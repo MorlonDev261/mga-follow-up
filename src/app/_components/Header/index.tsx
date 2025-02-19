@@ -7,10 +7,11 @@ import { FaRegEnvelope } from "react-icons/fa6";
 import { FaBars, FaTimes, FaRegBell } from 'react-icons/fa';
 
 interface HeaderProps {
+  sidebarState: "open" | "closed";
   toggleSidebar: () => void;
 }
 
-const Header = ({ toggleSidebar }: HeaderProps) => {
+const Header = ({ sidebarState, toggleSidebar }: HeaderProps) => {
   return (
     <header>
       <nav className="navbar">
