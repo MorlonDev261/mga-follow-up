@@ -9,19 +9,17 @@ import "./Sidebar.css";
 
 interface SidebarProps {
   sidebarState: boolean;
-  toggleSidebar: () => void;
+  setSidebarState: React.Dispatch<React.SetStateAction<boolean>>;
+
 }
 
-const Sidebar = ({ sidebarState, toggleSidebar }: SidebarProps) => {
+const Sidebar = ({ sidebarState, setSidebarState }: SidebarProps) => {
   return (
     <aside className="sidebar">
-      <Sheet open={sidebarState} onOpenChange={toggleSidebar}>
+      <Sheet open={sidebarState} onOpenChange={setSidebarState}>
         <SheetContent 
           side="left"
-          className="data-[state=open]:animate-in data-[state=closed]:animate-out 
-                     data-[state=closed]:fade-out data-[state=open]:fade-in 
-                     data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left"
-          >
+          className="data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left">
           <SheetHeader>
             <SheetTitle>Are you absolutely sure?</SheetTitle>
             <SheetDescription>
