@@ -8,7 +8,7 @@ import {
 import "./Sidebar.css";
 
 interface SidebarProps {
-  sidebarState: "open" | "closed";
+  sidebarState: boolean;
   toggleSidebar: () => void;
 }
 
