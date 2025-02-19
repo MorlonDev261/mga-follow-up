@@ -6,12 +6,16 @@ import './Header.css';
 import { FaRegEnvelope } from "react-icons/fa6";
 import { FaBars, FaRegBell } from 'react-icons/fa';
 
-const Header = () => {
+interface HeaderProps {
+  setIsSidebarOpen: (open: boolean) => void;
+}
+
+const Header = ({ setIsSidebarOpen }: HeaderProps) => {
   return (
     <header>
       <nav className="navbar">
         <div className="nav-section">
-          <button data-sidebar-type="sidebar-left" className="nav-button menu-button">
+          <button onClick={() => setIsSidebarOpen((prev) => !prev)} className="nav-button menu-button">
             <FaBars className="icon" />
           </button>
           <div className="flex items-center gap-1">
