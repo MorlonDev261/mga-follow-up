@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image";
 import './Header.css';
 import { FaRegEnvelope } from "react-icons/fa6";
 import { FaBars, FaRegBell } from 'react-icons/fa';
@@ -13,6 +14,10 @@ const Header = () => {
           <button data-sidebar-type="sidebar-left" className="nav-button menu-button">
             <FaBars className="icon" />
           </button>
+          <div classname="flex items-center gap-1">
+            <b className="hidden">AZTEK DWC LLC</b>
+            <Image className="logo" src="/icons/logo-aztek.svg" full />
+          </div>
         </div>
         
         <div className="nav-section">
