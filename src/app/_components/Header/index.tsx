@@ -4,11 +4,11 @@ import Link from 'next/link';
 import Image from "next/image";
 import './Header.css';
 import { FaRegEnvelope } from "react-icons/fa6";
-import { FaBars, FaRegBell } from 'react-icons/fa';
+import { FaBars, FaTimes, FaRegBell } from 'react-icons/fa';
 
 interface HeaderProps {
-  setIsSidebarOpen: (open: boolean) => void;
-  isSidebarOpen: boolean;
+  sidebarState: "open" | "closed";
+  toggleSidebar: () => void;
 }
 
 const Header = ({ setIsSidebarOpen, isSidebarOpen }: HeaderProps) => {
@@ -16,8 +16,8 @@ const Header = ({ setIsSidebarOpen, isSidebarOpen }: HeaderProps) => {
     <header>
       <nav className="navbar">
         <div className="nav-section">
-          <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="nav-button menu-button">
-            <FaBars className="icon" />
+          <button onClick={toggleSidebar} className="nav-button menu-button">
+            {sidebarState === "open" ? <FaTimes className="icon" /> : <FaBars className="icon" />}
           </button>
 
           <div className="flex items-center gap-1">
