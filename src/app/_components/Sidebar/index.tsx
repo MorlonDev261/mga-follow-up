@@ -11,7 +11,7 @@ interface SidebarProps {
 
 const Sidebar = ({ sidebarState, setSidebarState }: SidebarProps) => {
   return (
-    <aside className={`sidebar ${sidebarState ? "active" : ""}`}>
+    <aside className={`sidebar bg-white ${sidebarState ? "active" : ""}`}>
       <div className="nav-section p-5 nav-left">
           <Link href="/" className="nav-logo">
               <Image src="/icons/logo-aztek.svg" alt="Logo" width={50} height={50} className="logo-image" />
