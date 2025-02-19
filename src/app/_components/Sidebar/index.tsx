@@ -4,14 +4,17 @@ import {
   SheetDescription,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
 } from "@/components/ui/sheet"
 
-const Sidebar = () => {
+interface SidebarProps {
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
+}
+
+const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
   return (
     <aside>
-      <Sheet>
-        <SheetTrigger>Open</SheetTrigger>
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <SheetContent side="left">
           <SheetHeader>
             <SheetTitle>Are you absolutely sure?</SheetTitle>
