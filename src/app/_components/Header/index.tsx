@@ -11,7 +11,7 @@ interface HeaderProps {
   toggleSidebar: () => void;
 }
 
-const Header = ({ setIsSidebarOpen, isSidebarOpen }: HeaderProps) => {
+const Header = ({ sidebarState, toggleSidebar }: HeaderProps) => {
   return (
     <header>
       <nav className="navbar">
