@@ -16,7 +16,7 @@ const Header = () => {
           </button>
           <div className="flex items-center gap-1">
             <b className="hidden">AZTEK DWC LLC</b>
-            <Image className="logo" src="/icons/logo-aztek.svg" alt="AZTEK DWC LLC" width={200} height={100} />
+            <Image className="logo" src="/icons/logo-aztek.svg" alt="AZTEK DWC LLC" width={150} height={50} />
           </div>
         </div>
         
