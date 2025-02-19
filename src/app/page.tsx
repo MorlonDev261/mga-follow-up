@@ -12,8 +12,8 @@ export default function Home() {
   };
   return (
     <>
-      <Header isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
-      <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+      <Header sidebarState={sidebarState} toggleSidebar={toggleSidebar} />
+      <Sidebar sidebarState={sidebarState} toggleSidebar={toggleSidebar} />
     </>
   );
 }
