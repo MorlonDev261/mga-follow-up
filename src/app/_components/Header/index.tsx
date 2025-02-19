@@ -8,14 +8,15 @@ import { FaBars, FaRegBell } from 'react-icons/fa';
 
 interface HeaderProps {
   setIsSidebarOpen: (open: boolean) => void;
+  isSidebarOpen: boolean;
 }
 
-const Header = ({ setIsSidebarOpen }: HeaderProps) => {
+const Header = ({ setIsSidebarOpen, isSidebarOpen }: HeaderProps) => {
   return (
     <header>
       <nav className="navbar">
         <div className="nav-section">
-          <button onClick={() => setIsSidebarOpen((prev: boolean) => !prev)} className="nav-button menu-button">
+          <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="nav-button menu-button">
             <FaBars className="icon" />
           </button>
 
