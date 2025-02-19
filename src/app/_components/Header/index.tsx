@@ -17,15 +17,15 @@ const Header = ({ sidebarState, setSidebarState }: HeaderProps) => {
     <header>
       <nav className="navbar">
         <div className="nav-section">
-          {sidebarState ? 
+          {sidebarState ? (
             <button onClick={() => setSidebarState(false)} className="nav-button menu-button">
               <FaTimes className="icon" />
             </button>
-              : 
+             ) : (
             <button onClick={() => setSidebarState(true)} className="nav-button menu-button">
               <FaBars className="icon" />
             </button>
-          }
+           ) }
           <div className="flex items-center gap-1">
             <b className="hidden">AZTEK DWC LLC</b>
             <Image className="logo" src="/icons/logo-aztek.svg" alt="AZTEK DWC LLC" width={120} height={20} />
