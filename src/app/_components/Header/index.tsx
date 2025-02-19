@@ -17,7 +17,7 @@ const Header = ({ sidebarState, toggleSidebar }: HeaderProps) => {
       <nav className="navbar">
         <div className="nav-section">
           <button onClick={toggleSidebar} className="nav-button menu-button">
-            {sidebarState === "open" ? <FaTimes className="icon" /> : <FaBars className="icon" />}
+            {sidebarState ? <FaTimes className="icon" /> : <FaBars className="icon" />}
           </button>
 
           <div className="flex items-center gap-1">
