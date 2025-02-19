@@ -7,7 +7,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 
-const Header = () => {
+const Sidebar = () => {
   return (
     <aside>
       <Sheet>
@@ -26,4 +26,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default Sidebar;
