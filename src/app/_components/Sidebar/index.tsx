@@ -7,14 +7,14 @@ import {
 } from "@/components/ui/sheet"
 
 interface SidebarProps {
-  isOpen: boolean;
-  setIsOpen: (open: boolean) => void;
+  isSidebarOpen: boolean;
+  setIsSidebarOpen: (open: boolean) => void;
 }
 
-const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
+const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }: SidebarProps) => {
   return (
     <aside>
-      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+      <Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
         <SheetContent side="left">
           <SheetHeader>
             <SheetTitle>Are you absolutely sure?</SheetTitle>
