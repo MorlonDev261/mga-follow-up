@@ -7,7 +7,7 @@ import { FaRegEnvelope } from "react-icons/fa6";
 import { FaBars, FaTimes, FaRegBell } from 'react-icons/fa';
 
 interface HeaderProps {
-  sidebarState: "open" | "closed";
+  sidebarState: boolean;
   toggleSidebar: () => void;
 }
 
