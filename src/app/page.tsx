@@ -5,10 +5,10 @@ import Header from "@components/Header";
 import Sidebar from "@components/Sidebar";
 
 export default function Home() {
-  const [sidebarState, setSidebarState] = useState<"open" | "closed">("closed");
+  const [sidebarState, setSidebarState] = useState(false);
 
   const toggleSidebar = () => {
-    setSidebarState(prev => (prev === "open" ? "closed" : "open"));
+    setSidebarState(prev => !prev);
   };
   return (
     <>
