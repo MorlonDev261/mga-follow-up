@@ -12,7 +12,7 @@ interface HeaderProps {
 
 }
 
-const Header = ({ sidebarState, toggleSidebar }: HeaderProps) => {
+const Header = ({ sidebarState, setSidebarState }: HeaderProps) => {
   return (
     <header>
       <nav className="navbar">
