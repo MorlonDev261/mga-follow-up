@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image";
+import Image from "next/image";
 import './Header.css';
 import { FaRegEnvelope } from "react-icons/fa6";
 import { FaBars, FaRegBell } from 'react-icons/fa';
