@@ -7,13 +7,10 @@ import Sidebar from "@components/Sidebar";
 export default function Home() {
   const [sidebarState, setSidebarState] = useState(false);
 
-  const toggleSidebar = () => {
-    setSidebarState(prev => !prev);
-  };
   return (
     <>
-      <Header sidebarState={sidebarState} toggleSidebar={toggleSidebar} />
-      <Sidebar sidebarState={sidebarState} toggleSidebar={toggleSidebar} />
+      <Header sidebarState={sidebarState} setSidebarState={setSidebarState} />
+      <Sidebar sidebarState={sidebarState} setSidebarState={setSidebarState} />
     </>
   );
 }
