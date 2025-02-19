@@ -8,14 +8,14 @@ import {
 import "./Sidebar.css";
 
 interface SidebarProps {
-  isOpen: boolean;
-  setIsOpen: (open: boolean) => void;
+  sidebarState: "open" | "closed";
+  toggleSidebar: () => void;
 }
 
-const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
+const Sidebar = ({ sidebarState, toggleSidebar }: SidebarProps) => {
   return (
     <aside className="sidebar">
-      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+      <Sheet open={sidebarState} onOpenChange={toggleSidebar}>
         <SheetContent 
           side="left"
           className="data-[state=open]:animate-in data-[state=closed]:animate-out 
