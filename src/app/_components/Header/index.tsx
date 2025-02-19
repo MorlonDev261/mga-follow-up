@@ -18,11 +18,11 @@ const Header = ({ sidebarState, setSidebarState }: HeaderProps) => {
       <nav className="navbar">
         <div className="nav-section">
           {sidebarState ? 
-            <button onClick={setSidebarState(false)} className="nav-button menu-button">
+            <button onClick={() => setSidebarState(false)} className="nav-button menu-button">
               <FaTimes className="icon" />
             </button>
               : 
-            <button onClick={setSidebarState(true)} className="nav-button menu-button">
+            <button onClick={() => setSidebarState(true)} className="nav-button menu-button">
               <FaBars className="icon" />
             </button>
           }
