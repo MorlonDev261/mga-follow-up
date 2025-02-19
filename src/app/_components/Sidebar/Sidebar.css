@@ -3,7 +3,6 @@
     margin-left: -280px;
     overflow: hidden;
     transition: all 0.2s ease;
-    background: var(--white-color);
 }
 
 .sidebar.active {
