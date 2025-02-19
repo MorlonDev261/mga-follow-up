@@ -14,9 +14,9 @@ const Header = () => {
           <button data-sidebar-type="sidebar-left" className="nav-button menu-button">
             <FaBars className="icon" />
           </button>
-          <div classname="flex items-center gap-1">
+          <div className="flex items-center gap-1">
             <b className="hidden">AZTEK DWC LLC</b>
-            <Image className="logo" src="/icons/logo-aztek.svg" full />
+            <Image className="logo" src="/icons/logo-aztek.svg" full alt="AZTEK DWC LLC" />
           </div>
         </div>
         
