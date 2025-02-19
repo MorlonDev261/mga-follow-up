@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <>
       <Header isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
-      <Sidebar isSidebarOpen={isSidebarOpen} />
+      <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
     </>
   );
 }
