@@ -8,14 +8,18 @@ import {
 
 interface SidebarProps {
   isSidebarOpen: boolean;
-  setIsSidebarOpen: (open: boolean) => void;
 }
 
-const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }: SidebarProps) => {
+const Sidebar = ({ isSidebarOpen }: SidebarProps) => {
   return (
-    <aside>
-      <Sheet open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>
-        <SheetContent side="left">
+    <aside className="sidebar">
+      <Sheet open={isSidebarOpen}>
+        <SheetContent 
+          side="left"
+          className="data-[state=open]:animate-in data-[state=closed]:animate-out 
+                     data-[state=closed]:fade-out data-[state=open]:fade-in 
+                     data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left"
+          >
           <SheetHeader>
             <SheetTitle>Are you absolutely sure?</SheetTitle>
             <SheetDescription>
