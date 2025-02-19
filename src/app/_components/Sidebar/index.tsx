@@ -7,13 +7,14 @@ import {
 } from "@/components/ui/sheet"
 
 interface SidebarProps {
-  isSidebarOpen: boolean;
+  isOpen: boolean;
+  setIsOpen: (open: boolean) => void;
 }
 
-const Sidebar = ({ isSidebarOpen }: SidebarProps) => {
+const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
   return (
     <aside className="sidebar">
-      <Sheet open={isSidebarOpen}>
+      <Sheet open={isSidebarOpen} onOpenChange={setIsOpen}>
         <SheetContent 
           side="left"
           className="data-[state=open]:animate-in data-[state=closed]:animate-out 
