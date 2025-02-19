@@ -5,6 +5,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet"
+import "./Sidebar.css";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -14,7 +15,7 @@ interface SidebarProps {
 const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
   return (
     <aside className="sidebar">
-      <Sheet open={isSidebarOpen} onOpenChange={setIsOpen}>
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <SheetContent 
           side="left"
           className="data-[state=open]:animate-in data-[state=closed]:animate-out 
