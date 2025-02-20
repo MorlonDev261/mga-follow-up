@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaDollarSign, FaCalendarAlt, FaBox, FaUser, FaCog } from 'react-icons/fa';
+import { FaDollarSign, FaCalendarAlt, FaBox, FaCog } from 'react-icons/fa';
 import { FiDollarSign, FiClock, FiUsers, FiUser } from 'react-icons/fi';
 
 const shortcuts = [
