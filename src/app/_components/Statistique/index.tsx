@@ -29,8 +29,8 @@ export default function Statistique() {
   };
 
   return (
-    <div className="h-30">
+    <>
       <Doughnut data={chartData} options={options} />
-    </div>
+    </>
   );
 }
