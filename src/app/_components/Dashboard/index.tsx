@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { FaRegEnvelope, FaPlus } from "react-icons/fa6";
+import { MdOutlineAccountBalanceWallet } from "react-icons/md";
 import { FiBell, FiLifeBuoy, FiSearch } from 'react-icons/fi';
 import Image from 'next/image';
 import ShortcutList from '@components/ShortcutList';
@@ -59,12 +60,12 @@ export default function Dashboard() {
           <div className="grid gap-4 md:grid-cols-2">
             <div className="bg-[#111] p-2">
               <div className="mb-4">
-                <h3 className="text-gray-400">Net Available 👁️‍🗨️</h3>
+                <h3 className="text-gray-400"><MdOutlineAccountBalanceWallet /> Net Available</h3>
                 <div className="my-2 flex items-center justify-between text-2xl font-bold">
                   <div>
                     220,533.65 <span className="text-xs text-gray-400">NGN ⬇️</span>
                   </div>
-                  <button className="rounded bg-blue-500 px-5 py-1 text-sm"><FaPlus /> New</button>
+                  <button className="flex items-center justify-center gap-5 rounded bg-blue-500 px-5 py-1 text-sm"><FaPlus /> New</button>
                 </div>
                 <p className="text-gray-400">= 0.00151512 BTC</p>
               </div>
