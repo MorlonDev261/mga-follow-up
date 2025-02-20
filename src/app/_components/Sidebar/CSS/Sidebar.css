@@ -5,6 +5,24 @@
     transition: all 0.2s ease;
 }
 
+.overlay-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  z-index: 999;
+}
+
+.overlay-sidebar.active {
+  opacity: 1;
+  visibility: visible;
+}
+
 .sidebar.active {
     margin-left: 0;
 }
