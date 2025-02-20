@@ -71,14 +71,14 @@ export default function Dashboard() {
               <div className="mb-5">
                 <Statistique />
               </div>
-              <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-4">
-                <ShortcutList />
+              <div className="max-w-[200px]">
+                <Statistique />
               </div>
             </div>
 
             <div className="bg-[#111] p-2">
               <h3 className="mb-4">Statistique</h3>
-              <div className="mx-auto max-w-[200px]">
+              <div className="mb-5">
                 <Statistique />
               </div>
             </div>
