@@ -8,9 +8,10 @@ ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointE
 interface StatistiqueProps {
   type?: 'courbe' | 'rond';
   position?: 'top' | 'right' | 'bottom' | 'left';
+  legende?: boolean;
 }
 
-export default function Statistique({ type = 'rond', position = 'bottom' }: StatistiqueProps) {
+export default function Statistique({ type = 'rond', position = 'bottom', legende = true }: StatistiqueProps) {
   // Données pour le graphique en courbe (Ligne)
   const lineData = {
     labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'],
@@ -47,6 +48,7 @@ export default function Statistique({ type = 'rond', position = 'bottom' }: Stat
     layout: { padding: 0 },
     plugins: {
       legend: {
+        display: legende, // Affiche ou masque la légende
         position,
       },
       tooltip: {
@@ -62,6 +64,7 @@ export default function Statistique({ type = 'rond', position = 'bottom' }: Stat
     layout: { padding: 0 },
     plugins: {
       legend: {
+        display: legende, // Affiche ou masque la légende
         position,
       },
       tooltip: {
@@ -71,12 +74,12 @@ export default function Statistique({ type = 'rond', position = 'bottom' }: Stat
   };
 
   return (
-    <>
+    <div className="w-full h-64">
       {type === 'courbe' ? (
         <Line data={lineData} options={lineOptions} />
       ) : (
         <Doughnut data={doughnutData} options={doughnutOptions} />
       )}
-    </>
+    </div>
   );
 }
