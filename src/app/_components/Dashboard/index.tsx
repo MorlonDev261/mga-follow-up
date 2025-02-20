@@ -68,10 +68,7 @@ export default function Dashboard() {
                 </div>
                 <p className="text-gray-400">= 0.00151512 BTC</p>
               </div>
-              <div className="mb-5">
-                <Statistique />
-              </div>
-              <div className="max-w-[200px]">
+              <div className="max-w-[230px]">
                 <Statistique />
               </div>
             </div>
