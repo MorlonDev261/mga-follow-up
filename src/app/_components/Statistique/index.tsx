@@ -20,7 +20,7 @@ export default function Statistique() {
     responsive: true,
     plugins: {
       legend: {
-        position: 'bottom' as const, // Légende en bas
+        position: 'right' as const, // Légende en bas
       },
       tooltip: {
         enabled: true, // Activer les tooltips
@@ -29,7 +29,7 @@ export default function Statistique() {
   };
 
   return (
-    <div className="w-60 h-60">
+    <div className="h-30">
       <Doughnut data={chartData} options={options} />
     </div>
   );
