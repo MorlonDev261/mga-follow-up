@@ -15,8 +15,8 @@
   background: rgba(0, 0, 0, 0.5);
   opacity: 0;
   visibility: hidden;
-  z-index: 100;
-  transition: opacity 0.3s linear, visibility 0.3s linear;
+  z-index: 101;
+  transition: opacity 0.3s easy, visibility 0.3s easy;
 }
 
 .overlay-sidebar.active {
