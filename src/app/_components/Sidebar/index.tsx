@@ -17,7 +17,7 @@ const Sidebar = ({ sidebarState, setSidebarState }: SidebarProps) => {
       <aside className={`sidebar bg-white ${sidebarState ? "active" : ""}`}>
         <div className="nav-section p-5 nav-left">
           <Link href="/" className="nav-logo">
-            <Image src="/icons/logo-aztek.svg" alt="Logo" width={50} height={50} className="logo-image" />
+            <Image src="/icons/logo-aztek.svg" alt="Logo" width={120} height={20} className="logo-image" />
           </Link>
           <button className="nav-button theme-button" onClick={() => setSidebarState(false)}>
             <FaTimes />
