@@ -71,6 +71,9 @@ export default function Dashboard() {
               <div className="max-w-[230px]">
                 <Statistique />
               </div>
+              <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-4">
+                <ShortcutList />
+              </div>
             </div>
 
             <div className="bg-[#111] p-2">
