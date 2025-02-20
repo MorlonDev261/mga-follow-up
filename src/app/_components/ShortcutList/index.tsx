@@ -17,7 +17,6 @@ const shortcuts = [
 
 const ShortcutList = () => {
   return (
-    <div className="grid grid-cols-4 gap-2">
       {shortcuts.map((shortcut) => (
         <div
           key={shortcut.label}
@@ -31,7 +30,6 @@ const ShortcutList = () => {
           <span className="text-xs">{shortcut.label}</span>
         </div>
       ))}
-    </div>
   );
 };
 
