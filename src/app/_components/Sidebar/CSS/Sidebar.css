@@ -65,6 +65,7 @@
     align-items: center;
     gap: 8px;
     width: 100%;
+    min-width: 270px;
     font-size: 0.938rem;
     white-space: nowrap;
     padding: 0.37rem 0.75rem;
