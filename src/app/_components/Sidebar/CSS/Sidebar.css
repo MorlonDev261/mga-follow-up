@@ -28,20 +28,20 @@
     margin-left: 0;
 }
 
-.sidebar .nav-left {
+.sidebar .header {
     display: none;
     height: 53px;
-    padding: 0 5px;
-    border-bottom: 2px solid var(--theme-primary);
+    padding: 5px 10px;
+    border-bottom: 2px solid #041319;
 }
 
-.sidebar .nav-left .nav-logo {
+.sidebar .header .nav-logo {
     display: flex;
     align-items: center;
     gap: 5px;
 }
 
-.sidebar .nav-left .close-sidebar {
+.sidebar .header .close-sidebar {
     font-size: 30px;
 }
 
