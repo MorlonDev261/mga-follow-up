@@ -51,9 +51,8 @@ const Sidebar = ({ sidebarState, setSidebarState }: SidebarProps) => {
               </div>
             </Link>
           </div>
-
-          <div className="section-separator" />
         </div>
+        
       </aside>
     </>
   );
