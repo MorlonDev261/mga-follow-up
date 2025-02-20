@@ -68,7 +68,7 @@ export default function Dashboard() {
                 </div>
                 <p className="text-gray-400">= 0.00151512 BTC</p>
               </div>
-              <div className="mx-auto mb-5 max-w-[200px]">
+              <div className="mb-5">
                 <Statistique />
               </div>
               <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-4">
