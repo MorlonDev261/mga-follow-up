@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FaRegEnvelope } from "react-icons/fa6";
+import { FaRegEnvelope, FaPlus } from "react-icons/fa6";
 import { FiBell, FiLifeBuoy, FiSearch } from 'react-icons/fi';
 import Image from 'next/image';
 import ShortcutList from '@components/ShortcutList';
@@ -64,7 +64,7 @@ export default function Dashboard() {
                   <div>
                     220,533.65 <span className="text-xs text-gray-400">NGN ⬇️</span>
                   </div>
-                  <button className="rounded bg-blue-500 px-3 py-1 text-sm">Deposit</button>
+                  <button className="rounded bg-blue-500 px-5 py-1 text-sm"><FaPlus /> New</button>
                 </div>
                 <p className="text-gray-400">= 0.00151512 BTC</p>
               </div>
