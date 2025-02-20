@@ -47,6 +47,9 @@
 .sidebar .link-container {
     overflow-y: auto;
     padding: 0.5rem 0 0.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     scrollbar-width: thin;
     height: calc(100vh - 53px);
     scrollbar-color: transparent transparent;
