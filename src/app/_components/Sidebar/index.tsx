@@ -26,20 +26,26 @@ const Sidebar = ({ sidebarState, setSidebarState }: SidebarProps) => {
 
         <div className="link-container">
           <div className="link-section">
-            <Link href="/products" className="link-item change-type">
+            <Link href="/products" className="link-item hover:bg-dark/50">
               <Image className="profile rounded-full" src="/users/profile-1.jpg" width="30" height="30" alt="ShopCell" />
-              <span>Shop Cell</span>
-              <small>Last updated: 12 mai</small>
+              <div className="flex flex-col">
+                 <span>Shop Cell</span>
+                 <small>Last updated: 12 mai</small>
+              </div>
             </Link>
-            <Link href="/products" className="link-item change-type">
-              <Image className="profile" src="/users/profile-1.jpg" width="30" height="30" alt="ShopCell" />
-              <span>Shop Cell</span>
-              <small>Last updated: 12 mai</small>
+            <Link href="/products" className="link-item">
+              <Image className="profile rounded-full" src="/users/profile-1.jpg" width="30" height="30" alt="ShopCell" />
+              <div className="flex flex-col">
+                 <span>Shop Cell</span>
+                 <small>Last updated: 12 mai</small>
+              </div>
             </Link>
-            <Link href="/products" className="link-item change-type">
-              <Image className="profile" src="/users/profile-1.jpg" width="30" height="30" alt="ShopCell" />
-              <span>Shop Cell</span>
-              <small>Last updated: 12 mai</small>
+            <Link href="/products" className="link-item">
+              <Image className="profile rounded-full" src="/users/profile-1.jpg" width="30" height="30" alt="ShopCell" />
+              <div className="flex flex-col">
+                 <span>Shop Cell</span>
+                 <small>Last updated: 12 mai</small>
+              </div>
             </Link>
           </div>
 
