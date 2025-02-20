@@ -64,6 +64,7 @@
     position: relative;
     align-items: center;
     gap: 8px;
+    width: 100%;
     font-size: 0.938rem;
     white-space: nowrap;
     padding: 0.37rem 0.75rem;
