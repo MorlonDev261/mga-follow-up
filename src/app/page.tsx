@@ -1,10 +1,10 @@
 "use client";
 
-import Home from "@components/Home";
+import Dashboard from "@components/Dashboard";
 
 export default function Home() {
 
   return (
-      <Home />
+      <Dashboard />
   );
 }
