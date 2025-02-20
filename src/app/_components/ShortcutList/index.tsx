@@ -17,6 +17,7 @@ const shortcuts = [
 
 const ShortcutList = () => {
   return (
+    <>
       {shortcuts.map((shortcut) => (
         <div
           key={shortcut.label}
@@ -30,6 +31,7 @@ const ShortcutList = () => {
           <span className="text-xs">{shortcut.label}</span>
         </div>
       ))}
+    </>
   );
 };
 
