@@ -17,7 +17,7 @@ export default function Statistique({ type = 'rond', position = 'bottom', legend
     labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'],
     datasets: [
       {
-        label: 'Nombre de Produits',
+        label: 'Produits vendus',
         data: [10, 20, 15, 30, 25, 40, 35, 50, 45, 60, 55, 70],
         borderColor: '#4CAF50',
         backgroundColor: 'rgba(76, 175, 80, 0.2)',
@@ -74,12 +74,12 @@ export default function Statistique({ type = 'rond', position = 'bottom', legend
   };
 
   return (
-    <div className="w-full h-64">
+    <>
       {type === 'courbe' ? (
         <Line data={lineData} options={lineOptions} />
       ) : (
         <Doughnut data={doughnutData} options={doughnutOptions} />
       )}
-    </div>
+    </>
   );
 }
