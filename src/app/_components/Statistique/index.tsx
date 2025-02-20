@@ -71,12 +71,12 @@ export default function Statistique({ type = 'rond', position = 'bottom' }: Stat
   };
 
   return (
-    <div className="w-full h-64">
+    <>
       {type === 'courbe' ? (
         <Line data={lineData} options={lineOptions} />
       ) : (
         <Doughnut data={doughnutData} options={doughnutOptions} />
       )}
-    </div>
+    </>
   );
 }
