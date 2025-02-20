@@ -64,7 +64,7 @@
 }
 
 /* Link Items */
-.sidebar .link-section .link-item {
+.sidebar .link-item {
     display: flex;
     position: relative;
     align-items: center;
