@@ -30,11 +30,11 @@ export default function Statistique({ type = 'rond', position = 'bottom', legend
 
   // Données pour le graphique en rond (Doughnut)
   const doughnutData = {
-    labels: ['Revenu', 'Dépense', 'Pending'],
+    labels: ['Net available', 'Expenses', 'Pending'],
     datasets: [
       {
         label: 'Statistiques',
-        data: [65, 25, 10],
+        data: [656000, 25000, 456000],
         backgroundColor: ['#4CAF50', '#F44336', '#FFC107'],
         borderWidth: 0,
       },
