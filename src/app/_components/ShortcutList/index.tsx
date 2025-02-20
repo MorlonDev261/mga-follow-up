@@ -1,6 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
-import { FaDollarSign, FaCalendarAlt, FaCog, FaUsers, FaRegUserCircle } from 'react-icons/fa';
+import { FaCog, FaUsers, FaRegUserCircle } from 'react-icons/fa';
 import { BsShopWindow } from "react-icons/bs";
 import { FiDollarSign, FiClock } from 'react-icons/fi';
 
