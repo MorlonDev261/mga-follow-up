@@ -62,7 +62,7 @@ export default function Dashboard() {
               <div className="mb-4">
                 <h3 className="text-gray-400 flex items-center gap-1"><MdOutlineAccountBalanceWallet /> Net Available</h3>
                 <div className="my-2 flex items-center justify-between text-2xl font-bold">
-                  <div>
+                  <div className="text-green-500">
                     220,533.65 AR
                   </div>
                   <button className="flex items-center justify-center gap-1 rounded bg-blue-500 px-2 py-1 text-sm"><FaPlus /> New</button>
