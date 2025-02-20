@@ -19,7 +19,7 @@ const Sidebar = ({ sidebarState, setSidebarState }: SidebarProps) => {
           <Link href="/" className="nav-logo">
             <Image src="/icons/logo-aztek.svg" alt="Logo" width={120} height={20} className="logo-image" />
           </Link>
-          <button className="nav-button theme-button" onClick={() => setSidebarState(false)}>
+          <button className="nav-button close-sidebar" onClick={() => setSidebarState(false)}>
             <FaTimes />
           </button>
         </div>
