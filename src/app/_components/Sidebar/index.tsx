@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { FaTimes } from "react-icons/fa";
-import "./Sidebar.css";
+import "./CSS/Sidebar.css";
 
 interface SidebarProps {
   sidebarState: boolean;
