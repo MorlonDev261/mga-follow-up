@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { FaRegEnvelope } from "react-icons/fa6";
-import { FiBell, FiLifeBuoy, FiSearch, FiDollarSign } from 'react-icons/fi';
-import { FaDollarSign } from 'react-icons/fa';
+import { FiBell, FiLifeBuoy, FiSearch } from 'react-icons/fi';
 import Image from 'next/image';
 import ShortcutList from '@components/ShortcutList';
 import Statistique from '@components/Statistique';
