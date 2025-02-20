@@ -17,6 +17,7 @@
   visibility: hidden;
   z-index: 100;
   transition: opacity 0.3s;
+}
 
 .overlay-sidebar.active {
   opacity: 1;
