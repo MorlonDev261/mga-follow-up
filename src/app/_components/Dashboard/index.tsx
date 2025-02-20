@@ -69,7 +69,7 @@ export default function Dashboard() {
                 <p className="text-gray-400">= 0.00151512 BTC</p>
               </div>
               <div className="bg-[#ccc] max-h-[100px] max-w-[230px]">
-                <Statistique />
+                <Statistique position="right" />
               </div>
               <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-4">
                 <ShortcutList />
@@ -79,7 +79,7 @@ export default function Dashboard() {
             <div className="bg-[#111] p-2">
               <h3 className="mb-4">Statistique</h3>
               <div className="mb-5">
-                <Statistique />
+                <Statistique type="courbe" />
               </div>
             </div>
           </div>
