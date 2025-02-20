@@ -2,7 +2,7 @@
     width: 280px;
     margin-left: -280px;
     overflow: hidden;
-    transition: all 0.2s ease;
+    transition: all 0.2s ease-in-out;
     z-index: 1000;
 }
 
@@ -15,8 +15,8 @@
   background: rgba(0, 0, 0, 0.5);
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-  z-index: 999;
+  transition: opacity 0.15s linear, visibility 0.15s linear;
+  z-index: 105;
 }
 
 .overlay-sidebar.active {
