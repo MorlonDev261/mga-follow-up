@@ -12,7 +12,7 @@ const Sidebar = ({ sidebarState, setSidebarState }: SidebarProps) => {
   return (
     <>
       {/* Overlay */}
-      <div className={`overlay ${sidebarState ? "active" : ""}`} onClick={() => setSidebarState(false)}></div>
+      <div className={`overlay-sidebar ${sidebarState ? "active" : ""}`} onClick={() => setSidebarState(false)}></div>
 
       <aside className={`sidebar bg-white ${sidebarState ? "active" : ""}`}>
         <div className="nav-section p-5 nav-left">
