@@ -71,7 +71,7 @@ export default function Dashboard() {
               <div className="mx-auto mb-5 max-w-[200px]">
                 <Statistique />
               </div>
-              <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-4">
+              <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-4">
                 <ShortcutList />
               </div>
             </div>
