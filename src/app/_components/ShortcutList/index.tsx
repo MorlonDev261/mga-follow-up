@@ -5,11 +5,9 @@ import { BsShopWindow } from "react-icons/bs";
 import { FiDollarSign, FiClock } from 'react-icons/fi';
 
 const shortcuts = [
-  { label: 'Revenu', value: 457900, icon: <FaDollarSign />, color: 'text-green-500' }, // Vert
-  { label: 'Depense', value: 457900, icon: <FiDollarSign />, color: 'text-red-500' }, // Rouge
-  { label: 'Pending', value: 457900, icon: <FiClock />, color: 'text-yellow-500' }, // Jaune
-  { label: 'Stock', value: 457900, icon: <BsShopWindow /> },
-  { label: 'Agenda', icon: <FaCalendarAlt /> },
+  { label: 'Stock', value: 457900, icon: <BsShopWindow />, color: 'text-blue-500' },
+  { label: 'Depense', value: 457900, icon: <FiDollarSign />, color: 'text-red-500' },
+  { label: 'Pending', value: 457900, icon: <FiClock />, color: 'text-yellow-500' },
   { label: 'Client', value: 7, icon: <FaUsers /> },
   { label: 'Profile', icon: <FaRegUserCircle /> },
   { label: 'Paramètre', icon: <FaCog /> },
