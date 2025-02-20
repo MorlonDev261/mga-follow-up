@@ -15,7 +15,7 @@ const Sidebar = ({ sidebarState, setSidebarState }: SidebarProps) => {
       <div className={`overlay-sidebar ${sidebarState ? "active" : ""}`} onClick={() => setSidebarState(false)}></div>
 
       <aside className={`sidebar bg-white ${sidebarState ? "active" : ""}`}>
-        <div className="nav-section p-5 nav-left">
+        <div className="nav-section header">
           <Link href="/" className="nav-logo">
             <Image src="/icons/logo-aztek.svg" alt="Logo" width={120} height={20} className="logo-image" />
           </Link>
