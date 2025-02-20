@@ -15,7 +15,7 @@ interface HeaderProps {
 const Header = ({ sidebarState, setSidebarState }: HeaderProps) => {
   return (
     <header>
-      <nav className="navbar">
+      <nav className="navbar border-b-2 border-gray-900">
         <div className="nav-section">
           <button onClick={() => setSidebarState(prev => !prev)} className="nav-button menu-button">
             {sidebarState ? <FaTimes className="icon" /> : <FaBars className="icon" />}
