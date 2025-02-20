@@ -16,7 +16,7 @@
   opacity: 0;
   visibility: hidden;
   z-index: 100;
-  transition: opacity 0.3s;
+  transition: opacity 0.3s linear;
 }
 
 .overlay-sidebar.active {
