@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { FaTimes } from "react-icons/fa";
+import { FaTimes, FaPlus } from "react-icons/fa";
 import "./CSS/Sidebar.css";
 
 interface SidebarProps {
@@ -26,7 +26,10 @@ const Sidebar = ({ sidebarState, setSidebarState }: SidebarProps) => {
 
         <div className="link-container">
           <div className="link-section">
-            <Link href="/products" className="link-item hover:bg-dark/50">
+            <button className="link-item new-customer">
+              <FaPlus /> <span>Add new Customer</span>
+            </button>
+            <Link href="/products" className="link-item">
               <Image className="profile rounded-full" src="/users/profile-1.jpg" width="40" height="40" alt="ShopCell" />
               <div className="flex flex-col">
                  <span>Shop Cell</span>
