@@ -3,6 +3,7 @@
     margin-left: -280px;
     overflow: hidden;
     transition: all 0.2s ease;
+    z-index: 1000;
 }
 
 .overlay-sidebar {
