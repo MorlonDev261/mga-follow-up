@@ -85,11 +85,13 @@
     margin-right:  0.83rem;
 }
 
-#link-section-title {
-    font-size: 0.938rem;
-    font-weight: 600;
-    color: var(--black-color);
-    margin: 1rem !important;
+.sidebar .link-section .new-customer {
+    display: flex;
+    padding: 5px;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    background: #21B858;
 }
 
 .sidebar .section-separator {
