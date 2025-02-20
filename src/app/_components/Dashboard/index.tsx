@@ -79,7 +79,7 @@ export default function Dashboard() {
             <div className="bg-[#111] p-2">
               <h3 className="mb-4">Statistique</h3>
               <div className="mb-5">
-                <Statistique type="courbe" />
+                <Statistique type="courbe" legende={false} />
               </div>
             </div>
           </div>
