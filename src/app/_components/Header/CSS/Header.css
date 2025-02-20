@@ -6,23 +6,12 @@ header {
     z-index: 100;
 }
 
-header .resultats {
-    position: fixed;
-    top: 53px;
-    width: 100%;
-    height: calc(100vh - 53px);
-    background: #fff;
-}
-
 header .navbar {
     display: flex;
     gap: 1.5rem;
     align-items: center;
     padding: 0.5rem ;
-    border-bottom: 2px solid var(--theme-primary);
     justify-content: space-between;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px); 
 }
 
 header .nav-section {
