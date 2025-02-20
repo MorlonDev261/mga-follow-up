@@ -18,7 +18,7 @@ export default function Statistique({ type = 'rond', position = 'bottom', legend
     datasets: [
       {
         label: 'Produits vendus',
-        data: [10, 20, 15, 30, 25, 40, 35, 50, 45, 60, 55, 70],
+        data: [6, 20, 15, 58, 33, 27, 47, 50, 68, 100, 55, 120],
         borderColor: '#4CAF50',
         backgroundColor: 'rgba(76, 175, 80, 0.2)',
         borderWidth: 2,
@@ -34,7 +34,7 @@ export default function Statistique({ type = 'rond', position = 'bottom', legend
     datasets: [
       {
         label: 'Statistiques',
-        data: [656000, 25000, 456000],
+        data: [5220500, 457900, 457900],
         backgroundColor: ['#4CAF50', '#F44336', '#FFC107'],
         borderWidth: 0,
       },
