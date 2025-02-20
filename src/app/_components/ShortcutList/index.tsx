@@ -8,11 +8,11 @@ const shortcuts = [
   { label: 'Revenu', value: 457900, icon: <FaDollarSign />, color: 'text-green-500' }, // Vert
   { label: 'Depense', value: 457900, icon: <FiDollarSign />, color: 'text-red-500' }, // Rouge
   { label: 'Pending', value: 457900, icon: <FiClock />, color: 'text-yellow-500' }, // Jaune
-  { label: 'Agenda', icon: <FaCalendarAlt /> }, // Bleu
-  { label: 'Stock', value: 457900, icon: <BsShopWindow /> }, // Violet
-  { label: 'Client', value: 7, icon: <FaUsers /> }, // Orange
-  { label: 'Profile', icon: <FaRegUserCircle /> }, // Gris
-  { label: 'Paramètre', icon: <FaCog /> }, // Brun
+  { label: 'Stock', value: 457900, icon: <BsShopWindow /> },
+  { label: 'Agenda', icon: <FaCalendarAlt /> },
+  { label: 'Client', value: 7, icon: <FaUsers /> },
+  { label: 'Profile', icon: <FaRegUserCircle /> },
+  { label: 'Paramètre', icon: <FaCog /> },
 ];
 
 const ShortcutList = () => {
