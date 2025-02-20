@@ -22,8 +22,8 @@ const ShortcutList = () => {
         <div
           key={shortcut.label}
           className={clsx(
-            "flex h-20 flex-col items-center justify-center rounded bg-[#222] p-2 transition-colors duration-300 hover:text-white",
-            shortcut.color // Ajoute la couleur en hover dynamiquement
+            "flex h-20 flex-col items-center justify-center rounded bg-[#222] p-2 transition-colors duration-300 text-white",
+            shortcut.color !== undefined && shortcut.color // Ajoute la couleur en hover dynamiquement
           )}
         >
           <span className="mb-1 text-xl">{shortcut.icon}</span>
