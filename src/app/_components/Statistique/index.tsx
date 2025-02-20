@@ -40,14 +40,29 @@ export default function Statistique({ type = 'rond', position = 'bottom' }: Stat
     ],
   };
 
-  // Options générales avec typage correct
-  const options: ChartOptions<'doughnut' | 'line'> = {
+  // Options spécifiques pour le graphique en courbe
+  const lineOptions: ChartOptions<'line'> = {
     responsive: true,
     maintainAspectRatio: false,
     layout: { padding: 0 },
     plugins: {
       legend: {
-        position, // Position dynamique avec TypeScript
+        position,
+      },
+      tooltip: {
+        enabled: true,
+      },
+    },
+  };
+
+  // Options spécifiques pour le graphique en rond (Doughnut)
+  const doughnutOptions: ChartOptions<'doughnut'> = {
+    responsive: true,
+    maintainAspectRatio: false,
+    layout: { padding: 0 },
+    plugins: {
+      legend: {
+        position,
       },
       tooltip: {
         enabled: true,
@@ -58,9 +73,9 @@ export default function Statistique({ type = 'rond', position = 'bottom' }: Stat
   return (
     <div className="w-full h-64">
       {type === 'courbe' ? (
-        <Line data={lineData} options={options} />
+        <Line data={lineData} options={lineOptions} />
       ) : (
-        <Doughnut data={doughnutData} options={options} />
+        <Doughnut data={doughnutData} options={doughnutOptions} />
       )}
     </div>
   );
