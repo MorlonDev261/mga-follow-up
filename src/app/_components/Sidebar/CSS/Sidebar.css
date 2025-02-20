@@ -115,7 +115,7 @@
         left: -280px;
     }
 
-    .sidebar .nav-left {
+    .sidebar .header {
         display: flex;
         align-items: center;
         justify-content: space-between;
