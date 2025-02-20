@@ -27,7 +27,7 @@ const ShortcutList = () => {
           )}
         >
           <span className="mb-1 text-xl">{shortcut.icon}</span>
-          {shortcut.value !== undefined && <span className="text-xs">{shortcut.value}</span>}
+          {shortcut.value !== undefined && <b className="text-xs">{shortcut.value} Ar</b>}
           <span className="text-xs">{shortcut.label}</span>
         </div>
       ))}
