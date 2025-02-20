@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from "next/image";
-import './Header.css';
+import './CSS/Header.css';
 import { FaRegEnvelope } from "react-icons/fa6";
 import { FaBars, FaTimes, FaRegBell } from 'react-icons/fa';
 
