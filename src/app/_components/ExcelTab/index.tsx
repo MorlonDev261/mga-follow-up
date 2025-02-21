@@ -2,7 +2,7 @@ import { HotTable } from '@handsontable/react';
 import type { HotTableClass } from '@handsontable/react';
 import Handsontable from 'handsontable';
 import 'handsontable/dist/handsontable.full.min.css';
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useMemo } from 'react'; // Ajout de useMemo
 import { exportToExcel } from './excel-utils';
 
 interface FinancialDataRow {
@@ -21,7 +21,9 @@ const ExcelTab = () => {
     { date: '2024-01-02', client: 'Client B', income: 750000, expenses: 300000, comments: 'Commentaire 2', net: 450000 },
   ]);
 
-  const colHeaders = ['Date', 'Client', 'Income (AR)', 'Expenses (AR)', 'Comments', 'Net Available (AR)'];
+  // Utilisation de useMemo pour mémoriser colHeaders
+  const colHeaders = useMemo(() => ['Date', 'Client', 'Income (AR)', 'Expenses (AR)', 'Comments', 'Net Available (AR)'], []);
+
   const columns = [
     { data: 'date', type: 'date', dateFormat: 'YYYY-MM-DD', validator: Handsontable.validators.DateValidator },
     { data: 'client', type: 'text' },
@@ -55,7 +57,7 @@ const ExcelTab = () => {
       row.net,
     ]);
     exportToExcel(exportData, colHeaders, 'financial-report');
-  }, [data, colHeaders]);
+  }, [data, colHeaders]); // colHeaders est maintenant stable grâce à useMemo
 
   const addRow = useCallback(() => {
     setData(prev => [
