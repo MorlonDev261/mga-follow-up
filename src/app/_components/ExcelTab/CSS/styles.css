@@ -1,0 +1,181 @@
+/* Style général du tableau */
+.handsontable {
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  border: 1px solid #e0e0e0;
+  background-color: #ffffff;
+  color: #202124;
+}
+
+/* En-têtes de colonnes */
+.handsontable th {
+  background-color: #f8f9fa;
+  color: #202124;
+  font-weight: 500;
+  border-right: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 8px;
+  text-align: left;
+}
+
+/* Cellules */
+.handsontable td {
+  background-color: #ffffff;
+  color: #202124;
+  border-right: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 8px;
+}
+
+/* Cellules sélectionnées */
+.handsontable .currentRow,
+.handsontable .currentCol {
+  background-color: #e8f0fe !important;
+}
+
+/* Bordure de la cellule active */
+.handsontable .current {
+  border: 2px solid #1a73e8 !important;
+}
+
+/* Menu contextuel */
+.handsontable .htContextMenu .htItem {
+  padding: 6px 12px;
+  font-size: 14px;
+  color: #202124;
+}
+
+.handsontable .htContextMenu .htItem:hover {
+  background-color: #f1f3f4;
+}
+
+/* Scrollbar */
+.handsontable .wtHolder {
+  scrollbar-width: thin;
+  scrollbar-color: #dadce0 #f8f9fa;
+}
+
+.handsontable .wtHolder::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.handsontable .wtHolder::-webkit-scrollbar-thumb {
+  background-color: #dadce0;
+  border-radius: 4px;
+}
+
+.handsontable .wtHolder::-webkit-scrollbar-track {
+  background-color: #f8f9fa;
+}
+
+/* Styles pour les cellules colorées */
+.high-income {
+  background-color: #d4edda; /* Vert clair */
+  color: #155724; /* Texte vert foncé */
+}
+
+.low-income {
+  background-color: #fff3cd; /* Jaune clair */
+  color: #856404; /* Texte jaune foncé */
+}
+
+.high-expenses {
+  background-color: #f8d7da; /* Rouge clair */
+  color: #721c24; /* Texte rouge foncé */
+}
+
+.negative-net {
+  background-color: #f8d7da; /* Rouge clair */
+  color: #721c24; /* Texte rouge foncé */
+}
+
+.positive-net {
+  background-color: #d4edda; /* Vert clair */
+  color: #155724; /* Texte vert foncé */
+}
+
+/* Thème sombre */
+.handsontable.dark-theme {
+  background-color: #202124;
+  color: #e8eaed;
+}
+
+.handsontable.dark-theme th {
+  background-color: #2d2e30;
+  color: #e8eaed;
+  border-right: 1px solid #3c4043;
+  border-bottom: 1px solid #3c4043;
+}
+
+.handsontable.dark-theme td {
+  background-color: #202124;
+  color: #e8eaed;
+  border-right: 1px solid #3c4043;
+  border-bottom: 1px solid #3c4043;
+}
+
+.handsontable.dark-theme .currentRow,
+.handsontable.dark-theme .currentCol {
+  background-color: #3c4043 !important;
+}
+
+.handsontable.dark-theme .htContextMenu .htItem {
+  color: #e8eaed;
+}
+
+.handsontable.dark-theme .htContextMenu .htItem:hover {
+  background-color: #3c4043;
+}
+
+.handsontable.dark-theme .wtHolder {
+  scrollbar-color: #5f6368 #202124;
+}
+
+.handsontable.dark-theme .wtHolder::-webkit-scrollbar-thumb {
+  background-color: #5f6368;
+}
+
+.handsontable.dark-theme .wtHolder::-webkit-scrollbar-track {
+  background-color: #202124;
+}
+
+/* Styles pour les cellules colorées en mode sombre */
+.handsontable.dark-theme .high-income {
+  background-color: #d4edda; /* Vert clair */
+  color: #155724; /* Texte vert foncé */
+}
+
+.handsontable.dark-theme .low-income {
+  background-color: #fff3cd; /* Jaune clair */
+  color: #856404; /* Texte jaune foncé */
+}
+
+.handsontable.dark-theme .high-expenses {
+  background-color: #f8d7da; /* Rouge clair */
+  color: #721c24; /* Texte rouge foncé */
+}
+
+.handsontable.dark-theme .negative-net {
+  background-color: #f8d7da; /* Rouge clair */
+  color: #721c24; /* Texte rouge foncé */
+}
+
+.handsontable.dark-theme .positive-net {
+  background-color: #d4edda; /* Vert clair */
+  color: #155724; /* Texte vert foncé */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .handsontable {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .handsontable th,
+  .handsontable td {
+    padding: 6px;
+    font-size: 12px;
+  }
+}
