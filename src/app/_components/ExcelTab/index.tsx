@@ -149,10 +149,9 @@ const ExcelTab = () => {
           }
         }}
         stretchH="all"
-        dropdownMenu={true}
-        manualRowMove={true}
-        manualColumnMove={true}
         afterChange={handleAfterChange}
+        minRows={20}
+        viewportRowRenderingOffset="auto"
         rowHeights={40}
         autoWrapRow={true}
         navigableHeaders={true}
