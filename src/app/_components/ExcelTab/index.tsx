@@ -1,6 +1,6 @@
 import { HotTable } from '@handsontable/react';
 import 'handsontable/dist/handsontable.full.min.css';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { exportToExcel } from './excel-utils';
 
 interface FinancialDataRow {
