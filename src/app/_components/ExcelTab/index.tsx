@@ -73,19 +73,35 @@ const ExcelTab = () => {
     if (source === 'edit' && changes) {
       setData(prev => {
         const newData = [...prev];
-        changes.forEach(([row, prop, _oldValue, newValue]) => {
+        changes.forEach(([row, prop, oldValue, newValue]) => {
           if (row >= newData.length || typeof prop !== 'string') return;
 
           const key = prop as keyof FinancialDataRow;
           const rowData = newData[row];
 
           if (key in rowData) {
+            // Journaliser l'ancienne et la nouvelle valeur
+            console.log(`Modification détectée dans la ligne ${row}, colonne ${key}:`);
+            console.log(`- Ancienne valeur :`, oldValue);
+            console.log(`- Nouvelle valeur :`, newValue);
+
+            // Exemple de logique : annuler la modification si la nouvelle valeur est invalide
+            if (key === 'income' || key === 'expenses') {
+              const numericValue = Number(newValue);
+              if (isNaN(numericValue) {
+                console.warn(`La valeur "${newValue}" n'est pas un nombre valide. Annulation de la modification.`);
+                return; // Annuler la modification
+              }
+            }
+
+            // Appliquer la nouvelle valeur
             const numericKeys = ['income', 'expenses', 'net'];
             const value = numericKeys.includes(key) ? Number(newValue) || 0 : newValue;
 
             // @ts-expect-error - La validation est gérée par les colonnes
             rowData[key] = value;
 
+            // Recalculer le net si income ou expenses a changé
             if (key === 'income' || key === 'expenses') {
               rowData.net = Number(rowData.income) - Number(rowData.expenses);
             }
