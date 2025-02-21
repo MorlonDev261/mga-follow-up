@@ -1,8 +1,7 @@
 import { HotTable } from '@handsontable/react';
 import 'handsontable/dist/handsontable.full.min.css';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { exportToExcel } from './excel-utils';
-import Handsontable from 'handsontable';
 
 interface FinancialDataRow {
   date: string; // Format YYYY-MM-DD
@@ -14,7 +13,7 @@ interface FinancialDataRow {
 }
 
 const ExcelTab = () => {
-  const hotTableRef = useRef<HotTable | null>(null);
+  const hotTableRef = useRef<typeof HotTable | null>(null);
   const [data, setData] = useState<FinancialDataRow[]>([
     { date: '2024-01-01', client: 'Client A', income: 500000, expenses: 200000, comments: 'Commentaire 1', net: 300000 },
     { date: '2024-01-02', client: 'Client B', income: 750000, expenses: 300000, comments: 'Commentaire 2', net: 450000 },
@@ -72,7 +71,7 @@ const ExcelTab = () => {
       <div className="p-4">
         <HotTable
           ref={hotTableRef}
-          data={data.map(({ date, client, income, expenses, comments, net }) => [date, client, income, expenses, comments, net])}
+          data={data.map(({ date, client, income, expenses, comments, net }) => [date, client, income, expenses, comments, net])} // Conversion en tableau de tableaux
           colHeaders={colHeaders}
           rowHeaders={true}
           columns={columns}
@@ -85,7 +84,7 @@ const ExcelTab = () => {
           dropdownMenu={true}
           manualRowMove={true}
           manualColumnMove={true}
-          afterChange={handleAfterChange} // Mise à jour des données
+          afterChange={handleAfterChange}
         />
       </div>
       <div className="mt-4 flex gap-4">
