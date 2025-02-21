@@ -6,8 +6,6 @@ import Image from 'next/image';
 import ShortcutList from '@components/ShortcutList';
 import Statistique from '@components/Statistique';
 import ExcelTab from '@components/ExcelTab';
-import { HotTable } from '@handsontable/react';
-import 'handsontable/dist/handsontable.full.min.css';
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState<'dashboard' | 'excel'>('dashboard');
