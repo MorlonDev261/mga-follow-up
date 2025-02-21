@@ -80,6 +80,17 @@ const ExcelTab = () => {
         _prop: string | number,     // Type explicite pour `_prop`
         _value: unknown             // Type explicite pour `_value`
       ) {
+        // Création de l'objet `cellProperties` avec les propriétés requises
+        const cellProperties: Handsontable.CellProperties = {
+          row,
+          col: _col,
+          instance,
+          visualRow: row,
+          visualCol: _col,
+          prop: _prop,
+          // Ajoutez d'autres propriétés si nécessaire
+        };
+
         // Rendu numérique par défaut
         Handsontable.renderers.NumericRenderer.apply(this, [
           instance,
@@ -88,7 +99,7 @@ const ExcelTab = () => {
           _col,
           _prop,
           _value,
-          {}, // Ajout de `cellProperties` (un objet vide pour cet exemple)
+          cellProperties, // Utilisation de l'objet `cellProperties` valide
         ]);
         
         // Style pour la ligne de totaux
