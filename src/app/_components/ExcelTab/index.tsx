@@ -1,4 +1,5 @@
 import { HotTable } from '@handsontable/react';
+import Handsontable from 'handsontable';
 import 'handsontable/dist/handsontable.full.min.css';
 import { useState, useRef } from 'react';
 import { exportToExcel } from './excel-utils';
