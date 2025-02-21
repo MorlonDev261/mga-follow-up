@@ -81,7 +81,15 @@ const ExcelTab = () => {
         _value: unknown             // Type explicite pour `_value`
       ) {
         // Rendu numérique par défaut
-        Handsontable.renderers.NumericRenderer.apply(this, [instance, td, row, _col, _prop, _value]);
+        Handsontable.renderers.NumericRenderer.apply(this, [
+          instance,
+          td,
+          row,
+          _col,
+          _prop,
+          _value,
+          {}, // Ajout de `cellProperties` (un objet vide pour cet exemple)
+        ]);
         
         // Style pour la ligne de totaux
         if (row >= dataRows.length) {
