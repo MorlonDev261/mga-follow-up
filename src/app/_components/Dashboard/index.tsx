@@ -69,7 +69,7 @@ export default function Dashboard() {
                 </div>
                 <p className="text-gray-400">= 4350 AIED</p>
               </div>
-              <div className="mb-5 max-h-[100px] max-w-[220px] bg-gray-500">
+              <div className="mb-5 max-h-[100px] max-w-[250px] bg-gray-500">
                 <Statistique position="right" />
               </div>
               <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-4">
