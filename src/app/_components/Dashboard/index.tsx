@@ -88,9 +88,9 @@ export default function Dashboard() {
         </main>
       )}
       {activeTab === 'excel' && (
-        <main className="p-2">
-          <div className="bg-[#111] p-4">
-            <h3 className="text-xl mb-4">Financial Tracking</h3>
+        <main className="p-1">
+          <div className="bg-[#111]">
+            <h3 className="text-xl px-1 mb-4">Financial Tracking</h3>
             <ExcelTab />
           </div>
         </main>
