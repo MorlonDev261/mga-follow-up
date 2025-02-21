@@ -2,6 +2,7 @@ import { HotTable } from '@handsontable/react';
 import Handsontable from 'handsontable';
 import 'handsontable/dist/handsontable.full.min.css';
 import { useState, useRef } from 'react';
+import { exportToExcel, importFromExcel } from './excel-utils';
 
 const ExcelTab = () => {
   const hotTableRef = useRef(null);
@@ -25,7 +26,22 @@ const ExcelTab = () => {
     }
   ];
 
+  
+  const handleExport = () => {
+    exportToExcel(data, 'financial-report');
+  };
+
+  const handleImport = async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const importedData = await importFromExcel(file);
+      setData(importedData);
+    }
+  };
+
+
   return (
+    <>
     <div className="p-4">
       <HotTable
         ref={hotTableRef}
@@ -45,6 +61,16 @@ const ExcelTab = () => {
         manualColumnMove={true}
       />
     </div>
+    {/* Options supplémentaires */}
+      <div className="mt-4 flex gap-4">
+        <button className="bg-blue-500 px-4 py-2 rounded" onClick={handleExport}>
+          Exporter en Excel
+        </button>
+        <button className="bg-green-500 px-4 py-2 rounded" onClick={handleImport}>
+          Ajouter une ligne
+        </button>
+      </div>
+    </>
   );
 };
 
