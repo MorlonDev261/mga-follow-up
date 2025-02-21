@@ -60,7 +60,7 @@ const ExcelTab = () => {
           width="100%"
           licenseKey="non-commercial-and-evaluation"
           contextMenu={true}
-          formulas={{ engine: 'hyperformula' }}
+       // formulas={{ engine: 'hyperformula' }} // Mampiasa formule EXCEL
           stretchH="all"
           columnSorting={true}
           dropdownMenu={true}
