@@ -1,4 +1,5 @@
 import { HotTable } from '@handsontable/react';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import Handsontable from 'handsontable';
 import 'handsontable/dist/handsontable.full.min.css';
 import { useState, useRef } from 'react';
