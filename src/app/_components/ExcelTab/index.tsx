@@ -2,11 +2,11 @@ import { HotTable } from '@handsontable/react';
 import type { HotTableClass } from '@handsontable/react';
 import Handsontable from 'handsontable';
 import 'handsontable/dist/handsontable.full.min.css';
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { exportToExcel } from './excel-utils';
 
 interface FinancialDataRow {
-  date: string; // Format YYYY-MM-DD
+  date: string;
   client: string;
   income: number;
   expenses: number;
@@ -22,82 +22,126 @@ const ExcelTab = () => {
   ]);
 
   const colHeaders = ['Date', 'Client', 'Income (AR)', 'Expenses (AR)', 'Comments', 'Net Available (AR)'];
-
   const columns = [
-    { type: 'date', dateFormat: 'YYYY-MM-DD' },
-    { type: 'text' },
-    { type: 'numeric', numericFormat: { pattern: '0,0' } },
-    { type: 'numeric', numericFormat: { pattern: '0,0' } },
-    { type: 'text' },
-    { type: 'numeric', readOnly: true },
+    { data: 'date', type: 'date', dateFormat: 'YYYY-MM-DD', validator: Handsontable.validators.DateValidator },
+    { data: 'client', type: 'text' },
+    { 
+      data: 'income', 
+      type: 'numeric', 
+      numericFormat: { pattern: '0,0' },
+      validator: (value: any, callback: (result: boolean) => void) => {
+        callback(!isNaN(parseFloat(value)) && parseFloat(value) >= 0);
+      }
+    },
+    { 
+      data: 'expenses', 
+      type: 'numeric', 
+      numericFormat: { pattern: '0,0' },
+      validator: (value: any, callback: (result: boolean) => void) => {
+        callback(!isNaN(parseFloat(value)) && parseFloat(value) >= 0);
+      }
+    },
+    { data: 'comments', type: 'text' },
+    { data: 'net', type: 'numeric', readOnly: true, numericFormat: { pattern: '0,0' } },
   ];
 
-  const handleExport = () => {
-    exportToExcel(data, 'financial-report');
-  };
-
-  const addRow = () => {
-    setData((prevData) => [
-      ...prevData,
-      { date: '', client: '', income: 0, expenses: 0, comments: '', net: 0 },
+  const handleExport = useCallback(() => {
+    const exportData = data.map(row => [
+      row.date,
+      row.client,
+      row.income,
+      row.expenses,
+      row.comments,
+      row.net,
     ]);
-  };
+    exportToExcel(exportData, colHeaders, 'financial-report');
+  }, [data]);
 
-  const handleAfterChange = (
+  const addRow = useCallback(() => {
+    setData(prev => [
+      ...prev,
+      { date: '', client: '', income: 0, expenses: 0, comments: '', net: 0 }
+    ]);
+  }, []);
+
+  const handleAfterChange = useCallback((
     changes: Handsontable.CellChange[] | null,
     source: Handsontable.ChangeSource
   ) => {
-    if (source !== 'loadData' && changes) {
-      setData((prevData) => {
-        const newData = [...prevData];
-        changes.forEach(([row, prop, , newVal]) => {
-          if (newData[row]) {
-            const key = ['date', 'client', 'income', 'expenses', 'comments', 'net'][prop as number] as keyof FinancialDataRow;
-            if (key) {
-              newData[row][key] = newVal as never;
-              
-              // Recalcul du net si income ou expenses ont changé
-              if (key === 'income' || key === 'expenses') {
-                newData[row].net = newData[row].income - newData[row].expenses;
-              }
+    if (source === 'edit' && changes) {
+      setData(prev => {
+        const newData = [...prev];
+        changes.forEach(([row, prop, oldValue, newValue]) => {
+          if (row >= newData.length || typeof prop !== 'string') return;
+
+          const key = prop as keyof FinancialDataRow;
+          const rowData = newData[row];
+
+          if (key in rowData) {
+            // Conversion numérique pour les champs concernés
+            const numericKeys = ['income', 'expenses', 'net'];
+            const value = numericKeys.includes(key) ? Number(newValue) || 0 : newValue;
+
+            // @ts-ignore - Gestion dynamique des types
+            rowData[key] = value;
+
+            // Recalcul du net
+            if (key === 'income' || key === 'expenses') {
+              rowData.net = Number(rowData.income) - Number(rowData.expenses);
             }
           }
         });
         return newData;
       });
     }
-  };
+  }, []);
 
   return (
-    <>
-      <div className="p-4">
-        <HotTable
-          ref={hotTableRef}
-          data={data.map(({ date, client, income, expenses, comments, net }) => [date, client, income, expenses, comments, net])} // Conversion en tableau de tableaux
-          colHeaders={colHeaders}
-          rowHeaders={true}
-          columns={columns}
-          height="600"
-          width="100%"
-          licenseKey="non-commercial-and-evaluation"
-          contextMenu={true}
-          stretchH="all"
-          columnSorting={true}
-          dropdownMenu={true}
-          manualRowMove={true}
-          manualColumnMove={true}
-          afterChange={handleAfterChange}
-        />
-      </div>
-      <div className="mt-4 flex gap-4">
-        <button className="bg-blue-500 px-4 py-2 rounded text-white" onClick={handleExport}>
+    <div className="p-4">
+      <div className="mb-4 flex gap-4">
+        <button 
+          className="bg-blue-500 px-4 py-2 rounded text-white hover:bg-blue-600 transition-colors"
+          onClick={handleExport}
+        >
           Exporter en Excel
         </button>
-        <button className="bg-green-500 px-4 py-2 rounded text-white" onClick={addRow}>
+        <button 
+          className="bg-green-500 px-4 py-2 rounded text-white hover:bg-green-600 transition-colors"
+          onClick={addRow}
+        >
           Ajouter une ligne
         </button>
       </div>
-    </>
+
+      <HotTable
+        ref={hotTableRef}
+        data={data}
+        colHeaders={colHeaders}
+        columns={columns}
+        height="600"
+        width="100%"
+        licenseKey="non-commercial-and-evaluation"
+        contextMenu={{
+          items: {
+            row_above: {},
+            row_below: {},
+            remove_row: {},
+            undo: {},
+            redo: {}
+          }
+        }}
+        stretchH="all"
+        columnSorting={true}
+        dropdownMenu={true}
+        manualRowMove={true}
+        manualColumnMove={true}
+        afterChange={handleAfterChange}
+        rowHeights={40}
+        autoWrapRow={true}
+        navigableHeaders={true}
+        renderAllRows={true}
+      />
+    </div>
   );
 };
 
