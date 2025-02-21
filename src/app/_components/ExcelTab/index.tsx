@@ -39,7 +39,8 @@ const ExcelTab = () => {
     setData(prevData => [...prevData, newRow]);
 
     if (hotTableRef.current) {
-      hotTableRef.current.hotInstance.alter('insert_row', hotTableRef.current.hotInstance.countRows());
+      const hotInstance = hotTableRef.current.getInstance();
+      hotInstance.alter('insert_row', hotInstance.countRows());
     }
   };
 
