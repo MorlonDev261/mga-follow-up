@@ -3,7 +3,7 @@ import { HotTable } from '@handsontable/react';
 import Handsontable from 'handsontable';
 import 'handsontable/dist/handsontable.full.min.css';
 import { useState, useRef } from 'react';
-import { exportToExcel, importFromExcel } from './excel-utils';
+import { exportToExcel } from './excel-utils';
 
 const ExcelTab = () => {
   const hotTableRef = useRef<HotTable | null>(null);
@@ -25,14 +25,6 @@ const ExcelTab = () => {
 
   const handleExport = () => {
     exportToExcel(data, 'financial-report');
-  };
-
-  const handleImport = async (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const importedData = await importFromExcel(file);
-      setData(importedData);
-    }
   };
 
   const addRow = () => {
@@ -70,7 +62,6 @@ const ExcelTab = () => {
         <button className="bg-green-500 px-4 py-2 rounded text-white" onClick={addRow}>
           Ajouter une ligne
         </button>
-        <input type="file" onChange={handleImport} />
       </div>
     </>
   );
