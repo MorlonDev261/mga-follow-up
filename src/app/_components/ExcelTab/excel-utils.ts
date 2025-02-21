@@ -1,14 +1,5 @@
 import ExcelJS from 'exceljs';
 
-interface FinancialDataRow {
-  date: string; // Format YYYY-MM-DD
-  client: string;
-  income: number;
-  expenses: number;
-  comments: string;
-  net: number;
-}
-
 export const exportToExcel = async (
   data: (string | number)[][], // Acceptation des données sous forme de tableau de tableaux
   headers: string[], // Ajout des en-têtes comme argument
