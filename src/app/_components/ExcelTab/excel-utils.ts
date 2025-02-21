@@ -9,19 +9,16 @@ interface FinancialDataRow {
   net: number;
 }
 
-export const exportToExcel = async (data: FinancialDataRow[], fileName: string = 'export.xlsx') => {
+export const exportToExcel = async (
+  data: (string | number)[][], // Acceptation des données sous forme de tableau de tableaux
+  headers: string[], // Ajout des en-têtes comme argument
+  fileName: string = 'export.xlsx'
+) => {
   const workbook = new ExcelJS.Workbook();
   const worksheet = workbook.addWorksheet('Financial Data');
 
-  // Définition des colonnes
-  worksheet.columns = [
-    { header: 'Date', key: 'date', width: 15 },
-    { header: 'Client', key: 'client', width: 20 },
-    { header: 'Income (AR)', key: 'income', width: 15 },
-    { header: 'Expenses (AR)', key: 'expenses', width: 15 },
-    { header: 'Comments', key: 'comments', width: 30 },
-    { header: 'Net Available (AR)', key: 'net', width: 15 }
-  ];
+  // Ajout des en-têtes
+  worksheet.addRow(headers);
 
   // Ajout des données
   data.forEach(row => {
