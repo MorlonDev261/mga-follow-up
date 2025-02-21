@@ -1,7 +1,6 @@
 import { HotTable } from '@handsontable/react';
 import 'handsontable/dist/handsontable.full.min.css';
 import { useState, useRef } from 'react';
-import HyperFormula from '@handsontable/hyperformula';
 import { exportToExcel } from './excel-utils';
 
 interface FinancialDataRow {
@@ -73,7 +72,7 @@ const ExcelTab = () => {
           width="100%"
           licenseKey="non-commercial-and-evaluation"
           contextMenu={true}
-          formulas={{ engine: HyperFormula }}
+       // formulas={{ engine: HyperFormula }}
           stretchH="all"
           columnSorting={true}
           dropdownMenu={true}
