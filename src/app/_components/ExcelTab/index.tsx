@@ -1,10 +1,10 @@
+import "./CSS/styles.css";
 import { HotTable } from '@handsontable/react';
 import type { HotTableClass } from '@handsontable/react';
 import Handsontable from 'handsontable';
 import 'handsontable/dist/handsontable.full.min.css';
-import { useState, useRef, useCallback, useMemo } from 'react';
+import { useState, useRef, useCallback, useMemo } from 'react'; // Ajout de useMemo
 import { exportToExcel } from './excel-utils';
-import './CSS/styles.css'; // Importez votre fichier CSS
 
 interface FinancialDataRow {
   date: string;
@@ -22,6 +22,7 @@ const ExcelTab = () => {
     { date: '2024-01-02', client: 'Client B', income: 750000, expenses: 300000, comments: 'Commentaire 2', net: 450000 },
   ]);
 
+  // Utilisation de useMemo pour mémoriser colHeaders
   const colHeaders = useMemo(() => ['Date', 'Client', 'Income (AR)', 'Expenses (AR)', 'Comments', 'Net Available (AR)'], []);
 
   const columns = [
@@ -33,14 +34,6 @@ const ExcelTab = () => {
       numericFormat: { pattern: '0,0' },
       validator: (value: unknown, callback: (result: boolean) => void) => {
         callback(!isNaN(Number(value)) && Number(value) >= 0);
-      },
-      renderer: (instance, td, row, col, prop, value) => {
-        if (value > 500000) {
-          td.style.backgroundColor = '#d4edda'; // Vert clair
-        } else if (value > 0) {
-          td.style.backgroundColor = '#fff3cd'; // Jaune clair
-        }
-        Handsontable.renderers.TextRenderer.apply(this, arguments);
       }
     },
     { 
@@ -49,31 +42,10 @@ const ExcelTab = () => {
       numericFormat: { pattern: '0,0' },
       validator: (value: unknown, callback: (result: boolean) => void) => {
         callback(!isNaN(Number(value)) && Number(value) >= 0);
-      },
-      renderer: (instance, td, row, col, prop, value) => {
-        if (value > 300000) {
-          td.style.backgroundColor = '#f8d7da'; // Rouge clair
-        }
-        Handsontable.renderers.TextRenderer.apply(this, arguments);
       }
     },
     { data: 'comments', type: 'text' },
-    { 
-      data: 'net', 
-      type: 'numeric', 
-      readOnly: true, 
-      numericFormat: { pattern: '0,0' },
-      renderer: (instance, td, row, col, prop, value) => {
-        if (value < 0) {
-          td.style.backgroundColor = '#f8d7da'; // Rouge clair
-          td.style.color = '#721c24'; // Texte rouge foncé
-        } else {
-          td.style.backgroundColor = '#d4edda'; // Vert clair
-          td.style.color = '#155724'; // Texte vert foncé
-        }
-        Handsontable.renderers.TextRenderer.apply(this, arguments);
-      }
-    },
+    { data: 'net', type: 'numeric', readOnly: true, numericFormat: { pattern: '0,0' } },
   ];
 
   const handleExport = useCallback(() => {
@@ -86,7 +58,7 @@ const ExcelTab = () => {
       row.net,
     ]);
     exportToExcel(exportData, colHeaders, 'financial-report');
-  }, [data, colHeaders]);
+  }, [data, colHeaders]); // colHeaders est maintenant stable grâce à useMemo
 
   const addRow = useCallback(() => {
     setData(prev => [
@@ -109,12 +81,28 @@ const ExcelTab = () => {
           const rowData = newData[row];
 
           if (key in rowData) {
+            // Journaliser l'ancienne et la nouvelle valeur
+            console.log(`Modification détectée dans la ligne ${row}, colonne ${key}:`);
+            console.log(`- Ancienne valeur :`, oldValue);
+            console.log(`- Nouvelle valeur :`, newValue);
+
+            // Exemple de logique : annuler la modification si la nouvelle valeur est invalide
+            if (key === 'income' || key === 'expenses') {
+              const numericValue = Number(newValue);
+              if (isNaN(numericValue)) {
+                console.warn(`La valeur "${newValue}" n'est pas un nombre valide. Annulation de la modification.`);
+                return; // Annuler la modification
+              }
+            }
+
+            // Appliquer la nouvelle valeur
             const numericKeys = ['income', 'expenses', 'net'];
             const value = numericKeys.includes(key) ? Number(newValue) || 0 : newValue;
 
             // @ts-expect-error - La validation est gérée par les colonnes
             rowData[key] = value;
 
+            // Recalculer le net si income ou expenses a changé
             if (key === 'income' || key === 'expenses') {
               rowData.net = Number(rowData.income) - Number(rowData.expenses);
             }
@@ -155,31 +143,8 @@ const ExcelTab = () => {
             row_above: {},
             row_below: {},
             remove_row: {},
-            col_left: {},
-            col_right: {},
-            remove_col: {},
             undo: {},
-            redo: {},
-            change_color: {
-              name: 'Changer la couleur',
-              callback: function(key, selection) {
-                const { start, end } = selection[0];
-                const hot = this;
-
-                const color = prompt('Entrez une couleur (ex: #ff0000, red, rgb(255, 0, 0)):');
-
-                if (color) {
-                  for (let row = start.row; row <= end.row; row++) {
-                    for (let col = start.col; col <= end.col; col++) {
-                      const cell = hot.getCell(row, col);
-                      if (cell) {
-                        cell.style.backgroundColor = color;
-                      }
-                    }
-                  }
-                }
-              }
-            }
+            redo: {}
           }
         }}
         stretchH="all"
@@ -191,7 +156,6 @@ const ExcelTab = () => {
         autoWrapRow={true}
         navigableHeaders={true}
         renderAllRows={true}
-        selectionMode="range"
       />
     </>
   );
