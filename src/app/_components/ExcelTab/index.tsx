@@ -131,6 +131,7 @@ const ExcelTab = () => {
       </div>
 
       <HotTable
+        className="handsontable"
         ref={hotTableRef}
         data={data}
         colHeaders={colHeaders}
