@@ -1,7 +1,7 @@
 import { HotTable } from '@handsontable/react';
 import 'handsontable/dist/handsontable.full.min.css';
 import { useState, useRef } from 'react';
-import { exportToExcel, importFromExcel } from './excel-utils';
+import { exportToExcel } from './excel-utils';
 
 const ExcelTab = () => {
   const hotTableRef = useRef<HotTable | null>(null);
@@ -29,6 +29,7 @@ const ExcelTab = () => {
     if (hotTableRef.current) {
       const hotInstance = hotTableRef.current.hotInstance;
       hotInstance.alter('insert_row', hotInstance.countRows());
+      setData([...data, []]);
     }
   };
 
