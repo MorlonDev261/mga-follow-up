@@ -5,6 +5,9 @@ import { FiBell, FiLifeBuoy, FiSearch } from 'react-icons/fi';
 import Image from 'next/image';
 import ShortcutList from '@components/ShortcutList';
 import Statistique from '@components/Statistique';
+import ExcelTab from '@components/ExcelTab';
+import { HotTable } from '@handsontable/react';
+import 'handsontable/dist/handsontable.full.min.css';
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState<'dashboard' | 'excel'>('dashboard');
@@ -86,6 +89,24 @@ export default function Dashboard() {
           </div>
         </main>
       )}
+      {activeTab === 'excel' && (
+  <main className="p-2">
+    <div className="bg-[#111] p-4">
+      <h3 className="text-xl mb-4">Financial Tracking</h3>
+      <ExcelTab />
+      
+      {/* Options supplémentaires */}
+      <div className="mt-4 flex gap-4">
+        <button className="bg-blue-500 px-4 py-2 rounded">
+          Exporter en Excel
+        </button>
+        <button className="bg-green-500 px-4 py-2 rounded">
+          Ajouter une ligne
+        </button>
+      </div>
+    </div>
+  </main>
+)}
     </div>
   );
 }
