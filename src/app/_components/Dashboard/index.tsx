@@ -90,23 +90,13 @@ export default function Dashboard() {
         </main>
       )}
       {activeTab === 'excel' && (
-  <main className="p-2">
-    <div className="bg-[#111] p-4">
-      <h3 className="text-xl mb-4">Financial Tracking</h3>
-      <ExcelTab />
-      
-      {/* Options supplémentaires */}
-      <div className="mt-4 flex gap-4">
-        <button className="bg-blue-500 px-4 py-2 rounded">
-          Exporter en Excel
-        </button>
-        <button className="bg-green-500 px-4 py-2 rounded">
-          Ajouter une ligne
-        </button>
-      </div>
-    </div>
-  </main>
-)}
+        <main className="p-2">
+          <div className="bg-[#111] p-4">
+            <h3 className="text-xl mb-4">Financial Tracking</h3>
+            <ExcelTab />
+          </div>
+        </main>
+      )}
     </div>
   );
 }
