@@ -131,7 +131,7 @@ const ExcelTab = () => {
       </div>
 
       <HotTable
-        className="handsontable"
+        className="handsontable dark-theme"
         ref={hotTableRef}
         data={data}
         colHeaders={colHeaders}
