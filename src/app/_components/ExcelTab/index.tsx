@@ -1,4 +1,4 @@
-import { HotTable } from '@handsontable/react';
+import { HotTable, HotTableClass } from '@handsontable/react';
 import 'handsontable/dist/handsontable.full.min.css';
 import { useState, useRef } from 'react';
 import { exportToExcel } from './excel-utils';
@@ -13,16 +13,11 @@ interface FinancialDataRow {
 }
 
 const ExcelTab = () => {
-  const hotTableRef = useRef<HotTable | null>(null);
-  const initialData: FinancialDataRow[] = [
+  const hotTableRef = useRef<HotTableClass | null>(null);
+  const [data, setData] = useState<FinancialDataRow[]>([
     { date: '2024-01-01', client: 'Client A', income: 500000, expenses: 200000, comments: 'Commentaire 1', net: 300000 },
     { date: '2024-01-02', client: 'Client B', income: 750000, expenses: 300000, comments: 'Commentaire 2', net: 450000 },
-  ];
-
-  // Stocker les données sous forme de tableau de tableaux
-  const [tableData, setTableData] = useState(
-    initialData.map(({ date, client, income, expenses, comments, net }) => [date, client, income, expenses, comments, net])
-  );
+  ]);
 
   const colHeaders = ['Date', 'Client', 'Income (AR)', 'Expenses (AR)', 'Comments', 'Net Available (AR)'];
 
@@ -36,27 +31,20 @@ const ExcelTab = () => {
   ];
 
   const handleExport = () => {
-    exportToExcel(
-      tableData.map(row => ({
-        date: row[0],
-        client: row[1],
-        income: row[2],
-        expenses: row[3],
-        comments: row[4],
-        net: row[5],
-      })),
-      'financial-report'
-    );
+    exportToExcel(data, 'financial-report');
   };
 
   const addRow = () => {
-    const newRow = ['', '', 0, 0, '', 0]; // Format correspondant aux colonnes
-    setTableData(prevData => [...prevData, newRow]);
+    const newRow: FinancialDataRow = {
+      date: '',
+      client: '',
+      income: 0,
+      expenses: 0,
+      comments: '',
+      net: 0,
+    };
 
-    // Rafraîchir Handsontable après l'ajout d'une ligne
-    setTimeout(() => {
-      hotTableRef.current?.hotInstance.render();
-    }, 0);
+    setData([...data, newRow]);
   };
 
   return (
@@ -64,7 +52,7 @@ const ExcelTab = () => {
       <div className="p-4">
         <HotTable
           ref={hotTableRef}
-          data={tableData}
+          data={data.map(({ date, client, income, expenses, comments, net }) => [date, client, income, expenses, comments, net])} // Conversion en tableau de tableaux
           colHeaders={colHeaders}
           rowHeaders={true}
           columns={columns}
@@ -72,7 +60,7 @@ const ExcelTab = () => {
           width="100%"
           licenseKey="non-commercial-and-evaluation"
           contextMenu={true}
-       // formulas={{ engine: HyperFormula }}
+       // formulas={{ engine: 'hyperformula' }} // Mampiasa formule EXCEL
           stretchH="all"
           columnSorting={true}
           dropdownMenu={true}
