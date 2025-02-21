@@ -33,7 +33,7 @@ const ExcelTab = () => {
 
   const handleExport = () => {
     if (hotTableRef.current) {
-      const tableInstance = hotTableRef.current.hotInstance;
+      const tableInstance = hotTableRef.current.hotInstance as Handsontable | null;
       if (tableInstance) {
         const exportedData = tableInstance.getData();
         exportToExcel(exportedData, 'financial-report');
