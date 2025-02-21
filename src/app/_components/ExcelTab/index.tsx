@@ -1,4 +1,4 @@
-import { HotTable } from '@handsontable/react';
+import { HotTable, HotTableClass } from '@handsontable/react';
 import 'handsontable/dist/handsontable.full.min.css';
 import { useState, useRef } from 'react';
 import { exportToExcel } from './excel-utils';
@@ -13,7 +13,7 @@ interface FinancialDataRow {
 }
 
 const ExcelTab = () => {
-  const hotTableRef = useRef<HotTable | null>(null);
+  const hotTableRef = useRef<HotTableClass | null>(null);
   const [data, setData] = useState<FinancialDataRow[]>([
     { date: '2024-01-01', client: 'Client A', income: 500000, expenses: 200000, comments: 'Commentaire 1', net: 300000 },
     { date: '2024-01-02', client: 'Client B', income: 750000, expenses: 300000, comments: 'Commentaire 2', net: 450000 },
