@@ -29,16 +29,16 @@ const ExcelTab = () => {
       data: 'income', 
       type: 'numeric', 
       numericFormat: { pattern: '0,0' },
-      validator: (value: any, callback: (result: boolean) => void) => {
-        callback(!isNaN(parseFloat(value)) && parseFloat(value) >= 0);
+      validator: (value: unknown, callback: (result: boolean) => void) => {
+        callback(!isNaN(Number(value)) && Number(value) >= 0);
       }
     },
     { 
       data: 'expenses', 
       type: 'numeric', 
       numericFormat: { pattern: '0,0' },
-      validator: (value: any, callback: (result: boolean) => void) => {
-        callback(!isNaN(parseFloat(value)) && parseFloat(value) >= 0);
+      validator: (value: unknown, callback: (result: boolean) => void) => {
+        callback(!isNaN(Number(value)) && Number(value) >= 0);
       }
     },
     { data: 'comments', type: 'text' },
@@ -55,7 +55,7 @@ const ExcelTab = () => {
       row.net,
     ]);
     exportToExcel(exportData, colHeaders, 'financial-report');
-  }, [data]);
+  }, [data, colHeaders]);
 
   const addRow = useCallback(() => {
     setData(prev => [
@@ -71,21 +71,19 @@ const ExcelTab = () => {
     if (source === 'edit' && changes) {
       setData(prev => {
         const newData = [...prev];
-        changes.forEach(([row, prop, oldValue, newValue]) => {
+        changes.forEach(([row, prop, _oldValue, newValue]) => {
           if (row >= newData.length || typeof prop !== 'string') return;
 
           const key = prop as keyof FinancialDataRow;
           const rowData = newData[row];
 
           if (key in rowData) {
-            // Conversion numérique pour les champs concernés
             const numericKeys = ['income', 'expenses', 'net'];
             const value = numericKeys.includes(key) ? Number(newValue) || 0 : newValue;
 
-            // @ts-ignore - Gestion dynamique des types
+            // @ts-expect-error - La validation est gérée par les colonnes
             rowData[key] = value;
 
-            // Recalcul du net
             if (key === 'income' || key === 'expenses') {
               rowData.net = Number(rowData.income) - Number(rowData.expenses);
             }
