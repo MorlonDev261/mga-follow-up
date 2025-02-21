@@ -1,16 +1,17 @@
 import React from 'react';
 import clsx from 'clsx';
 import { FaCog, FaUsers, FaRegUserCircle } from 'react-icons/fa';
-import { BsShopWindow } from "react-icons/bs";
+import { BsShopWindow, BsPersonWorkspace } from "react-icons/bs";
 import { FiDollarSign, FiClock } from 'react-icons/fi';
 
 const shortcuts = [
   { label: 'Stock', value: 457900, icon: <BsShopWindow />, color: 'text-blue-500' },
-  { label: 'Depense', value: 457900, icon: <FiDollarSign />, color: 'text-red-500' },
+  { label: 'Expenses', value: 457900, icon: <FiDollarSign />, color: 'text-red-500' },
   { label: 'Pending', value: 457900, icon: <FiClock />, color: 'text-yellow-500' },
-  { label: 'Client', value: 7, icon: <FaUsers /> },
+  { label: 'Customers', value: 7, icon: <FaUsers /> },
+  { label: 'Employers', value: 7, icon: <BsPersonWorkspace /> },
   { label: 'Profile', icon: <FaRegUserCircle /> },
-  { label: 'Paramètre', icon: <FaCog /> },
+  { label: 'Settings', icon: <FaCog /> },
 ];
 
 const ShortcutList = () => {
@@ -20,7 +21,7 @@ const ShortcutList = () => {
         <div
           key={shortcut.label}
           className={clsx(
-            "flex h-20 flex-col items-center justify-center rounded bg-[#222] p-2 transition-colors duration-300",
+            "flex h-20 flex-col items-center justify-center rounded bg-[#222] hover:bg-[#333] p-2 transition-colors duration-300",
             shortcut.color !== undefined ? shortcut.color : "text-white" // Ajoute la couleur en hover dynamiquement
           )}
         >
