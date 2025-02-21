@@ -60,7 +60,7 @@ const ExcelTab = () => {
           width="100%"
           licenseKey="non-commercial-and-evaluation"
           contextMenu={true}
-          formulas={true}
+          formulas={{ engine: 'hyperformula' }}
           stretchH="all"
           columnSorting={true}
           dropdownMenu={true}
