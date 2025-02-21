@@ -72,7 +72,14 @@ const ExcelTab = () => {
       type: 'numeric', 
       readOnly: (row: number) => row >= dataRows.length, // Lecture seule pour le total
       numericFormat: { pattern: '0,0' },
-      renderer: function(instance, td, row, _col, _prop, _value) {
+      renderer: function(
+        instance: Handsontable.Core, // Type explicite pour `instance`
+        td: HTMLTableCellElement,   // Type explicite pour `td`
+        row: number,                // Type explicite pour `row`
+        _col: number,               // Type explicite pour `_col`
+        _prop: string | number,     // Type explicite pour `_prop`
+        _value: unknown             // Type explicite pour `_value`
+      ) {
         // Rendu numérique par défaut
         Handsontable.renderers.NumericRenderer.apply(this, [instance, td, row, _col, _prop, _value]);
         
