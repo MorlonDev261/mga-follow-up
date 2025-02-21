@@ -1,6 +1,6 @@
 import { HotTable, HotTableClass } from '@handsontable/react';
 import 'handsontable/dist/handsontable.full.min.css';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { exportToExcel } from './excel-utils';
 
 interface FinancialDataRow {
@@ -47,6 +47,10 @@ const ExcelTab = () => {
     setData([...data, newRow]);
   };
 
+  useEffect(() => {
+    console.log('Data updated:', data);
+  }, [data]);
+
   return (
     <>
       <div className="p-4">
@@ -60,7 +64,6 @@ const ExcelTab = () => {
           width="100%"
           licenseKey="non-commercial-and-evaluation"
           contextMenu={true}
-       // formulas={{ engine: 'hyperformula' }} // Mampiasa formule EXCEL
           stretchH="all"
           columnSorting={true}
           dropdownMenu={true}
