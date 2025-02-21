@@ -113,8 +113,8 @@ const ExcelTab = () => {
   }, []);
 
   return (
-    <div className="p-4">
-      <div className="mb-4 flex gap-4">
+    <>
+      <div className="mb-2 flex gap-4">
         <button 
           className="bg-blue-500 px-4 py-2 rounded text-white hover:bg-blue-600 transition-colors"
           onClick={handleExport}
@@ -147,7 +147,6 @@ const ExcelTab = () => {
           }
         }}
         stretchH="all"
-        columnSorting={true}
         dropdownMenu={true}
         manualRowMove={true}
         manualColumnMove={true}
@@ -157,7 +156,7 @@ const ExcelTab = () => {
         navigableHeaders={true}
         renderAllRows={true}
       />
-    </div>
+    </>
   );
 };
 
