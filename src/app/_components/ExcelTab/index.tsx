@@ -88,7 +88,7 @@ const ExcelTab = () => {
             // Exemple de logique : annuler la modification si la nouvelle valeur est invalide
             if (key === 'income' || key === 'expenses') {
               const numericValue = Number(newValue);
-              if (isNaN(numericValue) {
+              if (isNaN(numericValue)) {
                 console.warn(`La valeur "${newValue}" n'est pas un nombre valide. Annulation de la modification.`);
                 return; // Annuler la modification
               }
