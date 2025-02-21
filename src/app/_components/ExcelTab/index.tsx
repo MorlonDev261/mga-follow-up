@@ -153,9 +153,11 @@ const ExcelTab = () => {
         minRows={20}
         viewportRowRenderingOffset="auto"
         rowHeights={40}
-        autoWrapRow={true}
         navigableHeaders={true}
         renderAllRows={true}
+        autoWrapRow={true}
+        fixedRowsTop={1} // Garde le header toujours visible
+        fixedColumnsStart={0}
       />
     </>
   );
