@@ -25,14 +25,6 @@ const ExcelTab = () => {
     exportToExcel(data, 'financial-report');
   };
 
-  const handleImport = async (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const importedData = await importFromExcel(file);
-      setData(importedData);
-    }
-  };
-
   const addRow = () => {
     if (hotTableRef.current) {
       const hotInstance = hotTableRef.current.hotInstance;
@@ -68,7 +60,6 @@ const ExcelTab = () => {
         <button className="bg-green-500 px-4 py-2 rounded text-white" onClick={addRow}>
           Ajouter une ligne
         </button>
-        <input type="file" onChange={handleImport} />
       </div>
     </>
   );
