@@ -1,11 +1,11 @@
 import { HotTable } from '@handsontable/react';
 import 'handsontable/dist/handsontable.full.min.css';
 import { useState, useRef } from 'react';
-import { exportToExcel } from './excel-utils';
+import { exportToExcel, importFromExcel } from './excel-utils';
 
 const ExcelTab = () => {
-  const hotTableRef = useRef<HotTable>(null);
-  const [data, setData] = useState<(string | number)[][]>([
+  const hotTableRef = useRef<HotTable | null>(null);
+  const [data, setData] = useState([
     ['2024-01-01', 'Client A', 500000, 200000, 'Commentaire 1', 300000],
     ['2024-01-02', 'Client B', 750000, 300000, 'Commentaire 2', 450000],
   ]);
@@ -22,24 +22,20 @@ const ExcelTab = () => {
   ];
 
   const handleExport = () => {
-    const formattedData = data.map(row => ({
-      date: row[0] as string,
-      client: row[1] as string,
-      income: row[2] as number,
-      expenses: row[3] as number,
-      comments: row[4] as string,
-      net: row[5] as number,
-    }));
-    
-    exportToExcel(formattedData, 'financial-report.xlsx');
+    exportToExcel(data, 'financial-report');
+  };
+
+  const handleImport = async (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const importedData = await importFromExcel(file);
+      setData(importedData);
+    }
   };
 
   const addRow = () => {
-    const newRow: (string | number)[] = ['', '', 0, 0, '', 0]; // Nouvelle ligne vide
-    setData(prevData => [...prevData, newRow]);
-
     if (hotTableRef.current) {
-      const hotInstance = hotTableRef.current.getInstance();
+      const hotInstance = hotTableRef.current.hotInstance;
       hotInstance.alter('insert_row', hotInstance.countRows());
     }
   };
@@ -57,22 +53,12 @@ const ExcelTab = () => {
           width="100%"
           licenseKey="non-commercial-and-evaluation"
           contextMenu={true}
+          formulas={true} // Assurez-vous d'avoir activé le plugin Formulas
           stretchH="all"
           columnSorting={true}
           dropdownMenu={true}
           manualRowMove={true}
           manualColumnMove={true}
-          afterChange={(changes, source) => {
-            if (source !== 'loadData' && changes) {
-              setData(prevData => {
-                const newData = [...prevData];
-                changes.forEach(([row, col, , newValue]) => {
-                  newData[row][col] = newValue;
-                });
-                return newData;
-              });
-            }
-          }}
         />
       </div>
       <div className="mt-4 flex gap-4">
@@ -82,6 +68,7 @@ const ExcelTab = () => {
         <button className="bg-green-500 px-4 py-2 rounded text-white" onClick={addRow}>
           Ajouter une ligne
         </button>
+        <input type="file" onChange={handleImport} />
       </div>
     </>
   );
