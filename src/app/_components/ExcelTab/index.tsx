@@ -112,7 +112,7 @@ const ExcelTab = () => {
     if (source === 'edit' && changes) {
       setDataRows(prev => {
         const newData = [...prev];
-        changes.forEach(([row, prop, _oldValue, _newValue]) => {
+        changes.forEach(([row, prop]) => { // Suppression de `oldValue` et `newValue`
           if (row >= newData.length) return; // Ignore les modifications du total
 
           const key = prop as keyof FinancialDataRow;
