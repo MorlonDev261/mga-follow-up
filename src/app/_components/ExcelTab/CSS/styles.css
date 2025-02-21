@@ -6,8 +6,13 @@
   color: #202124;
 }
 
-.handsontable th, .handsontable td, .handsontable tr {
+.handsontable th {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+.handsontable td, .handsontable tr {
   border-color: #ccc;
+  color: #fff;
   background-color: transparent !important;
 }
 
