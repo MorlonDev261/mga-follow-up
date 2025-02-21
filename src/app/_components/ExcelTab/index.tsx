@@ -5,28 +5,23 @@ import { useState, useRef } from 'react';
 import { exportToExcel, importFromExcel } from './excel-utils';
 
 const ExcelTab = () => {
-  const hotTableRef = useRef(null);
+  const hotTableRef = useRef<HotTable | null>(null);
   const [data, setData] = useState([
-    // Données initiales
     ['2024-01-01', 'Client A', 500000, 200000, 'Commentaire 1', 300000],
     ['2024-01-02', 'Client B', 750000, 300000, 'Commentaire 2', 450000],
   ]);
 
+  const colHeaders = ['Date', 'Client', 'Income (AR)', 'Expenses (AR)', 'Comments', 'Net Available (AR)'];
+
   const columns = [
-    { type: 'date', dateFormat: 'YYYY-MM-DD', title: 'Date' },
-    { title: 'Client' },
-    { type: 'numeric', title: 'Income (AR)', format: '0,0' },
-    { type: 'numeric', title: 'Expenses (AR)', format: '0,0' },
-    { title: 'Comments' },
-    { 
-      type: 'numeric', 
-      title: 'Net Available (AR)', 
-      readOnly: true,
-      formula: 'ROW(INDIRECT("RC[-2]", FALSE)-INDIRECT("RC[-1]", FALSE))'
-    }
+    { type: 'date', dateFormat: 'YYYY-MM-DD' },
+    { type: 'text' },
+    { type: 'numeric', numericFormat: { pattern: '0,0' } },
+    { type: 'numeric', numericFormat: { pattern: '0,0' } },
+    { type: 'text' },
+    { type: 'numeric', readOnly: true },
   ];
 
-  
   const handleExport = () => {
     exportToExcel(data, 'financial-report');
   };
@@ -39,36 +34,42 @@ const ExcelTab = () => {
     }
   };
 
+  const addRow = () => {
+    if (hotTableRef.current) {
+      const hotInstance = hotTableRef.current.hotInstance;
+      hotInstance.alter('insert_row', hotInstance.countRows());
+    }
+  };
 
   return (
     <>
-    <div className="p-4">
-      <HotTable
-        ref={hotTableRef}
-        data={data}
-        colHeaders={true}
-        rowHeaders={true}
-        columns={columns}
-        height="600"
-        width="100%"
-        licenseKey="non-commercial-and-evaluation" // Clé pour usage non-commercial
-        contextMenu={true}
-        formulas={true}
-        stretchH="all"
-        columnSorting={true}
-        dropdownMenu={true}
-        manualRowMove={true}
-        manualColumnMove={true}
-      />
-    </div>
-    {/* Options supplémentaires */}
+      <div className="p-4">
+        <HotTable
+          ref={hotTableRef}
+          data={data}
+          colHeaders={colHeaders}
+          rowHeaders={true}
+          columns={columns}
+          height="600"
+          width="100%"
+          licenseKey="non-commercial-and-evaluation"
+          contextMenu={true}
+          formulas={true} // Assurez-vous d'avoir activé le plugin Formulas
+          stretchH="all"
+          columnSorting={true}
+          dropdownMenu={true}
+          manualRowMove={true}
+          manualColumnMove={true}
+        />
+      </div>
       <div className="mt-4 flex gap-4">
-        <button className="bg-blue-500 px-4 py-2 rounded" onClick={handleExport}>
+        <button className="bg-blue-500 px-4 py-2 rounded text-white" onClick={handleExport}>
           Exporter en Excel
         </button>
-        <button className="bg-green-500 px-4 py-2 rounded" onClick={handleImport}>
+        <button className="bg-green-500 px-4 py-2 rounded text-white" onClick={addRow}>
           Ajouter une ligne
         </button>
+        <input type="file" onChange={handleImport} />
       </div>
     </>
   );
