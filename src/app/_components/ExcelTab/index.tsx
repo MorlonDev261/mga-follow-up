@@ -72,9 +72,9 @@ const ExcelTab = () => {
       type: 'numeric', 
       readOnly: (row: number) => row >= dataRows.length, // Lecture seule pour le total
       numericFormat: { pattern: '0,0' },
-      renderer: function(instance, td, row, col, prop, value) {
+      renderer: function(instance, td, row, _col, _prop, _value) {
         // Rendu numérique par défaut
-        Handsontable.renderers.NumericRenderer.apply(this, arguments);
+        Handsontable.renderers.NumericRenderer.apply(this, [instance, td, row, _col, _prop, _value]);
         
         // Style pour la ligne de totaux
         if (row >= dataRows.length) {
@@ -112,7 +112,7 @@ const ExcelTab = () => {
     if (source === 'edit' && changes) {
       setDataRows(prev => {
         const newData = [...prev];
-        changes.forEach(([row, prop, oldValue, newValue]) => {
+        changes.forEach(([row, prop, _oldValue, _newValue]) => {
           if (row >= newData.length) return; // Ignore les modifications du total
 
           const key = prop as keyof FinancialDataRow;
