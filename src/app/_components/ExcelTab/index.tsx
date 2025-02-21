@@ -3,11 +3,20 @@ import 'handsontable/dist/handsontable.full.min.css';
 import { useState, useRef } from 'react';
 import { exportToExcel } from './excel-utils';
 
+interface FinancialDataRow {
+  date: string; // Format YYYY-MM-DD
+  client: string;
+  income: number;
+  expenses: number;
+  comments: string;
+  net: number;
+}
+
 const ExcelTab = () => {
   const hotTableRef = useRef<HotTable | null>(null);
-  const [data, setData] = useState([
-    ['2024-01-01', 'Client A', 500000, 200000, 'Commentaire 1', 300000],
-    ['2024-01-02', 'Client B', 750000, 300000, 'Commentaire 2', 450000],
+  const [data, setData] = useState<FinancialDataRow[]>([
+    { date: '2024-01-01', client: 'Client A', income: 500000, expenses: 200000, comments: 'Commentaire 1', net: 300000 },
+    { date: '2024-01-02', client: 'Client B', income: 750000, expenses: 300000, comments: 'Commentaire 2', net: 450000 },
   ]);
 
   const colHeaders = ['Date', 'Client', 'Income (AR)', 'Expenses (AR)', 'Comments', 'Net Available (AR)'];
@@ -26,11 +35,16 @@ const ExcelTab = () => {
   };
 
   const addRow = () => {
-    if (hotTableRef.current) {
-      const hotInstance = hotTableRef.current.hotInstance;
-      hotInstance.alter('insert_row', hotInstance.countRows());
-      setData([...data, []]);
-    }
+    const newRow: FinancialDataRow = {
+      date: '',
+      client: '',
+      income: 0,
+      expenses: 0,
+      comments: '',
+      net: 0,
+    };
+
+    setData([...data, newRow]);
   };
 
   return (
@@ -38,7 +52,7 @@ const ExcelTab = () => {
       <div className="p-4">
         <HotTable
           ref={hotTableRef}
-          data={data}
+          data={data.map(({ date, client, income, expenses, comments, net }) => [date, client, income, expenses, comments, net])} // Conversion en tableau de tableaux
           colHeaders={colHeaders}
           rowHeaders={true}
           columns={columns}
@@ -46,7 +60,7 @@ const ExcelTab = () => {
           width="100%"
           licenseKey="non-commercial-and-evaluation"
           contextMenu={true}
-          formulas={true} // Assurez-vous d'avoir activé le plugin Formulas
+          formulas={true}
           stretchH="all"
           columnSorting={true}
           dropdownMenu={true}
