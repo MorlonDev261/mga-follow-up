@@ -2,6 +2,7 @@ import { HotTable } from '@handsontable/react';
 import 'handsontable/dist/handsontable.full.min.css';
 import { useState, useRef } from 'react';
 import { exportToExcel } from './excel-utils';
+import Handsontable from 'handsontable';
 
 interface FinancialDataRow {
   date: string; // Format YYYY-MM-DD
@@ -47,18 +48,23 @@ const ExcelTab = () => {
     ]);
   };
 
-  const handleAfterChange = (changes: any, source: string) => {
+  const handleAfterChange = (
+    changes: Handsontable.CellChange[] | null,
+    source: Handsontable.ChangeSource
+  ) => {
     if (source !== 'loadData' && changes) {
       setData((prevData) => {
         const newData = [...prevData];
-        changes.forEach(([row, prop, _oldVal, newVal]) => {
+        changes.forEach(([row, prop, , newVal]) => {
           if (newData[row]) {
-            const key = ['date', 'client', 'income', 'expenses', 'comments', 'net'][prop] as keyof FinancialDataRow;
-            newData[row][key] = newVal;
-            
-            // Recalcul du net si income ou expenses ont changé
-            if (key === 'income' || key === 'expenses') {
-              newData[row].net = newData[row].income - newData[row].expenses;
+            const key = ['date', 'client', 'income', 'expenses', 'comments', 'net'][prop as number] as keyof FinancialDataRow;
+            if (key) {
+              newData[row][key] = newVal as never;
+              
+              // Recalcul du net si income ou expenses ont changé
+              if (key === 'income' || key === 'expenses') {
+                newData[row].net = newData[row].income - newData[row].expenses;
+              }
             }
           }
         });
