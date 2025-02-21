@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@handsontable/react": "^15.0.1",
+    "@handsontable/hyperformula": "^1.4.0",
     "@radix-ui/react-dialog": "^1.1.6",
     "@shadcn/ui": "^0.0.4",
     "class-variance-authority": "^0.7.1",
