@@ -69,7 +69,7 @@ const ExcelTab = () => {
         if (row >= dataRows.length) {
           cellProperties.readOnly = true;
         }
-        Handsontable.renderers.TextRenderer.apply(this, arguments as any);
+        Handsontable.renderers.TextRenderer.call(this, instance, td, row, col, prop, value, cellProperties);
       }
     },
     {
@@ -82,7 +82,7 @@ const ExcelTab = () => {
           td.style.backgroundColor = '#34a853'; // Équivalent Tailwind bg-green-500
           td.style.color = 'white';
         }
-        Handsontable.renderers.NumericRenderer.apply(this, arguments as any);
+        Handsontable.renderers.NumericRenderer.call(this, instance, td, row, col, prop, value, cellProperties);
       }
     }
   ], [dataRows.length]);
