@@ -62,31 +62,29 @@ const ExcelTab = () => {
       callback(!isNaN(Number(value)) && Number(value) >= 0);
     }
   },
-  { 
-    data: 'comments', 
+  {
+    data: 'comments',
     type: 'text',
-    renderer: function(
-      instance, td, row, col, prop, value, cellProperties
-    ) {
+    renderer: function(...args) {
+      const [instance, td, row, col, prop, value, cellProperties] = args;
       if (row >= dataRows.length) {
         cellProperties.readOnly = true;
       }
-      Handsontable.renderers.TextRenderer.apply(this, arguments);
+      Handsontable.renderers.TextRenderer.apply(this, args);
     }
   },
-  { 
-    data: 'net', 
-    type: 'numeric', 
+  {
+    data: 'net',
+    type: 'numeric',
     numericFormat: { pattern: '0,0' },
-    renderer: function(
-      instance, td, row, col, prop, value, cellProperties
-    ) {
+    renderer: function(...args) {
+      const [instance, td, row, col, prop, value, cellProperties] = args;
       if (row >= dataRows.length) {
         cellProperties.readOnly = true;
         td.style.backgroundColor = '#34a853'; // Équivalent Tailwind bg-green-500
         td.style.color = 'white';
       }
-      Handsontable.renderers.NumericRenderer.apply(this, arguments);
+      Handsontable.renderers.NumericRenderer.apply(this, args);
     }
   }
 ], [dataRows.length]);
