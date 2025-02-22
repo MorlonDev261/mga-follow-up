@@ -43,7 +43,7 @@ const ExcelTab = () => {
 
   const colHeaders = useMemo(() => ['Date', 'Client', 'Income (AR)', 'Expenses (AR)', 'Comments', 'Net Available (AR)'], []);
 
-  const columns = useMemo<Handsontable.ColumnSettings[]>(() => [
+  const columns = useMemo(() => [
     { data: 'date', type: 'date', dateFormat: 'YYYY-MM-DD', validator: Handsontable.validators.DateValidator },
     { data: 'client', type: 'text' },
     { 
@@ -62,34 +62,32 @@ const ExcelTab = () => {
         callback(!isNaN(Number(value)) && Number(value) >= 0);
       }
     },
-    {
-      data: 'comments',
+    { 
+      data: 'comments', 
       type: 'text',
-      renderer: function(instance, td, row, col, prop, value, cellProperties) {
-        if (row >= dataRows.length) {
-          cellProperties.readOnly = true;
-        }
-        Handsontable.renderers.TextRenderer.call(this, instance, td, row, col, prop, value, cellProperties);
-      }
+      readOnly: (row: number) => row >= dataRows.length, // Lecture seule pour le total
     },
-    {
-      data: 'net',
-      type: 'numeric',
+    { 
+      data: 'net', 
+      type: 'numeric', 
+      readOnly: (row: number) => row >= dataRows.length, // Lecture seule pour le total
       numericFormat: { pattern: '0,0' },
-      renderer: function(instance, td, row, col, prop, value, cellProperties) {
+      renderer: function(instance, td, row, col, prop, value) {
+        // Rendu numérique par défaut
+        Handsontable.renderers.NumericRenderer.apply(this, arguments);
+        
+        // Style pour la ligne de totaux
         if (row >= dataRows.length) {
-          cellProperties.readOnly = true;
           td.style.backgroundColor = '#34a853'; // Équivalent Tailwind bg-green-500
           td.style.color = 'white';
         }
-        Handsontable.renderers.NumericRenderer.call(this, instance, td, row, col, prop, value, cellProperties);
       }
-    }
+    },
   ], [dataRows.length]);
 
   const handleExport = useCallback(() => {
     // Exporte uniquement les données (exclut la ligne de totaux)
-    const exportData  = dataRows.map(row => [
+    const exportData = dataRows.map(row => [
       row.date,
       row.client,
       row.income,
@@ -114,7 +112,7 @@ const ExcelTab = () => {
     if (source === 'edit' && changes) {
       setDataRows(prev => {
         const newData = [...prev];
-        changes.forEach(([row, prop]) => { // Suppression de `oldValue` et `newValue`
+        changes.forEach(([row, prop, oldValue, newValue]) => {
           if (row >= newData.length) return; // Ignore les modifications du total
 
           const key = prop as keyof FinancialDataRow;
