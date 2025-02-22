@@ -65,16 +65,8 @@ const ExcelTab = () => {
   ];
 
   const handleExport = useCallback(() => {
-    const exportData = dataRows.map(row => [
-      row.date,
-      row.client,
-      row.income,
-      row.expenses,
-      row.comments,
-      row.net,
-    ]);
-    exportToExcel(exportData, colHeaders, 'financial-report');
-  }, [dataRows, colHeaders]); // colHeaders est maintenant stable grâce à useMemo
+  exportToExcel(dataRows, colHeaders, 'financial-report.xlsx');
+}, [dataRows, colHeaders]);
 
   const addRow = useCallback(() => {
     setDataRows(prev => [
