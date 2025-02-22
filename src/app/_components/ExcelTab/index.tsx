@@ -9,8 +9,8 @@ import { exportToExcel } from './excel-utils';
 interface FinancialDataRow {
   date: string;
   client?: string;
-  income?: number;
-  expenses?: number;
+  income?: number || '';
+  expenses?: number || '';
   comments?: string;
   net: number;
 }
