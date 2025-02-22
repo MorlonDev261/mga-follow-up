@@ -10,7 +10,7 @@ interface FinancialDataRow {
 }
 
 export const exportToExcel = async (
-  data: FinancialDataRow[], 
+  exportData: FinancialDataRow[], 
   headers: string[], 
   fileName: string = 'export.xlsx'
 ) => {
@@ -21,7 +21,7 @@ export const exportToExcel = async (
   worksheet.addRow(headers);
 
   // Ajout des données sous forme de tableau
-  data.forEach(row => {
+  exportData.forEach(row => {
     worksheet.addRow([
       row.date,
       row.client || '',
@@ -36,7 +36,7 @@ export const exportToExcel = async (
   worksheet.columns = headers.map((header, colIndex) => {
     const columnData = [
       header, // Inclut l'en-tête dans le calcul
-      ...data.map(row => {
+      ...exportData.map(row => {
         const value = Object.values(row)[colIndex];
         return value ? value.toString() : '';
       }),
