@@ -42,7 +42,11 @@ const ExcelTab = () => {
 
   const columns = [
     { data: 'date', type: 'date', dateFormat: 'YYYY-MM-DD', validator: Handsontable.validators.DateValidator },
-    { data: 'client', type: 'text' },
+    { 
+      data: 'client', 
+      type: 'dropdown', 
+      source: ['Client A', 'Client B', 'Client C']
+    },
     { 
       data: 'income', 
       type: 'numeric', 
