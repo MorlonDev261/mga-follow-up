@@ -8,9 +8,9 @@ const shortcuts = [
   { label: 'Stock', value: 457900, icon: <BsShopWindow />, color: 'text-blue-500' },
   { label: 'Expenses', value: 457900, icon: <FiDollarSign />, color: 'text-red-500' },
   { label: 'Pending', value: 457900, icon: <FiClock />, color: 'text-yellow-500' },
-  { label: 'Customers', value: 7, icon: <FaUsers /> },
   { label: 'Employers', value: 7, icon: <BsPersonWorkspace /> },
   { label: 'Profile', icon: <FaRegUserCircle /> },
+  { label: 'Customers', value: 7, icon: <FaUsers /> },
   { label: 'Settings', icon: <FaCog /> },
 ];
 
