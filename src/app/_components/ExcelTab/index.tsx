@@ -22,6 +22,25 @@ const ExcelTab = () => {
     { date: '2024-01-02', client: 'Client B', income: 750000, expenses: 300000, comments: 'Commentaire 2', net: 450000 },
   ]);
 
+    // Calcul du total net disponible
+  const totalNet = useMemo(() => 
+    dataRows.reduce((sum, row) => sum + row.net, 0), 
+    [dataRows]
+  );
+
+  // Données incluant la ligne de totaux
+  const dataWithTotal = useMemo(() => {
+    const totalRow: FinancialDataRow = {
+      date: '',
+      client: '',
+      income: 0,
+      expenses: 0,
+      comments: 'Total Net Available:',
+      net: totalNet,
+    };
+    return [...dataRows, totalRow];
+  }, [dataRows, totalNet]);
+
   // Utilisation de useMemo pour mémoriser colHeaders
   const colHeaders = useMemo(() => ['Date', 'Client', 'Income (AR)', 'Expenses (AR)', 'Comments', 'Net Available (AR)'], []);
 
@@ -156,8 +175,6 @@ const ExcelTab = () => {
         navigableHeaders={true}
         renderAllRows={true}
         autoWrapRow={true}
-        fixedRowsTop={1} // Garde le header toujours visible
-        fixedColumnsStart={0}
       />
     </>
   );
