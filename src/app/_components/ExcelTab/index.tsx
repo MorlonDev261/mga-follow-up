@@ -18,8 +18,7 @@ interface FinancialDataRow {
 const ExcelTab = () => {
   const hotTableRef = useRef<HotTableClass | null>(null);
   const [dataRows, setDataRows] = useState<FinancialDataRow[]>([
-    { date: '2024-01-01', client: 'Client A', income: 500000, expenses: 200000, comments: 'Commentaire 1', net: 300000 },
-    { date: '2024-01-02', client: 'Client B', income: 750000, expenses: 300000, comments: 'Commentaire 2', net: 450000 },
+    { date: new Date().toISOString().split('T')[0], client: '', income: 0, expenses: 0, comments: '', net: 0 }
   ]);
 
     // Calcul du total net disponible
