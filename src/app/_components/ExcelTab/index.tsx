@@ -12,7 +12,7 @@ interface FinancialDataRow {
   income?: number;
   expenses?: number;
   comments?: string;
-  net: number;
+  net?: number;
 }
 
 const ExcelTab = () => {
@@ -32,7 +32,7 @@ const ExcelTab = () => {
       comments: 'Total Net Available:',
       net: totalNet,
     };
-    return dataRows.length > 0 ? [...dataRows, totalRow] : dataRows;
+    return dataRows.length > 0 ? [...dataRows.map(row => ({ ...row })), totalRow] : dataRows;
   }, [dataRows, totalNet]);
 
   // Utilisation de useMemo pour mémoriser colHeaders
@@ -99,50 +99,31 @@ const ExcelTab = () => {
   }, []);
 
   const handleAfterChange = useCallback((
-    changes: Handsontable.CellChange[] | null,
-    source: Handsontable.ChangeSource
-  ) => {
-    if (source === 'edit' && changes) {
-      setDataRows(prev => {
-        const newData = [...prev];
-        changes.forEach(([row, prop, oldValue, newValue]) => {
-          if (row >= newData.length || typeof prop !== 'string') return;
+  changes: Handsontable.CellChange[] | null,
+  source: Handsontable.ChangeSource
+) => {
+  if (source === 'edit' && changes) {
+    setDataRows(prev => {
+      return prev.map((row, index) => {
+        const change = changes.find(([rowIndex]) => rowIndex === index);
+        if (!change) return row; // Si aucune modification, on garde la ligne inchangée
+        
+        const [_, prop, __, newValue] = change;
+        const key = prop as keyof FinancialDataRow;
+        const numericKeys = ['income', 'expenses', 'net'];
 
-          const key = prop as keyof FinancialDataRow;
-          const rowData = newData[row];
+        const updatedRow = { ...row };
+        updatedRow[key] = numericKeys.includes(key) ? Number(newValue) || 0 : newValue;
 
-          if (key in rowData) {
-            // Journaliser l'ancienne et la nouvelle valeur
-            console.log(`Modification détectée dans la ligne ${row}, colonne ${key}:`);
-            console.log(`- Ancienne valeur :`, oldValue);
-            console.log(`- Nouvelle valeur :`, newValue);
+        if (key === 'income' || key === 'expenses') {
+          updatedRow.net = Number(updatedRow.income) - Number(updatedRow.expenses);
+        }
 
-            // Exemple de logique : annuler la modification si la nouvelle valeur est invalide
-            if (key === 'income' || key === 'expenses') {
-              const numericValue = Number(newValue);
-              if (isNaN(numericValue)) {
-                console.warn(`La valeur "${newValue}" n'est pas un nombre valide. Annulation de la modification.`);
-                return; // Annuler la modification
-              }
-            }
-
-            // Appliquer la nouvelle valeur
-            const numericKeys = ['income', 'expenses', 'net'];
-            const value = numericKeys.includes(key) ? Number(newValue) || 0 : newValue;
-
-            // @ts-expect-error - La validation est gérée par les colonnes
-            rowData[key] = value;
-
-            // Recalculer le net si income ou expenses a changé
-            if (key === 'income' || key === 'expenses') {
-              rowData.net = Number(rowData.income) - Number(rowData.expenses);
-            }
-          }
-        });
-        return newData;
+        return updatedRow;
       });
-    }
-  }, []);
+    });
+  }
+}, []);
 
   return (
     <>
