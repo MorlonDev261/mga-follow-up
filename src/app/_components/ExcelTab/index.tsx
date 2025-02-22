@@ -68,8 +68,8 @@ const ExcelTab = () => {
   const formattedData: FinancialDataRow[] = dataRows.map(row => ({
     date: row.date,
     client: row.client || '',
-    income: row.income ?? 0,
-    expenses: row.expenses ?? 0,
+    income: row.income ?? '',
+    expenses: row.expenses ?? '',
     comments: row.comments || '',
     net: row.net,
   }));
