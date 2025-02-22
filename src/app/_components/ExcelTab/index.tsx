@@ -65,7 +65,7 @@ const ExcelTab = () => {
   ];
 
   const handleExport = useCallback(() => {
-    const totalRow = ['', '', '', '', 'Total Net Available:', totalNet]; // Ligne de total formatée
+    const totalRow = [new Date().toISOString().split('T')[0], '', '', '', 'Total Net Available:', totalNet]; // Ligne de total formatée
 
     const exportData = [
       ...dataRows.map(row => [
