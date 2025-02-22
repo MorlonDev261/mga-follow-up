@@ -65,13 +65,32 @@ const ExcelTab = () => {
   ];
 
   const handleExport = useCallback(() => {
-  exportToExcel(dataRows, colHeaders, 'financial-report.xlsx');
-}, [dataRows, colHeaders]);
+    const totalRow = ['', '', '', '', 'Total Net Available:', totalNet]; // Ligne de total formatée
+
+    const exportData = [
+      ...dataRows.map(row => [
+        row.date,
+        row.client,
+        row.income,
+        row.expenses,
+        row.comments,
+        row.net,
+      ]),
+      totalRow,
+    ];
+    exportToExcel(exportData, colHeaders, 'financial-report.xlsx');
+  }, [dataRows, colHeaders, totalNet]); // Ajout de `totalNet` aux dépendances
+
 
   const addRow = useCallback(() => {
     setDataRows(prev => [
       ...prev,
-      { date: '', client: '', income: 0, expenses: 0, comments: '', net: 0 }
+      { date: new Date().toISOString().split('T')[0], 
+        client: '', 
+        income: 0, 
+        expenses: 0, 
+        comments: '', 
+        net: 0 }
     ]);
   }, []);
 
