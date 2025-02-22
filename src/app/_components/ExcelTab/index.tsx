@@ -152,7 +152,7 @@ const ExcelTab = () => {
       <HotTable
         className="handsontable dark-theme"
         ref={hotTableRef}
-        data={data}
+        data={dataWithTotal}
         colHeaders={colHeaders}
         columns={columns}
         height="600"
