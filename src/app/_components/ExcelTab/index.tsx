@@ -32,7 +32,7 @@ const ExcelTab = () => {
       comments: 'Total Net Available:',
       net: totalNet,
     };
-    return [...dataRows, totalRow];
+    return dataRows.length > 0 ? [...dataRows, totalRow] : dataRows;
   }, [dataRows, totalNet]);
 
   // Utilisation de useMemo pour mémoriser colHeaders
