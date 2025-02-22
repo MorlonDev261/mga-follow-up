@@ -8,10 +8,10 @@ import { exportToExcel } from './excel-utils';
 
 interface FinancialDataRow {
   date: string;
-  client: string;
-  income: number;
-  expenses: number;
-  comments: string;
+  client?: string;
+  income?: number;
+  expenses?: number;
+  comments?: string;
   net: number;
 }
 
@@ -31,6 +31,7 @@ const ExcelTab = () => {
   // Données incluant la ligne de totaux
   const dataWithTotal = useMemo(() => {
     const totalRow: FinancialDataRow = {
+      date: '',
       comments: 'Total Net Available:',
       net: totalNet,
     };
