@@ -31,10 +31,6 @@ const ExcelTab = () => {
   // Données incluant la ligne de totaux
   const dataWithTotal = useMemo(() => {
     const totalRow: FinancialDataRow = {
-      date: '',
-      client: '',
-      income: 0,
-      expenses: 0,
       comments: 'Total Net Available:',
       net: totalNet,
     };
