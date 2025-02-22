@@ -12,7 +12,7 @@ interface FinancialDataRow {
   income?: number;
   expenses?: number;
   comments?: string;
-  net: number;
+  net?: number;
 }
 
 const ExcelTab = () => {
