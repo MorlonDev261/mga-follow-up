@@ -43,77 +43,57 @@ const ExcelTab = () => {
 
   const colHeaders = useMemo(() => ['Date', 'Client', 'Income (AR)', 'Expenses (AR)', 'Comments', 'Net Available (AR)'], []);
 
-  const columns = useMemo(() => [
-    { data: 'date', type: 'date', dateFormat: 'YYYY-MM-DD', validator: Handsontable.validators.DateValidator },
-    { data: 'client', type: 'text' },
-    { 
-      data: 'income', 
-      type: 'numeric', 
-      numericFormat: { pattern: '0,0' },
-      validator: (value: unknown, callback: (result: boolean) => void) => {
-        callback(!isNaN(Number(value)) && Number(value) >= 0);
+  const columns = useMemo<Handsontable.ColumnSettings[]>(() => [
+  { data: 'date', type: 'date', dateFormat: 'YYYY-MM-DD', validator: Handsontable.validators.DateValidator },
+  { data: 'client', type: 'text' },
+  { 
+    data: 'income', 
+    type: 'numeric', 
+    numericFormat: { pattern: '0,0' },
+    validator: (value: unknown, callback: (result: boolean) => void) => {
+      callback(!isNaN(Number(value)) && Number(value) >= 0);
+    }
+  },
+  { 
+    data: 'expenses', 
+    type: 'numeric', 
+    numericFormat: { pattern: '0,0' },
+    validator: (value: unknown, callback: (result: boolean) => void) => {
+      callback(!isNaN(Number(value)) && Number(value) >= 0);
+    }
+  },
+  { 
+    data: 'comments', 
+    type: 'text',
+    renderer: function(
+      instance, td, row, col, prop, value, cellProperties
+    ) {
+      if (row >= dataRows.length) {
+        cellProperties.readOnly = true;
       }
-    },
-    { 
-      data: 'expenses', 
-      type: 'numeric', 
-      numericFormat: { pattern: '0,0' },
-      validator: (value: unknown, callback: (result: boolean) => void) => {
-        callback(!isNaN(Number(value)) && Number(value) >= 0);
+      Handsontable.renderers.TextRenderer.apply(this, arguments);
+    }
+  },
+  { 
+    data: 'net', 
+    type: 'numeric', 
+    numericFormat: { pattern: '0,0' },
+    renderer: function(
+      instance, td, row, col, prop, value, cellProperties
+    ) {
+      if (row >= dataRows.length) {
+        cellProperties.readOnly = true;
+        td.style.backgroundColor = '#34a853'; // Équivalent Tailwind bg-green-500
+        td.style.color = 'white';
       }
-    },
-    { 
-      data: 'comments', 
-      type: 'text',
-      readOnly: (row: number) => row >= dataRows.length, // Lecture seule pour le total
-    },
-    { 
-      data: 'net', 
-      type: 'numeric', 
-      readOnly: (row: number) => row >= dataRows.length, // Lecture seule pour le total
-      numericFormat: { pattern: '0,0' },
-      renderer: function(
-        instance: Handsontable.Core, // Type explicite pour `instance`
-        td: HTMLTableCellElement,   // Type explicite pour `td`
-        row: number,                // Type explicite pour `row`
-        _col: number,               // Type explicite pour `_col`
-        _prop: string | number,     // Type explicite pour `_prop`
-        _value: unknown             // Type explicite pour `_value`
-      ) {
-        // Création de l'objet `cellProperties` avec les propriétés requises
-        const cellProperties: Handsontable.CellProperties = {
-          row,
-          col: _col,
-          instance,
-          visualRow: row,
-          visualCol: _col,
-          prop: _prop,
-          // Ajoutez d'autres propriétés si nécessaire
-        };
-
-        // Rendu numérique par défaut
-        Handsontable.renderers.NumericRenderer.apply(this, [
-          instance,
-          td,
-          row,
-          _col,
-          _prop,
-          _value,
-          cellProperties, // Utilisation de l'objet `cellProperties` valide
-        ]);
-        
-        // Style pour la ligne de totaux
-        if (row >= dataRows.length) {
-          td.style.backgroundColor = '#34a853'; // Équivalent Tailwind bg-green-500
-          td.style.color = 'white';
-        }
-      }
-    },
-  ], [dataRows.length]);
+      Handsontable.renderers.NumericRenderer.apply(this, arguments);
+    }
+  }
+], [dataRows.length]);
 
   const handleExport = useCallback(() => {
     // Exporte uniquement les données (exclut la ligne de totaux)
-    const exportData = dataRows.map(row => [
+    const exportData  = dataRows.map(row => [
       row.date,
       row.client,
       row.income,
