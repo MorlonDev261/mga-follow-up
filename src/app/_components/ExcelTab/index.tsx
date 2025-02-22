@@ -17,7 +17,9 @@ interface FinancialDataRow {
 
 const ExcelTab = () => {
   const hotTableRef = useRef<HotTableClass | null>(null);
-  const [dataRows, setDataRows] = useState<FinancialDataRow[]>([]);
+  const [dataRows, setDataRows] = useState<FinancialDataRow[]>([
+    { date: new Date().toISOString().split('T')[0], client: '', income: 0, expenses: 0, comments: '', net: 0 }
+  ]);
 
     // Calcul du total net disponible
   const totalNet = useMemo(() => 
