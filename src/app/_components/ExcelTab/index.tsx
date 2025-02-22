@@ -72,9 +72,35 @@ const ExcelTab = () => {
       type: 'numeric', 
       readOnly: (row: number) => row >= dataRows.length, // Lecture seule pour le total
       numericFormat: { pattern: '0,0' },
-      renderer: function(instance, td, row, col, prop, value) {
+      renderer: function(
+        instance: Handsontable.Core, // Type explicite pour `instance`
+        td: HTMLTableCellElement,   // Type explicite pour `td`
+        row: number,                // Type explicite pour `row`
+        _col: number,               // Type explicite pour `_col`
+        _prop: string | number,     // Type explicite pour `_prop`
+        _value: unknown             // Type explicite pour `_value`
+      ) {
+        // Création de l'objet `cellProperties` avec les propriétés requises
+        const cellProperties: Handsontable.CellProperties = {
+          row,
+          col: _col,
+          instance,
+          visualRow: row,
+          visualCol: _col,
+          prop: _prop,
+          // Ajoutez d'autres propriétés si nécessaire
+        };
+
         // Rendu numérique par défaut
-        Handsontable.renderers.NumericRenderer.apply(this, arguments);
+        Handsontable.renderers.NumericRenderer.apply(this, [
+          instance,
+          td,
+          row,
+          _col,
+          _prop,
+          _value,
+          cellProperties, // Utilisation de l'objet `cellProperties` valide
+        ]);
         
         // Style pour la ligne de totaux
         if (row >= dataRows.length) {
@@ -112,7 +138,7 @@ const ExcelTab = () => {
     if (source === 'edit' && changes) {
       setDataRows(prev => {
         const newData = [...prev];
-        changes.forEach(([row, prop, oldValue, newValue]) => {
+        changes.forEach(([row, prop]) => { // Suppression de `oldValue` et `newValue`
           if (row >= newData.length) return; // Ignore les modifications du total
 
           const key = prop as keyof FinancialDataRow;
