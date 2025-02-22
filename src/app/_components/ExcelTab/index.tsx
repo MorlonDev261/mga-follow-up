@@ -44,50 +44,48 @@ const ExcelTab = () => {
   const colHeaders = useMemo(() => ['Date', 'Client', 'Income (AR)', 'Expenses (AR)', 'Comments', 'Net Available (AR)'], []);
 
   const columns = useMemo<Handsontable.ColumnSettings[]>(() => [
-  { data: 'date', type: 'date', dateFormat: 'YYYY-MM-DD', validator: Handsontable.validators.DateValidator },
-  { data: 'client', type: 'text' },
-  { 
-    data: 'income', 
-    type: 'numeric', 
-    numericFormat: { pattern: '0,0' },
-    validator: (value: unknown, callback: (result: boolean) => void) => {
-      callback(!isNaN(Number(value)) && Number(value) >= 0);
-    }
-  },
-  { 
-    data: 'expenses', 
-    type: 'numeric', 
-    numericFormat: { pattern: '0,0' },
-    validator: (value: unknown, callback: (result: boolean) => void) => {
-      callback(!isNaN(Number(value)) && Number(value) >= 0);
-    }
-  },
-  {
-    data: 'comments',
-    type: 'text',
-    renderer: function(...args) {
-      const [instance, td, row, col, prop, value, cellProperties] = args;
-      if (row >= dataRows.length) {
-        cellProperties.readOnly = true;
+    { data: 'date', type: 'date', dateFormat: 'YYYY-MM-DD', validator: Handsontable.validators.DateValidator },
+    { data: 'client', type: 'text' },
+    { 
+      data: 'income', 
+      type: 'numeric', 
+      numericFormat: { pattern: '0,0' },
+      validator: (value: unknown, callback: (result: boolean) => void) => {
+        callback(!isNaN(Number(value)) && Number(value) >= 0);
       }
-      Handsontable.renderers.TextRenderer.apply(this, args);
-    }
-  },
-  {
-    data: 'net',
-    type: 'numeric',
-    numericFormat: { pattern: '0,0' },
-    renderer: function(...args) {
-      const [instance, td, row, col, prop, value, cellProperties] = args;
-      if (row >= dataRows.length) {
-        cellProperties.readOnly = true;
-        td.style.backgroundColor = '#34a853'; // Équivalent Tailwind bg-green-500
-        td.style.color = 'white';
+    },
+    { 
+      data: 'expenses', 
+      type: 'numeric', 
+      numericFormat: { pattern: '0,0' },
+      validator: (value: unknown, callback: (result: boolean) => void) => {
+        callback(!isNaN(Number(value)) && Number(value) >= 0);
       }
-      Handsontable.renderers.NumericRenderer.apply(this, args);
+    },
+    {
+      data: 'comments',
+      type: 'text',
+      renderer: function(instance, td, row, col, prop, value, cellProperties) {
+        if (row >= dataRows.length) {
+          cellProperties.readOnly = true;
+        }
+        Handsontable.renderers.TextRenderer.apply(this, arguments as any);
+      }
+    },
+    {
+      data: 'net',
+      type: 'numeric',
+      numericFormat: { pattern: '0,0' },
+      renderer: function(instance, td, row, col, prop, value, cellProperties) {
+        if (row >= dataRows.length) {
+          cellProperties.readOnly = true;
+          td.style.backgroundColor = '#34a853'; // Équivalent Tailwind bg-green-500
+          td.style.color = 'white';
+        }
+        Handsontable.renderers.NumericRenderer.apply(this, arguments as any);
+      }
     }
-  }
-], [dataRows.length]);
+  ], [dataRows.length]);
 
   const handleExport = useCallback(() => {
     // Exporte uniquement les données (exclut la ligne de totaux)
