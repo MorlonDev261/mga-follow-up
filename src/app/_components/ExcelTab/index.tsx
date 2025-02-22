@@ -18,7 +18,7 @@ interface FinancialDataRow {
 const ExcelTab = () => {
   const hotTableRef = useRef<HotTableClass | null>(null);
   const [dataRows, setDataRows] = useState<FinancialDataRow[]>([
-    { date: new Date().toISOString().split('T')[0], client: '', income: 0, expenses: 0, comments: '', net: 0 }
+    { date: new Date().toISOString().split('T')[0], net: 0 }
   ]);
 
     // Calcul du total net disponible
@@ -132,7 +132,7 @@ const ExcelTab = () => {
 
             // Recalculer le net si income ou expenses a changé
             if (key === 'income' || key === 'expenses') {
-              rowData.net = Number(rowData.income) - Number(rowData.expenses);
+              rowData.net = Number(rowData.income ?? 0) - Number(rowData.expenses ?? 0);
             }
           }
         });
