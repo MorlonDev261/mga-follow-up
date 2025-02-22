@@ -17,7 +17,7 @@ interface FinancialDataRow {
 
 const ExcelTab = () => {
   const hotTableRef = useRef<HotTableClass | null>(null);
-  const [data, setData] = useState<FinancialDataRow[]>([
+  const [dataRows, setDataRows] = useState<FinancialDataRow[]>([
     { date: '2024-01-01', client: 'Client A', income: 500000, expenses: 200000, comments: 'Commentaire 1', net: 300000 },
     { date: '2024-01-02', client: 'Client B', income: 750000, expenses: 300000, comments: 'Commentaire 2', net: 450000 },
   ]);
@@ -68,7 +68,7 @@ const ExcelTab = () => {
   ];
 
   const handleExport = useCallback(() => {
-    const exportData = data.map(row => [
+    const exportData = dataRows.map(row => [
       row.date,
       row.client,
       row.income,
@@ -77,10 +77,10 @@ const ExcelTab = () => {
       row.net,
     ]);
     exportToExcel(exportData, colHeaders, 'financial-report');
-  }, [data, colHeaders]); // colHeaders est maintenant stable grâce à useMemo
+  }, [dataRows, colHeaders]); // colHeaders est maintenant stable grâce à useMemo
 
   const addRow = useCallback(() => {
-    setData(prev => [
+    setDataRows(prev => [
       ...prev,
       { date: '', client: '', income: 0, expenses: 0, comments: '', net: 0 }
     ]);
@@ -91,7 +91,7 @@ const ExcelTab = () => {
     source: Handsontable.ChangeSource
   ) => {
     if (source === 'edit' && changes) {
-      setData(prev => {
+      setDataRows(prev => {
         const newData = [...prev];
         changes.forEach(([row, prop, oldValue, newValue]) => {
           if (row >= newData.length || typeof prop !== 'string') return;
