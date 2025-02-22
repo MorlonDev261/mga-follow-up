@@ -12,7 +12,7 @@ interface FinancialDataRow {
   income?: number;
   expenses?: number;
   comments?: string;
-  net?: number;
+  net: number;
 }
 
 const ExcelTab = () => {
@@ -89,7 +89,8 @@ const ExcelTab = () => {
     setDataRows(prev => [
       ...prev,
       { 
-        date: new Date().toISOString().split('T')[0]
+        date: new Date().toISOString().split('T')[0],
+        net: 0,
       }
     ]);
   }, []);
