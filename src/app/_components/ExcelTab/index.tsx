@@ -3,7 +3,7 @@ import { HotTable } from '@handsontable/react';
 import type { HotTableClass } from '@handsontable/react';
 import Handsontable from 'handsontable';
 import 'handsontable/dist/handsontable.full.min.css';
-import { useState, useRef, useCallback, useMemo } from 'react';
+import { useState, useRef, useCallback, useMemo } from 'react'; // Ajout de useMemo
 import { exportToExcel } from './excel-utils';
 
 interface FinancialDataRow {
@@ -17,33 +17,15 @@ interface FinancialDataRow {
 
 const ExcelTab = () => {
   const hotTableRef = useRef<HotTableClass | null>(null);
-  const [dataRows, setDataRows] = useState<FinancialDataRow[]>([
+  const [data, setData] = useState<FinancialDataRow[]>([
     { date: '2024-01-01', client: 'Client A', income: 500000, expenses: 200000, comments: 'Commentaire 1', net: 300000 },
     { date: '2024-01-02', client: 'Client B', income: 750000, expenses: 300000, comments: 'Commentaire 2', net: 450000 },
   ]);
 
-  // Calcul du total net disponible
-  const totalNet = useMemo(() => 
-    dataRows.reduce((sum, row) => sum + row.net, 0), 
-    [dataRows]
-  );
-
-  // Données incluant la ligne de totaux
-  const dataWithTotal = useMemo(() => {
-    const totalRow: FinancialDataRow = {
-      date: '',
-      client: '',
-      income: 0,
-      expenses: 0,
-      comments: 'Total Net Available:',
-      net: totalNet,
-    };
-    return [...dataRows, totalRow];
-  }, [dataRows, totalNet]);
-
+  // Utilisation de useMemo pour mémoriser colHeaders
   const colHeaders = useMemo(() => ['Date', 'Client', 'Income (AR)', 'Expenses (AR)', 'Comments', 'Net Available (AR)'], []);
 
-  const columns = useMemo(() => [
+  const columns = [
     { data: 'date', type: 'date', dateFormat: 'YYYY-MM-DD', validator: Handsontable.validators.DateValidator },
     { data: 'client', type: 'text' },
     { 
@@ -62,58 +44,12 @@ const ExcelTab = () => {
         callback(!isNaN(Number(value)) && Number(value) >= 0);
       }
     },
-    { 
-      data: 'comments', 
-      type: 'text',
-      readOnly: (row: number) => row >= dataRows.length, // Lecture seule pour le total
-    },
-    { 
-      data: 'net', 
-      type: 'numeric', 
-      readOnly: (row: number) => row >= dataRows.length, // Lecture seule pour le total
-      numericFormat: { pattern: '0,0' },
-      renderer: function(
-        instance: Handsontable.Core, // Type explicite pour `instance`
-        td: HTMLTableCellElement,   // Type explicite pour `td`
-        row: number,                // Type explicite pour `row`
-        _col: number,               // Type explicite pour `_col`
-        _prop: string | number,     // Type explicite pour `_prop`
-        _value: unknown             // Type explicite pour `_value`
-      ) {
-        // Création de l'objet `cellProperties` avec les propriétés requises
-        const cellProperties: Handsontable.CellProperties = {
-          row,
-          col: _col,
-          instance,
-          visualRow: row,
-          visualCol: _col,
-          prop: _prop,
-          // Ajoutez d'autres propriétés si nécessaire
-        };
-
-        // Rendu numérique par défaut
-        Handsontable.renderers.NumericRenderer.apply(this, [
-          instance,
-          td,
-          row,
-          _col,
-          _prop,
-          _value,
-          cellProperties, // Utilisation de l'objet `cellProperties` valide
-        ]);
-        
-        // Style pour la ligne de totaux
-        if (row >= dataRows.length) {
-          td.style.backgroundColor = '#34a853'; // Équivalent Tailwind bg-green-500
-          td.style.color = 'white';
-        }
-      }
-    },
-  ], [dataRows.length]);
+    { data: 'comments', type: 'text' },
+    { data: 'net', type: 'numeric', readOnly: true, numericFormat: { pattern: '0,0' } },
+  ];
 
   const handleExport = useCallback(() => {
-    // Exporte uniquement les données (exclut la ligne de totaux)
-    const exportData = dataRows.map(row => [
+    const exportData = data.map(row => [
       row.date,
       row.client,
       row.income,
@@ -122,10 +58,10 @@ const ExcelTab = () => {
       row.net,
     ]);
     exportToExcel(exportData, colHeaders, 'financial-report');
-  }, [dataRows, colHeaders]);
+  }, [data, colHeaders]); // colHeaders est maintenant stable grâce à useMemo
 
   const addRow = useCallback(() => {
-    setDataRows(prev => [
+    setData(prev => [
       ...prev,
       { date: '', client: '', income: 0, expenses: 0, comments: '', net: 0 }
     ]);
@@ -136,16 +72,40 @@ const ExcelTab = () => {
     source: Handsontable.ChangeSource
   ) => {
     if (source === 'edit' && changes) {
-      setDataRows(prev => {
+      setData(prev => {
         const newData = [...prev];
-        changes.forEach(([row, prop]) => { // Suppression de `oldValue` et `newValue`
-          if (row >= newData.length) return; // Ignore les modifications du total
+        changes.forEach(([row, prop, oldValue, newValue]) => {
+          if (row >= newData.length || typeof prop !== 'string') return;
 
           const key = prop as keyof FinancialDataRow;
           const rowData = newData[row];
 
           if (key in rowData) {
-            // ... (logique existante inchangée)
+            // Journaliser l'ancienne et la nouvelle valeur
+            console.log(`Modification détectée dans la ligne ${row}, colonne ${key}:`);
+            console.log(`- Ancienne valeur :`, oldValue);
+            console.log(`- Nouvelle valeur :`, newValue);
+
+            // Exemple de logique : annuler la modification si la nouvelle valeur est invalide
+            if (key === 'income' || key === 'expenses') {
+              const numericValue = Number(newValue);
+              if (isNaN(numericValue)) {
+                console.warn(`La valeur "${newValue}" n'est pas un nombre valide. Annulation de la modification.`);
+                return; // Annuler la modification
+              }
+            }
+
+            // Appliquer la nouvelle valeur
+            const numericKeys = ['income', 'expenses', 'net'];
+            const value = numericKeys.includes(key) ? Number(newValue) || 0 : newValue;
+
+            // @ts-expect-error - La validation est gérée par les colonnes
+            rowData[key] = value;
+
+            // Recalculer le net si income ou expenses a changé
+            if (key === 'income' || key === 'expenses') {
+              rowData.net = Number(rowData.income) - Number(rowData.expenses);
+            }
           }
         });
         return newData;
@@ -173,7 +133,7 @@ const ExcelTab = () => {
       <HotTable
         className="handsontable dark-theme"
         ref={hotTableRef}
-        data={dataWithTotal}
+        data={data}
         colHeaders={colHeaders}
         columns={columns}
         height="600"
@@ -193,8 +153,11 @@ const ExcelTab = () => {
         minRows={20}
         viewportRowRenderingOffset="auto"
         rowHeights={40}
+        navigableHeaders={true}
         renderAllRows={true}
         autoWrapRow={true}
+        fixedRowsTop={1} // Garde le header toujours visible
+        fixedColumnsStart={0}
       />
     </>
   );
