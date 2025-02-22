@@ -9,8 +9,8 @@ import { exportToExcel } from './excel-utils';
 interface FinancialDataRow {
   date: string;
   client?: string;
-  income?: number || '';
-  expenses?: number || '';
+  income?: number;
+  expenses?: number;
   comments?: string;
   net: number;
 }
@@ -68,8 +68,8 @@ const ExcelTab = () => {
   const formattedData: FinancialDataRow[] = dataRows.map(row => ({
     date: row.date,
     client: row.client || '',
-    income: row.income ?? '',
-    expenses: row.expenses ?? '',
+    income: row.income ?? undefined,
+    expenses: row.expenses ?? undefined,
     comments: row.comments || '',
     net: row.net,
   }));
@@ -77,9 +77,6 @@ const ExcelTab = () => {
   // Ajout de la ligne de total sous forme d'objet `FinancialDataRow`
   const totalRow: FinancialDataRow = {
     date: new Date().toISOString().split('T')[0], // Date actuelle
-    client: '',
-    income: undefined,
-    expenses: undefined,
     comments: 'Total Net Available:',
     net: totalNet,
   };
@@ -91,12 +88,9 @@ const ExcelTab = () => {
   const addRow = useCallback(() => {
     setDataRows(prev => [
       ...prev,
-      { date: new Date().toISOString().split('T')[0], 
-        client: '', 
-        income: 0, 
-        expenses: 0, 
-        comments: '', 
-        net: 0 }
+      { 
+        date: new Date().toISOString().split('T')[0]
+      }
     ]);
   }, []);
 
