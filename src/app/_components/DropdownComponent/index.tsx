@@ -25,7 +25,7 @@ export default function DropdownComponent() {
       <DropdownMenuTrigger asChild>
         <button className="flex items-center justify-center gap-1 rounded bg-blue-500 px-2 py-1 text-sm"><FaPlus /> New</button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56">
+      <DropdownMenuContent className="w-56 mr-5">
         <DropdownMenuLabel>Insert</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuCheckboxItem
