@@ -19,3 +19,23 @@
 .htDropdownArrow {
   display: none !important;
 }
+
+table select {
+  appearance: none; /* Annule le style par défaut */
+  -webkit-appearance: none; /* Safari */
+  -moz-appearance: none; /* Firefox */
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+table select::-ms-expand {
+  display: none; /* Masque la flèche sur IE/Edge */
+}
+
+table select:focus {
+  outline: none;
+  border-color: #007BFF;
+}
