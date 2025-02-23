@@ -4,7 +4,7 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 interface TextProps extends React.HTMLAttributes<HTMLParagraphElement> {
-  as?: keyof JSX.IntrinsicElements;
+  as?: "p" | "span" | "div" | "strong" | "em";
   size?: "sm" | "md" | "lg";
   weight?: "normal" | "bold";
 }
