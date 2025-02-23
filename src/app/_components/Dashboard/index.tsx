@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { FaRegEnvelope, FaPlus } from "react-icons/fa6";
+import { FaRegEnvelope } from "react-icons/fa6";
 import { MdOutlineAccountBalanceWallet } from "react-icons/md";
 import { FiBell, FiLifeBuoy, FiSearch } from 'react-icons/fi';
 import Image from 'next/image';
+import DropdownMenu from '@components/DropdownMenu';
 import ShortcutList from '@components/ShortcutList';
 import Statistique from '@components/Statistique';
 import ExcelTab from '@components/ExcelTab';
@@ -66,7 +67,7 @@ export default function Dashboard() {
                   <div className="text-green-500">
                     5,220,500 AR
                   </div>
-                  <button className="flex items-center justify-center gap-1 rounded bg-blue-500 px-2 py-1 text-sm"><FaPlus /> New</button>
+                  <DropdownMenu />
                 </div>
                 <p className="text-gray-400">= 4350 AIED</p>
               </div>
