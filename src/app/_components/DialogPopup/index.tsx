@@ -3,7 +3,7 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import { Button } from "@/components/ui/button";
 import { Flex } from "@/components/ui/flex";
-import { useState, ReactNode } from "react";
+import { ReactNode } from "react";
 
 interface DialogPopupProps {
   label: ReactNode;
@@ -13,8 +13,6 @@ interface DialogPopupProps {
 }
 
 export function DialogPopup({ label, title, desc, children }: DialogPopupProps) {
-  const [name, setName] = useState("Freja Johnsen");
-  const [email, setEmail] = useState("freja@example.com");
 
   return (
     <Dialog.Root>
