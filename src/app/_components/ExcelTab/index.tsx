@@ -91,9 +91,9 @@ const ExcelTab = () => {
 
 
   const addRow = useCallback(() => {
-    setErrorMessage(null);
     setDataRows(prev => {
       const lastRow = prev[prev.length - 1];
+      setErrorMessage(null);
 
       // Vérifie si la dernière ligne a une valeur pour income ou expenses
       if (lastRow && (lastRow.income !== undefined || lastRow.expenses !== undefined)) {
