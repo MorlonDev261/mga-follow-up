@@ -1,6 +1,8 @@
 "use client";
 
 import * as Dialog from "@radix-ui/react-dialog";
+import { Button } from "@/components/ui/button";
+import { Flex } from "@/components/ui/flex";
 import { useState, ReactNode } from "react";
 
 interface DialogPopupProps {
@@ -28,6 +30,16 @@ export function DialogPopup({ label, title, desc, children }: DialogPopupProps) 
             {desc}
           </Dialog.Description>
           {children}
+          <Flex gap="3" mt="4" justify="end">
+            <Dialog.Close asChild>
+              <Button variant="soft" color="gray">
+                Cancel
+              </Button>
+            </Dialog.Close>
+            <Dialog.Close asChild>
+              <Button>Save</Button>
+            </Dialog.Close>
+          </Flex>
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>
