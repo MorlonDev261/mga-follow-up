@@ -114,7 +114,7 @@ const ExcelTab = () => {
               rowData[key] = isNaN(numericValue) ? undefined : numericValue;
               rowData.net = Number(rowData.income ?? 0) - Number(rowData.expenses ?? 0);
             } else {
-              rowData[key] = newValue;
+              rowData[key as keyof FinancialDataRow] = newValue as never;
             }
           }
         });
