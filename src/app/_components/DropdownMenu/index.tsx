@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu"
-import { FaRegEnvelope, FaPlus } from "react-icons/fa6";
+import { FaPlus } from "react-icons/fa6";
 
 import {
   DropdownMenu,
