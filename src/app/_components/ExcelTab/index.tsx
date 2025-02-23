@@ -91,12 +91,12 @@ const ExcelTab = () => {
 
 
   const addRow = useCallback(() => {
+    setErrorMessage(null);
     setDataRows(prev => {
       const lastRow = prev[prev.length - 1];
 
       // Vérifie si la dernière ligne a une valeur pour income ou expenses
       if (lastRow && (lastRow.income !== undefined || lastRow.expenses !== undefined)) {
-        setErrorMessage(null); // Réinitialiser l'erreur si tout est bon
         return [
           ...prev,
           { 
@@ -112,7 +112,7 @@ const ExcelTab = () => {
 
     // Afficher un message d'erreur si income et expenses sont vides
     setErrorMessage("Veuillez remplir 'Income' ou 'Expenses' avant d'ajouter une nouvelle ligne.");
-    return prev;
+    return;
   });
 }, []);
 
