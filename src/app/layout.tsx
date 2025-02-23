@@ -14,10 +14,12 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "MGA Follow UP",
-  description: "Manage your moulaa easily 😎.",
-};
+export function generateMetadata(): Metadata {
+  return {
+    title: "MGA Follow UP",
+    description: "Manage your moulaa easily 😎.",
+  };
+}
 
 export default function RootLayout({
   children,
@@ -25,13 +27,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="light"
           enableSystem
           disableTransitionOnChange
         >
