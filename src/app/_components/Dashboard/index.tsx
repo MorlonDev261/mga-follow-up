@@ -3,7 +3,7 @@ import { FaRegEnvelope } from "react-icons/fa6";
 import { MdOutlineAccountBalanceWallet } from "react-icons/md";
 import { FiBell, FiLifeBuoy, FiSearch } from 'react-icons/fi';
 import Image from 'next/image';
-import DropdownMenu from '@components/DropdownMenu';
+import DropdownMenu from '@components/DropdownMenu/DropdownMenu';
 import ShortcutList from '@components/ShortcutList';
 import Statistique from '@components/Statistique';
 import ExcelTab from '@components/ExcelTab';
