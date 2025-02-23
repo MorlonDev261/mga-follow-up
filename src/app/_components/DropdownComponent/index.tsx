@@ -2,8 +2,8 @@
 
 import * as React from "react"
 import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu"
-import { FaPlus, FaUserTag } from "react-icons/fa6";
-import { FaUserPlus } from "react-icons/fa";
+import { FaPlus, FaClipboardUser } from "react-icons/fa6";
+import { ImUserPlus } from "react-icons/im";
 import { AiOutlineProduct } from "react-icons/ai";
 import {
   DropdownMenu,
@@ -33,20 +33,20 @@ export default function DropdownComponent() {
           checked={showStatusBar}
           onCheckedChange={setShowStatusBar}
         >
-          <AiOutlineProduct /> New arrivals
+          <AiOutlineProduct />&nbsp; New arrivals
         </DropdownMenuCheckboxItem>
         <DropdownMenuCheckboxItem
           checked={showActivityBar}
           onCheckedChange={setShowActivityBar}
           disabled
         >
-          <FaUserPlus /> New customer
+          <ImUserPlus />&nbsp; New customer
         </DropdownMenuCheckboxItem>
         <DropdownMenuCheckboxItem
           checked={showPanel}
           onCheckedChange={setShowPanel}
         >
-          <FaUserTag /> New employer
+          <FaClipboardUser />&nbsp; New employer
         </DropdownMenuCheckboxItem>
       </DropdownMenuContent>
     </DropdownMenu>
