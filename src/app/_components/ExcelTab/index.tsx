@@ -17,6 +17,7 @@ interface FinancialDataRow {
 
 const ExcelTab = () => {
   const hotTableRef = useRef<HotTableClass | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [dataRows, setDataRows] = useState<FinancialDataRow[]>([
     { date: new Date().toISOString().split('T')[0], net: 0 }
   ]);
@@ -90,14 +91,30 @@ const ExcelTab = () => {
 
 
   const addRow = useCallback(() => {
-    setDataRows(prev => [
-      ...prev,
-      { 
-        date: new Date().toISOString().split('T')[0],
-        net: 0,
+    setDataRows(prev => {
+      const lastRow = prev[prev.length - 1];
+
+      // Vérifie si la dernière ligne a une valeur pour income ou expenses
+      if (lastRow && (lastRow.income !== undefined || lastRow.expenses !== undefined)) {
+        setErrorMessage(null); // Réinitialiser l'erreur si tout est bon
+        return [
+          ...prev,
+          { 
+            date: new Date().toISOString().split('T')[0],
+            client: '', 
+            income: undefined, 
+            expenses: undefined, 
+            comments: '', 
+            net: 0 
+          }
+        ];
       }
-    ]);
-  }, []);
+
+    // Afficher un message d'erreur si income et expenses sont vides
+    setErrorMessage("Veuillez remplir 'Income' ou 'Expenses' avant d'ajouter une nouvelle ligne.");
+    return prev;
+  });
+}, []);
 
   const handleAfterChange = useCallback((
     changes: Handsontable.CellChange[] | null,
@@ -129,7 +146,7 @@ const ExcelTab = () => {
 
             // Appliquer la nouvelle valeur
             const numericKeys = ['income', 'expenses', 'net'];
-            const value = numericKeys.includes(key) ? Number(newValue) || 0 : newValue;
+            const value = numericKeys.includes(key) ? Number(newValue) || undefined : newValue;
 
             // @ts-expect-error - La validation est gérée par les colonnes
             rowData[key] = value;
