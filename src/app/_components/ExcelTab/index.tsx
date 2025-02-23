@@ -178,6 +178,10 @@ const ExcelTab = () => {
           Ajouter une ligne
         </button>
       </div>
+      
+      {errorMessage && (
+        <p className="text-red-500 text-sm mb-2">{errorMessage}</p>
+      )}
 
       <HotTable
         className="handsontable dark-theme"
