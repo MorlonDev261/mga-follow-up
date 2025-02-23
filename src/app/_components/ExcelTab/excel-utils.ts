@@ -25,8 +25,8 @@ export const exportToExcel = async (
     worksheet.addRow([
       row.date,
       row.client || '',
-      row.income ?? undefind,
-      row.expenses ?? undefind,
+      row.income ?? undefined,
+      row.expenses ?? undefined,
       row.comments || '',
       row.net
     ]);
