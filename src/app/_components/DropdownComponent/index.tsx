@@ -2,8 +2,9 @@
 
 import * as React from "react"
 import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu"
-import { FaPlus } from "react-icons/fa6";
-
+import { FaPlus, FaUserTag } from "react-icons/fa6";
+import { FaUserPlus } from "react-icons/fa";
+import { AiOutlineProduct } from "react-icons/ai";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -26,26 +27,26 @@ export default function DropdownComponent() {
         <button className="flex items-center justify-center gap-1 rounded bg-blue-500 px-2 py-1 text-sm"><FaPlus /> New</button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56 bg-[#222] mr-5">
-        <DropdownMenuLabel>Insert</DropdownMenuLabel>
+        <DropdownMenuLabel className="text-center">Insertion</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuCheckboxItem
           checked={showStatusBar}
           onCheckedChange={setShowStatusBar}
         >
-          New arrivals
+          <AiOutlineProduct /> New arrivals
         </DropdownMenuCheckboxItem>
         <DropdownMenuCheckboxItem
           checked={showActivityBar}
           onCheckedChange={setShowActivityBar}
           disabled
         >
-          New customer
+          <FaUserPlus /> New customer
         </DropdownMenuCheckboxItem>
         <DropdownMenuCheckboxItem
           checked={showPanel}
           onCheckedChange={setShowPanel}
         >
-          New employer
+          <FaUserTag /> New employer
         </DropdownMenuCheckboxItem>
       </DropdownMenuContent>
     </DropdownMenu>
