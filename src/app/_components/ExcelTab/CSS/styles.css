@@ -16,3 +16,6 @@
   background-color: transparent !important;
 }
 
+.htDropdownArrow {
+  display: none !important;
+}
