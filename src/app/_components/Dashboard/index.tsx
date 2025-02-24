@@ -3,7 +3,6 @@ import { FaRegEnvelope } from "react-icons/fa6";
 import { MdOutlineAccountBalanceWallet } from "react-icons/md";
 import { FiBell, FiLifeBuoy, FiSearch } from 'react-icons/fi';
 import Image from 'next/image';
-import DropdownComponent from '@components/DropdownComponent';
 import ShortcutList from '@components/ShortcutList';
 import Statistique from '@components/Statistique';
 import ExcelTab from '@components/ExcelTab';
@@ -67,7 +66,7 @@ export default function Dashboard() {
                   <div className="text-green-500">
                     5,220,500 AR
                   </div>
-                  <DropdownComponent />
+                  New
                 </div>
                 <p className="text-gray-400">= 4350 AIED</p>
               </div>
