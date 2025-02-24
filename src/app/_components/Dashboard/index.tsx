@@ -82,7 +82,10 @@ export default function Dashboard() {
                   >
                     <DropdownMenuItem>
                       <DialogPopup 
-                        label={<><AiOutlineProduct /> New arrivals</>}
+                        label='
+                        <button className="flex items-center justify-center gap-1 rounded bg-blue-500 px-2 py-1 text-sm">
+                          <AiOutlineProduct /> New arrivals
+                        </button>'
                         title="New arrivals"
                         desc="test"
                       >
