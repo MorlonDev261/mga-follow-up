@@ -12,7 +12,7 @@ interface DialogPopupProps {
   children?: ReactNode;
 }
 
-export function DialogPopup({ label, title, desc, children }: DialogPopupProps) {
+export default function DialogPopup({ label, title, desc, children }: DialogPopupProps) {
 
   return (
     <Dialog.Root>
