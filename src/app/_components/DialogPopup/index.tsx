@@ -1,5 +1,5 @@
 "use client";
-
+import { useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { Button } from "@/components/ui/button";
 import { Flex } from "@/components/ui/flex";
@@ -13,7 +13,7 @@ interface DialogPopupProps {
 }
 
 export default function DialogPopup({ label, title, desc, children }: DialogPopupProps) {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
