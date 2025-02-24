@@ -72,7 +72,7 @@ export default function Dashboard() {
                   </div>
                   <Dropdown 
                     btn={
-                      <button className="flex items-center gap-2 rounded bg-blue-500 px-3 py-2 text-white">
+                      <button className="flex items-center justify-center gap-1 rounded bg-blue-500 px-2 py-1 text-sm">
                         <FaPlus /> New
                       </button>
                     } 
