@@ -80,30 +80,21 @@ export default function Dashboard() {
                     } 
                     title="Insersion"
                   >
-                    <DropdownMenuItem>
-                      <DialogPopup 
-                        label='
-                        <button className="flex items-center justify-center gap-1 rounded bg-blue-500 px-2 py-1 text-sm">
-                          <AiOutlineProduct /> New arrivals
-                        </button>'
-                        title="New arrivals"
-                        desc="test"
-                      >
-                        <UserForm type="customer" status="post" />
-                      </DialogPopup>
+                    <DropdownMenuItem> 
+                      <AiOutlineProduct /> New arrivals
                     </DropdownMenuItem>
                     <DropdownMenuItem><ImUserPlus />&nbsp;New customer</DropdownMenuItem>
                     <DropdownMenuItem><FaClipboardUser />&nbsp;New employer</DropdownMenuItem>
                   </Dropdown>
                   <DialogPopup 
-                        label={<><AiOutlineProduct /> New arrivals</>}
+                        label={<button><AiOutlineProduct /> New arrivals</button>}
                         title="New arrivals"
                         desc="test"
                       >
                         <UserForm type="customer" status="post" />
                       </DialogPopup>
                 </div>
-                <p className="text-gray-400">= 4350 AIED</p>
+                <p className="text-gray-400">= AIED4350</p>
               </div>
               <div className="mb-5 max-h-[100px] max-w-[250px]">
                 <Statistique position="right" />
