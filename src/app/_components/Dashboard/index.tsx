@@ -6,6 +6,8 @@ import { ImUserPlus } from "react-icons/im";
 import { AiOutlineProduct } from "react-icons/ai";
 import Image from 'next/image';
 import Dropdown from "@components/Dropdown";
+import DialogPopup from "@components/DialogPopup";
+import UserForm from "@components/Form/UserForm";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import ShortcutList from '@components/ShortcutList';
 import Statistique from '@components/Statistique';
@@ -78,7 +80,15 @@ export default function Dashboard() {
                     } 
                     title="Insersion"
                   >
-                    <DropdownMenuItem><AiOutlineProduct />&nbsp;New arrivals</DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <DialogPopup 
+                        label="<AiOutlineProduct />&nbsp;New arrivals"
+                        title="New arrivals"
+                        desc="test"
+                      >
+                        <UserForm type="customer" status="post" />
+                      </DialogPopup>
+                    </DropdownMenuItem>
                     <DropdownMenuItem><ImUserPlus />&nbsp;New customer</DropdownMenuItem>
                     <DropdownMenuItem><FaClipboardUser />&nbsp;New employer</DropdownMenuItem>
                   </Dropdown>
