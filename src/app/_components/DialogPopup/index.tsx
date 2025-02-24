@@ -18,7 +18,7 @@ export default function DialogPopup({ label, title, desc, children }: DialogPopu
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger asChild>
-        {typeof label === "string" ? <Button>{label}</Button> : label}
+        {typeof label === "string" ? <Button className="w-full">{label}</Button> : label}
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
