@@ -13,7 +13,7 @@ export default function UserForm({ type }: UserFormProps) {
   const [contact, setContact] = useState("");
 
   return (
-    <>
+    <div>
       <Flex direction="column" gap="3">
         <label>
           <Text as="div" size="md" className="mb-1" weight="bold">
@@ -61,6 +61,6 @@ export default function UserForm({ type }: UserFormProps) {
           </label>
         </Flex>
       )}
-    </>
+    </div>
   );
 }
