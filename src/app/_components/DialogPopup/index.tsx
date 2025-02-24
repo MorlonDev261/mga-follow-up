@@ -17,7 +17,7 @@ export function DialogPopup({ label, title, desc, children }: DialogPopupProps) 
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
-        <button>{label}</button>
+        {label}
       </Dialog.Trigger>
 
       <Dialog.Portal>
