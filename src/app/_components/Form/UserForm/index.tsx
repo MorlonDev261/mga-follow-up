@@ -19,7 +19,7 @@ export function UserForm({ type }: UserFormProps) {
           <Text as="div" size="md" className="mb-1" weight="bold">
             Name
           </Text>
-          <TextField.Root
+          <TextField
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder={`Enter your ${type} full name`}
@@ -29,7 +29,7 @@ export function UserForm({ type }: UserFormProps) {
           <Text as="div" size="md" className="mb-1" weight="bold">
             Email or phone
           </Text>
-          <TextField.Root
+          <TextField
             value={contact}
             onChange={(e) => setContact(e.target.value)}
             placeholder={`Enter your ${type} email or phone number`}
