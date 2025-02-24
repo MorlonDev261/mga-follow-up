@@ -92,6 +92,13 @@ export default function Dashboard() {
                     <DropdownMenuItem><ImUserPlus />&nbsp;New customer</DropdownMenuItem>
                     <DropdownMenuItem><FaClipboardUser />&nbsp;New employer</DropdownMenuItem>
                   </Dropdown>
+                  <DialogPopup 
+                        label={<><AiOutlineProduct /> New arrivals</>}
+                        title="New arrivals"
+                        desc="test"
+                      >
+                        <UserForm type="customer" status="post" />
+                      </DialogPopup>
                 </div>
                 <p className="text-gray-400">= 4350 AIED</p>
               </div>
