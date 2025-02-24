@@ -82,7 +82,7 @@ export default function Dashboard() {
                   >
                     <DropdownMenuItem>
                       <DialogPopup 
-                        label="<AiOutlineProduct />&nbsp;New arrivals"
+                        label={<><AiOutlineProduct /> New arrivals</>}
                         title="New arrivals"
                         desc="test"
                       >
