@@ -9,7 +9,7 @@ interface DialogPopupProps {
   label: ReactNode;
   title: string;
   desc: string;
-  children?: ReactNode;
+  children?: ReactNode | ((setOpen: (open: boolean) => void) => ReactNode);
 }
 
 export default function DialogPopup({ label, title, desc, children }: DialogPopupProps) {
@@ -28,7 +28,7 @@ export default function DialogPopup({ label, title, desc, children }: DialogPopu
             {desc}
           </Dialog.Description>
           <Flex justify="center" className="p-1">
-            {children && typeof children === "function" ? children(setOpen) : children}
+            {typeof children === "function" ? children(setOpen) : children}
           </Flex>
         </Dialog.Content>
       </Dialog.Portal>
