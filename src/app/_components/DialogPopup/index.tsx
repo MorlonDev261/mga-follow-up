@@ -30,14 +30,6 @@ export default function DialogPopup({ label, title, desc, children }: DialogPopu
           <Flex justify="center" className="p-1">
             {children}
           </Flex>
-          <Flex gap="3" justify="end" className="mt-4">
-            <Button variant="soft" color="gray" onClick={() => setOpen(false)}>
-              Cancel
-            </Button>
-            <Button onClick={() => { /* Action avant fermeture */ setOpen(false); }}>
-              Save
-            </Button>
-          </Flex>
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>
