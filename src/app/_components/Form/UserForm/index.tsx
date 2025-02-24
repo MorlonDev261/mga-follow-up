@@ -8,7 +8,7 @@ interface UserFormProps {
   status: "post" | "edit";
 }
 
-export function UserForm({ type }: UserFormProps) {
+export default function UserForm({ type }: UserFormProps) {
   const [name, setName] = useState("");
   const [contact, setContact] = useState("");
 
