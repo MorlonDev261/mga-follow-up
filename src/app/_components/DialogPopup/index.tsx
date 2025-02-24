@@ -17,7 +17,7 @@ export function DialogPopup({ label, title, desc, children }: DialogPopupProps) 
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
-        <button>{label}</button> {/* Ajout d'un wrapper pour gérer tout type de label */}
+        <button>{label}</button>
       </Dialog.Trigger>
 
       <Dialog.Portal>
@@ -28,7 +28,7 @@ export function DialogPopup({ label, title, desc, children }: DialogPopupProps) 
             {desc}
           </Dialog.Description>
           {children}
-          <Flex gap="3" mt="4" justify="end">
+          <Flex gap="3" justify="end" className="mt-4">
             <Dialog.Close asChild>
               <Button variant="soft" color="gray">
                 Cancel
