@@ -81,18 +81,18 @@ export default function Dashboard() {
                     title="Insersion"
                   >
                     <DropdownMenuItem> 
-                      <DialogPopup label={<button><AiOutlineProduct /> New arrivals</button>} title="Insertion new arrivals"  desc="Fill in the details to add a new product.">
+                      <DialogPopup label={<button className="w-full"><AiOutlineProduct /> New arrivals</button>} title="Insertion new arrivals"  desc="Fill in the details to add a new product.">
                         {(setOpen) => <UserForm type="customer" status="post" setOpen={setOpen} />}
                       </DialogPopup>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                      <DialogPopup label={<button><AiOutlineProduct /> New arrivals</button>} title="Insertion new arrivals"  desc="Fill in the details to add a new product.">
+                      <DialogPopup label={<button className="w-full"><AiOutlineProduct /> New arrivals</button>} title="Insertion new arrivals"  desc="Fill in the details to add a new product.">
                         {(setOpen) => <UserForm type="customer" status="post" setOpen={setOpen} />}
                       </DialogPopup>
                       <ImUserPlus />&nbsp;New customer
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                      <DialogPopup label={<button><FaClipboardUser />&nbsp;New employer</button>} title="Insertion new arrivals"  desc="Fill in the details to add a new product.">
+                      <DialogPopup label={<button className="w-full"><FaClipboardUser />&nbsp;New employer</button>} title="Insertion new arrivals"  desc="Fill in the details to add a new product.">
                         {(setOpen) => <UserForm type="customer" status="post" setOpen={setOpen} />}
                       </DialogPopup>
                     </DropdownMenuItem>
