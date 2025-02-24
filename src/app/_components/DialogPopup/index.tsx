@@ -13,13 +13,13 @@ interface DialogPopupProps {
 }
 
 export default function DialogPopup({ label, title, desc, children }: DialogPopupProps) {
+  const [open, setOpen] = React.useState(false);
 
   return (
-    <Dialog.Root>
+    <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger asChild>
-        {label}
+        {typeof label === "string" ? <Button>{label}</Button> : label}
       </Dialog.Trigger>
-
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
         <Dialog.Content className="fixed left-1/2 top-1/2 w-[450px] -translate-x-1/2 -translate-y-1/2 rounded-lg bg-white p-6 shadow-lg dark:bg-gray-900">
@@ -29,14 +29,12 @@ export default function DialogPopup({ label, title, desc, children }: DialogPopu
           </Dialog.Description>
           {children}
           <Flex gap="3" justify="end" className="mt-4">
-            <Dialog.Close asChild>
-              <Button variant="soft" color="gray">
-                Cancel
-              </Button>
-            </Dialog.Close>
-            <Dialog.Close asChild>
-              <Button>Save</Button>
-            </Dialog.Close>
+            <Button variant="soft" color="gray" onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={() => { /* Action avant fermeture */ setOpen(false); }}>
+              Save
+            </Button>
           </Flex>
         </Dialog.Content>
       </Dialog.Portal>
