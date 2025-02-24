@@ -1,14 +1,17 @@
 import { useState } from "react";
 import { Flex } from "@/components/ui/flex";
 import { Text } from "@/components/ui/text";
+import { Button } from "@/components/ui/button";
 import { TextField } from "@/components/ui/textfield";
 
 interface UserFormProps {
   type: "customer" | "employer";
   status: "post" | "edit";
+  setOpen: (open: boolean) => void;
+  
 }
 
-export default function UserForm({ type }: UserFormProps) {
+export default function UserForm({ type, setOpen }: UserFormProps) {
   const [name, setName] = useState("");
   const [contact, setContact] = useState("");
 
@@ -61,6 +64,12 @@ export default function UserForm({ type }: UserFormProps) {
           </label>
         </Flex>
       )}
+      <Flex gap="3" justify="end" className="mt-4">
+        <Button variant="soft" color="gray" onClick={() => setOpen(false)}>
+          Cancel
+        </Button>
+        <Button onClick={() => setOpen(false)}>Save</Button>
+      </Flex>
     </div>
   );
 }
