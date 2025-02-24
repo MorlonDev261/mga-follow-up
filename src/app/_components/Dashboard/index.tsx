@@ -3,6 +3,7 @@ import { FaRegEnvelope, FaPlus, FaClipboardUser } from "react-icons/fa6";
 import { MdOutlineAccountBalanceWallet } from "react-icons/md";
 import { FiBell, FiLifeBuoy, FiSearch } from 'react-icons/fi';
 import { ImUserPlus } from "react-icons/im";
+import { AiOutlineProduct } from "react-icons/ai";
 import Image from 'next/image';
 import Dropdown from "@components/Dropdown";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
