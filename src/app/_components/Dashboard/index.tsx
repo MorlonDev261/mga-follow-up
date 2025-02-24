@@ -1,8 +1,11 @@
 import { useState } from 'react';
-import { FaRegEnvelope } from "react-icons/fa6";
+import { FaRegEnvelope, FaPlus, FaClipboardUser } from "react-icons/fa6";
 import { MdOutlineAccountBalanceWallet } from "react-icons/md";
 import { FiBell, FiLifeBuoy, FiSearch } from 'react-icons/fi';
+import { ImUserPlus } from "react-icons/im";
 import Image from 'next/image';
+import Dropdown from "@components/Dropdown";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import ShortcutList from '@components/ShortcutList';
 import Statistique from '@components/Statistique';
 import ExcelTab from '@components/ExcelTab';
@@ -66,7 +69,18 @@ export default function Dashboard() {
                   <div className="text-green-500">
                     5,220,500 AR
                   </div>
-                  New
+                  <Dropdown 
+                    btn={
+                      <button className="flex items-center gap-2 rounded bg-blue-500 px-3 py-2 text-white">
+                        <FaPlus /> New
+                      </button>
+                    } 
+                    title="Insersion"
+                  >
+                    <DropdownMenuItem><AiOutlineProduct />&nbsp;New arrivals</DropdownMenuItem>
+                    <DropdownMenuItem><ImUserPlus />&nbsp;New customer</DropdownMenuItem>
+                    <DropdownMenuItem><FaClipboardUser />&nbsp;New employer</DropdownMenuItem>
+                  </Dropdown>
                 </div>
                 <p className="text-gray-400">= 4350 AIED</p>
               </div>
