@@ -16,7 +16,7 @@ export function UserForm({ type }: UserFormProps) {
     <>
       <Flex direction="column" gap="3">
         <label>
-          <Text as="div" size="2" mb="1" weight="bold">
+          <Text as="div" size="md" mb="1" weight="bold">
             Name
           </Text>
           <TextField.Root
@@ -26,7 +26,7 @@ export function UserForm({ type }: UserFormProps) {
           />
         </label>
         <label>
-          <Text as="div" size="2" mb="1" weight="bold">
+          <Text as="div" size="md" mb="1" weight="bold">
             Email or phone
           </Text>
           <TextField.Root
@@ -40,7 +40,7 @@ export function UserForm({ type }: UserFormProps) {
       {type === "employer" && (
         <Flex justify="between">
           <label>
-            <Text as="div" size="2" mb="1" weight="bold">
+            <Text as="div" size="md" mb="1" weight="bold">
               Authorization:
             </Text>
             <select multiple className="border p-2 rounded w-full">
@@ -50,7 +50,7 @@ export function UserForm({ type }: UserFormProps) {
             </select>
           </label>
           <label>
-            <Text as="div" size="2" mb="1" weight="bold">
+            <Text as="div" size="md" mb="1" weight="bold">
               Status:
             </Text>
             <select className="border p-2 rounded w-full">
