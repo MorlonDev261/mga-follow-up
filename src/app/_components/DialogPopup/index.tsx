@@ -22,12 +22,14 @@ export default function DialogPopup({ label, title, desc, children }: DialogPopu
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
-        <Dialog.Content className="fixed left-1/2 top-1/2 w-[450px] -translate-x-1/2 -translate-y-1/2 rounded-lg bg-white p-6 shadow-lg dark:bg-gray-900">
+        <Dialog.Content className="fixed left-1/2 top-1/2 w-[90%] max-w-[450px] -translate-x-1/2 -translate-y-1/2 rounded-lg bg-white p-6 shadow-lg dark:bg-gray-900">
           <Dialog.Title className="text-lg font-bold">{title}</Dialog.Title>
           <Dialog.Description className="mb-4 text-sm text-gray-500 dark:text-gray-400">
             {desc}
           </Dialog.Description>
-          {children}
+          <Flex justify="center" className="p-1">
+            {children}
+          </Flex>
           <Flex gap="3" justify="end" className="mt-4">
             <Button variant="soft" color="gray" onClick={() => setOpen(false)}>
               Cancel
