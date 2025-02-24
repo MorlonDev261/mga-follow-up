@@ -1,54 +1,32 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu"
-import { FaPlus, FaClipboardUser } from "react-icons/fa6";
-import { ImUserPlus } from "react-icons/im";
-import { AiOutlineProduct } from "react-icons/ai";
+import * as React from "react";
+import { ReactNode } from "react";
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 
-type Checked = DropdownMenuCheckboxItemProps["checked"]
+interface DropdownProps {
+  btn: ReactNode;
+  title: string;
+  children: ReactNode;
+}
 
-export default function DropdownComponent() {
-  const [showStatusBar, setShowStatusBar] = React.useState<Checked>(true)
-  const [showActivityBar, setShowActivityBar] = React.useState<Checked>(false)
-  const [showPanel, setShowPanel] = React.useState<Checked>(false)
-
+export default function Dropdown({ btn, title, children }: DropdownProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="flex items-center justify-center gap-1 rounded bg-blue-500 px-2 py-1 text-sm"><FaPlus /> New</button>
+        {btn}
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-45 bg-[#222] mr-5">
-        <DropdownMenuLabel className="text-center">Insertion</DropdownMenuLabel>
+      <DropdownMenuContent className="w-48 bg-[#222] mr-5">
+        <DropdownMenuLabel className="text-center">{title} Insertion</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuCheckboxItem
-          checked={showStatusBar}
-          onCheckedChange={setShowStatusBar}
-        >
-          <AiOutlineProduct />&nbsp; New arrivals
-        </DropdownMenuCheckboxItem>
-        <DropdownMenuCheckboxItem
-          checked={showActivityBar}
-          onCheckedChange={setShowActivityBar}
-          disabled
-        >
-          <ImUserPlus />&nbsp; New customer
-        </DropdownMenuCheckboxItem>
-        <DropdownMenuCheckboxItem
-          checked={showPanel}
-          onCheckedChange={setShowPanel}
-        >
-          <FaClipboardUser />&nbsp; New employer
-        </DropdownMenuCheckboxItem>
+        {children}
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }
