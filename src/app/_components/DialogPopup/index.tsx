@@ -28,7 +28,7 @@ export default function DialogPopup({ label, title, desc, children }: DialogPopu
             {desc}
           </Dialog.Description>
           <Flex justify="center" className="p-1">
-            {children}
+            {children && React.cloneElement(children as React.ReactElement, { setOpen })}
           </Flex>
         </Dialog.Content>
       </Dialog.Portal>
