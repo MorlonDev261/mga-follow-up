@@ -81,18 +81,22 @@ export default function Dashboard() {
                     title="Insersion"
                   >
                     <DropdownMenuItem> 
-                      <AiOutlineProduct /> New arrivals
-                    </DropdownMenuItem>
-                    <DropdownMenuItem><ImUserPlus />&nbsp;New customer</DropdownMenuItem>
-                    <DropdownMenuItem><FaClipboardUser />&nbsp;New employer</DropdownMenuItem>
-                  </Dropdown>
-                  <DialogPopup 
-                        label={<button><AiOutlineProduct /> New arrivals</button>}
-                        title="New arrivals"
-                        desc="test"
-                      >
+                      <DialogPopup label={<button><AiOutlineProduct /> New arrivals</button>} title="Insertion new arrivals"  desc="Fill in the details to add a new product.">
                         {(setOpen) => <UserForm type="customer" status="post" setOpen={setOpen} />}
                       </DialogPopup>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <DialogPopup label={<button><AiOutlineProduct /> New arrivals</button>} title="Insertion new arrivals"  desc="Fill in the details to add a new product.">
+                        {(setOpen) => <UserForm type="customer" status="post" setOpen={setOpen} />}
+                      </DialogPopup>
+                      <ImUserPlus />&nbsp;New customer
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <DialogPopup label={<button><FaClipboardUser />&nbsp;New employer</button>} title="Insertion new arrivals"  desc="Fill in the details to add a new product.">
+                        {(setOpen) => <UserForm type="customer" status="post" setOpen={setOpen} />}
+                      </DialogPopup>
+                    </DropdownMenuItem>
+                  </Dropdown>
                 </div>
                 <p className="text-gray-400">= AIED4350</p>
               </div>
