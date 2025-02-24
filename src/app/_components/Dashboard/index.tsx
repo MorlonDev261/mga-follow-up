@@ -91,7 +91,7 @@ export default function Dashboard() {
                         title="New arrivals"
                         desc="test"
                       >
-                        <UserForm type="customer" status="post" />
+                        <UserForm type="customer" status="post" setOpen={setOpen} />
                       </DialogPopup>
                 </div>
                 <p className="text-gray-400">= AIED4350</p>
