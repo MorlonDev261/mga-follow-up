@@ -13,7 +13,7 @@ interface DialogPopupProps {
 }
 
 export default function DialogPopup({ label, title, desc, children }: DialogPopupProps) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
 
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>
