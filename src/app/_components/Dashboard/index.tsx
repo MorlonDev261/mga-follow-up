@@ -6,15 +6,13 @@ import { ImUserPlus } from "react-icons/im";
 import { AiOutlineProduct } from "react-icons/ai";
 import Image from 'next/image';
 import Dropdown from "@components/Dropdown";
-import DialogPopup from "@components/DialogPopup";
-import UserForm from "@components/Form/UserForm";
+import { DropdownMenuItem } from '@components/ui/dropdown-menu';
 import ShortcutList from '@components/ShortcutList';
 import Statistique from '@components/Statistique';
 import ExcelTab from '@components/ExcelTab';
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState<'dashboard' | 'excel'>('dashboard');
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // État pour contrôler la visibilité du Dropdown
 
   return (
     <div className="min-h-screen bg-[#010101] text-white">
@@ -73,41 +71,21 @@ export default function Dashboard() {
                     5,220,500 AR
                   </div>
                   <Dropdown 
-                    isOpen={isDropdownOpen} // Contrôle la visibilité du Dropdown
-                    onToggle={() => setIsDropdownOpen(!isDropdownOpen)} // Bascule la visibilité
                     btn={
-                      <button 
-                        className="flex items-center justify-center gap-1 rounded bg-blue-500 px-2 py-1 text-sm"
-                        onClick={() => setIsDropdownOpen(!isDropdownOpen)} // Ouvre/ferme le Dropdown
-                      >
+                      <button className="flex items-center justify-center gap-1 rounded bg-blue-500 px-2 py-1 text-sm">
                         <FaPlus /> New
                       </button>
                     } 
                     title="Insertion">
-                      <DialogPopup 
-                        label={<button className="w-full"><AiOutlineProduct /> New arrivals</button>} 
-                        title="Insertion new arrivals"  
-                        desc="Fill in the details to add a new product."
-                        onOpenChange={() => setIsDropdownOpen(false)} // Ferme le Dropdown lorsque le DialogPopup s'ouvre
-                      >
-                        {(setOpen) => <UserForm type="customer" status="post" setOpen={setOpen} />}
-                      </DialogPopup>
-                      <DialogPopup 
-                        label={<button className="w-full"><ImUserPlus /> New customer</button>} 
-                        title="Insertion new customer"  
-                        desc="Enter customer details."
-                        onOpenChange={() => setIsDropdownOpen(false)} // Ferme le Dropdown lorsque le DialogPopup s'ouvre
-                      >
-                        {(setOpen) => <UserForm type="customer" status="post" setOpen={setOpen} />}
-                      </DialogPopup>
-                      <DialogPopup 
-                        label={<button className="w-full"><FaClipboardUser /> New employer</button>} 
-                        title="Insertion new employer"  
-                        desc="Enter employer details."
-                        onOpenChange={() => setIsDropdownOpen(false)} // Ferme le Dropdown lorsque le DialogPopup s'ouvre
-                      >
-                        {(setOpen) => <UserForm type="employer" status="post" setOpen={setOpen} />}
-                    </DialogPopup>
+                    <DropdownMenuItem>
+                      <AiOutlineProduct /> New arrivals
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <ImUserPlus /> New customer
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <FaClipboardUser /> New employer
+                    </DropdownMenuItem>
                 </Dropdown>
 
                 </div>
