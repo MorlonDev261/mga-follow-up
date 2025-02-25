@@ -5,7 +5,7 @@ import { FiBell, FiLifeBuoy, FiSearch } from 'react-icons/fi';
 import { ImUserPlus } from "react-icons/im";
 import { AiOutlineProduct } from "react-icons/ai";
 import Image from 'next/image';
-import CountUp from "react-countup";
+import Counter from "@components/Counter";
 import Dropdown from "@components/Dropdown";
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import ShortcutList from '@components/ShortcutList';
@@ -69,7 +69,7 @@ export default function Dashboard() {
                 <h3 className="text-gray-400 flex items-center gap-1"><MdOutlineAccountBalanceWallet /> Net Available</h3>
                 <div className="my-2 flex items-center justify-between text-2xl font-bold">
                   <div className="text-green-500">
-                    <CountUp start={0} end={5220500} duration={1} separator="," suffix=" Ar" />
+                    <Counter end={5220500} duration={0.8} sound="on" src="/sounds/money-sound.mp3" /> Ar
                   </div>
                   <Dropdown 
                     btn={
@@ -90,7 +90,7 @@ export default function Dashboard() {
                 </Dropdown>
 
                 </div>
-                <p className="text-gray-400">= <CountUp start={0} end={4350} duration={1} separator="," suffix="dh" /></p>
+                <p className="text-gray-400">= AED<Counter end={4350} duration={0.8} /></p>
               </div>
               <div className="mb-5 max-h-[100px] max-w-[250px]">
                 <Statistique position="right" />
