@@ -6,7 +6,7 @@ import { ImUserPlus } from "react-icons/im";
 import { AiOutlineProduct } from "react-icons/ai";
 import Image from 'next/image';
 import Dropdown from "@components/Dropdown";
-import { DropdownMenuItem } from '@components/ui/dropdown-menu';
+import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import ShortcutList from '@components/ShortcutList';
 import Statistique from '@components/Statistique';
 import ExcelTab from '@components/ExcelTab';
