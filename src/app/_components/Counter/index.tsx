@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import CountUp from "react-countup";
 import useSound from "use-sound";
 
@@ -21,7 +20,6 @@ export default function Counter({
   src = "/sounds/default-count.mp3",
   volume = 1,
 }: CounterProps) {
-  const [isPlaying, setIsPlaying] = useState(false);
   const [play, { stop }] = useSound(src, { volume });
 
   return (
