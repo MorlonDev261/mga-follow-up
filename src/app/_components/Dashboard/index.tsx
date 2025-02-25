@@ -69,7 +69,7 @@ export default function Dashboard() {
                 <h3 className="text-gray-400 flex items-center gap-1"><MdOutlineAccountBalanceWallet /> Net Available</h3>
                 <div className="my-2 flex items-center justify-between text-2xl font-bold">
                   <div className="text-green-500">
-                    <CountUp start={0} end={5220500} duration={3} separator="," suffix=" Ar" />
+                    <CountUp start={0} end={5220500} duration={1} separator="," suffix=" Ar" />
                   </div>
                   <Dropdown 
                     btn={
@@ -90,7 +90,7 @@ export default function Dashboard() {
                 </Dropdown>
 
                 </div>
-                <p className="text-gray-400">= <CountUp start={0} end={4350} duration={3} separator="," suffix="dh" /></p>
+                <p className="text-gray-400">= <CountUp start={0} end={4350} duration={1} separator="," suffix="dh" /></p>
               </div>
               <div className="mb-5 max-h-[100px] max-w-[250px]">
                 <Statistique position="right" />
