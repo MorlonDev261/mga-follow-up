@@ -14,6 +14,7 @@ import ExcelTab from '@components/ExcelTab';
 
 export default function Dashboard() {
   const [activeTab, setActiveTab] = useState<'dashboard' | 'excel'>('dashboard');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // État pour contrôler la visibilité du Dropdown
 
   return (
     <div className="min-h-screen bg-[#010101] text-white">
@@ -72,8 +73,13 @@ export default function Dashboard() {
                     5,220,500 AR
                   </div>
                   <Dropdown 
+                    isOpen={isDropdownOpen} // Contrôle la visibilité du Dropdown
+                    onToggle={() => setIsDropdownOpen(!isDropdownOpen)} // Bascule la visibilité
                     btn={
-                      <button className="flex items-center justify-center gap-1 rounded bg-blue-500 px-2 py-1 text-sm">
+                      <button 
+                        className="flex items-center justify-center gap-1 rounded bg-blue-500 px-2 py-1 text-sm"
+                        onClick={() => setIsDropdownOpen(!isDropdownOpen)} // Ouvre/ferme le Dropdown
+                      >
                         <FaPlus /> New
                       </button>
                     } 
@@ -82,6 +88,7 @@ export default function Dashboard() {
                         label={<button className="w-full"><AiOutlineProduct /> New arrivals</button>} 
                         title="Insertion new arrivals"  
                         desc="Fill in the details to add a new product."
+                        onOpenChange={() => setIsDropdownOpen(false)} // Ferme le Dropdown lorsque le DialogPopup s'ouvre
                       >
                         {(setOpen) => <UserForm type="customer" status="post" setOpen={setOpen} />}
                       </DialogPopup>
@@ -89,6 +96,7 @@ export default function Dashboard() {
                         label={<button className="w-full"><ImUserPlus /> New customer</button>} 
                         title="Insertion new customer"  
                         desc="Enter customer details."
+                        onOpenChange={() => setIsDropdownOpen(false)} // Ferme le Dropdown lorsque le DialogPopup s'ouvre
                       >
                         {(setOpen) => <UserForm type="customer" status="post" setOpen={setOpen} />}
                       </DialogPopup>
@@ -96,6 +104,7 @@ export default function Dashboard() {
                         label={<button className="w-full"><FaClipboardUser /> New employer</button>} 
                         title="Insertion new employer"  
                         desc="Enter employer details."
+                        onOpenChange={() => setIsDropdownOpen(false)} // Ferme le Dropdown lorsque le DialogPopup s'ouvre
                       >
                         {(setOpen) => <UserForm type="employer" status="post" setOpen={setOpen} />}
                     </DialogPopup>
