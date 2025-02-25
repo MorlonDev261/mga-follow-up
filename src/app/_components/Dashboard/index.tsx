@@ -73,30 +73,42 @@ export default function Dashboard() {
                     5,220,500 AR
                   </div>
                   <Dropdown 
-                    btn={
-                      <button className="flex items-center justify-center gap-1 rounded bg-blue-500 px-2 py-1 text-sm">
-                        <FaPlus /> New
-                      </button>
-                    } 
-                    title="Insersion"
-                  >
-                    <DropdownMenuItem> 
-                      <DialogPopup label={<button className="w-full"><AiOutlineProduct /> New arrivals</button>} title="Insertion new arrivals"  desc="Fill in the details to add a new product.">
-                        {(setOpen) => <UserForm type="customer" status="post" setOpen={setOpen} />}
-                      </DialogPopup>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <DialogPopup label={<button className="w-full"><AiOutlineProduct /> New arrivals</button>} title="Insertion new arrivals"  desc="Fill in the details to add a new product.">
-                        {(setOpen) => <UserForm type="customer" status="post" setOpen={setOpen} />}
-                      </DialogPopup>
-                      <ImUserPlus />&nbsp;New customer
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <DialogPopup label={<button className="w-full"><FaClipboardUser />&nbsp;New employer</button>} title="Insertion new arrivals"  desc="Fill in the details to add a new product.">
-                        {(setOpen) => <UserForm type="customer" status="post" setOpen={setOpen} />}
-                      </DialogPopup>
-                    </DropdownMenuItem>
-                  </Dropdown>
+  btn={
+    <button className="flex items-center justify-center gap-1 rounded bg-blue-500 px-2 py-1 text-sm">
+      <FaPlus /> New
+    </button>
+  } 
+  title="Insertion"
+>
+  <DropdownMenuItem> 
+    <DialogPopup 
+      label={<button className="w-full"><AiOutlineProduct /> New arrivals</button>} 
+      title="Insertion new arrivals"  
+      desc="Fill in the details to add a new product."
+    >
+      {(setOpen) => <UserForm type="customer" status="post" setOpen={setOpen} />}
+    </DialogPopup>
+  </DropdownMenuItem>
+  <DropdownMenuItem>
+    <DialogPopup 
+      label={<button className="w-full"><ImUserPlus /> New customer</button>} 
+      title="Insertion new customer"  
+      desc="Enter customer details."
+    >
+      {(setOpen) => <UserForm type="customer" status="post" setOpen={setOpen} />}
+    </DialogPopup>
+  </DropdownMenuItem>
+  <DropdownMenuItem>
+    <DialogPopup 
+      label={<button className="w-full"><FaClipboardUser /> New employer</button>} 
+      title="Insertion new employer"  
+      desc="Enter employer details."
+    >
+      {(setOpen) => <UserForm type="employer" status="post" setOpen={setOpen} />}
+    </DialogPopup>
+  </DropdownMenuItem>
+</Dropdown>
+
                 </div>
                 <p className="text-gray-400">= AIED4350</p>
               </div>
