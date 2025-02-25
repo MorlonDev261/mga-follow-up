@@ -23,24 +23,19 @@ export default function Counter({
   const [play, { stop }] = useSound(src, { volume });
 
   return (
-    <div className="p-4 text-center bg-gray-900 text-white rounded-md">
-      <h2 className="text-xl font-bold mb-2">Total Sales</h2>
-      <p className="text-3xl font-extrabold">
-        <CountUp
-          start={start}
-          end={end}
-          duration={duration}
-          separator=","
-          onStart={() => {
-            if (sound === "on") {
-              play();
-            }
-          }}
-          onEnd={() => {
-            stop();
-          }}
-        />
-      </p>
-    </div>
+    <CountUp
+      start={start}
+      end={end}
+      duration={duration}
+      separator=","
+      onStart={() => {
+        if (sound === "on") {
+          play();
+        }
+      }}
+      onEnd={() => {
+        stop();
+      }}
+    />
   );
 }
