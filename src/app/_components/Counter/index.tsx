@@ -33,12 +33,10 @@ export default function Counter({
           separator=","
           onStart={() => {
             if (sound === "on") {
-              setIsPlaying(true);
               play();
             }
           }}
           onEnd={() => {
-            setIsPlaying(false);
             stop();
           }}
         />
