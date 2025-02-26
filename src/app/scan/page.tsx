@@ -1,36 +1,38 @@
 "use client";
-import { useEffect, useState } from "react";
-import { BrowserMultiFormatReader } from "@zxing/browser";
+import { useEffect, useState, useRef } from "react";
+import { BrowserMultiFormatReader, Result } from "@zxing/browser";
 
 export default function BarcodeScanner() {
-  const [result, setResult] = useState("");
+  const [result, setResult] = useState<string>("");
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const controlsRef = useRef<any>(null); // Pour stocker les contrôles de la caméra
 
   useEffect(() => {
     const codeReader = new BrowserMultiFormatReader();
 
-    // Démarrer le décodage depuis le périphérique vidéo
+    // Démarrer le scan
     codeReader
-      .decodeFromVideoDevice(undefined, "video", (result, error, controls) => {
+      .decodeFromVideoDevice(undefined, videoRef.current!, (result: Result | null, error: Error | null, controls: any) => {
         if (result) {
           setResult(result.getText());
-          controls.stop(); // Arrêter le scan et éteindre la caméra
+          controlsRef.current = controls; // Stocker les contrôles
+          controls.stop(); // Arrêter après la détection
         }
-        if (error) {
-          console.error(error);
-        }
+        if (error) console.error(error);
       })
       .catch((err) => console.error(err));
 
-    // Nettoyage lors du démontage du composant
+    // Nettoyage
     return () => {
-      codeReader.stopStreams(); // Utiliser stopStreams au lieu de reset
+      if (controlsRef.current) controlsRef.current.stop(); // Arrêter la caméra
+      (codeReader as any).reset(); // Contournement TypeScript
     };
   }, []);
 
   return (
     <div>
-      <video id="video" style={{ width: "100%" }} />
-      {result && <p>Scanned: {result}</p>}
+      <video ref={videoRef} style={{ width: "100%", height: "auto" }} />
+      {result && <p>Résultat : {result}</p>}
     </div>
   );
 }
