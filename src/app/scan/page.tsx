@@ -2,6 +2,11 @@
 import { useEffect, useState, useRef } from "react";
 import { BrowserMultiFormatReader } from "@zxing/browser";
 
+// Étendre l'interface BrowserMultiFormatReader
+interface ExtendedBrowserMultiFormatReader extends BrowserMultiFormatReader {
+  reset: () => void;
+}
+
 type Controls = {
   stop: () => void;
 };
@@ -13,7 +18,7 @@ export default function BarcodeScanner() {
   const controlsRef = useRef<Controls | null>(null);
 
   useEffect(() => {
-    const codeReader = new BrowserMultiFormatReader();
+    const codeReader = new BrowserMultiFormatReader() as ExtendedBrowserMultiFormatReader;
 
     // Démarrer le scan
     codeReader
@@ -23,7 +28,7 @@ export default function BarcodeScanner() {
           controlsRef.current = controls; // Stocker les contrôles
           controls.stop(); // Arrêter après la détection
 
-          // Dessiner un rectangle autour du code détecté
+          // Dessiner un cadre visuel autour du code détecté
           const canvas = canvasRef.current!;
           const ctx = canvas.getContext("2d")!;
           const video = videoRef.current!;
@@ -32,7 +37,7 @@ export default function BarcodeScanner() {
           canvas.width = video.videoWidth;
           canvas.height = video.videoHeight;
 
-          // Effacer le canvas
+          // Effacer le Canvas
           ctx.clearRect(0, 0, canvas.width, canvas.height);
 
           // Dessiner un rectangle autour du code détecté
@@ -41,9 +46,9 @@ export default function BarcodeScanner() {
             const firstPoint = positions[0]; // Prendre le premier point détecté
             const x = firstPoint.getX(); // Utiliser la méthode getX()
             const y = firstPoint.getY(); // Utiliser la méthode getY()
-            ctx.strokeStyle = "green";
-            ctx.lineWidth = 2;
-            ctx.strokeRect(x, y, 100, 100); // Ajuster la taille du rectangle selon vos besoins
+            ctx.strokeStyle = "green"; // Couleur du cadre
+            ctx.lineWidth = 2; // Épaisseur du cadre
+            ctx.strokeRect(x, y, 100, 100); // Dessiner un rectangle de 100x100 pixels
           }
         }
         if (error) console.error(error);
@@ -53,7 +58,7 @@ export default function BarcodeScanner() {
     // Nettoyage
     return () => {
       if (controlsRef.current) controlsRef.current.stop(); // Arrêter la caméra
-      codeReader.stopAsync(); // Utiliser stopAsync au lieu de reset
+      codeReader.reset(); // Utiliser reset sans erreur de typage
     };
   }, []);
 
