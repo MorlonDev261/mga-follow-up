@@ -46,14 +46,17 @@ export default function BarcodeScanner() {
             const firstPoint = positions[0]; // Prendre le premier point détecté
             const x = firstPoint.getX(); // Utiliser la méthode getX()
             const y = firstPoint.getY(); // Utiliser la méthode getY()
+            console.log("Point détecté :", { x, y }); // Afficher les coordonnées dans la console
             ctx.strokeStyle = "green"; // Couleur du cadre
             ctx.lineWidth = 2; // Épaisseur du cadre
             ctx.strokeRect(x, y, 100, 100); // Dessiner un rectangle de 100x100 pixels
+          } else {
+            console.log("Aucun point détecté.");
           }
         }
-        if (error) console.error(error);
+        if (error) console.error("Erreur de caméra :", error);
       })
-      .catch((err) => console.error(err));
+      .catch((err) => console.error("Erreur lors du démarrage de la caméra :", err));
 
     // Nettoyage
     return () => {
