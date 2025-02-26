@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
-import { BrowserMultiFormatReader, Result } from "@zxing/browser";
+import { BrowserMultiFormatReader } from "@zxing/browser";
 
 type Controls = {
   stop: () => void;
@@ -9,14 +9,14 @@ type Controls = {
 export default function BarcodeScanner() {
   const [result, setResult] = useState<string>("");
   const videoRef = useRef<HTMLVideoElement>(null);
-  const controlsRef = useRef<Controls | null>(null); // Utilisation d'un type spécifique
+  const controlsRef = useRef<Controls | null>(null);
 
   useEffect(() => {
     const codeReader = new BrowserMultiFormatReader();
 
     // Démarrer le scan
     codeReader
-      .decodeFromVideoDevice(undefined, videoRef.current!, (result: Result | null, error: Error | null, controls: Controls) => {
+      .decodeFromVideoDevice(undefined, videoRef.current!, (result, error, controls) => {
         if (result) {
           setResult(result.getText());
           controlsRef.current = controls; // Stocker les contrôles
