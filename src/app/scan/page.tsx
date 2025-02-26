@@ -2,6 +2,11 @@
 import { useEffect, useState, useRef } from "react";
 import { BrowserMultiFormatReader } from "@zxing/browser";
 
+// Étendre l'interface BrowserMultiFormatReader
+interface ExtendedBrowserMultiFormatReader extends BrowserMultiFormatReader {
+  reset: () => void;
+}
+
 type Controls = {
   stop: () => void;
 };
@@ -12,7 +17,7 @@ export default function BarcodeScanner() {
   const controlsRef = useRef<Controls | null>(null);
 
   useEffect(() => {
-    const codeReader = new BrowserMultiFormatReader();
+    const codeReader = new BrowserMultiFormatReader() as ExtendedBrowserMultiFormatReader;
 
     // Démarrer le scan
     codeReader
@@ -29,7 +34,7 @@ export default function BarcodeScanner() {
     // Nettoyage
     return () => {
       if (controlsRef.current) controlsRef.current.stop(); // Arrêter la caméra
-      (codeReader as any).reset(); // Utiliser reset avec une assertion de type
+      codeReader.reset(); // Utiliser reset sans erreur de typage
     };
   }, []);
 
