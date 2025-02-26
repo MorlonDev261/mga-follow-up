@@ -29,7 +29,7 @@ export default function BarcodeScanner() {
     // Nettoyage
     return () => {
       if (controlsRef.current) controlsRef.current.stop(); // Arrêter la caméra
-      codeReader.stopAsync(); // Utiliser stopAsync au lieu de reset
+      (codeReader as any).reset(); // Utiliser reset avec une assertion de type
     };
   }, []);
 
