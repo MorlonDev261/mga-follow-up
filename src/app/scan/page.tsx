@@ -26,7 +26,7 @@ export default function BarcodeScanner() {
           // Dessiner un rectangle autour du code détecté
           const canvas = canvasRef.current!;
           const ctx = canvas.getContext("2d")!;
-          const video = videoRef.current!; // Utilisation de la variable video
+          const video = videoRef.current!;
 
           // Ajuster la taille du Canvas à la taille de la vidéo
           canvas.width = video.videoWidth;
@@ -38,7 +38,9 @@ export default function BarcodeScanner() {
           // Dessiner un rectangle autour du code détecté
           const positions = result.getResultPoints();
           if (positions && positions.length > 0) {
-            const { x, y } = positions[0]; // Prendre le premier point détecté
+            const firstPoint = positions[0]; // Prendre le premier point détecté
+            const x = firstPoint.getX(); // Utiliser la méthode getX()
+            const y = firstPoint.getY(); // Utiliser la méthode getY()
             ctx.strokeStyle = "green";
             ctx.lineWidth = 2;
             ctx.strokeRect(x, y, 100, 100); // Ajuster la taille du rectangle selon vos besoins
