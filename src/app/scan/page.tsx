@@ -23,7 +23,7 @@ export default function BarcodeScanner() {
 
     // Nettoyage lors du démontage du composant
     return () => {
-      codeReader.reset();
+      codeReader.stopStreams(); // Utiliser stopStreams au lieu de reset
     };
   }, []);
 
