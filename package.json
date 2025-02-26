@@ -23,7 +23,7 @@
     "react-chartjs-2": "^5.2.0",
     "react-countup": "^6.5.3",
     "use-sound": "^5.0.0",
-    "@zxing/browser": "^0.2.8",
+    "@zxing/browser": "^0.1.5",
     "jsbarcode": "^3.11.6",
     "react-barcode-scanner": "^3.2.1",
     "next": "15.1.7",
