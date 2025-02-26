@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { FaRegEnvelope, FaPlus, FaClipboardUser } from "react-icons/fa6";
 import { MdOutlineAccountBalanceWallet } from "react-icons/md";
-import { FiBell, FiLifeBuoy, FiSearch } from 'react-icons/fi';
+import { FiBell, FiSearch } from 'react-icons/fi';
 import { ImUserPlus } from "react-icons/im";
 import { AiOutlineProduct } from "react-icons/ai";
+import { LuScanLine } from "react-icons/lu";
 import Image from 'next/image';
 import Counter from "@components/Counter";
 import Dropdown from "@components/Dropdown";
@@ -57,7 +58,7 @@ export default function Dashboard() {
               className="w-full rounded-full bg-[#222] py-1 pl-10 pr-4 outline-none"
             />
           </div>
-          <FiLifeBuoy className="text-xl" />
+          <LuScanLine className="text-2xl" />
         </div>
       </header>
 
