@@ -26,7 +26,11 @@ export default function BarcodeScanner() {
           // Dessiner un rectangle autour du code détecté
           const canvas = canvasRef.current!;
           const ctx = canvas.getContext("2d")!;
-          const video = videoRef.current!;
+          const video = videoRef.current!; // Utilisation de la variable video
+
+          // Ajuster la taille du Canvas à la taille de la vidéo
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
 
           // Effacer le canvas
           ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -64,8 +68,6 @@ export default function BarcodeScanner() {
           height: "100%",
           pointerEvents: "none", // Permettre les interactions avec la vidéo
         }}
-        width={videoRef.current?.videoWidth || 640}
-        height={videoRef.current?.videoHeight || 480}
       />
       {result && <p>Résultat : {result}</p>}
     </div>
