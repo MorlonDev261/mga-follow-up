@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Link from "next/link";
 import { FaRegEnvelope, FaPlus, FaClipboardUser } from "react-icons/fa6";
 import { MdOutlineAccountBalanceWallet } from "react-icons/md";
 import { FiBell, FiSearch } from 'react-icons/fi';
@@ -58,7 +59,9 @@ export default function Dashboard() {
               className="w-full rounded-full bg-[#222] py-1 pl-10 pr-4 outline-none"
             />
           </div>
-          <LuScanLine className="text-2xl" />
+          <Link href="/scan">
+            <LuScanLine className="text-2xl" />
+          </Link>
         </div>
       </header>
 
