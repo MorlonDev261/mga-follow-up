@@ -8,21 +8,22 @@ export default function BarcodeScanner() {
   useEffect(() => {
     const codeReader = new BrowserMultiFormatReader();
 
-    // Utilisation de la méthode correcte `decodeFromVideoDevice`
+    // Démarrer le décodage depuis le périphérique vidéo
     codeReader
-      .decodeFromVideoDevice(undefined, "video", (result, err) => {
+      .decodeFromVideoDevice(undefined, "video", (result, error, controls) => {
         if (result) {
           setResult(result.getText());
-          codeReader.reset(); // Arrêter après le scan
+          controls.stop(); // Arrêter le scan et éteindre la caméra
         }
-        if (err) {
-          console.error(err);
+        if (error) {
+          console.error(error);
         }
       })
       .catch((err) => console.error(err));
 
+    // Nettoyage lors du démontage du composant
     return () => {
-      codeReader.reset(); // Nettoyage à la fermeture du composant
+      codeReader.reset();
     };
   }, []);
 
