@@ -2,6 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import { FaCog, FaUsers, FaRegUserCircle } from 'react-icons/fa';
 import { BsShopWindow, BsPersonWorkspace } from "react-icons/bs";
+import { HiOutlineBanknotes } from "react-icons/hi2";
 import { FiDollarSign, FiClock } from 'react-icons/fi';
 
 const shortcuts = [
@@ -9,8 +10,9 @@ const shortcuts = [
   { label: 'Expenses', value: 457900, icon: <FiDollarSign />, color: 'text-red-500' },
   { label: 'Pending', value: 457900, icon: <FiClock />, color: 'text-yellow-500' },
   { label: 'Employers', value: 7, icon: <BsPersonWorkspace /> },
-  { label: 'Profile', icon: <FaRegUserCircle /> },
+  { label: 'Payement', icon: <HiOutlineBanknotes /> },
   { label: 'Customers', value: 7, icon: <FaUsers /> },
+  { label: 'Profile', icon: <FaRegUserCircle /> },
   { label: 'Settings', icon: <FaCog /> },
 ];
 
