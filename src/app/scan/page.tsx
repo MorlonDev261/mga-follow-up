@@ -157,7 +157,7 @@ export default function BarcodeScanner() {
       <div className="relative w-full h-60 bg-black rounded-lg overflow-hidden flex items-center justify-center">
         {loading && <p className="absolute text-white text-lg">Loading...</p>}
         
-        {!loading && !result && (
+        {!loading && !result && !isScanned && (
           <p className="absolute text-green-500 text-sm z-20 pointer-events-none">
             Place the barcode inside the indicator
           </p>
