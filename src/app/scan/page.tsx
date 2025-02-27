@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
 import { BrowserMultiFormatReader } from "@zxing/browser";
+import { DecodeHintType, BarcodeFormat } from "@zxing/library";
 import { BsLightning, BsLightningFill } from "react-icons/bs";
 import { IoMdRefresh } from "react-icons/io";
 import { MdOutlineHistory } from "react-icons/md";
@@ -25,7 +26,10 @@ export default function BarcodeScanner() {
 
   const startScanner = () => {
     setLoading(true);
-    const codeReader = new BrowserMultiFormatReader(["EAN_13", "CODE_128"]);
+    const hints = new Map();
+    hints.set(DecodeHintType.POSSIBLE_FORMATS, ["EAN_13", "CODE_128"]);
+
+    const codeReader = new BrowserMultiFormatReader(hints);
 
     if (videoRef.current) {
       codeReader
