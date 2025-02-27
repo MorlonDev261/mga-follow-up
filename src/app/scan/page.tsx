@@ -72,10 +72,10 @@ export default function BarcodeScanner() {
         <video ref={videoRef} className="w-full h-full z-10 object-cover" />
         {!loading && (
           <div className="absolute w-4/5 h-1/4 z-20 pointer-events-none">
-            <div className="absolute top-0 left-0 w-6 h-6 border-t-4 border-l-4 border-green-500"></div>
-            <div className="absolute top-0 right-0 w-6 h-6 border-t-4 border-r-4 border-green-500"></div>
-            <div className="absolute bottom-0 left-0 w-6 h-6 border-b-4 border-l-4 border-green-500"></div>
-            <div className="absolute bottom-0 right-0 w-6 h-6 border-b-4 border-r-4 border-green-500"></div>
+            <div className="absolute top-0 left-0 w-3 h-3 border-t-4 border-l-4 border-green-500"></div>
+            <div className="absolute top-0 right-0 w-3 h-3 border-t-4 border-r-4 border-green-500"></div>
+            <div className="absolute bottom-0 left-0 w-3 h-3 border-b-4 border-l-4 border-green-500"></div>
+            <div className="absolute bottom-0 right-0 w-3 h-3 border-b-4 border-r-4 border-green-500"></div>
           </div>
         )}
       </div>
