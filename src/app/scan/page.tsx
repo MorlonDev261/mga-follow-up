@@ -120,7 +120,7 @@ export default function BarcodeScanner() {
 
     const codeReader = new BrowserMultiFormatReader(hints);
     try {
-      const result = await codeReader.decodeFromImage(canvas);
+      const result = await codeReader.decodeFromImageElement(canvas);
       const scannedText = result.getText();
 
       if (/^\d{15}$/.test(scannedText) && scannedText !== resultRef.current) {
