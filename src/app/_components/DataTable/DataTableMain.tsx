@@ -107,7 +107,7 @@ export const columns: ColumnDef<Payment>[] = [
       const formattedDate = rawDate.toLocaleDateString("fr-FR"); // Format: "23/01/2025"
       return <div>{formattedDate}</div>;
     },
-  }
+  },
   {
     accessorKey: "email",
     header: ({ column }) => {
