@@ -67,11 +67,11 @@ export default function BarcodeScanner() {
   return (
     <div className="flex flex-col items-center justify-center w-full max-w-md mx-auto p-4">
       {/* Scanner */}
-      <div className="relative w-full h-72 bg-black rounded-lg overflow-hidden flex items-center justify-center">
+      <div className="relative w-full h-60 bg-black rounded-lg overflow-hidden flex items-center justify-center">
         {loading && <p className="absolute text-white text-lg">Chargement...</p>}
         <video ref={videoRef} className="w-full h-full z-10 object-cover" />
         {!loading && (
-          <div className="absolute w-4/5 h-1/3 z-20 pointer-events-none">
+          <div className="absolute w-4/5 h-1/4 z-20 pointer-events-none">
             <div className="absolute top-0 left-0 w-6 h-6 border-t-4 border-l-4 border-green-500"></div>
             <div className="absolute top-0 right-0 w-6 h-6 border-t-4 border-r-4 border-green-500"></div>
             <div className="absolute bottom-0 left-0 w-6 h-6 border-b-4 border-l-4 border-green-500"></div>
