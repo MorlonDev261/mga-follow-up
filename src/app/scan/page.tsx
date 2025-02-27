@@ -2,6 +2,7 @@
 import { useEffect, useState, useRef } from "react";
 import { BrowserMultiFormatReader } from "@zxing/browser";
 import { DecodeHintType, BarcodeFormat } from "@zxing/library";
+import { cn } from "@/utils/cn";
 import { BsLightning, BsLightningFill } from "react-icons/bs";
 import { IoMdRefresh } from "react-icons/io";
 import { MdOutlineHistory } from "react-icons/md";
@@ -19,6 +20,7 @@ export default function BarcodeScanner() {
   const [loading, setLoading] = useState(true);
   const [flash, setFlash] = useState(false);
   const [history, setHistory] = useState<string[]>([]);
+  const [isScanned, setIsScanned] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const controlsRef = useRef<Controls | null>(null);
   const resultRef = useRef<string>("");
@@ -94,6 +96,7 @@ export default function BarcodeScanner() {
 
   const scanIndicatorArea = async () => {
   if (!videoRef.current) return;
+  setIsScanned(false);
 
   const video = videoRef.current;
   const canvas = document.createElement("canvas");
@@ -127,7 +130,10 @@ export default function BarcodeScanner() {
       const result = await codeReader.decodeFromImageElement(image);
       const scannedText = result.getText();
 
-      if (/^\d{15}$/.test(scannedText) && scannedText !== resultRef.current) {
+      if (scannedText == resultRef.current) {
+        setIsScanned(true);
+        return;
+      }else {
         resultRef.current = scannedText;
         setResult(scannedText);
         setHistory((prev) => [...prev, scannedText]);
@@ -161,10 +167,10 @@ export default function BarcodeScanner() {
 
         {!loading && (
           <div className="absolute w-4/5 h-1/4 z-20 pointer-events-none">
-            <div className="absolute top-0 left-0 w-3 h-3 border-t-4 border-l-4 border-green-500"></div>
-            <div className="absolute top-0 right-0 w-3 h-3 border-t-4 border-r-4 border-green-500"></div>
-            <div className="absolute bottom-0 left-0 w-3 h-3 border-b-4 border-l-4 border-green-500"></div>
-            <div className="absolute bottom-0 right-0 w-3 h-3 border-b-4 border-r-4 border-green-500"></div>
+            <div className={cn("absolute top-0 left-0 w-3 h-3 border-t-4 border-l-4" isScanned ? "border-green-500" : "border-yello-500")}></div>
+            <div className={cn("absolute top-0 right-0 w-3 h-3 border-t-4 border-l-4" isScanned ? "border-green-500" : "border-yello-500")}></div>
+            <div className={cn("absolute bottom-0 left-0 w-3 h-3 border-t-4 border-l-4" isScanned ? "border-green-500" : "border-yello-500")}></div>
+            <div className={cn("absolute bottom-0 right-0 w-3 h-3 border-t-4 border-l-4" isScanned ? "border-green-500" : "border-yello-500")}></div>
           </div>
         )}
       </div>
