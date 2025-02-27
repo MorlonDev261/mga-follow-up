@@ -12,7 +12,7 @@ import Dropdown from "@components/Dropdown";
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import ShortcutList from '@components/ShortcutList';
 import Statistique from '@components/Statistique';
-import DataTableDemo from "@components/DataTableDemo";
+import DataTable from "@components/DataTable";
 import ExcelTab from '@components/ExcelTab';
 
 export default function Dashboard() {
@@ -115,7 +115,7 @@ export default function Dashboard() {
             
           </div>
 
-          <DataTableDemo />
+          <DataTable />
         </main>
       )}
       {activeTab === 'excel' && (
