@@ -12,6 +12,7 @@ const buttonVariants = cva(
         default: "bg-blue-500 text-white hover:bg-blue-600",
         soft: "bg-gray-200 text-gray-900 hover:bg-gray-300",
         ghost: "bg-transparent hover:bg-gray-100",
+        outline: "border border-gray-300 text-gray-900 hover:bg-gray-100",
       },
     },
     defaultVariants: {
