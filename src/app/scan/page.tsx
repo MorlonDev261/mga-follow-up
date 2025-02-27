@@ -164,7 +164,7 @@ export default function BarcodeScanner() {
         )}
 
         {isScanned && (
-          <p className="absolute bottom-6 text-yellow-500 text-lg z-20 pointer-events-none">
+          <p className="absolute bottom-5 text-yellow-500 text-lg z-20 pointer-events-none">
             This barcode is already scanned.
           </p>
         )}
