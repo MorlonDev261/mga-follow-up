@@ -39,41 +39,41 @@ import {
 const data: Payment[] = [
   {
     id: "m5gr84i9",
-    amount: 316,
-    status: "success",
+    date: "23-01-25",
     email: "ken99@example.com",
+    amount: 316,
   },
   {
     id: "3u1reuv4",
-    amount: 242,
-    status: "success",
+    date: "24-01-25",
     email: "Abe45@example.com",
+    amount: 242,
   },
   {
     id: "derv1ws0",
-    amount: 837,
-    status: "processing",
+    date: "26-01-25",
     email: "Monserrat44@example.com",
+    amount: 837,
   },
   {
     id: "5kma53ae",
-    amount: 874,
-    status: "success",
+    date: "29-01-25",
     email: "Silas22@example.com",
+    amount: 874,
   },
   {
     id: "bhqecj4p",
-    amount: 721,
-    status: "failed",
+    date: "31-01-25",
     email: "carmella@example.com",
+    amount: 721,
   },
 ]
 
 export type Payment = {
   id: string
-  amount: number
-  status: "pending" | "processing" | "success" | "failed"
+  date: string
   email: string
+  amount: number
 }
 
 export const columns: ColumnDef<Payment>[] = [
@@ -100,10 +100,10 @@ export const columns: ColumnDef<Payment>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "status",
-    header: "Status",
+    accessorKey: "date",
+    header: "Date",
     cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
+      <div className="capitalize">{row.getValue("date")}</div>
     ),
   },
   {
