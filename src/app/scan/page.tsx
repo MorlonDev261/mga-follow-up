@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
 import { BrowserMultiFormatReader } from "@zxing/browser";
-import { DecodeHintType } from "@zxing/library";
+import { DecodeHintType, BarcodeFormat } from "@zxing/library";
 import { BsLightning, BsLightningFill } from "react-icons/bs";
 import { IoMdRefresh } from "react-icons/io";
 import { MdOutlineHistory } from "react-icons/md";
@@ -27,7 +27,7 @@ export default function BarcodeScanner() {
   const startScanner = () => {
     setLoading(true);
     const hints = new Map();
-    hints.set(DecodeHintType.POSSIBLE_FORMATS, ["EAN_13", "CODE_128"]);
+    hints.set(DecodeHintType.POSSIBLE_FORMATS, [BarcodeFormat.EAN_13, BarcodeFormat.CODE_128]);
 
     const codeReader = new BrowserMultiFormatReader(hints);
 
@@ -110,7 +110,10 @@ export default function BarcodeScanner() {
     ctx.drawImage(video, x, y, indicatorWidth, indicatorHeight, 0, 0, indicatorWidth, indicatorHeight);
 
     // Scanner la zone ciblée
-    const codeReader = new BrowserMultiFormatReader(["EAN_13", "CODE_128"]);
+    const hints = new Map();
+    hints.set(DecodeHintType.POSSIBLE_FORMATS, [BarcodeFormat.EAN_13, BarcodeFormat.CODE_128]);
+
+    const codeReader = new BrowserMultiFormatReader(hints);
     try {
       const result = await codeReader.decodeFromImage(canvas);
       const scannedText = result.getText();
