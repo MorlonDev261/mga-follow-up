@@ -12,6 +12,7 @@ import Dropdown from "@components/Dropdown";
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import ShortcutList from '@components/ShortcutList';
 import Statistique from '@components/Statistique';
+import DataTableDemo from "@components/DataTableDemo";
 import ExcelTab from '@components/ExcelTab';
 
 export default function Dashboard() {
@@ -68,6 +69,7 @@ export default function Dashboard() {
       {activeTab === 'dashboard' && (
         <main className="p-2">
           <div className="grid gap-4 md:grid-cols-2">
+            
             <div className="bg-[#111] p-2">
               <div className="mb-4">
                 <h3 className="text-gray-400 flex items-center gap-1"><MdOutlineAccountBalanceWallet /> Net Available</h3>
@@ -110,7 +112,10 @@ export default function Dashboard() {
                 <Statistique type="courbe" legende={false} />
               </div>
             </div>
+            
           </div>
+
+          <DataTableDemo />
         </main>
       )}
       {activeTab === 'excel' && (
