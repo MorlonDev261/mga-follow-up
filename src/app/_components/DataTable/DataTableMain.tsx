@@ -40,32 +40,32 @@ const data: Payment[] = [
   {
     id: "m5gr84i9",
     date: "23-01-25",
-    email: "ken99@example.com",
+    comments: "Vente iPhone XR 3pcs",
     amount: 316,
   },
   {
     id: "3u1reuv4",
     date: "24-01-25",
-    email: "Abe45@example.com",
-    amount: 242,
+    comments: "Nividy sonnerie antragno",
+    amount: -242,
   },
   {
     id: "derv1ws0",
     date: "26-01-25",
-    email: "Monserrat44@example.com",
-    amount: 837,
+    comments: "Frais taxi",
+    amount: -837,
   },
   {
     id: "5kma53ae",
     date: "29-01-25",
-    email: "Silas22@example.com",
+    comments: "Google pixel 2pcs",
     amount: 874,
   },
   {
     id: "bhqecj4p",
     date: "31-01-25",
-    email: "carmella@example.com",
-    amount: 721,
+    comments: "Volan'ny forfait",
+    amount: -21,
   },
 ]
 
@@ -109,19 +109,9 @@ export const columns: ColumnDef<Payment>[] = [
     },
   },
   {
-    accessorKey: "email",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Email
-          <ArrowUpDown />
-        </Button>
-      )
-    },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+    accessorKey: "comments",
+    header: "Comments",
+    cell: ({ row }) => <div className="lowercase">{row.getValue("comments")}</div>,
   },
   {
     accessorKey: "amount",
