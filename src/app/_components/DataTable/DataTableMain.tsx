@@ -100,12 +100,14 @@ export const columns: ColumnDef<Payment>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "date",
+  accessorKey: "date",
     header: "Date",
-    cell: ({ row }) => (
-      <div className="capitalize w-45">{row.getValue("date")}</div>
-    ),
-  },
+    cell: ({ row }) => {
+      const rawDate = new Date(row.getValue("date"));
+      const formattedDate = rawDate.toLocaleDateString("fr-FR"); // Format: "23/01/2025"
+      return <div>{formattedDate}</div>;
+    },
+  }
   {
     accessorKey: "email",
     header: ({ column }) => {
