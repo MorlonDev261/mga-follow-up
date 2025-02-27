@@ -29,7 +29,7 @@ export default function BarcodeScanner() {
 
     if (videoRef.current) {
       codeReader
-        .decodeFromVideoDevice(undefined, videoRef.current, (result, error, controls) => {
+        .decodeFromVideoDevice(undefined, videoRef.current, (result, _, controls) => {
           setLoading(false);
 
           if (result) {
@@ -47,7 +47,6 @@ export default function BarcodeScanner() {
               }
             }
           }
-          if (error) console.error(error);
         })
         .catch((err) => {
           setLoading(false);
@@ -117,7 +116,7 @@ export default function BarcodeScanner() {
         setResult(scannedText);
         setHistory((prev) => [...prev, scannedText]);
       }
-    } catch (error) {
+    } catch (_) {
       console.warn("Aucun code détecté dans l’indicator");
     }
   };
@@ -133,7 +132,15 @@ export default function BarcodeScanner() {
       {/* Scanner */}
       <div className="relative w-full h-60 bg-black rounded-lg overflow-hidden flex items-center justify-center">
         {loading && <p className="absolute text-white text-lg">Chargement...</p>}
+        
+        {!loading && !result && (
+          <p className="absolute text-white text-lg bg-black/60 px-3 py-1 rounded-md">
+            Place the barcode inside the indicator
+          </p>
+        )}
+
         <video ref={videoRef} className="w-full h-full z-10 object-cover" />
+
         {!loading && (
           <div className="absolute w-4/5 h-1/4 z-20 pointer-events-none">
             <div className="absolute top-0 left-0 w-3 h-3 border-t-4 border-l-4 border-green-500"></div>
