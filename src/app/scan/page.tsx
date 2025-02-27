@@ -93,34 +93,38 @@ export default function BarcodeScanner() {
 
 
   const scanIndicatorArea = async () => {
-    if (!videoRef.current) return;
+  if (!videoRef.current) return;
 
-    const video = videoRef.current;
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
+  const video = videoRef.current;
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
 
-    if (!ctx) return;
+  if (!ctx) return;
 
-    // Définir la zone de l'indicator (80% largeur, 25% hauteur, centré)
-    const indicatorWidth = video.videoWidth * 0.8;
-    const indicatorHeight = video.videoHeight * 0.25;
-    const x = (video.videoWidth - indicatorWidth) / 2;
-    const y = (video.videoHeight - indicatorHeight) / 2;
+  // Définir la zone de l'indicateur
+  const indicatorWidth = video.videoWidth * 0.8;
+  const indicatorHeight = video.videoHeight * 0.25;
+  const x = (video.videoWidth - indicatorWidth) / 2;
+  const y = (video.videoHeight - indicatorHeight) / 2;
 
-    // Ajuster le canvas
-    canvas.width = indicatorWidth;
-    canvas.height = indicatorHeight;
+  // Ajuster le canvas
+  canvas.width = indicatorWidth;
+  canvas.height = indicatorHeight;
 
-    // Capturer la zone de l'indicator
-    ctx.drawImage(video, x, y, indicatorWidth, indicatorHeight, 0, 0, indicatorWidth, indicatorHeight);
+  // Capturer la zone de l'indicateur
+  ctx.drawImage(video, x, y, indicatorWidth, indicatorHeight, 0, 0, indicatorWidth, indicatorHeight);
 
-    // Scanner la zone ciblée
+  // Convertir le canvas en image
+  const image = new Image();
+  image.src = canvas.toDataURL(); // Convertir en URL de données
+
+  image.onload = async () => {
     const hints = new Map();
     hints.set(DecodeHintType.POSSIBLE_FORMATS, [BarcodeFormat.EAN_13, BarcodeFormat.CODE_128]);
 
     const codeReader = new BrowserMultiFormatReader(hints);
     try {
-      const result = await codeReader.decodeFromImageElement(canvas);
+      const result = await codeReader.decodeFromImageElement(image);
       const scannedText = result.getText();
 
       if (/^\d{15}$/.test(scannedText) && scannedText !== resultRef.current) {
@@ -132,6 +136,8 @@ export default function BarcodeScanner() {
       console.warn("Aucun code détecté dans l’indicator :", error);
     }
   };
+};
+
 
   // Scanner uniquement dans la zone de l'indicator toutes les secondes
   useEffect(() => {
