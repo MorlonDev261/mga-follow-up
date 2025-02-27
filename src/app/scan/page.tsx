@@ -167,10 +167,10 @@ export default function BarcodeScanner() {
 
         {!loading && (
           <div className="absolute w-4/5 h-1/4 z-20 pointer-events-none">
-            <div className={cn("absolute top-0 left-0 w-3 h-3 border-t-4 border-l-4" isScanned ? "border-green-500" : "border-yello-500")}></div>
-            <div className={cn("absolute top-0 right-0 w-3 h-3 border-t-4 border-l-4" isScanned ? "border-green-500" : "border-yello-500")}></div>
-            <div className={cn("absolute bottom-0 left-0 w-3 h-3 border-t-4 border-l-4" isScanned ? "border-green-500" : "border-yello-500")}></div>
-            <div className={cn("absolute bottom-0 right-0 w-3 h-3 border-t-4 border-l-4" isScanned ? "border-green-500" : "border-yello-500")}></div>
+            <div className={cn("absolute top-0 left-0 w-3 h-3 border-t-4 border-l-4", isScanned ? "border-green-500" : "border-yello-500")}></div>
+            <div className={cn("absolute top-0 right-0 w-3 h-3 border-t-4 border-l-4", isScanned ? "border-green-500" : "border-yello-500")}></div>
+            <div className={cn("absolute bottom-0 left-0 w-3 h-3 border-t-4 border-l-4", isScanned ? "border-green-500" : "border-yello-500")}></div>
+            <div className={cn("absolute bottom-0 right-0 w-3 h-3 border-t-4 border-l-4", isScanned ? "border-green-500" : "border-yello-500")}></div>
           </div>
         )}
       </div>
