@@ -1,69 +1,42 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
 import { BrowserMultiFormatReader } from "@zxing/browser";
-import styles from "./CSS/BarcodeScanner.module.css";
-
-// Étendre l'interface BrowserMultiFormatReader
-interface ExtendedBrowserMultiFormatReader extends BrowserMultiFormatReader {
-  reset: () => void;
-}
+import { BsLightning, BsLightningFill } from "react-icons/bs";
+import { IoMdRefresh } from "react-icons/io";
+import { MdOutlineHistory } from "react-icons/md";
 
 type Controls = {
   stop: () => void;
 };
 
 export default function BarcodeScanner() {
-  const [result, setResult] = useState<string>("");
+  const [result, setResult] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [flash, setFlash] = useState(false);
+  const [history, setHistory] = useState<string[]>([]);
   const videoRef = useRef<HTMLVideoElement>(null);
   const controlsRef = useRef<Controls | null>(null);
   const resultRef = useRef<string>("");
 
   useEffect(() => {
-    const codeReader = new BrowserMultiFormatReader() as ExtendedBrowserMultiFormatReader;
-
-    if (videoRef.current) {
-      codeReader
-        .decodeFromVideoDevice(undefined, videoRef.current, (result, error, controls) => {
-          setLoading(false); // Caméra prête
-
-          if (result && result.getText() !== resultRef.current) {
-            resultRef.current = result.getText();
-            setResult(result.getText());
-            if (controls) {
-              controlsRef.current = controls;
-              controls.stop();
-            }
-          }
-          if (error) console.error(error);
-        })
-        .catch((err) => {
-          setLoading(false);
-          console.error(err);
-        });
-    }
-
-    return () => {
-      if (controlsRef.current) controlsRef.current.stop();
-      try {
-        codeReader.reset();
-      } catch (err) {
-        console.warn("Erreur lors du reset du codeReader :", err);
-      }
-    };
+    startScanner();
+    return () => stopScanner();
   }, []);
 
-  const restartScan = () => {
-    setResult(""); // Réinitialiser le résultat
+  const startScanner = () => {
     setLoading(true);
-    const codeReader = new BrowserMultiFormatReader() as ExtendedBrowserMultiFormatReader;
+    const codeReader = new BrowserMultiFormatReader();
     if (videoRef.current) {
       codeReader
         .decodeFromVideoDevice(undefined, videoRef.current, (result, error, controls) => {
           setLoading(false);
-          if (result) {
-            resultRef.current = result.getText();
-            setResult(result.getText());
+
+          if (result && result.getText() !== resultRef.current) {
+            const scannedText = result.getText();
+            resultRef.current = scannedText;
+            setResult(scannedText);
+            setHistory((prev) => [...prev, scannedText]);
+
             if (controls) {
               controlsRef.current = controls;
               controls.stop();
@@ -78,18 +51,68 @@ export default function BarcodeScanner() {
     }
   };
 
+  const stopScanner = () => {
+    if (controlsRef.current) controlsRef.current.stop();
+  };
+
+  const restartScan = () => {
+    setResult(null);
+    startScanner();
+  };
+
+  const toggleFlash = () => {
+    setFlash((prev) => !prev);
+  };
+
   return (
-    <div className={styles.container}>
-      <div className={styles.scanner}>
-        {loading && <div className={styles.loading}>Chargement de la caméra...</div>}
-        <video ref={videoRef} className={styles.video} />
-        {!loading && !result && <div className={styles.scanBox}></div>}
+    <div className="flex flex-col items-center justify-center w-full max-w-md mx-auto p-4">
+      {/* Scanner */}
+      <div className="relative w-full h-72 bg-black rounded-lg overflow-hidden flex items-center justify-center">
+        {loading && <p className="absolute text-white text-lg">Chargement...</p>}
+        <video ref={videoRef} className="w-full h-full object-cover" />
+        {!loading && !result && (
+          <div className="absolute w-4/5 h-1/3 border-4 border-green-500 rounded-lg animate-pulse"></div>
+        )}
       </div>
 
+      {/* Boutons */}
+      <div className="flex gap-3 mt-4">
+        <button
+          onClick={toggleFlash}
+          className="p-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-all"
+        >
+          {flash ? <BsLightningFill size={24} /> : <BsLightning size={24} />}
+        </button>
+
+        <button
+          onClick={restartScan}
+          className="p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700 flex items-center gap-1 transition-all"
+        >
+          <IoMdRefresh size={24} />
+          <span>Recommencer</span>
+        </button>
+      </div>
+
+      {/* Résultat */}
       {result && (
-        <div className={styles.resultContainer}>
-          <p className={styles.resultText}>Résultat : <strong>{result}</strong></p>
-          <button className={styles.retryButton} onClick={restartScan}>Recommencer</button>
+        <div className="mt-4 p-3 bg-gray-100 rounded-lg shadow-md text-center w-full">
+          <p className="text-lg font-semibold">Résultat :</p>
+          <p className="text-gray-800 text-xl font-bold">{result}</p>
+        </div>
+      )}
+
+      {/* Historique */}
+      {history.length > 0 && (
+        <div className="mt-4 w-full">
+          <div className="flex items-center gap-2 text-gray-700 font-semibold">
+            <MdOutlineHistory size={24} />
+            <p>Historique :</p>
+          </div>
+          <ul className="mt-2 max-h-40 overflow-y-auto bg-gray-50 p-2 rounded-lg shadow">
+            {history.slice(-5).reverse().map((item, index) => (
+              <li key={index} className="p-2 border-b border-gray-200">{item}</li>
+            ))}
+          </ul>
         </div>
       )}
     </div>
