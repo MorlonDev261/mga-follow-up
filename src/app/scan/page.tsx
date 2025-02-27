@@ -158,8 +158,14 @@ export default function BarcodeScanner() {
         {loading && <p className="absolute text-white text-lg">Loading...</p>}
         
         {!loading && !result && (
-          <p className="absolute text-white text-lg bg-black/60 px-3 py-1 rounded-md">
+          <p className="absolute -top-2.5 text-green-100 text-lg z-20 pointer-events-none">
             Place the barcode inside the indicator
+          </p>
+        )}
+
+        {isScanned && (
+          <p className="absolute -bottom-2.5 text-yellow-500 text-lg z-20 pointer-events-none">
+            This barcode is already scanned.
           </p>
         )}
 
@@ -168,9 +174,9 @@ export default function BarcodeScanner() {
         {!loading && (
           <div className="absolute w-4/5 h-1/4 z-20 pointer-events-none">
             <div className={cn("absolute top-0 left-0 w-3 h-3 border-t-4 border-l-4", isScanned ? "border-yellow-500" : "border-green-500")}></div>
-            <div className={cn("absolute top-0 right-0 w-3 h-3 border-t-4 border-l-4", isScanned ? "border-yellow-500" : "border-green-500")}></div>
+            <div className={cn("absolute top-0 right-0 w-3 h-3 border-t-4 border-r-4", isScanned ? "border-yellow-500" : "border-green-500")}></div>
             <div className={cn("absolute bottom-0 left-0 w-3 h-3 border-b-4 border-l-4", isScanned ? "border-yellow-500" : "border-green-500")}></div>
-            <div className={cn("absolute bottom-0 right-0 w-3 h-3 border-b-4 border-l-4", isScanned ? "border-yellow-500" : "border-green-500")}></div>
+            <div className={cn("absolute bottom-0 right-0 w-3 h-3 border-b-4 border-r-4", isScanned ? "border-yellow-500" : "border-green-500")}></div>
           </div>
         )}
       </div>
