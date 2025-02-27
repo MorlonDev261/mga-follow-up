@@ -169,7 +169,7 @@ export default function BarcodeScanner() {
           </p>
         )}
 
-        <video ref={videoRef} className="w-full h-full z-10 object-cover" />
+        <video ref={videoRef} className="w-full h-full z-10 object-cover" autoPlay playsInline muted disableRemotePlayback controls={false}  />
 
         {!loading && (
           <div className="absolute w-4/5 h-1/4 z-20 pointer-events-none">
