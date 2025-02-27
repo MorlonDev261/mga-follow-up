@@ -25,21 +25,26 @@ export default function BarcodeScanner() {
 
   const startScanner = () => {
     setLoading(true);
-    const codeReader = new BrowserMultiFormatReader();
+    const codeReader = new BrowserMultiFormatReader(["EAN_13", "CODE_128"]);
+
     if (videoRef.current) {
       codeReader
         .decodeFromVideoDevice(undefined, videoRef.current, (result, error, controls) => {
           setLoading(false);
 
-          if (result && result.getText() !== resultRef.current) {
+          if (result) {
             const scannedText = result.getText();
-            resultRef.current = scannedText;
-            setResult(scannedText);
-            setHistory((prev) => [...prev, scannedText]);
 
-            if (controls) {
-              controlsRef.current = controls;
-              controls.stop();
+            // Vérifier si c'est un IMEI valide (15 chiffres)
+            if (/^\d{15}$/.test(scannedText) && scannedText !== resultRef.current) {
+              resultRef.current = scannedText;
+              setResult(scannedText);
+              setHistory((prev) => [...prev, scannedText]);
+
+              if (controls) {
+                controlsRef.current = controls;
+                controls.stop();
+              }
             }
           }
           if (error) console.error(error);
@@ -60,9 +65,68 @@ export default function BarcodeScanner() {
     startScanner();
   };
 
-  const toggleFlash = () => {
-    setFlash((prev) => !prev);
+  const toggleFlash = async () => {
+    if (!videoRef.current) return;
+
+    const stream = videoRef.current.srcObject as MediaStream | null;
+    if (!stream) return;
+
+    const [track] = stream.getVideoTracks();
+    if (!track) return;
+
+    try {
+      await track.applyConstraints({
+        advanced: [{ torch: !flash }],
+      });
+      setFlash((prev) => !prev);
+    } catch (error) {
+      console.error("Flash non supporté :", error);
+    }
   };
+
+  const scanIndicatorArea = async () => {
+    if (!videoRef.current) return;
+
+    const video = videoRef.current;
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+
+    if (!ctx) return;
+
+    // Définir la zone de l'indicator (80% largeur, 25% hauteur, centré)
+    const indicatorWidth = video.videoWidth * 0.8;
+    const indicatorHeight = video.videoHeight * 0.25;
+    const x = (video.videoWidth - indicatorWidth) / 2;
+    const y = (video.videoHeight - indicatorHeight) / 2;
+
+    // Ajuster le canvas
+    canvas.width = indicatorWidth;
+    canvas.height = indicatorHeight;
+
+    // Capturer la zone de l'indicator
+    ctx.drawImage(video, x, y, indicatorWidth, indicatorHeight, 0, 0, indicatorWidth, indicatorHeight);
+
+    // Scanner la zone ciblée
+    const codeReader = new BrowserMultiFormatReader(["EAN_13", "CODE_128"]);
+    try {
+      const result = await codeReader.decodeFromImage(canvas);
+      const scannedText = result.getText();
+
+      if (/^\d{15}$/.test(scannedText) && scannedText !== resultRef.current) {
+        resultRef.current = scannedText;
+        setResult(scannedText);
+        setHistory((prev) => [...prev, scannedText]);
+      }
+    } catch (error) {
+      console.warn("Aucun code détecté dans l’indicator");
+    }
+  };
+
+  // Scanner uniquement dans la zone de l'indicator toutes les secondes
+  useEffect(() => {
+    const interval = setInterval(scanIndicatorArea, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="flex flex-col items-center justify-center w-full max-w-md mx-auto p-4">
