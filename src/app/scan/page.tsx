@@ -2,7 +2,7 @@
 import { useEffect, useState, useRef } from "react";
 import { BrowserMultiFormatReader } from "@zxing/browser";
 import { DecodeHintType, BarcodeFormat } from "@zxing/library";
-import { cn } from "@/lib/cn";
+import { cn } from "@/lib/utils";
 import { BsLightning, BsLightningFill } from "react-icons/bs";
 import { IoMdRefresh } from "react-icons/io";
 import { MdOutlineHistory } from "react-icons/md";
