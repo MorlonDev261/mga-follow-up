@@ -69,23 +69,24 @@ export default function BarcodeScanner() {
   };
 
   const toggleFlash = async () => {
-    if (!videoRef.current) return;
+  if (!videoRef.current) return;
 
-    const stream = videoRef.current.srcObject as MediaStream | null;
-    if (!stream) return;
+  const stream = videoRef.current.srcObject as MediaStream | null;
+  if (!stream) return;
 
-    const [track] = stream.getVideoTracks();
-    if (!track) return;
+  const [track] = stream.getVideoTracks();
+  if (!track) return;
 
-    try {
-      await track.applyConstraints({
-        advanced: [{ torch: !flash }],
-      });
-      setFlash((prev) => !prev);
-    } catch (error) {
-      console.error("Flash non supporté :", error);
-    }
-  };
+  try {
+    await track.applyConstraints({
+      advanced: [{ torch: !flash }] as any, // ✅ Correction ici
+    });
+    setFlash((prev) => !prev);
+  } catch (error) {
+    console.error("Flash non supporté :", error);
+  }
+};
+
 
   const scanIndicatorArea = async () => {
     if (!videoRef.current) return;
