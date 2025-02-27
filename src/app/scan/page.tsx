@@ -70,7 +70,7 @@ export default function BarcodeScanner() {
       <div className="relative w-full h-72 bg-black rounded-lg overflow-hidden flex items-center justify-center">
         {loading && <p className="absolute text-white text-lg">Chargement...</p>}
         <video ref={videoRef} className="w-full h-full object-cover" />
-        {!loading && !result && (
+        {!loading && (
           <div className="absolute w-4/5 h-1/3 z-10">
             <div className="absolute top-0 left-0 w-6 h-6 border-t-4 border-l-4 border-green-500"></div>
             <div className="absolute top-0 right-0 w-6 h-6 border-t-4 border-r-4 border-green-500"></div>
