@@ -158,13 +158,13 @@ export default function BarcodeScanner() {
         {loading && <p className="absolute text-white text-lg">Loading...</p>}
         
         {!loading && !result && (
-          <p className="absolute top-5 text-green-500 text-lg z-20 pointer-events-none">
+          <p className="absolute text-green-500 text-sm z-20 pointer-events-none">
             Place the barcode inside the indicator
           </p>
         )}
 
         {isScanned && (
-          <p className="absolute bottom-5 text-yellow-500 text-lg z-20 pointer-events-none">
+          <p className="absolute bottom-6 text-yellow-500 text-lg z-20 pointer-events-none">
             This barcode is already scanned.
           </p>
         )}
