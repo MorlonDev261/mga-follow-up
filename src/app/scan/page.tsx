@@ -116,8 +116,8 @@ export default function BarcodeScanner() {
         setResult(scannedText);
         setHistory((prev) => [...prev, scannedText]);
       }
-    } catch (_) {
-      console.warn("Aucun code détecté dans l’indicator");
+    } catch (error) {
+      console.warn("Aucun code détecté dans l’indicator :", error);
     }
   };
 
@@ -131,7 +131,7 @@ export default function BarcodeScanner() {
     <div className="flex flex-col items-center justify-center w-full max-w-md mx-auto p-4">
       {/* Scanner */}
       <div className="relative w-full h-60 bg-black rounded-lg overflow-hidden flex items-center justify-center">
-        {loading && <p className="absolute text-white text-lg">Chargement...</p>}
+        {loading && <p className="absolute text-white text-lg">Loading...</p>}
         
         {!loading && !result && (
           <p className="absolute text-white text-lg bg-black/60 px-3 py-1 rounded-md">
