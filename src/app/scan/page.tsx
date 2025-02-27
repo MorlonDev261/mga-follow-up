@@ -95,9 +95,11 @@ export default function BarcodeScanner() {
 
       {/* Résultat */}
       {result && (
-        <div className="mt-4 p-3 bg-gray-100 rounded-lg shadow-md text-center w-full">
-          <p className="text-lg font-semibold">Résultat :</p>
-          <p className="text-gray-800 text-xl font-bold">{result}</p>
+        <div className="absolute w-4/5 h-1/3 rounded-lg">
+          <div className="absolute top-0 left-0 w-6 h-6 border-t-4 border-l-4 border-green-500"></div>
+          <div className="absolute top-0 right-0 w-6 h-6 border-t-4 border-r-4 border-green-500"></div>
+          <div className="absolute bottom-0 left-0 w-6 h-6 border-b-4 border-l-4 border-green-500"></div>
+          <div className="absolute bottom-0 right-0 w-6 h-6 border-b-4 border-r-4 border-green-500"></div>
         </div>
       )}
 
