@@ -10,6 +10,10 @@ type Controls = {
   stop: () => void;
 };
 
+interface TorchTrackConstraint extends MediaTrackConstraintSet {
+  torch?: boolean;
+}
+
 export default function BarcodeScanner() {
   const [result, setResult] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -79,7 +83,7 @@ export default function BarcodeScanner() {
 
   try {
     await track.applyConstraints({
-      advanced: [{ torch: !flash }] as any, // ✅ Correction ici
+      advanced: [{ torch: !flash } as TorchTrackConstraint],
     });
     setFlash((prev) => !prev);
   } catch (error) {
