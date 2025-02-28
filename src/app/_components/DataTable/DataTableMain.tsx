@@ -91,15 +91,19 @@ export const columns: ColumnDef<Payment>[] = [
     accessorKey: "amount",
     header: () => <div className="text-right">Amount</div>,
     cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("amount"))
+      const amount = parseFloat(row.getValue("amount"));
 
-      // Format the amount as a dollar amount
+      // Format the amount as a currency (USD)
       const formatted = new Intl.NumberFormat("en-US", {
         style: "currency",
         currency: "USD",
-      }).format(amount)
+      }).format(amount);
 
-      return <div className={cn("text-right font-medium" amount > 0 ? "text-green-500" : "text-red-500")}>{formatted}</div>
+      return (
+        <div className={cn("text-right font-medium", amount > 0 ? "text-green-500" : "text-red-500")}>
+          {amount > 0 ? "+" + formatted : formatted}
+        </div>
+      );
     },
   },
   {
