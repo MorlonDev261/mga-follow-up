@@ -5,11 +5,11 @@ interface BalanceProps {
   title: ReactNode;
   subtitle: ReactNode;
   balance: ReactNode;
+  textColor?: string;
   children: ReactNode;
 }
 
-export default function Balance({ title, balance, subtitle, children }: BalanceProps) {
-  const textColor = color || "text-green-500";
+export default function Balance({ title, balance, textColor = "text-green-500", subtitle, children }: BalanceProps) {
   
   return (
     <div className="mb-4">
