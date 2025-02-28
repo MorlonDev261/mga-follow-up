@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { BsShopWindow } from "react-icons/bs";
 import { FaPlus } from "react-icons/fa6";
