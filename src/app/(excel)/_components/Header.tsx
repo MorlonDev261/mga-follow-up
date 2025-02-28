@@ -18,7 +18,7 @@ export default function Header() {
         newPath = pathname.replace(/^\/rows/, ""); // Supprime uniquement si au début
       }
     } else if (type === "rows") {
-      if (!pathname.startsWith("/excel")) {
+      if (!pathname.startsWith("/rows")) {
         newPath = "/rows" + pathname; // Ajoute "/excel"
       }
     }
