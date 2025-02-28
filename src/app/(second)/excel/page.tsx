@@ -1,6 +1,6 @@
 "use client";
 
-import ExcelTab from "@/components/ExcelTab";
+import ExcelTab from "@components/ExcelTab";
 
 export default function HomeExcel() {
   return (
