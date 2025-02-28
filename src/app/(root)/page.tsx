@@ -11,7 +11,6 @@ import Balance from "@components/Balance";
 import ShortcutList from '@components/ShortcutList';
 import Statistique from '@components/Statistique';
 import DataTableMain from "@components/DataTable/DataTableMain";
-import ExcelTab from '@components/ExcelTab';
 
 export default function Dashboard() {
 
