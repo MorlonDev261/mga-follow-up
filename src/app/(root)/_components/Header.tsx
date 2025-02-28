@@ -44,13 +44,13 @@ export default function Header() {
         {/* Mode Toggle (Dashboard / Excel) */}
         <div className="flex w-full max-w-[250px] items-center rounded bg-white/10 p-1">
           <button
-            className={cn("w-1/2 rounded p-1", !pathname.startsWith("/rows") && "bg-white/40")}
+            className={cn("w-1/2 rounded p-1", !pathname.startsWith("/rows") && "bg-white/40 pointer-events-none")}
             onClick={() => togglePath("dashboard")}
           >
             Dashboard
           </button>
           <button
-            className={cn("w-1/2 rounded p-1", pathname.startsWith("/rows") && "bg-white/40")}
+            className={cn("w-1/2 rounded p-1", pathname.startsWith("/rows") && "bg-white/40 pointer-events-none")}
             onClick={() => togglePath("rows")}
           >
             Excel
