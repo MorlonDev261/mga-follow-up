@@ -9,14 +9,16 @@ interface BalanceProps {
   children: ReactNode;
 }
 
-export default function Balance({ title, balance, color = "text-green-500", subtitle, children }: BalanceProps) {
+export default function Balance({ title, balance, color, subtitle, children }: BalanceProps) {
+  const textColor = color || "text-green-500";
+  
   return (
     <div className="mb-4">
       <h3 className="text-gray-400 flex items-center gap-1">
         {title}
       </h3>
       <div className="my-2 flex items-center justify-between text-2xl font-bold">
-        <div className={color}>
+        <div className={textColor}>
           {balance}
         </div>
         {children}
