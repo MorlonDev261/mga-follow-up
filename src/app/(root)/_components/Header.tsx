@@ -12,17 +12,21 @@ export default function Header() {
   const pathname = usePathname();
   const { push } = useRouter();
 
-  const togglePath = (type) => {
-    if (type == "dasboard") {
-      const newPath = pathname.startsWith("/excel")
-      && pathname.replace("/excel", "");
-    }else if (type == "excel") {
-      const newPath = !pathname.startsWith("/excel")
-      && "/excel" + pathname;
-    }
+  const togglePath = (type: "dashboard" | "excel") => {
+    let newPath = pathname;
 
+    if (type === "dashboard") {
+      if (pathname.startsWith("/excel")) {
+        newPath = pathname.replace("/excel", ""); // Supprime "/excel"
+      }
+    } else if (type === "excel") {
+      if (!pathname.startsWith("/excel")) {
+        newPath = "/excel" + pathname; // Ajoute "/excel"
+      }
+    }
     push(newPath);
   };
+
 
   return (
     <header className="sticky top-0 z-50 w-full bg-[#111] p-2">
