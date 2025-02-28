@@ -6,7 +6,7 @@ import { FaPlus } from "react-icons/fa6";
 import Balance from "@components/Balance";
 import Counter from "@components/Counter";
 import Statistique from "@components/Statistique";
-import DataTableMain from "@components/DataTable/DataTableMain";
+import TableStock from "@components/DataTable/TableStock";
 
 export default function Stock() {
   return (
@@ -38,7 +38,7 @@ export default function Stock() {
         </div>
       </div>
       {/* Data Table */}
-      <DataTableMain />
+      <TableStock />
     </main>
   );
 }
