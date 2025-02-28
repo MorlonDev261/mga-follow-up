@@ -22,53 +22,7 @@ export default function Dashboard() {
   const [activeTab, setActiveTab] = useState<'dashboard' | 'excel'>('dashboard');
 
   return (
-    <div className="min-h-screen bg-[#010101] text-white">
-      <header className="sticky top-0 z-50 w-full bg-[#111] p-2">
-        <div className="flex items-center justify-between gap-4">
-          <Image
-            src="/profile.jpg"
-            width={30}
-            height={30}
-            alt="profile"
-            className="rounded-full w-50 h-50 border border-white"
-          />
-          
-          <div className="flex w-full max-w-[250px] items-center rounded bg-white/10 p-1">
-            <button
-              className={`w-1/2 rounded p-1 ${activeTab === 'dashboard' ? 'bg-white/40' : ''}`}
-              onClick={() => setActiveTab('dashboard')}
-            >
-              Dashboard
-            </button>
-            <button
-              className={`w-1/2 rounded p-1 ${activeTab === 'excel' ? 'bg-white/40' : ''}`}
-              onClick={() => setActiveTab('excel')}
-            >
-              Excel
-            </button>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <FaRegEnvelope className="text-xl" />
-            <FiBell className="text-xl" />
-          </div>
-        </div>
-
-        <div className="mt-2 flex items-center gap-2">
-          <div className="relative w-full">
-            <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-            <input
-              type="search"
-              placeholder="Recherche..."
-              className="w-full rounded-full bg-[#222] py-1 pl-10 pr-4 outline-none"
-            />
-          </div>
-          <Link href="/scan">
-            <LuScanLine className="text-2xl" />
-          </Link>
-        </div>
-      </header>
-
+     <>
       {activeTab === 'dashboard' && (
         <main className="p-2">
           <div className="grid gap-4 md:grid-cols-2">
@@ -128,6 +82,6 @@ export default function Dashboard() {
           </div>
         </main>
       )}
-    </div>
+    </>
   );
 }
