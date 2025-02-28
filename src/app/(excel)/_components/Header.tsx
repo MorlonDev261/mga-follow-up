@@ -10,16 +10,16 @@ export default function Header() {
   const pathname = usePathname();
   const { push } = useRouter();
 
-  const togglePath = (type: "dashboard" | "excel") => {
+  const togglePath = (type: "dashboard" | "rows") => {
     let newPath = pathname;
 
     if (type === "dashboard") {
-      if (pathname.startsWith("/excel")) {
-        newPath = pathname.replace("/excel", ""); // Supprime "/excel"
+      if (pathname.startsWith("/rows")) {
+        newPath = pathname.replace("/rows", ""); // Supprime "/excel"
       }
-    } else if (type === "excel") {
+    } else if (type === "rows") {
       if (!pathname.startsWith("/excel")) {
-        newPath = "/excel" + pathname; // Ajoute "/excel"
+        newPath = "/rows" + pathname; // Ajoute "/excel"
       }
     }
     push(newPath);
@@ -42,14 +42,14 @@ export default function Header() {
         {/* Mode Toggle (Dashboard / Excel) */}
         <div className="flex w-full max-w-[250px] items-center rounded bg-white/10 p-1">
           <button
-            className={cn("w-1/2 rounded p-1", !pathname.startsWith("/excel") && "bg-white/40")}
+            className={cn("w-1/2 rounded p-1", !pathname.startsWith("/rows") && "bg-white/40")}
             onClick={() => togglePath("dashboard")}
           >
             Dashboard
           </button>
           <button
-            className={cn("w-1/2 rounded p-1", pathname.startsWith("/excel") && "bg-white/40")}
-            onClick={() => togglePath("excel")}
+            className={cn("w-1/2 rounded p-1", pathname.startsWith("/rows") && "bg-white/40")}
+            onClick={() => togglePath("rows")}
           >
             Excel
           </button>
