@@ -3,7 +3,7 @@ import { BsShopWindow } from "react-icons/bs";
 import { FaPlus } from "react-icons/fa6";
 import Balance from "@components/Balance";
 import Counter from "@components/Counter";
-Statistique from "@components/Statistique";
+import Statistique from "@components/Statistique";
 
 export default function Stock() {
   return (
