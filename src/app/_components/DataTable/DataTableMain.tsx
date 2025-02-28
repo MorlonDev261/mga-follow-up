@@ -46,7 +46,7 @@ const data: Payment[] = [
 export type Payment = {
   id: string
   date: string
-  email: string
+  comments: string
   amount: number
 }
 
