@@ -2,6 +2,7 @@ import React from "react";
 import { BsShopWindow } from "react-icons/bs";
 import { FaPlus } from "react-icons/fa6";
 import Balance from "@components/Balance";
+import Counter from "@components/Counter";
 
 export default function Stock() {
   return (
