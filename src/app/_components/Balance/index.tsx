@@ -7,7 +7,7 @@ interface BalanceProps {
   balance: ReactNode
 }
 
-export default function Balance({ title, balance, bubtitle, children }: BalanceProps) {
+export default function Balance({ title, balance, subtitle, children }: BalanceProps) {
   return (
     <div className="mb-4">
       <h3 className="text-gray-400 flex items-center gap-1">
