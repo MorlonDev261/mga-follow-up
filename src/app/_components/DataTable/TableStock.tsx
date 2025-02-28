@@ -58,8 +58,8 @@ export const columns: ColumnDef<Payment>[] = [
     accessorKey: "date",
     header: "Date",
     cell: ({ row }) => {
-      const rawDate = new Date((row.getValue("date") as string).replace(/-/g, "/"));
-      const formattedDate = rawDate.toLocaleDateString("fr-FR");
+      const rawDate = new Date(row.getValue("date"));
+      const formattedDate = rawDate.toLocaleDateString("fr-FR"); // Format: "23/01/2025"
       return <div>{formattedDate}</div>;
     },
   },
