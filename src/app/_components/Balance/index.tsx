@@ -4,7 +4,8 @@ import { ReactNode } from "react";
 interface BalanceProps {
   title: ReactNode;
   subtitle: ReactNode;
-  balance: ReactNode
+  balance: ReactNode;
+  children: ReactNode;
 }
 
 export default function Balance({ title, balance, subtitle, children }: BalanceProps) {
