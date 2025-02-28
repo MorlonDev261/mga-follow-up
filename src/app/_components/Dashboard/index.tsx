@@ -1,16 +1,10 @@
 import { useState } from 'react';
 import Link from "next/link";
-import { FaRegEnvelope, FaPlus, FaClipboardUser } from "react-icons/fa6";
-import { MdOutlineAccountBalanceWallet } from "react-icons/md";
+import { FaRegEnvelope } from "react-icons/fa6";
 import { FiBell, FiSearch } from 'react-icons/fi';
-import { ImUserPlus } from "react-icons/im";
-import { AiOutlineProduct } from "react-icons/ai";
 import { LuScanLine } from "react-icons/lu";
 import Image from 'next/image';
 import Balance from "@components/Balance";
-import Counter from "@components/Counter";
-import Dropdown from "@components/Dropdown";
-import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import ShortcutList from '@components/ShortcutList';
 import Statistique from '@components/Statistique';
 import DataTableMain from "@components/DataTable/DataTableMain";
@@ -28,7 +22,7 @@ export default function Dashboard() {
             width={30}
             height={30}
             alt="profile"
-            className="rounded-full border border-white"
+            className="rounded-full w-50 h-50 border border-white"
           />
           
           <div className="flex w-full max-w-[250px] items-center rounded bg-white/10 p-1">
