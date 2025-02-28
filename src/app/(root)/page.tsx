@@ -1,12 +1,8 @@
 "use client";
 
-import { useState } from 'react';
-import Link from "next/link";
-import Image from 'next/image';
-import { FaRegEnvelope, FaPlus, FaClipboardUser } from "react-icons/fa6";
-import { FiBell, FiSearch } from 'react-icons/fi';
+import { usePathname } from 'next/navigation';
+import { FaPlus, FaClipboardUser } from "react-icons/fa6";
 import { AiOutlineProduct } from "react-icons/ai";
-import { LuScanLine } from "react-icons/lu";
 import { MdOutlineAccountBalanceWallet } from "react-icons/md";
 import { ImUserPlus } from "react-icons/im";
 import Counter from "@components/Counter";
@@ -19,11 +15,11 @@ import DataTableMain from "@components/DataTable/DataTableMain";
 import ExcelTab from '@components/ExcelTab';
 
 export default function Dashboard() {
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'excel'>('dashboard');
+  const pathname = usePathname();
 
   return (
      <>
-      {activeTab === 'dashboard' && (
+      {!pathname.startsWith("/excel") && (
         <main className="p-2">
           <div className="grid gap-4 md:grid-cols-2">
             
@@ -74,7 +70,7 @@ export default function Dashboard() {
           <DataTableMain />
         </main>
       )}
-      {activeTab === 'excel' && (
+      {pathname.startsWith("/excel") && (
         <main className="p-1">
           <div className="bg-[#111]">
             <h3 className="text-xl px-1 mb-4">Financial Tracking</h3>
