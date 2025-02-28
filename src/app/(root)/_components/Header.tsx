@@ -17,7 +17,7 @@ export default function Header() {
 
     if (type === "dashboard") {
       if (pathname.startsWith("/rows")) {
-        newPath = pathname.replace(/^\/rows/, ""); // Supprime uniquement si au début
+        newPath = pathname.replace(/^\/rows/, "") || "/"; // Supprime uniquement si au début
       }
     } else if (type === "rows") {
       if (!pathname.startsWith("/rows")) {
