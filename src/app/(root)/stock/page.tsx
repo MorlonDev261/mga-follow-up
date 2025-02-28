@@ -6,6 +6,7 @@ import { FaPlus } from "react-icons/fa6";
 import Balance from "@components/Balance";
 import Counter from "@components/Counter";
 import Statistique from "@components/Statistique";
+import DataTableMain from "@components/DataTable/DataTableMain";
 
 export default function Stock() {
   return (
@@ -34,9 +35,10 @@ export default function Stock() {
               <Statistique type="courbe" legende={false} />
             </div>
           </div>
-          
         </div>
       </div>
+      {/* Data Table */}
+      <DataTableMain />
     </main>
   );
 }
