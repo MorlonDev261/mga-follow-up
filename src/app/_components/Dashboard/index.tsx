@@ -1,9 +1,15 @@
 import { useState } from 'react';
 import Link from "next/link";
-import { FaRegEnvelope } from "react-icons/fa6";
-import { FiBell, FiSearch } from 'react-icons/fi';
-import { LuScanLine } from "react-icons/lu";
 import Image from 'next/image';
+import { FaRegEnvelope, FaPlus, FaClipboardUser } from "react-icons/fa6";
+import { FiBell, FiSearch } from 'react-icons/fi';
+import { AiOutlineProduct } from "react-icons/ai";
+import { LuScanLine } from "react-icons/lu";
+import { MdOutlineAccountBalanceWallet } from "react-icons/md";
+import { ImUserPlus } from "react-icons/im";
+import Counter from "@components/Counter";
+import Dropdown from "@components/Dropdown";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import Balance from "@components/Balance";
 import ShortcutList from '@components/ShortcutList';
 import Statistique from '@components/Statistique';
@@ -67,7 +73,30 @@ export default function Dashboard() {
             
             <div className="bg-[#111] p-2">
               
-              <Balance />
+              <Balance 
+                title={<><MdOutlineAccountBalanceWallet /> Net Available</>} 
+                subtitle={<>= AED <Counter end={4350} duration={0.8} /></>}
+                balance={<><Counter end={5220500} duration={0.8} sound="on" src="/sounds/money-sound.mp3" /> Ar</>}
+              >
+                <Dropdown
+                  btn={
+                    <button className="flex items-center justify-center gap-1 rounded bg-blue-500 px-2 py-1 text-sm text-white">
+                      <FaPlus /> New
+                    </button>
+                  }
+                  title="Insertion"
+                >
+                  <DropdownMenuItem>
+                    <AiOutlineProduct /> New arrivals
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <ImUserPlus /> New customer
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <FaClipboardUser /> New employer
+                  </DropdownMenuItem>
+                </Dropdown>
+              </Balance>
               
               <div className="mb-5 max-h-[100px] max-w-[250px]">
                 <Statistique position="right" />
