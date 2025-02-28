@@ -6,7 +6,7 @@ import Statistique from '@components/Statistique';
 import DataTableMain from "@components/DataTable/DataTableMain";
 import Counter from "@components/Counter"; // Assure-toi que Counter est bien importé
 
-export default function Dashboard() {
+export default function Stock() {
   return (
     <main className="p-2">
       <div className="grid gap-4 md:grid-cols-2">
