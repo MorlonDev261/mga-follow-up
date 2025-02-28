@@ -23,6 +23,15 @@ export default function Stock() {
               <FaPlus /> New arrival
             </button>
           </Balance>
+
+          {/* Statistique Component */}
+          <div className="bg-[#111] text-white p-2">
+            <h3 className="mb-4">Statistique de vente:</h3>
+            <div className="mb-5 w-full">
+              <Statistique type="courbe" legende={false} />
+            </div>
+          </div>
+          
         </div>
       </div>
     </main>
