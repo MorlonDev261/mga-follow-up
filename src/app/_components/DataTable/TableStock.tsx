@@ -74,7 +74,7 @@ export default function TableStock() {
 
   filterIdProduct
     ? { accessorKey: "comments", header: "Comments", cell: ({ row }) => <div>{row.getValue("comments")}</div> }
-    : { accessorKey: "Qte", header: "Qte", cell: ({ row }) => <div>{row.getValue("Qte")}</div> } ,
+    : { accessorKey: "Qte", header: "Qte", cell: ({ row }) => <div>{Qte)}</div> } ,
 
   {
     accessorKey: "amount",
@@ -82,11 +82,11 @@ export default function TableStock() {
     cell: ({ row }) => <div className="text-right font-medium">{row.getValue("amount")}</div>,
   },
 
-  !filterIdProduct
+  !filterIdProduct && total
     ? {
         accessorKey: "total",
         header: () => <div className="text-right">Total</div>,
-        cell: ({ row }) => <div className="text-right font-medium">{row.getValue("total")}</div>,
+        cell: ({ row }) => <div className="text-right font-medium">{total}</div>,
       }
     : null, // ⬅️ Ajout de null pour éviter d'insérer une valeur invalide
 
