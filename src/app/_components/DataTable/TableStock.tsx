@@ -61,10 +61,7 @@ export default function TableStock() {
   const filterIdProduct = searchParams.get("idProduct");
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({
-    comments: false,
-    imei: false,
-  });
+  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
 
   // ✅ Si un idProduct est dans l'URL, filtrer les produits
   const filteredData = filterIdProduct
@@ -72,47 +69,58 @@ export default function TableStock() {
     : groupedData;
 
   const columns: ColumnDef<Product & { Qte?: number; total?: number }>[] = [
-    { accessorKey: "date", header: "Date", cell: ({ row }) => <div>{row.getValue("date")}</div> },
-    { accessorKey: "designation", header: "Designation", cell: ({ row }) => <div>{row.getValue("designation")}</div> },
-    { accessorKey: "comments", header: "Comments", cell: ({ row }) => <div>{row.getValue("comments")}</div> },
-    {
-      accessorKey: "amount",
-      header: () => <div className="text-right">Price</div>,
-      cell: ({ row }) => {
-        return <div className="text-right font-medium">{row.getValue("amount")}</div>;
-      },
-    },
-    {
-      id: "actions",
-      enableHiding: false,
-      cell: ({ row }) => {
-        const product = row.original;
+  { accessorKey: "date", header: "Date", cell: ({ row }) => <div>{row.getValue("date")}</div> },
+  { accessorKey: "designation", header: "Designation", cell: ({ row }) => <div>{row.getValue("designation")}</div> },
 
-        return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem
-                onClick={() => {
-                  const newParams = new URLSearchParams();
-                  newParams.set("idProduct", product.idProduct);
-                  router.push(`?${newParams.toString()}`);
-                }}
-              >
-                View Product
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        );
-      },
+  filterIdProduct
+    ? { accessorKey: "comments", header: "Comments", cell: ({ row }) => <div>{row.getValue("comments")}</div> }
+    : { accessorKey: "Qte", header: "Qte", cell: ({ row }) => <div>{row.getValue("Qte")}</div> } ,
+
+  {
+    accessorKey: "amount",
+    header: () => <div className="text-right">Price</div>,
+    cell: ({ row }) => <div className="text-right font-medium">{row.getValue("amount")}</div>,
+  },
+
+  !filterIdProduct
+    ? {
+        accessorKey: "total",
+        header: () => <div className="text-right">Total</div>,
+        cell: ({ row }) => <div className="text-right font-medium">{row.getValue("total")}</div>,
+      }
+    : undefined, // ⬅️ Ajout de undefined pour éviter d'insérer une valeur invalide
+
+  {
+    id: "actions",
+    enableHiding: false,
+    cell: ({ row }) => {
+      const product = row.original;
+
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem
+              onClick={() => {
+                const newParams = new URLSearchParams();
+                newParams.set("idProduct", product.idProduct);
+                router.push(`?${newParams.toString()}`);
+              }}
+            >
+              View Product
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
     },
-  ];
+  },
+].filter(Boolean); // ✅ Filtre les `undefined` pour éviter des erreurs
 
   const table = useReactTable({
     data: filteredData,
