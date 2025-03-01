@@ -88,7 +88,7 @@ export default function TableStock() {
         header: () => <div className="text-right">Total</div>,
         cell: ({ row }) => <div className="text-right font-medium">{row.getValue("total")}</div>,
       }
-    : undefined, // ⬅️ Ajout de undefined pour éviter d'insérer une valeur invalide
+    : null, // ⬅️ Ajout de null pour éviter d'insérer une valeur invalide
 
   {
     id: "actions",
