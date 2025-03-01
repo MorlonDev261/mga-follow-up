@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { Suspense } from "react";
 import { BsShopWindow } from "react-icons/bs";
 import { FaPlus } from "react-icons/fa6";
 import Balance from "@components/Balance";
@@ -38,7 +38,9 @@ export default function Stock() {
         </div>
       </div>
       {/* Data Table */}
-      <TableStock />
+      <Suspense fallback={<div>Loading...</div>}>
+        <TableStock />
+      </Suspense>
     </main>
   );
 }
