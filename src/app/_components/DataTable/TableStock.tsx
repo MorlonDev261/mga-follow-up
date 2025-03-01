@@ -82,7 +82,7 @@ export default function TableStock() {
     cell: ({ row }) => <div className="text-right font-medium">{row.getValue("amount")}</div>,
   },
 
-  !filterIdProduct && total
+  !filterIdProduct
     ? {
         accessorKey: "total",
         header: () => <div className="text-right">Total</div>,
