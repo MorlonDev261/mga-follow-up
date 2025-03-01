@@ -145,8 +145,8 @@ export default function TableStock() {
       className="max-w-sm"
       onChange={(event) => table.getColumn("comments")?.setFilterValue(event.target.value)}
     />
-    <Button variant="outline" className="ml-auto" onClick={() => router.push("/")}>
-      Reset
+    <Button variant="outline" className="ml-auto" onClick={() => router.push("/stock")}>
+      Go Back
     </Button>
   </div>
 
