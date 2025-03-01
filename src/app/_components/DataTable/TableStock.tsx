@@ -155,6 +155,7 @@ export default function TableStock() {
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({
     date: false,
     comments: false,
+    imei: false,
   });
   const [rowSelection, setRowSelection] = React.useState({});
 
