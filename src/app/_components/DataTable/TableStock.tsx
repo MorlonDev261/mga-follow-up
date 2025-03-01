@@ -74,13 +74,11 @@ export default function TableStock() {
   const columns: ColumnDef<Product & { Qte?: number; total?: number }>[] = [
     { accessorKey: "date", header: "Date", cell: ({ row }) => <div>{row.getValue("date")}</div> },
     { accessorKey: "designation", header: "Designation", cell: ({ row }) => <div>{row.getValue("designation")}</div> },
-    { accessorKey: "Qte", header: "Qte", cell: ({ row }) => <div>{row.getValue("Qte")}</div> },
-    { accessorKey: "amount", header: "Price", cell: ({ row }) => <div>{row.getValue("amount")}</div> },
+    { accessorKey: "comments", header: "Comments", cell: ({ row }) => <div>{row.getValue("comments")}</div> },
     {
-      accessorKey: "total",
+      accessorKey: "amount",
       header: () => <div className="text-right">Price</div>,
       cell: ({ row }) => {
-        const formatted = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(row.getValue("total"));
         return <div className="text-right font-medium">{row.getValue("amount")}</div>;
       },
     },
