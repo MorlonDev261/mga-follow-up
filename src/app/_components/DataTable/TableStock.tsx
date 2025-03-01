@@ -74,7 +74,7 @@ export default function TableStock() {
 
   filterIdProduct
     ? { accessorKey: "comments", header: "Comments", cell: ({ row }) => <div>{row.getValue("comments")}</div> }
-    : { accessorKey: "Qte", header: "Qte", cell: ({ row }) => <div>{Qte)}</div> } ,
+    : { accessorKey: "Qte", header: "Qte", cell: ({ row }) => <div>{row.getValue("Qte")}</div> },
 
   {
     accessorKey: "amount",
@@ -86,16 +86,15 @@ export default function TableStock() {
     ? {
         accessorKey: "total",
         header: () => <div className="text-right">Total</div>,
-        cell: ({ row }) => <div className="text-right font-medium">{total}</div>,
+        cell: ({ row }) => <div className="text-right font-medium">{row.getValue("total")}</div>,
       }
-    : null, // ⬅️ Ajout de null pour éviter d'insérer une valeur invalide
+    : null, // ⬅️ Ajout de `null` pour éviter les erreurs
 
   {
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
       const product = row.original;
-
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -120,7 +119,7 @@ export default function TableStock() {
       );
     },
   },
-].filter(Boolean); // ✅ Filtre les `undefined` pour éviter des erreurs
+].filter(Boolean); // ✅ Supprime les `null` pour éviter des erreurs
 
   const table = useReactTable({
     data: filteredData,
