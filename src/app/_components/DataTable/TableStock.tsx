@@ -71,57 +71,59 @@ export default function TableStock() {
     : groupedData;
 
   const columns: ColumnDef<Product>[] = [
-    { accessorKey: "date", header: "Date", cell: ({ row }) => <div>{row.getValue("date")}</div> },
-    { accessorKey: "designation", header: "Designation", cell: ({ row }) => <div>{row.getValue("designation")}</div> },
+  { accessorKey: "date", header: "Date", cell: ({ row }) => <div>{row.getValue("date")}</div> },
+  { accessorKey: "designation", header: "Designation", cell: ({ row }) => <div>{row.getValue("designation")}</div> },
 
-    filterIdProduct
-      ? { accessorKey: "comments", header: "Comments", cell: ({ row }) => <div>{row.getValue("comments")}</div> }
-      : { accessorKey: "Qte", header: "Qte", cell: ({ row }) => <div>{row.getValue("Qte")}</div> },
+  filterIdProduct
+    ? { accessorKey: "comments", header: "Comments", cell: ({ row }) => <div>{row.getValue("comments")}</div> }
+    : { accessorKey: "Qte", header: "Qte", cell: ({ row }) => <div>{row.getValue("Qte")}</div> },
 
-    {
-      accessorKey: "amount",
-      header: () => <div className="text-right">Price</div>,
-      cell: ({ row }) => <div className="text-right font-medium">{row.getValue("amount")}</div>,
-    },
+  {
+    accessorKey: "amount",
+    header: () => <div className="text-right">Price</div>,
+    cell: ({ row }) => <div className="text-right font-medium">{row.getValue("amount")}</div>,
+  },
 
-    !filterIdProduct
-      ? {
+  ...(!filterIdProduct
+    ? [
+        {
           accessorKey: "total",
           header: () => <div className="text-right">Total</div>,
           cell: ({ row }) => <div className="text-right font-medium">{row.getValue("total")}</div>,
-        }
-      : undefined, // ⬅️ Cela peut produire `undefined`
+        },
+      ]
+    : []),
 
-    {
-      id: "actions",
-      enableHiding: false,
-      cell: ({ row }) => {
-        const product = row.original;
-        return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem
-                onClick={() => {
-                  const newParams = new URLSearchParams();
-                  newParams.set("idProduct", product.idProduct);
-                  router.push(`?${newParams.toString()}`);
-                }}
-              >
-                View Product
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        );
-      },
+  {
+    id: "actions",
+    enableHiding: false,
+    cell: ({ row }) => {
+      const product = row.original;
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem
+              onClick={() => {
+                const newParams = new URLSearchParams();
+                newParams.set("idProduct", product.idProduct);
+                router.push(`?${newParams.toString()}`);
+              }}
+            >
+              View Product
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
     },
-  ].filter(Boolean); // ✅ Supprime les `undefined`
+  },
+];
 
   const table = useReactTable({
     data: filteredData,
