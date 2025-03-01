@@ -27,10 +27,12 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 export type Product = {
   id: string;
   date: string;
+  Qte?: number;
   designation: string;
   idProduct: string;
   comments: string;
   amount: number;
+  total?: number;
 };
 
 const data: Product[] = [
@@ -68,7 +70,7 @@ export default function TableStock() {
     ? data.filter((item) => item.idProduct === filterIdProduct)
     : groupedData;
 
-  const columns: ColumnDef<Product & { Qte?: number; total?: number }>[] = [
+  const columns: ColumnDef<Product>[] = [
   { accessorKey: "date", header: "Date", cell: ({ row }) => <div>{row.getValue("date")}</div> },
   { accessorKey: "designation", header: "Designation", cell: ({ row }) => <div>{row.getValue("designation")}</div> },
 
