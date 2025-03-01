@@ -25,7 +25,7 @@ import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 export type Product = {
-  id?: string;
+  id: string;
   date: string;
   Qte?: number;
   designation: string;
