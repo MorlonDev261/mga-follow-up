@@ -90,7 +90,7 @@ export default function TableStock() {
         header: () => <div className="text-right">Total</div>,
         cell: ({ row }) => <div className="text-right font-medium">{row.getValue("total")}</div>,
       }
-    : null, // ⬅️ Ajout de `null` pour éviter les erreurs
+    : undefined, // ⬅️ Ajout de undefined pour éviter les erreurs
 
   {
     id: "actions",
