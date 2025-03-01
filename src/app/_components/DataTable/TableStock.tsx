@@ -4,6 +4,7 @@ import * as React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   ColumnDef,
+  Row,
   SortingState,
   VisibilityState,
   flexRender,
@@ -71,17 +72,17 @@ export default function TableStock() {
     : groupedData;
 
   const columns: ColumnDef<Product>[] = [
-  { accessorKey: "date", header: "Date", cell: ({ row }) => <div>{row.getValue("date")}</div> },
-  { accessorKey: "designation", header: "Designation", cell: ({ row }) => <div>{row.getValue("designation")}</div> },
+  { accessorKey: "date", header: "Date", cell: ({ row }: { row: Row<Product> }) => <div>{row.getValue("date")}</div> },
+  { accessorKey: "designation", header: "Designation", cell: ({ row }: { row: Row<Product> }) => <div>{row.getValue("designation")}</div> },
 
   filterIdProduct
-    ? { accessorKey: "comments", header: "Comments", cell: ({ row }) => <div>{row.getValue("comments")}</div> }
-    : { accessorKey: "Qte", header: "Qte", cell: ({ row }) => <div>{row.getValue("Qte")}</div> },
+    ? { accessorKey: "comments", header: "Comments", cell: ({ row }: { row: Row<Product> }) => <div>{row.getValue("comments")}</div> } 
+    : { accessorKey: "Qte", header: "Qte", cell: ({ row }: { row: Row<Product> }) => <div>{row.getValue("Qte")}</div> } ,
 
   {
     accessorKey: "amount",
     header: () => <div className="text-right">Price</div>,
-    cell: ({ row }) => <div className="text-right font-medium">{row.getValue("amount")}</div>,
+    cell: ({ row }: { row: Row<Product> }) => <div className="text-right font-medium">{row.getValue("amount")}</div>,
   },
 
   ...(!filterIdProduct
@@ -89,7 +90,7 @@ export default function TableStock() {
         {
           accessorKey: "total",
           header: () => <div className="text-right">Total</div>,
-          cell: ({ row }) => <div className="text-right font-medium">{row.getValue("total")}</div>,
+          cell: ({ row }: { row: Row<Product> }) => <div className="text-right font-medium">{row.getValue("total")}</div>,
         },
       ]
     : []),
@@ -97,7 +98,7 @@ export default function TableStock() {
   {
     id: "actions",
     enableHiding: false,
-    cell: ({ row }) => {
+    cell: ({ row }: { row: Row<Product> }) => {
       const product = row.original;
       return (
         <DropdownMenu>
