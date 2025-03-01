@@ -1,180 +1,130 @@
 "use client";
 
 import * as React from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   ColumnDef,
-  ColumnFiltersState,
   SortingState,
   VisibilityState,
   flexRender,
   getCoreRowModel,
-  getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import { ChevronDown, MoreHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
-export type Payment = {
+export type Product = {
   id: string;
   date: string;
   designation: string;
-  Qte: number;
+  idProduct: string;
   comments: string;
   amount: number;
-  total: number;
-  imei: Record<string, string>;
 };
 
-const data: Payment[] = [
-  {
-    id: "1",
-    date: "23-01-25",
-    designation: "iPhone 11 128",
-    Qte: 23,
-    comments: "Vente iPhone XR 3pcs",
-    amount: 316,
-    total: 4968,
-    imei: { "IMEI 1": "674377328907540", "IMEI 2": "631579953270063" },
-  },
-  {
-    id: "2",
-    date: "23-01-25",
-    designation: "iPhone 11 128",
-    Qte: 23,
-    comments: "Vente iPhone XR 3pcs",
-    amount: 316,
-    total: 4968,
-    imei: { "IMEI 1": "584280422753795", "IMEI 2": "584280422778048" },
-  },
+const data: Product[] = [
+  { id: "1", date: "23-01-25", designation: "iPhone 11 128", idProduct: "6784geH", comments: "Vente iPhone XR 3pcs", amount: 316 },
+  { id: "2", date: "23-01-25", designation: "iPhone 11 128", idProduct: "6784geH", comments: "Vente iPhone XR 3pcs", amount: 316 },
+  { id: "3", date: "23-01-25", designation: "iPhone 11 64", idProduct: "HtGghd3635", comments: "Vente iPhone XR 3pcs", amount: 316 },
+  { id: "4", date: "23-01-25", designation: "iPhone 11 128", idProduct: "HtGghd3635", comments: "Vente iPhone XR 3pcs", amount: 316 },
+  { id: "5", date: "23-01-25", designation: "iPhone 11 128", idProduct: "67880GgeH", comments: "Vente iPhone XR 3pcs", amount: 316 },
 ];
 
-export const columns: ColumnDef<Payment>[] = [
-  {
-    accessorKey: "date",
-    header: "Date",
-    cell: ({ row }) => {
-      const rawDate = new Date(row.getValue("date"));
-      const formattedDate = rawDate.toLocaleDateString("fr-FR"); // Format: "23/01/2025"
-      return <div>{formattedDate}</div>;
-    },
-  },
-  {
-    accessorKey: "designation",
-    header: "Designation",
-    cell: ({ row }) => <div>{row.getValue("designation")}</div>,
-  },
-  {
-    accessorKey: "Qte",
-    header: "Qte",
-    cell: ({ row }) => <div>{row.getValue("Qte")}</div>,
-  },
-  {
-    accessorKey: "comments",
-    header: "Comments",
-    cell: ({ row }) => <div>{row.getValue("comments")}</div>,
-  },
-  {
-    accessorKey: "amount",
-    header: "Amount",
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("amount"));
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(amount);
-      return <div className="text-right font-medium">{formatted}</div>;
-    },
-  },
-  {
-    accessorKey: "total",
-    header: () => <div className="text-right">Total</div>,
-    cell: ({ row }) => {
-      const total = parseFloat(row.getValue("total"));
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(total);
-      return <div className="text-right font-medium">{formatted}</div>;
-    },
-  },
-  {
-    accessorKey: "imei",
-    header: "IMEI",
-    cell: ({ row }) => {
-      const imeiData = row.getValue("imei") as Record<string, string>;
-      return (
-        <div className="text-xs">
-          {Object.entries(imeiData).map(([key, value]) => (
-            <div key={key}>
-              <strong>{key}:</strong> {value}
-            </div>
-          ))}
-        </div>
-      );
-    },
-  },
-  {
-    id: "actions",
-    enableHiding: false,
-    cell: ({ row }) => {
-      const payment = row.original
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Copy payment ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )
-    },
-  },
-];
+// ✅ Regrouper les produits par `idProduct` et `designation`
+const groupedData = Object.values(
+  data.reduce((acc, item) => {
+    const key = `${item.idProduct}-${item.designation}`;
+    if (!acc[key]) {
+      acc[key] = { ...item, Qte: 1, total: item.amount };
+    } else {
+      acc[key].Qte += 1;
+      acc[key].total += item.amount;
+    }
+    return acc;
+  }, {} as Record<string, Product & { Qte: number; total: number }>)
+);
 
 export default function TableStock() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const filterIdProduct = searchParams.get("idProduct");
+
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({
     comments: false,
     imei: false,
   });
-  const [rowSelection, setRowSelection] = React.useState({});
+
+  // ✅ Si un idProduct est dans l'URL, filtrer les produits
+  const filteredData = filterIdProduct
+    ? data.filter((item) => item.idProduct === filterIdProduct)
+    : groupedData;
+
+  const columns: ColumnDef<Product & { Qte?: number; total?: number }>[] = [
+    { accessorKey: "date", header: "Date", cell: ({ row }) => <div>{row.getValue("date")}</div> },
+    { accessorKey: "designation", header: "Designation", cell: ({ row }) => <div>{row.getValue("designation")}</div> },
+    { accessorKey: "Qte", header: "Qte", cell: ({ row }) => <div>{row.getValue("Qte")}</div> },
+    { accessorKey: "comments", header: "Comments", cell: ({ row }) => <div>{row.getValue("comments")}</div> },
+    {
+      accessorKey: "total",
+      header: () => <div className="text-right">Total</div>,
+      cell: ({ row }) => {
+        const formatted = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(row.getValue("total"));
+        return <div className="text-right font-medium">{formatted}</div>;
+      },
+    },
+    {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }) => {
+        const product = row.original;
+
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem
+                onClick={() => {
+                  const newParams = new URLSearchParams();
+                  newParams.set("idProduct", product.idProduct);
+                  router.push(`?${newParams.toString()}`);
+                }}
+              >
+                View Product
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
+  ];
 
   const table = useReactTable({
-    data,
+    data: filteredData,
     columns,
     onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
-    state: {
-      sorting,
-      columnFilters,
-      columnVisibility,
-      rowSelection,
-    },
+    state: { sorting, columnVisibility },
   });
 
   return (
@@ -182,38 +132,12 @@ export default function TableStock() {
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter comments..."
-          value={(table.getColumn("comments")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("comments")?.setFilterValue(event.target.value)
-          }
           className="max-w-sm"
+          onChange={(event) => table.getColumn("comments")?.setFilterValue(event.target.value)}
         />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Columns <ChevronDown />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <Button variant="outline" className="ml-auto" onClick={() => router.push("/")}>
+          Reset
+        </Button>
       </div>
       <div className="rounded-md border">
         <Table>
@@ -221,11 +145,7 @@ export default function TableStock() {
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id}>
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(header.column.columnDef.header, header.getContext())}
-                  </TableHead>
+                  <TableHead key={header.id}>{flexRender(header.column.columnDef.header, header.getContext())}</TableHead>
                 ))}
               </TableRow>
             ))}
@@ -235,9 +155,7 @@ export default function TableStock() {
               table.getRowModel().rows.map((row) => (
                 <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </TableCell>
+                    <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
                   ))}
                 </TableRow>
               ))
@@ -255,14 +173,12 @@ export default function TableStock() {
         <div className="flex-1 text-sm text-muted-foreground">
           Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
         </div>
-        <div className="space-x-2">
-          <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
-            Previous
-          </Button>
-          <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
-            Next
-          </Button>
-        </div>
+        <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
+          Previous
+        </Button>
+        <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
+          Next
+        </Button>
       </div>
     </div>
   );
