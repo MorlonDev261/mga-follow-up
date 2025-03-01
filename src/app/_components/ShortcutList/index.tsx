@@ -6,22 +6,23 @@ import { HiOutlineBanknotes } from "react-icons/hi2";
 import { FiDollarSign, FiClock } from 'react-icons/fi';
 
 const shortcuts = [
-  { label: 'Stock', value: 457900, icon: <BsShopWindow />, color: 'text-blue-500' },
-  { label: 'Expenses', value: 457900, icon: <FiDollarSign />, color: 'text-red-500' },
-  { label: 'Pending', value: 457900, icon: <FiClock />, color: 'text-yellow-500' },
-  { label: 'Employers', value: 7, icon: <BsPersonWorkspace /> },
-  { label: 'Payement', icon: <HiOutlineBanknotes /> },
-  { label: 'Customers', value: 7, icon: <FaUsers /> },
-  { label: 'Profile', icon: <FaRegUserCircle /> },
-  { label: 'Settings', icon: <FaCog /> },
+  { label: 'Stock', to: '/stock', value: 457900, icon: <BsShopWindow />, color: 'text-blue-500' },
+  { label: 'Expenses', to: '/expenses', value: 457900, icon: <FiDollarSign />, color: 'text-red-500' },
+  { label: 'Pending', to: '/pending', value: 457900, icon: <FiClock />, color: 'text-yellow-500' },
+  { label: 'Employers', to: '/employers', value: 7, icon: <BsPersonWorkspace /> },
+  { label: 'Payement', to: '/payement', icon: <HiOutlineBanknotes /> },
+  { label: 'Customers', to: '/customers', value: 7, icon: <FaUsers /> },
+  { label: 'Profile', to: '/profile', icon: <FaRegUserCircle /> },
+  { label: 'Settings', to: '/settings', icon: <FaCog /> },
 ];
 
 const ShortcutList = () => {
   return (
     <>
       {shortcuts.map((shortcut) => (
-        <div
+        <Link
           key={shortcut.label}
+          href={shortcut.to}
           className={clsx(
             "flex h-20 flex-col items-center justify-center rounded bg-[#222] hover:bg-[#333] p-2 transition-colors duration-300",
             shortcut.color !== undefined ? shortcut.color : "text-white" // Ajoute la couleur en hover dynamiquement
@@ -30,7 +31,7 @@ const ShortcutList = () => {
           <span className="mb-1 text-xl">{shortcut.icon}</span>
           {shortcut.value !== undefined && <b className="text-xs">{shortcut.value} Ar</b>}
           <span className="text-xs">{shortcut.label}</span>
-        </div>
+        </Link>
       ))}
     </>
   );
