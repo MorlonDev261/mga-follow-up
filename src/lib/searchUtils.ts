@@ -74,7 +74,7 @@ export function parseSearchQuery(searchInput: string): SearchConditions {
 /**
  * Crée un index de recherche pour des données
  */
-export function createSearchIndex(data: Product[], keys: (keyof Product)[]): Product[] {
+export function createSearchIndex<T extends Product>(data: T[], keys: (keyof T)[]): T[] {
   return data.map(item => ({
     ...item,
     _search: keys
