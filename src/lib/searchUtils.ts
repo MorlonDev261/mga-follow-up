@@ -1,19 +1,6 @@
 import { parse, isValid, format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 
-type Product = {
-  id: string;
-  date: string;
-  Qte?: number;
-  designation: string;
-  idProduct: string;
-  comments: string;
-  amount: number;
-  total?: number;
-  dateObject?: Date;
-  _search?: string;
-};
-
 type SearchConditions = {
   dateFilters: Date[];
   textTerms: string[];
@@ -82,8 +69,9 @@ export function createSearchIndex(data: Product[], keys: (keyof Product)[]): Pro
       .join(' ')
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, ''),
-  })) as Product[]; // Cast explicite en Product[]
+  }));
 }
+
 
 /**
  * Filtre les données selon les conditions de recherche
