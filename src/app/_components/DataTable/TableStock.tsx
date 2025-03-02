@@ -202,16 +202,30 @@ export default function TableStock() {
         ))}
       </TableHeader>
       <TableBody>
-        {table.getRowModel().rows.map((row) => (
+        {loading || error ? (
+          <TableRow>
+            <TableCell colSpan={columns.length} className="text-center py-4">
+              {loading ? "Chargement..." : <span className="text-red-500">{error}</span>}
+            </TableCell>
+          </TableRow>
+       ) : table.getRowModel().rows.length > 0 ? (
+        table.getRowModel().rows.map((row) => (
           <TableRow key={row.id} className="text-xs sm:text-sm">
             {row.getVisibleCells().map((cell) => (
               <TableCell key={cell.id} className="px-2 py-2 whitespace-nowrap">
                 {flexRender(cell.column.columnDef.cell, cell.getContext())}
               </TableCell>
             ))}
-          </TableRow>
-        ))}
-      </TableBody>
+         </TableRow>
+       ))
+      ) : (
+      <TableRow>
+         <TableCell colSpan={columns.length} className="text-center py-4">
+          Aucun produit trouvé.
+         </TableCell>
+      </TableRow>
+    )}
+  </TableBody>
     </Table>
   </div>
 
