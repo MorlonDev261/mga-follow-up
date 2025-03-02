@@ -4,6 +4,7 @@ import * as React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   ColumnDef,
+  Row,
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
@@ -93,8 +94,19 @@ export default function TableStock() {
     { accessorKey: "date", header: "Date" },
     { accessorKey: "designation", header: "Designation" },
     !grouped ? { accessorKey: "comments", header: "Comments" } : { accessorKey: "Qte", header: "Qte" },
-    { accessorKey: "amount", header: "Price", cell: ({ row }) => <div className="text-right font-medium">{row.getValue("amount")}</div> },
-    ...(grouped ? [{ accessorKey: "total", header: "Total", cell: ({ row }) => <div className="text-right font-medium">{row.getValue("total")}</div> }] : []),
+    { 
+      accessorKey: "amount", 
+      header: "Price", 
+      cell: ({ row }: { row: Row<Product> }) => <div className="text-right font-medium">{row.getValue("amount")}</div> 
+    },
+
+    ...(grouped ? [
+    { 
+      accessorKey: "total", 
+      header: "Total", 
+      cell: ({ row }: { row: Row<Product> }) => <div className="text-right font-medium">{row.getValue("total")}</div> 
+    }
+    ] : []),
     {
       id: "actions",
       cell: ({ row }) => (
