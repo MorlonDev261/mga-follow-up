@@ -49,10 +49,10 @@ const data: Product[] = [
   { id: "10", date: "28-01-25", designation: "iPhone 11 128", idProduct: "6784geH", comments: "", amount: 2507 },
 ];
 
-// ✅ Regrouper les produits par `idProduct` et `designation`
+// ✅ Regrouper les produits par `idProduct`, `designation` et `date`
 const groupedData = Object.values(
   data.reduce((acc, item) => {
-    const key = `${item.idProduct}-${item.designation}`;
+    const key = `${item.idProduct}-${item.designation}-${item.date}`;
     if (!acc[key]) {
       acc[key] = { ...item, Qte: 1, total: item.amount };
     } else {
@@ -61,7 +61,12 @@ const groupedData = Object.values(
     }
     return acc;
   }, {} as Record<string, Product & { Qte: number; total: number }>)
-);
+).sort((a, b) => {
+  // ✅ Trier par date décroissante (plus récent en premier)
+  const dateA = new Date(a.date.split("-").reverse().join("-"));
+  const dateB = new Date(b.date.split("-").reverse().join("-"));
+  return dateB.getTime() - dateA.getTime();
+});
 
 export default function TableStock() {
   const router = useRouter();
