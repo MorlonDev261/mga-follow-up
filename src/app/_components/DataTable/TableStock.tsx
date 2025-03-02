@@ -5,12 +5,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import {
   ColumnDef,
   Row,
-  SortingState,
-  VisibilityState,
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
-  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
@@ -49,167 +46,120 @@ const data: Product[] = [
   { id: "10", date: "28-01-25", designation: "iPhone 11 128", idProduct: "6784geH", comments: "", amount: 2507 },
 ];
 
-// ✅ Regrouper les produits par `idProduct`, `designation` et `date`
-const groupedData = Object.values(
-  data.reduce((acc, item) => {
-    const key = `${item.idProduct}-${item.designation}-${item.date}`;
-    if (!acc[key]) {
-      acc[key] = { ...item, Qte: 1, total: item.amount };
-    } else {
-      acc[key].Qte += 1;
-      acc[key].total += item.amount;
-    }
-    return acc;
-  }, {} as Record<string, Product & { Qte: number; total: number }>)
-).sort((a, b) => {
-  // ✅ Trier par date décroissante (plus récent en premier)
-  const dateA = new Date(a.date.split("-").reverse().join("-"));
-  const dateB = new Date(b.date.split("-").reverse().join("-"));
-  return dateB.getTime() - dateA.getTime();
-});
-
 export default function TableStock() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const filterIdProduct = searchParams.get("idProduct");
   const filterDate = searchParams.get("date");
 
-  // ✅ Filtrer les produits par `idProduct` et `date`
-  const filteredData = filterIdProduct && filterDate
-    ? data.filter((item) => item.idProduct === filterIdProduct && item.date === filterDate)
-    : groupedData;
+  // ✅ État pour activer/désactiver le regroupement
+  const [grouped, setGrouped] = React.useState(true);
+  const [search, setSearch] = React.useState("");
 
-  // ✅ Mise à jour du bouton "View Product" pour inclure `date`
+  // ✅ Regroupement des produits
+  const groupedData = Object.values(
+    data.reduce((acc, item) => {
+      const key = `${item.idProduct}-${item.designation}-${item.date}`;
+      if (!acc[key]) {
+        acc[key] = { ...item, Qte: 1, total: item.amount };
+      } else {
+        acc[key].Qte += 1;
+        acc[key].total += item.amount;
+      }
+      return acc;
+    }, {} as Record<string, Product & { Qte: number; total: number }>)
+  );
+
+  // ✅ Sélection des données affichées en fonction des filtres
+  let displayedData = grouped ? groupedData : data;
+
+  if (filterIdProduct && filterDate) {
+    displayedData = data.filter((p) => p.idProduct === filterIdProduct && p.date === filterDate);
+  } else if (filterIdProduct) {
+    displayedData = data.filter((p) => p.idProduct === filterIdProduct);
+  }
+
+  // ✅ Filtrage en fonction de la barre de recherche
+  displayedData = displayedData.filter((p) => {
+    if (filterIdProduct) return p.comments.toLowerCase().includes(search.toLowerCase());
+    return (
+      p.date.includes(search) ||
+      p.designation.toLowerCase().includes(search.toLowerCase()) ||
+      (!grouped && p.comments.toLowerCase().includes(search.toLowerCase()))
+    );
+  });
+
+  // ✅ Colonnes du tableau
   const columns: ColumnDef<Product>[] = [
-    { accessorKey: "date", header: "Date", cell: ({ row }: { row: Row<Product> }) => <div>{row.getValue("date")}</div> },
-    { accessorKey: "designation", header: "Designation", cell: ({ row }: { row: Row<Product> }) => <div>{row.getValue("designation")}</div> },
-
-    filterIdProduct
-      ? { accessorKey: "comments", header: "Comments", cell: ({ row }: { row: Row<Product> }) => <div>{row.getValue("comments")}</div> } 
-      : { accessorKey: "Qte", header: "Qte", cell: ({ row }: { row: Row<Product> }) => <div>{row.getValue("Qte")}</div> } ,
-
-    {
-      accessorKey: "amount",
-      header: () => <div className="text-right">Price</div>,
-      cell: ({ row }: { row: Row<Product> }) => <div className="text-right font-medium">{row.getValue("amount")}</div>,
-    },
-
-    ...(!filterIdProduct
-      ? [
-          {
-            accessorKey: "total",
-            header: () => <div className="text-right">Total</div>,
-            cell: ({ row }: { row: Row<Product> }) => <div className="text-right font-medium">{row.getValue("total")}</div>,
-          },
-        ]
-      : []),
-
+    { accessorKey: "date", header: "Date" },
+    { accessorKey: "designation", header: "Designation" },
+    !grouped ? { accessorKey: "comments", header: "Comments" } : { accessorKey: "Qte", header: "Qte" },
+    { accessorKey: "amount", header: "Price", cell: ({ row }) => <div className="text-right font-medium">{row.getValue("amount")}</div> },
+    ...(grouped ? [{ accessorKey: "total", header: "Total", cell: ({ row }) => <div className="text-right font-medium">{row.getValue("total")}</div> }] : []),
     {
       id: "actions",
-      enableHiding: false,
-      cell: ({ row }: { row: Row<Product> }) => {
-        const product = row.original;
-        return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0"> 
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem
-                onClick={() => {
-                  const newParams = new URLSearchParams();
-                  newParams.set("idProduct", product.idProduct);
-                  newParams.set("date", product.date); // ✅ Ajout de `date` à l'URL
-                  router.push(`?${newParams.toString()}`);
-                }}
-              >
-                View Product
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        );
-      },
+      cell: ({ row }) => (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <MoreHorizontal />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem
+              onClick={() => {
+                const newParams = new URLSearchParams();
+                newParams.set("idProduct", row.original.idProduct);
+                newParams.set("date", row.original.date);
+                router.push(`?${newParams.toString()}`);
+              }}
+            >
+              View Product
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      ),
     },
   ];
 
-  const table = useReactTable({
-    data: filteredData,
-    columns,
-    onSortingChange: setSorting,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    state: { sorting, columnVisibility },
-  });
+  const table = useReactTable({ data: displayedData, columns, getCoreRowModel: getCoreRowModel(), getPaginationRowModel: getPaginationRowModel() });
 
   return (
     <div className="w-full bg-[#111]">
-  <div className="flex items-center py-4 gap-2">
-    <Input
-      placeholder="Filter comments..."
-      className="max-w-sm"
-      onChange={(event) => table.getColumn("comments")?.setFilterValue(event.target.value)}
-    />
-    <Button variant="outline" className="ml-auto" onClick={() => router.push("/stock")}>
-      Go Back
-    </Button>
-  </div>
+      <div className="flex items-center py-4 gap-2">
+        <Input
+          placeholder="Search..."
+          className="max-w-sm"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        <Button variant="outline" onClick={() => setGrouped(!grouped)}>
+          {grouped ? "One by One" : "Group"}
+        </Button>
+        <Button variant="outline" className="ml-auto" onClick={() => router.push("/stock")}>
+          Go Back
+        </Button>
+      </div>
 
-  {/* ✅ Ajout du div overflow-x-auto */}
-  <div className="rounded-md border overflow-x-auto">
-    <Table>
-      <TableHeader>
-        {table.getHeaderGroups().map((headerGroup) => (
-          <TableRow key={headerGroup.id}>
-            {headerGroup.headers.map((header) => (
-              <TableHead key={header.id} className="text-sm md:text-base">
-                {flexRender(header.column.columnDef.header, header.getContext())}
-              </TableHead>
+      <div className="rounded-md border overflow-x-auto">
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>{flexRender(header.column.columnDef.header, header.getContext())}</TableHead>
+                ))}
+              </TableRow>
             ))}
-          </TableRow>
-        ))}
-      </TableHeader>
-      <TableBody>
-        {table.getRowModel().rows.length ? (
-          table.getRowModel().rows.map((row) => (
-            <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
-              {row.getVisibleCells().map((cell) => (
-                <TableCell
-                  key={cell.id}
-                  className="whitespace-nowrap text-sm md:text-base"
-                >
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </TableCell>
-              ))}
-            </TableRow>
-          ))
-        ) : (
-          <TableRow>
-            <TableCell colSpan={columns.length} className="h-24 text-center">
-              No results.
-            </TableCell>
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
-  </div>
-
-  <div className="flex items-center justify-end space-x-2 py-4">
-    <div className="flex-1 text-sm text-muted-foreground">
-      Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows.length ? table.getRowModel().rows.map((row) => (
+              <TableRow key={row.id}>{row.getVisibleCells().map((cell) => <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>)}</TableRow>
+            )) : <TableRow><TableCell colSpan={columns.length} className="h-24 text-center">No results.</TableCell></TableRow>}
+          </TableBody>
+        </Table>
+      </div>
     </div>
-    <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
-      Previous
-    </Button>
-    <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
-      Next
-    </Button>
-  </div>
-</div>
   );
 }
