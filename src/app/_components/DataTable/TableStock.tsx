@@ -100,7 +100,7 @@ export default function TableStock() {
 
   // Filtered data
   const filteredData = useMemo(() => {
-  let result = grouped ? groupedData : data;
+  let result: Product[] = grouped ? groupedData : data;
 
   if (filterIdProduct && filterDate) {
     result = result.filter(p => p.idProduct === filterIdProduct && p.date === filterDate);
@@ -110,11 +110,12 @@ export default function TableStock() {
 
   if (search) {
     const conditions = parseSearchQuery(search);
-    result = filterData(searchableData as Product[], conditions); // Cast en Product[]
+    result = filterData(searchableData, conditions); // Plus besoin de cast
   }
 
   return result;
 }, [data, groupedData, grouped, filterIdProduct, filterDate, search, searchableData]);
+
 
   // Columns configuration
   const columns = useMemo<ColumnDef<Product | GroupedProduct>[]>(
