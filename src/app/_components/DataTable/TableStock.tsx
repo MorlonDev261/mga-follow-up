@@ -86,13 +86,13 @@ export default function TableStock() {
 
   // Create search index
   const searchableData = useMemo(() => 
-    createSearchIndex(grouped ? groupedData : data, [
-      'designation', 
-      'comments', 
-      'date'
-    ]), 
-    [data, groupedData, grouped]
-  );
+  createSearchIndex(grouped ? groupedData : data, [
+    'designation', 
+    'comments', 
+    'date'
+  ]) as Product[], 
+  [data, groupedData, grouped]
+);
 
   // Get URL params
   const filterIdProduct = searchParams.get("idProduct");
