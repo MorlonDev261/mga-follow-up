@@ -1,6 +1,19 @@
 import { parse, isValid, format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 
+type Product = {
+  id: string;
+  date: string;
+  Qte?: number;
+  designation: string;
+  idProduct: string;
+  comments: string;
+  amount: number;
+  total?: number;
+  dateObject?: Date;
+  _search?: string;
+};
+
 type SearchConditions = {
   dateFilters: Date[];
   textTerms: string[];
