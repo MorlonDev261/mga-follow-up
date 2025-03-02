@@ -1,44 +1,76 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
+import { ReactNode } from "react"
+import { usePathname, useRouter } from "next/navigation";
+import Link from "next/link";
 import Image from "next/image";
-import './CSS/Header.css';
+import { cn } from "@/lib/utils";
 import { FaRegEnvelope } from "react-icons/fa6";
-import { FaBars, FaTimes, FaRegBell } from 'react-icons/fa';
+import { FiBell, FiSearch } from "react-icons/fi";
+import { LuScanLine } from "react-icons/lu";
 
-interface HeaderProps {
-  sidebarState: boolean;
-  setSidebarState: React.Dispatch<React.SetStateAction<boolean>>;
-
-}
-
-const Header = ({ sidebarState, setSidebarState }: HeaderProps) => {
-  return (
-    <header>
-      <nav className="navbar border-b-2 border-gray-900 bg-white">
-        <div className="nav-section">
-          <button onClick={() => setSidebarState(prev => !prev)} className="nav-button menu-button">
-            {sidebarState ? <FaTimes className="icon" /> : <FaBars className="icon" />}
-          </button>
-          <div className="flex items-center gap-1">
-            <b className="hidden">AZTEK DWC LLC</b>
-            <Image className="logo" src="/icons/logo-aztek.svg" alt="AZTEK DWC LLC" width={120} height={20} />
-          </div>
-        </div>
-        
-        <div className="nav-section">
-          <Link href="#" className="nav-button message-button">
-            <FaRegEnvelope className="icon" />
-            <span className="count">5</span>
-          </Link>
-          <button className="nav-button notif-button">
-            <FaRegBell className="icon" />
-            <span className="count">1</span>
-          </button>
-        </div>
-      </nav>
-    </header>
-  );
+type HeaderProps = {
+  children?: ReactNode;
 };
 
-export default Header;
+export default function Header({ children? }: HeaderProps) {
+  const pathname = usePathname();
+  const { push } = useRouter();
+
+  const togglePath = (type: "dashboard" | "rows") => {
+    let newPath = pathname;
+
+    if (type === "dashboard") {
+      if (pathname.startsWith("/rows")) {
+        newPath = pathname.replace(/^\/rows/, "") || "/"; // Supprime uniquement si au début
+      }
+    } else if (type === "rows") {
+      if (!pathname.startsWith("/rows")) {
+        newPath = "/rows" + pathname; // Ajoute "/excel"
+      }
+    }
+    push(newPath);
+  };
+
+
+  return (
+    <header className="sticky top-0 z-50 w-full bg-[#111] p-2">
+      {/* Top section */}
+      <div className="flex items-center justify-between gap-4">
+        {/* Profile Image */}
+        <Image
+          src="/profile.jpg"
+          width={30}
+          height={30}
+          alt="profile"
+          className="rounded-full w-50 h-50 border border-white cover"
+        />
+
+        {/* Mode Toggle (Dashboard / Excel) */}
+        <div className="flex w-full max-w-[250px] items-center rounded bg-white/10 p-1">
+          <button
+            className={cn("w-1/2 rounded p-1", !pathname.startsWith("/rows") && "bg-white/40 pointer-events-none")}
+            onClick={() => togglePath("dashboard")}
+          >
+            Dashboard
+          </button>
+          <button
+            className={cn("w-1/2 rounded p-1", pathname.startsWith("/rows") && "bg-white/40 pointer-events-none")}
+            onClick={() => togglePath("rows")}
+          >
+            Excel
+          </button>
+        </div>
+
+        {/* Notifications & Messages */}
+        <div className="flex items-center gap-4">
+          <FaRegEnvelope className="text-xl" />
+          <FiBell className="text-xl" />
+        </div>
+      </div>
+
+      {/* Search & Scan */}
+      {children}
+    </header>
+  );
+}
