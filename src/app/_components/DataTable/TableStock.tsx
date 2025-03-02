@@ -168,70 +168,71 @@ export default function TableStock() {
 
   return (
     <div className="w-full bg-[#111] p-4">
-      <div className="flex items-center py-4 gap-2">
-        <Input
-          placeholder="Rechercher..."
-          className="max-w-sm"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-        <Button variant="outline" onClick={() => setGrouped(!grouped)}>
-          {grouped ? "Vue détaillée" : "Vue groupée"}
-        </Button>
-        <Button 
-          variant="outline" 
-          className="ml-auto"
-          onClick={() => router.push("/stock")}
-        >
-          Retour
-        </Button>
-      </div>
+  <div className="flex flex-wrap items-center py-4 gap-2">
+    <Input
+      placeholder="Rechercher..."
+      className="max-w-xs sm:max-w-sm"
+      value={search}
+      onChange={(e) => setSearch(e.target.value)}
+    />
+    <Button variant="outline" onClick={() => setGrouped(!grouped)}>
+      {grouped ? "Vue détaillée" : "Vue groupée"}
+    </Button>
+    <Button
+      variant="outline"
+      className="ml-auto"
+      onClick={() => router.push("/stock")}
+    >
+      Retour
+    </Button>
+  </div>
 
-      <div className="rounded-md border overflow-x-auto">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map(headerGroup => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map(header => (
-                  <TableHead key={header.id} className="bg-gray-800">
-                    {flexRender(header.column.columnDef.header, header.getContext())}
-                  </TableHead>
-                ))}
-              </TableRow>
+  {/* Conteneur responsive */}
+  <div className="rounded-md border overflow-x-auto">
+    <Table className="min-w-max w-full">
+      <TableHeader>
+        {table.getHeaderGroups().map((headerGroup) => (
+          <TableRow key={headerGroup.id} className="bg-gray-800">
+            {headerGroup.headers.map((header) => (
+              <TableHead key={header.id} className="px-2 py-3 text-xs sm:text-sm">
+                {flexRender(header.column.columnDef.header, header.getContext())}
+              </TableHead>
             ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows.map(row => (
-              <TableRow key={row.id}>
-                {row.getVisibleCells().map(cell => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                ))}
-              </TableRow>
+          </TableRow>
+        ))}
+      </TableHeader>
+      <TableBody>
+        {table.getRowModel().rows.map((row) => (
+          <TableRow key={row.id} className="text-xs sm:text-sm">
+            {row.getVisibleCells().map((cell) => (
+              <TableCell key={cell.id} className="px-2 py-2 whitespace-nowrap">
+                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+              </TableCell>
             ))}
-          </TableBody>
-        </Table>
-      </div>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  </div>
 
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          Précédent
-        </Button>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          Suivant
-        </Button>
-      </div>
-    </div>
+  <div className="flex items-center justify-between space-x-2 py-4 text-xs sm:text-sm">
+    <Button
+      variant="outline"
+      size="sm"
+      onClick={() => table.previousPage()}
+      disabled={!table.getCanPreviousPage()}
+    >
+      Précédent
+    </Button>
+    <Button
+      variant="outline"
+      size="sm"
+      onClick={() => table.nextPage()}
+      disabled={!table.getCanNextPage()}
+    >
+      Suivant
+    </Button>
+  </div>
+</div>
   );
 }
