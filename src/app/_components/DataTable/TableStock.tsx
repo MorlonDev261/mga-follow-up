@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { parseSearchQuery, createSearchIndex, filterData } from "@/lib/searchUtils";
 
 type Product = {
   id: string;
@@ -31,6 +32,8 @@ type Product = {
   comments: string;
   amount: number;
   total?: number;
+  dateObject?: Date;
+  _search?: string;
 };
 
 type GroupedProduct = Product & { Qte: number; total: number };
@@ -50,7 +53,11 @@ export default function TableStock() {
       try {
         const response = await fetch('/api/stock');
         const data = await response.json();
-        setData(data);
+        const enrichedData = data.map((product: Product) => ({
+          ...product,
+          dateObject: new Date(product.date)
+        }));
+        setData(enrichedData);
       } catch (err) {
         setError("Erreur lors du chargement des données");
         console.error("Erreur lors de la récupération des données :", err);
@@ -77,6 +84,16 @@ export default function TableStock() {
     );
   }, [data]);
 
+  // Create search index
+  const searchIndex = useMemo(() => 
+    createSearchIndex(grouped ? groupedData : data, [
+      'designation', 
+      'comments', 
+      'date'
+    ]), 
+    [data, groupedData, grouped]
+  );
+
   // Get URL params
   const filterIdProduct = searchParams.get("idProduct");
   const filterDate = searchParams.get("date");
@@ -85,6 +102,7 @@ export default function TableStock() {
   const filteredData = useMemo(() => {
     let result = grouped ? groupedData : data;
 
+    // Filtrage initial par paramètres URL
     if (filterIdProduct && filterDate) {
       result = result.filter(p => 
         p.idProduct === filterIdProduct && 
@@ -94,67 +112,66 @@ export default function TableStock() {
       result = result.filter(p => p.idProduct === filterIdProduct);
     }
 
-    return result.filter(p => {
-      const searchLower = search.toLowerCase();
-      return (
-        p.date.includes(searchLower) ||
-        p.designation.toLowerCase().includes(searchLower) ||
-        (!grouped && p.comments.toLowerCase().includes(searchLower))
-      );
-    });
+    // Filtrage par recherche
+    if (search) {
+      const conditions = parseSearchQuery(search);
+      result = filterData(result, conditions);
+    }
+
+    return result;
   }, [data, groupedData, grouped, filterIdProduct, filterDate, search]);
 
   // Columns configuration
   const columns = useMemo<ColumnDef<Product | GroupedProduct>[]>(
-  () => [
-    { accessorKey: "date", header: "Date" },
-    { accessorKey: "designation", header: "Designation" },
-    { 
-      accessorKey: grouped ? "Qte" : "comments", 
-      header: grouped ? "Qte" : "Comments" 
-    },
-    { 
-      accessorKey: "amount", 
-      header: "Price", 
-      cell: ({ row }: { row: Row<Product | GroupedProduct> }) => (
-        <div className="text-right">{row.getValue("amount")}</div>
-      ),
-    },
-    ...(grouped ? [{
-      accessorKey: "total",
-      header: "Total",
-      cell: ({ row }: { row: Row<Product | GroupedProduct> }) => (
-        <div className="text-right">{row.getValue("total")}</div>
-      ),
-    }] : []),
-    {
-      id: "actions",
-      cell: ({ row }: { row: Row<Product | GroupedProduct> }) => (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => {
-                const params = new URLSearchParams();
-                params.set("idProduct", row.original.idProduct);
-                params.set("date", row.original.date);
-                router.push(`?${params.toString()}`);
-              }}
-            >
-              Voir le produit
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      ),
-    },
-  ],
-  [grouped, router]
-);
+    () => [
+      { accessorKey: "date", header: "Date" },
+      { accessorKey: "designation", header: "Designation" },
+      { 
+        accessorKey: grouped ? "Qte" : "comments", 
+        header: grouped ? "Qte" : "Comments" 
+      },
+      { 
+        accessorKey: "amount", 
+        header: "Price", 
+        cell: ({ row }: { row: Row<Product | GroupedProduct> }) => (
+          <div className="text-right">{row.getValue("amount")}</div>
+        ),
+      },
+      ...(grouped ? [{
+        accessorKey: "total",
+        header: "Total",
+        cell: ({ row }: { row: Row<Product | GroupedProduct> }) => (
+          <div className="text-right">{row.getValue("total")}</div>
+        ),
+      }] : []),
+      {
+        id: "actions",
+        cell: ({ row }: { row: Row<Product | GroupedProduct> }) => (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem
+                onClick={() => {
+                  const params = new URLSearchParams();
+                  params.set("idProduct", row.original.idProduct);
+                  params.set("date", row.original.date);
+                  router.push(`?${params.toString()}`);
+                }}
+              >
+                Voir le produit
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ),
+      },
+    ],
+    [grouped, router]
+  );
 
   const table = useReactTable({
     data: filteredData,
