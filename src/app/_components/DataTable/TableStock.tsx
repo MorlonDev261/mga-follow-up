@@ -163,9 +163,6 @@ export default function TableStock() {
     getPaginationRowModel: getPaginationRowModel(),
   });
 
-  if (loading) return <div className="p-4 text-center">Chargement...</div>;
-  if (error) return <div className="p-4 text-center text-red-500">{error}</div>;
-
   return (
     <div className="w-full bg-[#111] p-4">
   <div className="flex flex-wrap items-center py-4 gap-2">
