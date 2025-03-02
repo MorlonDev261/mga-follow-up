@@ -89,27 +89,19 @@ export function createSearchIndex<T extends Product>(data: T[], keys: (keyof T)[
 /**
  * Filtre les données selon les conditions de recherche
  */
-export function filterData<T extends { _search: string; dateObject: Date }>(
-  data: T[],
-  conditions: SearchConditions
-): T[] {
+export function filterData(data: Product[], conditions: SearchConditions): Product[] {
   const { dateFilters, textTerms } = conditions;
 
   return data.filter(item => {
-    // Vérification des dates
     const dateMatch = dateFilters.length === 0 || dateFilters.some(filterDate => {
-      const itemDate = item.dateObject;
-      if (!itemDate) return false; // Évite les erreurs si `dateObject` est `undefined`
-      return (
-        format(filterDate, 'yyyy-MM-dd') === format(itemDate, 'yyyy-MM-dd') ||
-        format(filterDate, 'yyyy-MM') === format(itemDate, 'yyyy-MM') ||
-        format(filterDate, 'yyyy') === format(itemDate, 'yyyy')
-      );
+      return item.dateObject 
+        ? format(filterDate, 'yyyy-MM-dd') === format(item.dateObject, 'yyyy-MM-dd')
+        : false;
     });
 
-    // Vérification du texte
-    const textMatch = textTerms.length === 0 || 
-      textTerms.every(term => item._search.includes(term));
+    const textMatch = textTerms.length === 0 || textTerms.every(term => 
+      item._search ? item._search.includes(term) : false
+    );
 
     return dateMatch && textMatch;
   });
