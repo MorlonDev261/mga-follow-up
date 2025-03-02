@@ -13,7 +13,7 @@ type HeaderProps = {
   children?: ReactNode;
 };
 
-export default function Header({ children? }: HeaderProps) {
+export default function Header({ children }: HeaderProps) {
   const pathname = usePathname();
   const { push } = useRouter();
 
