@@ -91,7 +91,7 @@ export default function TableStock() {
       'comments', 
       'date'
     ]), 
-    [data, groupedData, grouped
+    [data, groupedData, grouped]
   );
 
   // Get URL params
