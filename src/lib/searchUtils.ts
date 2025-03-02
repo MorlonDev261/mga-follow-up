@@ -1,5 +1,6 @@
 import { parse, isValid, format } from 'date-fns';
 import { fr } from 'date-fns/locale';
+import type { Product } from "@/app/_components/DataTable/TableStock";
 
 type SearchConditions = {
   dateFilters: Date[];
