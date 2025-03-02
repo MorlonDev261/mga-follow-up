@@ -1,6 +1,8 @@
 import TableStock from "@components/DataTable/TableStock";
 
 export default function MyComponent() {
+  const inStock = false;
+  
   return (
     <>
       <h3>Arrival 20 March 2025</h3>
