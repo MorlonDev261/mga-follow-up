@@ -86,6 +86,7 @@ export function filterData<T extends { _search: string; dateObject: Date }>(
     // Vérification des dates
     const dateMatch = dateFilters.length === 0 || dateFilters.some(filterDate => {
       const itemDate = item.dateObject;
+      if (!itemDate) return false; // Évite les erreurs si `dateObject` est `undefined`
       return (
         format(filterDate, 'yyyy-MM-dd') === format(itemDate, 'yyyy-MM-dd') ||
         format(filterDate, 'yyyy-MM') === format(itemDate, 'yyyy-MM') ||
