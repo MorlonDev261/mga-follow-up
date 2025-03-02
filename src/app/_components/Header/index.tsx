@@ -6,8 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { FaRegEnvelope } from "react-icons/fa6";
-import { FiBell, FiSearch } from "react-icons/fi";
-import { LuScanLine } from "react-icons/lu";
+import { FiBell } from "react-icons/fi";
 
 type HeaderProps = {
   children?: ReactNode;
@@ -64,8 +63,12 @@ export default function Header({ children }: HeaderProps) {
 
         {/* Notifications & Messages */}
         <div className="flex items-center gap-4">
-          <FaRegEnvelope className="text-xl" />
-          <FiBell className="text-xl" />
+          <Link href="/messages">
+            <FaRegEnvelope className="text-xl" />
+          </Link>
+          <Link href="/notifications">
+            <FiBell className="text-xl" />
+          </Link>
         </div>
       </div>
 
