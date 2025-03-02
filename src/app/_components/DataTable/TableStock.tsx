@@ -4,7 +4,6 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   ColumnDef,
-  Row,
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
@@ -53,6 +52,7 @@ export default function TableStock() {
         setData(data);
       } catch (err) {
         setError("Erreur lors du chargement des données");
+        console.error("Erreur lors de la récupération des données :", err);
       } finally {
         setLoading(false);
       }
@@ -82,26 +82,26 @@ export default function TableStock() {
 
   // Filtered data
   const filteredData = useMemo(() => {
-  let result = grouped ? groupedData : data;
+    let result = grouped ? groupedData : data;
 
-  if (filterIdProduct && filterDate) {
-    result = result.filter(p => 
-      p.idProduct === filterIdProduct && 
-      p.date === filterDate
-    );
-  } else if (filterIdProduct) {
-    result = result.filter(p => p.idProduct === filterIdProduct);
-  }
+    if (filterIdProduct && filterDate) {
+      result = result.filter(p => 
+        p.idProduct === filterIdProduct && 
+        p.date === filterDate
+      );
+    } else if (filterIdProduct) {
+      result = result.filter(p => p.idProduct === filterIdProduct);
+    }
 
-  return result.filter(p => {
-    const searchLower = search.toLowerCase();
-    return (
-      p.date.includes(searchLower) ||
-      p.designation.toLowerCase().includes(searchLower) ||
-      (!grouped && p.comments.toLowerCase().includes(searchLower))
-    );
-  });
-}, [data, groupedData, grouped, filterIdProduct, filterDate, search]);
+    return result.filter(p => {
+      const searchLower = search.toLowerCase();
+      return (
+        p.date.includes(searchLower) ||
+        p.designation.toLowerCase().includes(searchLower) ||
+        (!grouped && p.comments.toLowerCase().includes(searchLower))
+      );
+    });
+  }, [data, groupedData, grouped, filterIdProduct, filterDate, search]);
 
   // Columns configuration
   const columns = useMemo<ColumnDef<Product | GroupedProduct>[]>(
