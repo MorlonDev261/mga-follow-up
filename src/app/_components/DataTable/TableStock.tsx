@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   ColumnDef,
+  Row,
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
@@ -120,7 +121,7 @@ export default function TableStock() {
       ...(grouped ? [{
         accessorKey: "total",
         header: "Total",
-        cell: ({ row }) => <div className="text-right">{row.getValue("total")}</div>
+        cell: ({ row }: { row: Row<Product | GroupedProduct> }) => <div className="text-right">{row.getValue("total")}</div>
       }] : []),
       {
         id: "actions",
