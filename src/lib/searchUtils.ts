@@ -69,9 +69,8 @@ export function createSearchIndex(data: Product[], keys: (keyof Product)[]): Pro
       .join(' ')
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, ''),
-  }));
+  })) as Product[]; // Cast explicite en Product[]
 }
-
 
 /**
  * Filtre les données selon les conditions de recherche
