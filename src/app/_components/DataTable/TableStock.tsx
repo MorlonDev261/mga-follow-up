@@ -95,7 +95,7 @@ function parseDateTerm(term: string) {
 
       if (format.parts) {
         const parts = match.slice(1);
-        const result: any = {};
+        const result: Record<string, string> = {};
         format.parts.forEach((part, index) => {
           if (part === 'day-or-month') {
             const value = parts[index].padStart(2, '0');
@@ -181,7 +181,7 @@ export default function TableStock() {
     }
 
     const searchTerms = search.toLowerCase().split(/\s+/);
-    const dateConditions: any[] = [];
+    const dateConditions: Record<string, string>[] = [];
     const textTerms: string[] = [];
 
     searchTerms.forEach(term => {
