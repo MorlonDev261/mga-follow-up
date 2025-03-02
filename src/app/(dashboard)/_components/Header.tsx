@@ -1,5 +1,6 @@
 "use client";
 
+import { ReactNode } from "react"
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -8,7 +9,11 @@ import { FaRegEnvelope } from "react-icons/fa6";
 import { FiBell, FiSearch } from "react-icons/fi";
 import { LuScanLine } from "react-icons/lu";
 
-export default function Header() {
+type HeaderProps = {
+  children?: ReactNode;
+};
+
+export default function Header({ children? }: HeaderProps) {
   const pathname = usePathname();
   const { push } = useRouter();
 
@@ -65,19 +70,7 @@ export default function Header() {
       </div>
 
       {/* Search & Scan */}
-      <div className="mt-2 flex items-center gap-2">
-        <div className="relative w-full">
-          <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-          <input
-            type="search"
-            placeholder="Recherche..."
-            className="w-full rounded-full bg-[#222] py-1 pl-10 pr-4 outline-none"
-          />
-        </div>
-        <Link href="/scan">
-          <LuScanLine className="text-2xl" />
-        </Link>
-      </div>
+      {children}
     </header>
   );
 }
