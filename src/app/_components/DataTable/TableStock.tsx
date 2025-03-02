@@ -100,26 +100,21 @@ export default function TableStock() {
 
   // Filtered data
   const filteredData = useMemo(() => {
-    let result = grouped ? groupedData : data;
+  let result = grouped ? groupedData : data;
 
-    // Filtrage initial par paramètres URL
-    if (filterIdProduct && filterDate) {
-      result = result.filter(p => 
-        p.idProduct === filterIdProduct && 
-        p.date === filterDate
-      );
-    } else if (filterIdProduct) {
-      result = result.filter(p => p.idProduct === filterIdProduct);
-    }
+  if (filterIdProduct && filterDate) {
+    result = result.filter(p => p.idProduct === filterIdProduct && p.date === filterDate);
+  } else if (filterIdProduct) {
+    result = result.filter(p => p.idProduct === filterIdProduct);
+  }
 
-    // Filtrage par recherche
-    if (search) {
-      const conditions = parseSearchQuery(search);
-      result = filterData(searchableData, conditions); // Utilisation de searchableData
-    }
+  if (search) {
+    const conditions = parseSearchQuery(search);
+    result = filterData(searchableData as Product[], conditions); // Cast en Product[]
+  }
 
-    return result;
-  }, [data, groupedData, grouped, filterIdProduct, filterDate, search, searchableData]);
+  return result;
+}, [data, groupedData, grouped, filterIdProduct, filterDate, search, searchableData]);
 
   // Columns configuration
   const columns = useMemo<ColumnDef<Product | GroupedProduct>[]>(
