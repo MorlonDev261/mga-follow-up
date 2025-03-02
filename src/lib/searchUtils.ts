@@ -61,19 +61,17 @@ export function parseSearchQuery(searchInput: string): SearchConditions {
 /**
  * Crée un index de recherche pour des données
  */
-export function createSearchIndex<T extends Record<string, unknown>>(
-  data: T[], 
-  keys: (keyof T)[]
-): (T & { _search: string })[] {
+export function createSearchIndex(data: Product[], keys: (keyof Product)[]): Product[] {
   return data.map(item => ({
     ...item,
     _search: keys
-      .map(k => item[k]?.toString().toLowerCase() || '') // <-- Plus de 'any'
+      .map(k => item[k]?.toString().toLowerCase() || '')
       .join(' ')
       .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[\u0300-\u036f]/g, ''),
   }));
 }
+
 
 /**
  * Filtre les données selon les conditions de recherche
