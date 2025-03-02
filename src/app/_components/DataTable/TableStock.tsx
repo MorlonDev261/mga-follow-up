@@ -106,51 +106,55 @@ export default function TableStock() {
 
   // Columns configuration
   const columns = useMemo<ColumnDef<Product | GroupedProduct>[]>(
-    () => [
-      { accessorKey: "date", header: "Date" },
-      { accessorKey: "designation", header: "Designation" },
-      { 
-        accessorKey: grouped ? "Qte" : "comments", 
-        header: grouped ? "Qte" : "Comments" 
-      },
-      { 
-        accessorKey: "amount", 
-        header: "Price", 
-        cell: ({ row }) => <div className="text-right">{row.getValue("amount")}</div>
-      },
-      ...(grouped ? [{
-        accessorKey: "total",
-        header: "Total",
-        cell: ({ row }: { row: Row<Product | GroupedProduct> }) => <div className="text-right">{row.getValue("total")}</div>
-      }] : []),
-      {
-        id: "actions",
-        cell: ({ row }) => (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem
-                onClick={() => {
-                  const params = new URLSearchParams();
-                  params.set("idProduct", row.original.idProduct);
-                  params.set("date", row.original.date);
-                  router.push(`?${params.toString()}`);
-                }}
-              >
-                Voir le produit
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        ),
-      },
-    ],
-    [grouped, router]
-  );
+  () => [
+    { accessorKey: "date", header: "Date" },
+    { accessorKey: "designation", header: "Designation" },
+    { 
+      accessorKey: grouped ? "Qte" : "comments", 
+      header: grouped ? "Qte" : "Comments" 
+    },
+    { 
+      accessorKey: "amount", 
+      header: "Price", 
+      cell: ({ row }: { row: Row<Product | GroupedProduct> }) => (
+        <div className="text-right">{row.getValue("amount")}</div>
+      ),
+    },
+    ...(grouped ? [{
+      accessorKey: "total",
+      header: "Total",
+      cell: ({ row }: { row: Row<Product | GroupedProduct> }) => (
+        <div className="text-right">{row.getValue("total")}</div>
+      ),
+    }] : []),
+    {
+      id: "actions",
+      cell: ({ row }: { row: Row<Product | GroupedProduct> }) => (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem
+              onClick={() => {
+                const params = new URLSearchParams();
+                params.set("idProduct", row.original.idProduct);
+                params.set("date", row.original.date);
+                router.push(`?${params.toString()}`);
+              }}
+            >
+              Voir le produit
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      ),
+    },
+  ],
+  [grouped, router]
+);
 
   const table = useReactTable({
     data: filteredData,
