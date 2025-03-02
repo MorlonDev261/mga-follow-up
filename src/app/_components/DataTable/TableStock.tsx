@@ -85,13 +85,13 @@ export default function TableStock() {
   }, [data]);
 
   // Create search index
-  const searchIndex = useMemo(() => 
+  const searchableData = useMemo(() => 
     createSearchIndex(grouped ? groupedData : data, [
       'designation', 
       'comments', 
       'date'
     ]), 
-    [data, groupedData, grouped]
+    [data, groupedData, grouped
   );
 
   // Get URL params
@@ -115,11 +115,11 @@ export default function TableStock() {
     // Filtrage par recherche
     if (search) {
       const conditions = parseSearchQuery(search);
-      result = filterData(result, conditions);
+      result = filterData(searchableData, conditions); // Utilisation de searchableData
     }
 
     return result;
-  }, [data, groupedData, grouped, filterIdProduct, filterDate, search]);
+  }, [data, groupedData, grouped, filterIdProduct, filterDate, search, searchableData]);
 
   // Columns configuration
   const columns = useMemo<ColumnDef<Product | GroupedProduct>[]>(
