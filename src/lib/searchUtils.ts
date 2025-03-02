@@ -61,14 +61,17 @@ export function parseSearchQuery(searchInput: string): SearchConditions {
 /**
  * Crée un index de recherche pour des données
  */
-export function createSearchIndex<T>(data: T[], keys: string[]): (T & { _search: string })[] {
+export function createSearchIndex<T extends Record<string, unknown>>(
+  data: T[], 
+  keys: (keyof T)[]
+): (T & { _search: string })[] {
   return data.map(item => ({
     ...item,
     _search: keys
-      .map(k => (item as any)[k]?.toString().toLowerCase() || '')
+      .map(k => item[k]?.toString().toLowerCase() || '') // <-- Plus de 'any'
       .join(' ')
       .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '') // Supprime les accents
+      .replace(/[\u0300-\u036f]/g, '')
   }));
 }
 
