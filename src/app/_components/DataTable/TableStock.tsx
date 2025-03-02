@@ -82,25 +82,26 @@ export default function TableStock() {
 
   // Filtered data
   const filteredData = useMemo(() => {
-    let result = grouped ? groupedData : data;
+  let result = grouped ? groupedData : data;
 
-    if (filterIdProduct && filterDate) {
-      result = result.filter(p => 
-        p.idProduct === filterIdProduct && 
-        p.date === filterDate
-      );
-    } else if (filterIdProduct) {
-      result = result.filter(p => p.idProduct === filterIdProduct);
-    }
+  if (filterIdProduct && filterDate) {
+    result = result.filter(p => 
+      p.idProduct === filterIdProduct && 
+      p.date === filterDate
+    );
+  } else if (filterIdProduct) {
+    result = result.filter(p => p.idProduct === filterIdProduct);
+  }
 
-    return result.filter(p => {
-      const searchLower = search.toLowerCase();
-      return (
-        p.date.includes(searchLower) ||
-        p.designation.toLowerCase().includes(searchLower) ||
-        (!grouped && p.comments.toLowerCase().includes(searchLower))
-    });
-  }, [data, groupedData, grouped, filterIdProduct, filterDate, search]);
+  return result.filter(p => {
+    const searchLower = search.toLowerCase();
+    return (
+      p.date.includes(searchLower) ||
+      p.designation.toLowerCase().includes(searchLower) ||
+      (!grouped && p.comments.toLowerCase().includes(searchLower))
+    );
+  });
+}, [data, groupedData, grouped, filterIdProduct, filterDate, search]);
 
   // Columns configuration
   const columns = useMemo<ColumnDef<Product | GroupedProduct>[]>(
