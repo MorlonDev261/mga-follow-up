@@ -4,7 +4,6 @@ import * as React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
   ColumnDef,
-  Row,
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
