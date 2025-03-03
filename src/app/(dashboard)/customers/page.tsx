@@ -8,7 +8,7 @@ export default function MyComponent() {
   const customers = 12;
   
   return (
-    <div className={cn(customers <= 0 && "bg-[#111]")}>
+    <main className={cn("p-2", customers <= 0 && "bg-[#111]")}>
       <div className="px-2 bg-[#111]">
         <Balance 
           title={<><FaUsers /> List of Customers</>} 
@@ -24,7 +24,7 @@ export default function MyComponent() {
         </Balance>
       </div>
       {customers > 0 ?
-        <div className="w-full h-[100%] mt-2 flex items-center justify-center flex-col bg-[#111]">
+        <div className="mt-2 bg-[#111]">
           <Suspense fallback={<div>Loading...</div>}>
             <Customers />
           </Suspense> 
@@ -37,6 +37,6 @@ export default function MyComponent() {
           </div>
         </div>
       }
-    </div>
+    </main>
   );
 }
