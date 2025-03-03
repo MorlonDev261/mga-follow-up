@@ -1,3 +1,4 @@
+import React from "react";
 import TableStock from "@components/DataTable/TableStock";
 
 export default function MyComponent() {
