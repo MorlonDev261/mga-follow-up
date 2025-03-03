@@ -3,16 +3,16 @@ import { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 interface BalanceProps {
-  title: ReactNode;
+  title?: ReactNode;
   titleColor?: string;
   titleSize?: string;
-  subtitle: ReactNode;
+  subtitle?: ReactNode;
   subtitleColor?: string;
   subtitleSize?: string;
-  balance: ReactNode;
+  balance?: ReactNode;
   balanceColor?: string;
   balanceSize?: string
-  children: ReactNode;
+  children?: ReactNode;
 }
 
 export default function Balance({ title, titleColor, titleSize, balance, balanceColor, balanceSize, subtitle, subtitleColor, subtitleSize, children }: BalanceProps) {
