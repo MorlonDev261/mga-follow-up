@@ -1,19 +1,24 @@
 import React, { Suspense } from "react";
 import TableStock from "@components/DataTable/TableStock";
-import { FaPlus } from "react-icons/fa";
+import { FaPlus, FaUsers } from "react-icons/fa";
 
 export default function MyComponent() {
-  const pending = true;
+  const customers = 0;
   
   return (
     <>
       <div className="px-2 bg-[#111]">
-        <h2 className="text-lg">List of Customers</h2>
-        {customers &&
-          <h3 className="text-blue-500">250 Customers now.</h3>
-        }
+        <Balance 
+          title={<><FaUsers /> List of Customers</>} 
+          subtitle=""
+          balance={customers > 0 ? "26 customers now." : "No customer registered."}
+        >
+          <button className="flex items-center justify-center gap-1 rounded bg-blue-500 px-2 py-1 text-sm text-white">
+            <FaPlus /> New customer
+          </button>
+        </Balance>
       </div>
-      {customers ?
+      {customers > 0 ?
         <Suspense fallback={<div>Loading...</div>}>
           <TableStock />
         </Suspense> :
