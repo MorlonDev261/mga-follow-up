@@ -12,12 +12,14 @@ export default function MyComponent() {
         <Balance 
           title={<><FaUsers /> List of Customers</>} 
           subtitle={customers > 0 ? "26 customers now." : "No customer registered."}
-          subtitleSize="text-lg"
-          subtitleColor="text-green-500 hover:text-green-600"
+          subtitleSize="text-xl"
+          subtitleColor="text-green-500"
         >
-          <button className="flex items-center justify-center gap-1 rounded bg-blue-500 hover:text-blue-600 px-2 py-1 text-sm text-white">
-            <FaPlus /> New customer
-          </button>
+          {customers > 0 &&
+            <button className="flex items-center justify-center gap-1 rounded bg-blue-500 hover:bg-blue-600 px-2 py-1 text-sm text-white">
+              <FaPlus /> New customer
+            </button>
+          }
         </Balance>
       </div>
       {customers > 0 ?
