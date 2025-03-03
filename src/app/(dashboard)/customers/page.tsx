@@ -7,36 +7,8 @@ export default function MyComponent() {
   const customers = 0;
   
   return (
-    <div className="h-screen">
-      <div className="p-2 bg-[#111]">
-        <Balance 
-          title={<><FaUsers /> List of Customers</>} 
-          subtitle={customers > 0 ? "26 customers now." : "No customer registered."}
-          subtitleSize="text-xl"
-          subtitleColor="text-green-500"
-        >
-          {customers > 0 &&
-            <button className="flex items-center justify-center gap-1 rounded bg-blue-500 hover:bg-blue-600 px-2 py-1 text-sm text-white">
-              <FaPlus /> New customer
-            </button>
-          }
-        </Balance>
-      </div>
-      {customers > 0 ?
-        <div className="mt-2 bg-[#111] w-full h-[100%]">
-          <Suspense fallback={<div>Loading...</div>}>
-          <TableStock />
-        import React, { Suspense } from "react";
-import TableStock from "@components/DataTable/TableStock";
-import Balance from "@components/Balance";
-import { FaPlus, FaUsers } from "react-icons/fa";
-
-export default function MyComponent() {
-  const customers = 0;
-  
-  return (
-    <>
-      <div className={cn("px-2", customers <= 0 && "bg-[#111]")}>
+    <div className={customers <= 0 && "bg-[#111]")}>
+      <div className="px-2 bg-[#111]">
         <Balance 
           title={<><FaUsers /> List of Customers</>} 
           subtitle={customers > 0 ? "26 customers now." : "No customer registered."}
