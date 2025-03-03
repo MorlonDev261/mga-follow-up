@@ -7,7 +7,7 @@ export default function MyComponent() {
   const customers = 0;
   
   return (
-    <>
+    <div className="h-screen">
       <div className="px-2 bg-[#111]">
         <Balance 
           title={<><FaUsers /> List of Customers</>} 
@@ -31,6 +31,6 @@ export default function MyComponent() {
           <button className="px-4 flex items-center gap-2 py-2 bg-green-500 hover:bg-green-600"><FaPlus /> Add First Customer</button>
         </div>
       }
-    </>
+    </div>
   );
 }
