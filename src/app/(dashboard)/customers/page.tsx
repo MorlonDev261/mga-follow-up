@@ -8,7 +8,7 @@ export default function MyComponent() {
   const customers = 12;
   
   return (
-    <main className={cn("p-2", customers <= 0 && "bg-[#111]")}>
+    <main className={customers <= 0 && "bg-[#111]")}>
       <div className="px-2 bg-[#111]">
         <Balance 
           title={<><FaUsers /> List of Customers</>} 
