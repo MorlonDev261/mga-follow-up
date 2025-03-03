@@ -150,7 +150,7 @@ export default function DataTableDemo() {
   })
 
   return (
-    <div className="w-full">
+    <div className="w-full px-4 bg-[#111]">
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter name..."
