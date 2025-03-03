@@ -5,7 +5,7 @@ import { FaPlus, FaUsers } from "react-icons/fa";
 import { cn } from "@/lib/utils";
 
 export default function MyComponent() {
-  const customers = 0;
+  const customers = 12;
   
   return (
     <div className={cn(customers <= 0 && "bg-[#111]")}>
