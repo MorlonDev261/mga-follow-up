@@ -1,5 +1,6 @@
 import React, { Suspense } from "react";
 import TableStock from "@components/DataTable/TableStock";
+import Balance from "@components/Balance";
 import { FaPlus, FaUsers } from "react-icons/fa";
 
 export default function MyComponent() {
