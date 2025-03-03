@@ -26,7 +26,7 @@ export default function MyComponent() {
         <Suspense fallback={<div>Loading...</div>}>
           <TableStock />
         </Suspense> :
-        <div className="w-full h-full flex items-center justify-center flex-col bg-[#111]">
+        <div className="w-full h-full mt-5 flex items-center justify-center flex-col bg-[#111]">
           <p>There is no customer. please add your customer !</p>
           <button className="px-4 flex gap-1 py-2 bg-green-500 hover:bg-green-600"><FaPlus /> Add First Customer</button>
         </div>
