@@ -24,7 +24,7 @@ export default function MyComponent() {
         </Balance>
       </div>
       {customers > 0 ?
-        <div className="mt-2 bg-[#111]">
+        <div className="pt-2 bg-[#111]">
           <Suspense fallback={<div>Loading...</div>}>
             <Customers />
           </Suspense> 
