@@ -2,12 +2,13 @@ import React, { Suspense } from "react";
 import TableStock from "@components/DataTable/TableStock";
 import Balance from "@components/Balance";
 import { FaPlus, FaUsers } from "react-icons/fa";
+import { cn } from "@/lib/utils";
 
 export default function MyComponent() {
   const customers = 0;
   
   return (
-    <div className={customers <= 0 && "bg-[#111]")}>
+    <div className={cn(customers <= 0 && "bg-[#111]")}>
       <div className="px-2 bg-[#111]">
         <Balance 
           title={<><FaUsers /> List of Customers</>} 
