@@ -16,6 +16,6 @@ export default function MyComponent() {
       <Suspense>
         <TableStock />
       </Suspense>
-    <main/>
+    </main>
   );
 }
