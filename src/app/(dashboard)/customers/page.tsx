@@ -21,6 +21,7 @@ export default function MyComponent() {
           <p>There is no customer. please add your customer !</p>
           <button className="px-4 py-2 bg-green-500 hover:bg-green-600"><FaPlus /> Add First Customer</button>
         </div>
+      }
     </>
   );
 }
