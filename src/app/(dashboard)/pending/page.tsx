@@ -1,4 +1,4 @@
-import React from "react";
+import React { Suspense } from "react";
 import TableStock from "@components/DataTable/TableStock";
 
 export default function MyComponent() {
@@ -14,7 +14,9 @@ export default function MyComponent() {
           <p className="text-green-500">Out of Stock</p>
         }
       </div>
-      <TableStock />
+      <Suspense fallback={<div>Loading...</div>}>
+        <TableStock />
+      </Suspense>
     </>
   );
 }
