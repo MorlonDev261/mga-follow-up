@@ -71,7 +71,7 @@ export const columns: ColumnDef<Payment>[] = [
     },
   },
   {
-    accessorKey: "fullname",
+    accessorKey: "fullName",
     header: "Full Name",
     cell: ({ row }) => <div className="lowercase">{row.getValue("fullName")}</div>,
   },
@@ -82,13 +82,13 @@ export const columns: ColumnDef<Payment>[] = [
   },
   {
     accessorKey: "deal",
-    header: () => <div className="bg-green-500 text-white">Deal</div>,
-    cell: ({ row }) => <div className="lowercase">{row.getValue("deal")}</div>,
+    header: () => <div className="text-center">Deal</div>,
+    cell: ({ row }) => <div className="text-center">{row.getValue("deal")}</div>,
   },
   {
-    accessorKey: "deal",
-    header: () => <div className="text-center bg-yellow-500 text-white">Pending</div>,
-    cell: ({ row }) => <div className="lowercase text-yellow-500">{row.getValue("pending")}</div>,
+    accessorKey: "pending",
+    header: () => <div className="text-center">Pending</div>,
+    cell: ({ row }) => <div className="text-center">{row.getValue("pending")}</div>,
   },
   {
     id: "actions",
