@@ -1,5 +1,5 @@
 import React, { Suspense } from "react";
-import TableStock from "@components/DataTable/TableStock";
+import Pending from "@components/Table/Pending";
 
 export default function MyComponent() {
   const pending = true;
@@ -14,7 +14,7 @@ export default function MyComponent() {
         }
       </div>
       <Suspense>
-        <TableStock />
+        <Pending />
       </Suspense>
     </main>
   );
