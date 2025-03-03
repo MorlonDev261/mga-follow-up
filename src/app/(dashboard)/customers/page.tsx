@@ -1,5 +1,5 @@
 import React, { Suspense } from "react";
-import TableStock from "@components/DataTable/TableStock";
+import Customers from "@components/Table/Customers";
 import Balance from "@components/Balance";
 import { FaPlus, FaUsers } from "react-icons/fa";
 import { cn } from "@/lib/utils";
@@ -12,7 +12,7 @@ export default function MyComponent() {
       <div className="px-2 bg-[#111]">
         <Balance 
           title={<><FaUsers /> List of Customers</>} 
-          subtitle={customers > 0 ? "26 customers now." : "No customer registered."}
+          subtitle={customers > 0 ? "You have 26 customers now." : "No customer registered."}
           subtitleSize="text-xl"
           subtitleColor="text-green-500"
         >
@@ -26,7 +26,7 @@ export default function MyComponent() {
       {customers > 0 ?
         <div className="w-full h-[100%] mt-2 flex items-center justify-center flex-col bg-[#111]">
           <Suspense fallback={<div>Loading...</div>}>
-            <TableStock />
+            <Customers />
           </Suspense> 
         </div>
         :
