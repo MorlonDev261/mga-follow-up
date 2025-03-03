@@ -12,9 +12,7 @@ export default function MyComponent() {
       <div className="px-2 bg-[#111]">
         <Balance 
           title={<><FaUsers /> List of Customers</>} 
-          subtitle={customers > 0 ? "You have 26 customers now." : "No customer registered."}
-          subtitleSize="text-xl"
-          subtitleColor="text-green-500"
+          balance={customers > 0 ? `You have ${customers} customers now.` : "No customer registered."}
         >
           {customers > 0 &&
             <button className="flex items-center justify-center gap-1 rounded bg-blue-500 hover:bg-blue-600 px-2 py-1 text-sm text-white">
