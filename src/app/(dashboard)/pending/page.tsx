@@ -7,7 +7,7 @@ export default function MyComponent() {
   return (
     <>
       <div className="px-2 bg-[#111]">
-        <h2>Arrival 20 March 2025</h2>
+        <h2 className="text-lg">Pending payment</h2>
         <h3 className="text-blue-500">Total : <span className="text-bold">25pcs</span></h3>
         {inStock ? 
           <p className="text-yello-500">Remaining : <span className="text-bold">5pcs</span></p> : 
