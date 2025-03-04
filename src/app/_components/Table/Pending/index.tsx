@@ -81,12 +81,12 @@ export default function DataTable() {
     {
       accessorKey: "customer",
       header: "Customer",
-      cell: ({ row }) => <div className="lowercase">{row.getValue("customer")}</div>,
+      cell: ({ row }) => <div>{row.getValue("customer")}</div>,
     },
     {
       accessorKey: "designation",
       header: "Designation",
-      cell: ({ row }) => <div className="lowercase">{row.getValue("designation")}</div>,
+      cell: ({ row }) => <div>{row.getValue("designation")}</div>,
     },
     {
       accessorKey: "price",
