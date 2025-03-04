@@ -18,8 +18,8 @@ type Payment = {
 }
 
 export default function DataTableDemo() {
-  const [data, setData] = useState<Payment[]>([])
-  const [loading, setLoading] = useState(true)
+  const [data, setData] = React.useState<Payment[]>([])
+  const [loading, setLoading] = React.useState(true)
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
@@ -44,7 +44,7 @@ export default function DataTableDemo() {
   }
 
   // Récupération des données depuis l'API
-  useEffect(() => {
+  React.useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch("/api/pending")
