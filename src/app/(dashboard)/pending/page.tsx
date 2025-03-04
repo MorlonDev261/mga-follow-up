@@ -14,15 +14,14 @@ export default function MyComponent() {
       <div className="px-2 bg-[#111]">
         <Balance 
           title={<><FiClock /> Pending Payement</>} 
-          balance={pending > 0 ? `${totalPending} Ar.` : "No pending payement added."}
-          balanceSize="text-md"
+          balance={<>pending > 0 ? <Counter end={totalPending} duration={0.8} /> Ar. : "No pending payement added."</>}
           balanceColor="text-yellow-500 hover:text-yellow-600"
           subtitle="25 customers have pending payments."
           subtitleSize="text-sm"
         >
           {pending > 0 &&
-            <button className="flex items-center gap-1 rounded bg-red-500 hover:bg-red-600 px-2 py-1 text-sm text-white">
-              <FaPlus /> New expense
+            <button className="flex items-center gap-1 rounded bg-yellow-500 hover:bg-yellow-600 px-2 py-1 text-sm text-white">
+              <FaPlus /> New unpaid purchase
             </button>
           }
         </Balance>
