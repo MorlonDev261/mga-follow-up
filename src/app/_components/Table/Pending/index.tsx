@@ -14,8 +14,7 @@ type Payment = {
   date: string
   customer: string
   designation: string
-  deal: number
-  pending: number
+  price: number
 } & { Qte?: number; sum?: number }
 
 // Fonction pour regrouper les données par customer
@@ -96,9 +95,9 @@ export default function DataTableDemo() {
   ...(show
     ? [
         {
-          accessorKey: "pending",
+          accessorKey: "price",
           header: "Price",
-          cell: ({ row }) => <div className="text-center">{row.getValue("pending")}</div>,
+          cell: ({ row }) => <div className="text-center">{row.getValue("price")}</div>,
         },
       ]
     : [
