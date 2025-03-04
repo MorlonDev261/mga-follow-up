@@ -104,7 +104,7 @@ export default function DataTableDemo() {
         {
           accessorKey: "Qte",
           header: () => <div className="text-center">Qte</div>,
-          cell: ({ row }) => <div className="text-center">{row.getValue("Qte")}</div>,
+          cell: ({ row }: { row: Row<Payment> }) => <div className="text-center">{row.getValue("Qte")}</div>,
         },
         {
           accessorKey: "sum",
