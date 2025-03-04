@@ -73,7 +73,7 @@ export const columns: ColumnDef<Payment>[] = [
   {
     accessorKey: "fullName",
     header: "Full Name",
-    cell: ({ row }) => <div className="lowercase">{row.getValue("fullName")}</div>,
+    cell: ({ row }) => <div>{row.getValue("fullName")}</div>,
   },
   {
     accessorKey: "contact",
