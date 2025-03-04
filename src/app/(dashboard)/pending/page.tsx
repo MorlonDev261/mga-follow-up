@@ -1,5 +1,5 @@
 import React, { Suspense } from "react";
-import Customers from "@components/Table/Customers";
+import Pending from "@components/Table/Pending";
 import Balance from "@components/Balance";
 import { FaPlus } from "react-icons/fa";
 import { FiClock } from 'react-icons/fi';
@@ -30,7 +30,7 @@ export default function MyComponent() {
       {pending > 0 ?
         <div className="pt-2 bg-[#111]">
           <Suspense>
-            <Customers />
+            <Pending />
           </Suspense> 
         </div>
         :
