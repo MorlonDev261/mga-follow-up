@@ -97,7 +97,10 @@ export default function DataTableDemo() {
         {
           accessorKey: "price",
           header: "Price",
-          cell: ({ row }) => <div className="text-center">{row.getValue("price")}</div>,
+          cell: ({ row }) => {
+            const price = show ? row.getValue("price") : row.getValue("sum")
+            return <div className="text-center">{price}</div>
+          },
         },
       ]
     : [
