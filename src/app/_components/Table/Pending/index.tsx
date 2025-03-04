@@ -109,7 +109,7 @@ export default function DataTableDemo() {
         {
           accessorKey: "sum",
           header: () => <div className="text-center">Total</div>,
-          cell: ({ row }) => <div className="text-center">{row.getValue("sum")}</div>,
+          cell: ({ row }: { row: Row<Payment> }) => <div className="text-center">{row.getValue("sum")}</div>,
         },
       ]),
   {
