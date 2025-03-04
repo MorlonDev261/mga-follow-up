@@ -17,7 +17,7 @@ export default function MyComponent() {
           title={<><FiClock /> Pending Payement</>} 
           balance={pending > 0 ? <><Counter end={totalPending} duration={0.8} /> Ar.</> : "No pending payement added."}
           balanceColor="text-yellow-500 hover:text-yellow-600"
-          subtitle="25 customers have pending payments."
+          subtitle="25 customers have pending payments. Pending payment from Mr. Kiady."
           subtitleSize="text-sm"
         >
           {pending > 0 &&
