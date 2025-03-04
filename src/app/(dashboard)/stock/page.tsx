@@ -32,7 +32,7 @@ export default function Stock() {
           <div className="bg-[#111] text-white p-2">
             <h3 className="mb-4">Statistique de vente:</h3>
             <div className="mb-5 w-full">
-              <Statistique type="courbe" legende={false} />
+              <Statistique type="bar" legende={false} />
             </div>
           </div>
         </div>
