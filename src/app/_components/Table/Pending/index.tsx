@@ -96,7 +96,8 @@ export default function DataTableDemo() {
       accessorKey: "date",
       header: "Date",
       cell: ({ row }) => {
-        const [day, month, year] = row.getValue("date").split("-")
+        const date = row.getValue("date") as string
+        const [day, month, year] = date.split("-")
         return <div>{`${day}/${month}/20${year}`}</div>
       },
     },
