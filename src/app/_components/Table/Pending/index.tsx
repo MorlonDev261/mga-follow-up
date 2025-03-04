@@ -17,13 +17,13 @@ type dataType = {
 } & { Qte?: number; sum?: number }
 
 
-export default function DataTableDemo() {
+export default function DataTableDemo({ Columns }: dataType) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
 
-  const columns: ColumnDef<dataType>[] = Column;
+  const columns: ColumnDef<dataType>[] = Columns;
 
   const table = useReactTable({
     data,
