@@ -1,23 +1,58 @@
 "use client"
 
 import * as React from "react"
-import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table"
-import { ChevronDown, MoreHorizontal } from "lucide-react"
+import { useRouter, useSearchParams } from "next/navigation"
+import {
+  ColumnDef,
+  ColumnFiltersState,
+  SortingState,
+  VisibilityState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable
+} from "@tanstack/react-table"
+import { ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
 type Payment = {
   id: string
   date: string
-  fullName: string,
-  contact: string,
-  deal: number,
-  pending: number,
+  customer: string
+  designation: string
+  deal: number
+  pending: number
+} & { Qte?: number; sum?: number }
+
+// Fonction pour regrouper les données par customer
+const groupByCustomer = (data: Payment[]): Payment[] => {
+  const grouped: Record<string, Payment> = {}
+
+  data.forEach((item) => {
+    const key = item.customer
+
+    if (!grouped[key]) {
+      grouped[key] = { ...item, Qte: 1, sum: item.pending, designation: item.designation }
+    } else {
+      grouped[key].Qte! += 1
+      grouped[key].sum! += item.pending
+      grouped[key].designation += `, ${item.designation}`
+    }
+  })
+
+  return Object.values(grouped)
 }
 
 export default function DataTableDemo() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const show = searchParams.get("show")
+
   const [data, setData] = React.useState<Payment[]>([])
   const [loading, setLoading] = React.useState(true)
   const [sorting, setSorting] = React.useState<SortingState>([])
@@ -25,31 +60,19 @@ export default function DataTableDemo() {
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
 
-  // Fonction pour regrouper les données par `designation`
-  const groupByDesignation = (data: Payment[]): Payment[] => {
-    const grouped: Record<string, Payment> = {}
-
-    data.forEach((item) => {
-      const key = `${item.designation}-${item.customer}`
-
-      if (!grouped[key]) {
-        grouped[key] = { ...item, Qte: 1, sum: item.price }
-      } else {
-        grouped[key].Qte! += 1
-        grouped[key].sum! += item.price
-      }
-    })
-
-    return Object.values(grouped)
-  }
-
   // Récupération des données depuis l'API
   React.useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch("/api/pending")
-        const result: Payment[] = await response.json()
-        setData(groupByDesignation(result))
+        let result: Payment[] = await response.json()
+        result = groupByCustomer(result)
+
+        if (show) {
+          result = result.filter((item) => item.customer === show)
+        }
+
+        setData(result)
       } catch (error) {
         console.error("Error fetching data:", error)
       } finally {
@@ -58,7 +81,7 @@ export default function DataTableDemo() {
     }
 
     fetchData()
-  }, [])
+  }, [show])
 
   const columns: ColumnDef<Payment>[] = [
     {
@@ -96,30 +119,17 @@ export default function DataTableDemo() {
         const payment = row.original
 
         return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              <DropdownMenuItem
-                onClick={() => navigator.clipboard.writeText(payment.id)}
-              >
-                Copy payment ID
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>View customer</DropdownMenuItem>
-              <DropdownMenuItem>View payment details</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <Button
+            variant="outline"
+            onClick={() => router.push(`?show=${payment.customer}`)}
+          >
+            Show list pending payment
+          </Button>
         )
       },
     },
   ]
-  
+
   const table = useReactTable({
     data,
     columns,
