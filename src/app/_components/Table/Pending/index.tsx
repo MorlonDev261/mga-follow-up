@@ -28,7 +28,7 @@ const groupByCustomer = (data: Payment[]): Payment[] => {
       grouped[key] = { ...item, Qte: 1, sum: item.pending, designation: item.designation }
     } else {
       grouped[key].Qte! += 1
-      grouped[key].sum! += item.pending
+      grouped[key].sum! += item.price
       grouped[key].designation += `, ${item.designation}`
     }
   })
