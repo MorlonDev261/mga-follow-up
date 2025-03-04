@@ -85,7 +85,7 @@ export default function DataTableDemo() {
   {
     accessorKey: "customer",
     header: "Customer",
-    cell: ({ row }) => <div>{row.getValue("customer")}</div>,
+    cell: ({ row }) => row.getValue("customer"),
   },
   {
     accessorKey: "designation",
