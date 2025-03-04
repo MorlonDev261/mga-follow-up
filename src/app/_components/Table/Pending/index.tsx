@@ -1,15 +1,14 @@
 "use client"
 
 import * as React from "react"
-import { useSearchParams, useRouter } from "next/navigation"
-import { ColumnDef, Row, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table"
+import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table"
 import { ChevronDown, MoreHorizontal } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
-type Payment = {
+type dataType = {
   id: string
   date: string
   customer: string
@@ -17,133 +16,14 @@ type Payment = {
   price: number
 } & { Qte?: number; sum?: number }
 
-// Fonction pour regrouper les données par customer
-const groupByCustomer = (data: Payment[]): Payment[] => {
-  const grouped: Record<string, Payment> = {}
-
-  data.forEach((item) => {
-    const key = item.customer
-
-    if (!grouped[key]) {
-      grouped[key] = { ...item, Qte: 1, sum: item.price, designation: item.designation }
-    } else {
-      grouped[key].Qte! += 1
-      grouped[key].sum! += item.price
-      grouped[key].designation += `, ${item.designation}`
-    }
-  })
-
-  return Object.values(grouped)
-}
 
 export default function DataTableDemo() {
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const show = searchParams.get("show")
-
-  const [data, setData] = React.useState<Payment[]>([])
-  const [loading, setLoading] = React.useState(true)
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
 
-  // Récupération des données depuis l'API
-  React.useEffect(() => {
-  const fetchData = async () => {
-    try {
-      const response = await fetch("/api/pending")
-      let result: Payment[] = await response.json()
-
-      if (!show) {
-        result = groupByCustomer(result) // Regrouper uniquement si show est absent
-      } else {
-        result = result.filter((item) => item.customer === show) // Pas de regroupement
-      }
-
-      setData(result)
-    } catch (error) {
-      console.error("Error fetching data:", error)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  fetchData()
-}, [show])
-
-  const columns: ColumnDef<Payment>[] = [
-  {
-    accessorKey: "date",
-    header: "Date",
-    cell: ({ row }) => {
-      const date = row.getValue("date") as string
-      const [day, month, year] = date.split("-")
-      return <div>{`${day}/${month}/20${year}`}</div>
-    },
-  },
-  {
-    accessorKey: "customer",
-    header: "Customer",
-    cell: ({ row }) => <div>{row.getValue("customer")}</div>,
-  },
-  {
-    accessorKey: "designation",
-    header: "Designation",
-    cell: ({ row }) => <div>{row.getValue("designation")}</div>,
-  },
-  ...(show
-    ? [
-        {
-          accessorKey: "price",
-          header: "Price",
-          cell: ({ row }: { row: Row<Payment> }) => <div className="text-center">{row.getValue("price")}</div>,
-        },
-      ]
-    : [
-        {
-          accessorKey: "Qte",
-          header: () => <div className="text-center">Qte</div>,
-          cell: ({ row }: { row: Row<Payment> }) => <div className="text-center">{row.getValue("Qte")}</div>,
-        },
-        {
-          accessorKey: "sum",
-          header: () => <div className="text-center">Total</div>,
-          cell: ({ row }: { row: Row<Payment> }) => <div className="text-center">{row.getValue("sum")}</div>,
-        },
-      ]),
-  {
-    id: "actions",
-    enableHiding: false,
-    cell: ({ row }) => {
-      const payment = row.original
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(payment.id)}>
-              Copy payment ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => router.push(`?show=${payment.customer}`)}>
-              Show list pending payment
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )
-    },
-  },
-]
+  const columns: ColumnDef<dataType>[] = Column;
 
   const table = useReactTable({
     data,
