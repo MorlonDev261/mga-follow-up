@@ -6,27 +6,28 @@ import { FiClock } from 'react-icons/fi';
 import { cn } from "@/lib/utils";
 
 export default function MyComponent() {
-  const expenses = 12;
+  const pending = 12;
+  const totalPending = 4500000;
   
   return (
-    <main className={cn(expenses <= 0 && "bg-[#111]")}>
+    <main className={cn(pending <= 0 && "bg-[#111]")}>
       <div className="px-2 bg-[#111]">
         <Balance 
           title={<><FiClock /> Pending Payement</>} 
-          balance={expenses > 0 ? `${totalPending} Ar.` : "No pending payement added."}
+          balance={pending > 0 ? `${totalPending} Ar.` : "No pending payement added."}
           balanceSize="text-md"
           balanceColor="text-yellow-500 hover:text-yellow-600"
           subtitle="25 customers have pending payments."
           subtitleSize="text-sm"
         >
-          {expenses > 0 &&
+          {pending > 0 &&
             <button className="flex items-center gap-1 rounded bg-red-500 hover:bg-red-600 px-2 py-1 text-sm text-white">
               <FaPlus /> New expense
             </button>
           }
         </Balance>
       </div>
-      {expenses > 0 ?
+      {pending > 0 ?
         <div className="pt-2 bg-[#111]">
           <Suspense>
             <Customers />
