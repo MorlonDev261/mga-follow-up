@@ -1,5 +1,6 @@
 import React, { Suspense } from "react";
 import Pending from "@components/Table/Pending";
+import Counter from "@components/Counter";
 import Balance from "@components/Balance";
 import { FaPlus } from "react-icons/fa";
 import { FiClock } from 'react-icons/fi';
