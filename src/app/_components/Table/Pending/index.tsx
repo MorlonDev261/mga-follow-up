@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { useSearchParams, useRouter } from "next/navigation"
-import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table"
+import { ColumnDef, Row, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table"
 import { ChevronDown, MoreHorizontal } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
@@ -97,10 +97,7 @@ export default function DataTableDemo() {
         {
           accessorKey: "price",
           header: "Price",
-          cell: ({ row }) => {
-            const price = show ? row.getValue("price") : row.getValue("sum")
-            return <div className="text-center">{price}</div>
-          },
+          cell: ({ row }: { row: Row<Payment> }) => <div className="text-center">{row.getValue("price")}</div>,
         },
       ]
     : [
