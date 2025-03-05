@@ -16,8 +16,13 @@ type dataType = {
   price: number
 } & { Qte?: number; sum?: number }
 
+interface DataTableProps {
+  Columns: ColumnDef<dataType>[];
+  data: dataType[];
+  loading: boolean;
+}
 
-export default function DataTableDemo({ Columns }: dataType) {
+export default function DataTableDemo({ Columns, data, loading }: DataTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
