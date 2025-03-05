@@ -1,7 +1,6 @@
+// app/(dashboard)/pending/PendingContent.tsx
 "use client";
 
-import * as React from "react";
-import { Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { FaPlus } from "react-icons/fa";
 import { FiClock } from 'react-icons/fi';
@@ -20,6 +19,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Suspense } from "react";
 
 type Payment = {
   id: string;
@@ -31,7 +31,7 @@ type Payment = {
 
 type dataType = Payment & { Qte?: number; sum?: number };
 
-export default function MyComponent() {
+export default function PendingContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const show = searchParams.get("show");
@@ -193,9 +193,7 @@ export default function MyComponent() {
       </div>
       {data.length > 0 ?
         <div className="pt-2 bg-[#111]">
-          <Suspense>
-            <Pending Columns={Columns} data={data} loading={loading} />
-          </Suspense> 
+          <Pending Columns={Columns} data={data} loading={loading} />
         </div>
         :
         <div className="w-full h-[65vh] flex items-center justify-center bg-[#111]">
