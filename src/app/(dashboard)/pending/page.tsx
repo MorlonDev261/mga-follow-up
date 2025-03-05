@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import * as React, { Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { FaPlus } from "react-icons/fa";
 import { FiClock } from 'react-icons/fi';
@@ -186,9 +186,9 @@ export default function MyComponent() {
       </div>
       {pending > 0 ?
         <div className="pt-2 bg-[#111]">
-          <React.Suspense>
+          <Suspense>
             <Pending Columns={Columns} data={data} loading={loading} />
-          </React.Suspense> 
+          </Suspense> 
         </div>
         :
         <div className="w-full h-[65vh] flex items-center justify-center bg-[#111]">
