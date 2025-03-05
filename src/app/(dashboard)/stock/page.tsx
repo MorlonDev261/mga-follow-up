@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { FaPlus } from "react-icons/fa6";
-import { MoreHorizontal } from "lucide-react";
 import Balance from "@components/Balance";
 import Counter from "@components/Counter";
 import Statistique from "@components/Statistique";
