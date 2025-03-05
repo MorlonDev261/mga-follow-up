@@ -1,6 +1,4 @@
-// Pas de "use client" ici, car generateMetadata est côté serveur
-
-import { Metadata, ResolvingMetadata } from "next";
+import { Metadata } from "next";
 import PendingDetailsPage from "./PendingDetailsPage"; // Importez le composant côté client
 
 type Payment = {
