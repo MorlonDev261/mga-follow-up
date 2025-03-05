@@ -1,9 +1,12 @@
+"use client"; // Ajoutez cette ligne
+
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { FiClock, FiArrowLeft } from "react-icons/fi";
 import { Skeleton } from "@/components/ui/skeleton";
 import { format } from "date-fns";
+import * as React from "react"; // Assurez-vous d'importer React
 
 type Payment = {
   id: string;
