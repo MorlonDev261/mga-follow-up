@@ -179,7 +179,7 @@ export default function PendingContent() {
       <div className="px-2 bg-[#111]">
         <Balance 
           title={<><FiClock /> Pending Payement</>} 
-          balance={loading ? "Loading" : && data.length > 0 ? <><Counter end={totalPending} duration={0.8} /> Ar.</> : "No pending payement added."}
+          balance={loading ? "Loading..." : data.length > 0 ? <><Counter end={totalPending} duration={0.8} /> Ar.</> : "No pending payement added."}
           balanceColor="text-yellow-500 hover:text-yellow-600"
           subtitle={subtitle}
           subtitleSize="text-sm"
