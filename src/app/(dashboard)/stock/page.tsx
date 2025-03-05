@@ -2,12 +2,12 @@
 
 import * as React from "react";
 import { FaPlus } from "react-icons/fa6";
+import { BsShopWindow } from "react-icons/bs";
 import Balance from "@components/Balance";
 import Counter from "@components/Counter";
 import Statistique from "@components/Statistique";
 import TableStock from "@components/DataTable/TableStock";
 import { Suspense } from "react";
-import { Button } from "@/components/ui/button";
 
 export default function Stock() {
   return (
