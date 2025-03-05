@@ -1,24 +1,17 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server"
 
-// Simuler une base de données
-const payments = [
-  { id: "1", date: "2025-03-01", customer: "John Doe", designation: "Service A", price: 50000 },
-  { id: "2", date: "2025-03-02", customer: "Jane Smith", designation: "Product B", price: 75000 },
-  { id: "3", date: "2025-03-03", customer: "Alice Johnson", designation: "Subscription C", price: 100000 },
-];
+type Payment = {
+  id: string
+  date: string
+  customer: string
+  designation: string
+  price: number
+}
 
-export async function GET(request: NextRequest, context: { params: { id: string } }) {
-  const { id } = context.params;
+const payments: Payment[] = [
+  { id: "bhqecj4p", date: "23-02-25", customer: "Shop Cell", designation: "iPhone 7plus", price: 10034 },
+]
 
-  if (!id) {
-    return NextResponse.json({ error: "Missing ID parameter" }, { status: 400 });
-  }
-
-  const payment = payments.find((p) => p.id === id);
-
-  if (!payment) {
-    return NextResponse.json({ error: "Payment not found" }, { status: 404 });
-  }
-
-  return NextResponse.json(payment);
+export async function GET() {
+  return NextResponse.json(payments, { status: 200 })
 }
