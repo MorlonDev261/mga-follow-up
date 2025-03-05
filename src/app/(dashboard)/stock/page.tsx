@@ -54,8 +54,8 @@ export default function Stock() {
       </div>
 
       {/* Data Table */}
-      <Suspense fallback={<div>Loading...</div>}>
-        <TableStock Columns={Columns} data={data} loading={loading} />
+      <Suspense>
+        <TableStock />
       </Suspense>
     </main>
   );
