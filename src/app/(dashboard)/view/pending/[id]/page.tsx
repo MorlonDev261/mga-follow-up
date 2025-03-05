@@ -1,6 +1,3 @@
-"use client"; // Indique que ce composant est un Client Component
-
-import * as React from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
@@ -16,7 +13,11 @@ type Payment = {
   price: number;
 };
 
-export default function PendingDetailsPage({ params }: { params: { id: string } }) {
+type PageProps = {
+  params: { id: string };
+};
+
+export default function PendingDetailsPage({ params }: PageProps) {
   const router = useRouter();
   const [payment, setPayment] = React.useState<Payment | null>(null);
   const [loading, setLoading] = React.useState(true);
