@@ -1,12 +1,12 @@
-import { NextResponse } from "next/server"
+import { NextResponse } from "next/server";
 
 type Payment = {
-  id: string
-  date: string
-  customer: string
-  designation: string
-  price: number
-}
+  id: string;
+  date: string;
+  customer: string;
+  designation: string;
+  price: number;
+};
 
 const payments: Payment[] = [
   { id: "m5gr84i9", date: "23-01-25", customer: "Kiady", designation: "iPhone 8", price: 316 },
@@ -14,8 +14,16 @@ const payments: Payment[] = [
   { id: "derv1ws0", date: "12-01-25", customer: "Top Mada", designation: "Moto G 128", price: 316 },
   { id: "5kma53ae", date: "04-02-25", customer: "Kiady", designation: "iPhone Xs", price: 316 },
   { id: "bhqecj4p", date: "23-02-25", customer: "Shop Cell", designation: "iPhone 7plus", price: 10034 },
-]
+];
 
-export async function GET() {
-  return NextResponse.json(payments, { status: 200 })
+export async function GET(_: Request, { params }: { params: { payId: string } }) {
+  const { payId } = params;
+
+  const payment = payments.find((p) => p.id === payId);
+
+  if (!payment) {
+    return NextResponse.json({ error: "Payment not found" }, { status: 404 });
+  }
+
+  return NextResponse.json(payment, { status: 200 });
 }
