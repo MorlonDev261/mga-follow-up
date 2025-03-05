@@ -71,14 +71,11 @@ export const columns: ColumnDef<Payment>[] = [
       const amount = parseFloat(row.getValue("amount"));
 
       // Format the amount as a currency (USD)
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(amount);
+      const formatted = amount;
 
       return (
         <div className={cn("text-right font-medium", amount > 0 ? "text-green-500" : "text-red-500")}>
-          {amount > 0 ? "+" + formatted : formatted}
+          {amount > 0 ? "+" + formatted : formatted} Ar
         </div>
       );
     },
