@@ -19,10 +19,9 @@ const payments: Payment[] = [
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { [key: string]: string | string[] } }
+  { params }: { params: { id: string } } // Typage corrigé
 ) {
-  const paymentId = Array.isArray(params.id) ? params.id[0] : params.id;
-  const payment = payments.find((p) => p.id === paymentId);
+  const payment = payments.find((p) => p.id === params.id);
 
   if (!payment) {
     return NextResponse.json({ error: "Payment not found" }, { status: 404 });
