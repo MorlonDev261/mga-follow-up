@@ -1,4 +1,4 @@
-"use client"; // Ajoutez cette ligne
+"use client"; // Assurez-vous que cette directive est présente
 
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -6,7 +6,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { FiClock, FiArrowLeft } from "react-icons/fi";
 import { Skeleton } from "@/components/ui/skeleton";
 import { format } from "date-fns";
-import * as React from "react"; // Assurez-vous d'importer React
+import * as React from "react"; // Importez React pour utiliser useState et useEffect
 
 type Payment = {
   id: string;
@@ -16,11 +16,7 @@ type Payment = {
   price: number;
 };
 
-type PageProps = {
-  params: { id: string };
-};
-
-export default function PendingDetailsPage({ params }: PageProps) {
+export default function PendingDetailsPage({ params }: { params: { id: string } }) {
   const router = useRouter();
   const [payment, setPayment] = React.useState<Payment | null>(null);
   const [loading, setLoading] = React.useState(true);
