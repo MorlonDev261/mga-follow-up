@@ -1,4 +1,3 @@
-// app/(dashboard)/pending/PendingContent.tsx
 "use client";
 
 import * as React from "react";
@@ -90,8 +89,9 @@ export default function PendingContent() {
 
   // Ajustement du sous-titre en fonction du filtre
   const subtitle = show
-    ? `Pending payment from ${!data[0]?.customer.startsWith("Mr.") ? "Mr. " : ""}${data[0]?.customer.split(" ")[0]}.`
-    : `${numberOfCustomers} customers have pending payments. Pending payment from Mr. Kiady.`;
+    ? `Pending payment from ${data[0]?.customer || "unknown customer"}.`
+    : `${numberOfCustomers} customers have pending payments.`;
+
 
   const Columns: ColumnDef<dataType>[] = [
     {
