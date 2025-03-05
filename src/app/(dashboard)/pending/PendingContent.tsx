@@ -19,7 +19,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Suspense } from "react";
 
 type Payment = {
   id: string;
