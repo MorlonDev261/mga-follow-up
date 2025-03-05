@@ -1,6 +1,7 @@
 // app/(dashboard)/pending/PendingContent.tsx
 "use client";
 
+import * as React from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { FaPlus } from "react-icons/fa";
 import { FiClock } from 'react-icons/fi';
