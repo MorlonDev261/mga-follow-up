@@ -1,7 +1,5 @@
-// Pas de "use client" ici, car generateMetadata est côté serveur
-
 import { Metadata } from "next";
-import PendingDetailsPage from "./PendingDetailsPage"; // Importez le composant côté client
+import PendingDetailsPage from "./PendingDetailsPage"; // Import du composant côté client
 
 type Payment = {
   id: string;
@@ -12,9 +10,13 @@ type Payment = {
 };
 
 // Fonction pour générer les métadonnées dynamiques
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params; // Attendre la résolution de params
+
   // Récupérer les détails du paiement depuis l'API
-  const response = await fetch(`http://localhost:3000/api/pending/${params.id}`); // Remplacez par l'URL de votre API
+  const response = await fetch(`https://mga-follow-up.vercel.app/api/pending/${id}`);
+  if (!response.ok) throw new Error("Failed to fetch payment data");
+
   const payment: Payment = await response.json();
 
   return {
@@ -24,10 +26,10 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
       title: `Pending Payment - ${payment.customer}`,
       description: `Details of the pending payment for ${payment.customer}. Amount: ${payment.price} Ar.`,
       type: "website",
-      url: `http://localhost:3000/view/pending/${params.id}`, // Remplacez par l'URL de votre page
+      url: `https://mga-follow-up.vercel.app/view/pending/${id}`,
       images: [
         {
-          url: "https://yourwebsite.com/og-image.png", // Remplacez par l'URL de votre image OpenGraph
+          url: "https://mga-follow-up.vercel.app/og-image.png",
           width: 1200,
           height: 630,
           alt: "Pending Payment",
@@ -38,12 +40,13 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
       card: "summary_large_image",
       title: `Pending Payment - ${payment.customer}`,
       description: `Details of the pending payment for ${payment.customer}. Amount: ${payment.price} Ar.`,
-      images: ["https://yourwebsite.com/og-image.png"], // Remplacez par l'URL de votre image Twitter
+      images: ["https://mga-follow-up.vercel.app/og-image.png"],
     },
   };
 }
 
-// Exportez le composant de page par défaut
-export default function Page({ params }: { params: { id: string } }) {
-  return <PendingDetailsPage params={params} />;
+// Composant principal de la page
+export default async function Page({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params; // Attendre la résolution de params
+  return <PendingDetailsPage params={{ id }} />;
 }
