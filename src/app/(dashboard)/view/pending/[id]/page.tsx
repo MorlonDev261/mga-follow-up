@@ -22,6 +22,38 @@ type PageProps = {
   searchParams: { [key: string]: string | string[] | undefined };
 };
 
+// Fonction pour générer les métadonnées dynamiques
+export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+  // Récupérer les détails du paiement depuis l'API
+  const response = await fetch(`/api/pending/${params.id}`);
+  const payment: Payment = await response.json();
+
+  return {
+    title: `Pending Payment - ${payment.customer}`,
+    description: `Details of the pending payment for ${payment.customer}. Amount: ${payment.price} Ar.`,
+    openGraph: {
+      title: `Pending Payment - ${payment.customer}`,
+      description: `Details of the pending payment for ${payment.customer}. Amount: ${payment.price} Ar.`,
+      type: "website",
+      url: `https://yourwebsite.com/view/pending/${params.id}`,
+      images: [
+        {
+          url: "https://yourwebsite.com/og-image.png", // Remplacez par l'URL de votre image OpenGraph
+          width: 1200,
+          height: 630,
+          alt: "Pending Payment",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `Pending Payment - ${payment.customer}`,
+      description: `Details of the pending payment for ${payment.customer}. Amount: ${payment.price} Ar.`,
+      images: ["https://yourwebsite.com/og-image.png"], // Remplacez par l'URL de votre image Twitter
+    },
+  };
+}
+
 export default function PendingDetailsPage({ params }: PageProps) {
   const router = useRouter();
   const [payment, setPayment] = React.useState<Payment | null>(null);
