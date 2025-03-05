@@ -31,9 +31,6 @@ type Payment = {
 type dataType = Payment & { Qte?: number; sum?: number };
 
 export default function MyComponent() {
-  const pending = 12;
-  const totalPending = 4500000;
-
   const router = useRouter();
   const searchParams = useSearchParams();
   const show = searchParams.get("show");
@@ -85,6 +82,15 @@ export default function MyComponent() {
 
     return Object.values(grouped);
   };
+
+  // Calcul du total des paiements en attente et du nombre de clients
+  const totalPending = data.reduce((acc, item) => acc + (item.sum || item.price), 0);
+  const numberOfCustomers = new Set(data.map(item => item.customer)).size;
+
+  // Ajustement du sous-titre en fonction du filtre
+  const subtitle = show
+    ? `Pending payment from ${!data[0]?.customer.startsWith("Mr.") ? "Mr. " : ""}${data[0]?.customer.split(" ")[0]}.`
+    : `${numberOfCustomers} customers have pending payments. Pending payment from Mr. Kiady.`;
 
   const Columns: ColumnDef<dataType>[] = [
     {
@@ -168,23 +174,23 @@ export default function MyComponent() {
   ];
   
   return (
-    <main className={cn(pending <= 0 && "bg-[#111]")}>
+    <main className={cn(data.length <= 0 && "bg-[#111]")}>
       <div className="px-2 bg-[#111]">
         <Balance 
           title={<><FiClock /> Pending Payement</>} 
-          balance={pending > 0 ? <><Counter end={totalPending} duration={0.8} /> Ar.</> : "No pending payement added."}
+          balance={data.length > 0 ? <><Counter end={totalPending} duration={0.8} /> Ar.</> : "No pending payement added."}
           balanceColor="text-yellow-500 hover:text-yellow-600"
-          subtitle="25 customers have pending payments. Pending payment from Mr. Kiady."
+          subtitle={subtitle}
           subtitleSize="text-sm"
         >
-          {pending > 0 &&
+          {data.length > 0 &&
             <button className="flex items-center gap-1 rounded bg-yellow-500 hover:bg-yellow-600 px-2 py-1 text-sm text-white">
               <FaPlus /> New unpaid purchase
             </button>
           }
         </Balance>
       </div>
-      {pending > 0 ?
+      {data.length > 0 ?
         <div className="pt-2 bg-[#111]">
           <Suspense>
             <Pending Columns={Columns} data={data} loading={loading} />
