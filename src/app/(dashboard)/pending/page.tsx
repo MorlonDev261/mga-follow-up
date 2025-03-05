@@ -5,7 +5,6 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { FaPlus } from "react-icons/fa";
 import { FiClock } from 'react-icons/fi';
 import { MoreHorizontal } from "lucide-react";
-import { BsShopWindow } from "react-icons/bs";
 import Pending from "@components/Table/Pending";
 import Counter from "@components/Counter";
 import Balance from "@components/Balance";
