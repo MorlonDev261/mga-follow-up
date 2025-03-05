@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 // Simuler une base de données
 const payments = [
@@ -7,8 +7,12 @@ const payments = [
   { id: "3", date: "2025-03-03", customer: "Alice Johnson", designation: "Subscription C", price: 100000 },
 ];
 
-// GET /api/pending/:id
-export async function GET(request: Request, { params }: { params: { id: string } }) {
+// GET /api/pending/[id]
+export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+  if (!params || !params.id) {
+    return NextResponse.json({ error: "Missing ID parameter" }, { status: 400 });
+  }
+
   const payment = payments.find((p) => p.id === params.id);
 
   if (!payment) {
