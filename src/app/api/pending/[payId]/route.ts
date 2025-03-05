@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
  
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { id } = req.query
-  res.end(`Post: ${id}`)
+  const { payId } = req.query
+  res.end(`Post: ${payId}`)
 }
