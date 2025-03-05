@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { NextRequest } from "next/server";
 
 type Payment = {
   id: string;
@@ -17,10 +16,9 @@ const payments: Payment[] = [
   { id: "bhqecj4p", date: "23-02-25", customer: "Shop Cell", designation: "iPhone 7plus", price: 10034 },
 ];
 
-export async function GET(request: NextRequest, context: { params: { id: string } }) {
-  const { id } = context.params;
+export async function GET(_: Request, { params }: { params: { id: string } }) {
+  const payment = payments.find((p) => p.id === params.id);
 
-  const payment = payments.find((p) => p.id === id);
   if (!payment) {
     return NextResponse.json({ error: "Payment not found" }, { status: 404 });
   }
