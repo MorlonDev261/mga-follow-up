@@ -1,4 +1,8 @@
-function Page({ params }) {
-  // direct access of `params.id`.
-  return <p>ID: {params.payId}</p>
+export async function GET(
+  request: Request,
+  { params }: { params: { payId: string } }
+) {
+  return new Response(JSON.stringify({ id: params.payId }), {
+    headers: { "Content-Type": "application/json" },
+  });
 }
