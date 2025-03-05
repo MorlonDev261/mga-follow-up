@@ -7,13 +7,14 @@ const payments = [
   { id: "3", date: "2025-03-03", customer: "Alice Johnson", designation: "Subscription C", price: 100000 },
 ];
 
-// GET /api/pending/[id]
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
-  if (!params || !params.id) {
+export async function GET(request: NextRequest, context: { params: { id: string } }) {
+  const { id } = context.params;
+
+  if (!id) {
     return NextResponse.json({ error: "Missing ID parameter" }, { status: 400 });
   }
 
-  const payment = payments.find((p) => p.id === params.id);
+  const payment = payments.find((p) => p.id === id);
 
   if (!payment) {
     return NextResponse.json({ error: "Payment not found" }, { status: 404 });
