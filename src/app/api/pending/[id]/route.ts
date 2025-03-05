@@ -1,26 +1,14 @@
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
 
-type Payment = {
-  id: string;
-  date: string;
-  customer: string;
-  designation: string;
-  price: number;
-};
-
-const payments: Payment[] = [
-  { id: "m5gr84i9", date: "23-01-25", customer: "Kiady", designation: "iPhone 8", price: 316 },
-  { id: "3u1reuv4", date: "01-02-25", customer: "Mr Tanjona", designation: "iPhone 11pro 64", price: 316 },
-  { id: "derv1ws0", date: "12-01-25", customer: "Top Mada", designation: "Moto G 128", price: 316 },
-  { id: "5kma53ae", date: "04-02-25", customer: "Kiady", designation: "iPhone Xs", price: 316 },
-  { id: "bhqecj4p", date: "23-02-25", customer: "Shop Cell", designation: "iPhone 7plus", price: 10034 },
+// Simuler une base de données
+const payments = [
+  { id: "1", date: "2025-03-01", customer: "John Doe", designation: "Service A", price: 50000 },
+  { id: "2", date: "2025-03-02", customer: "Jane Smith", designation: "Product B", price: 75000 },
+  { id: "3", date: "2025-03-03", customer: "Alice Johnson", designation: "Subscription C", price: 100000 },
 ];
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } } // Typage corrigé
-) {
+// GET /api/pending/:id
+export async function GET(request: Request, { params }: { params: { id: string } }) {
   const payment = payments.find((p) => p.id === params.id);
 
   if (!payment) {
