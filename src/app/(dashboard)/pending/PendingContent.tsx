@@ -179,19 +179,23 @@ export default function PendingContent() {
       <div className="px-2 bg-[#111]">
         <Balance 
           title={<><FiClock /> Pending Payement</>} 
-          balance={data.length > 0 ? <><Counter end={totalPending} duration={0.8} /> Ar.</> : "No pending payement added."}
+          balance={loading ? "Loading" : && data.length > 0 ? <><Counter end={totalPending} duration={0.8} /> Ar.</> : "No pending payement added."}
           balanceColor="text-yellow-500 hover:text-yellow-600"
           subtitle={subtitle}
           subtitleSize="text-sm"
         >
-          {data.length > 0 &&
+          {!loading && data.length > 0 &&
             <button className="flex items-center gap-1 rounded bg-yellow-500 hover:bg-yellow-600 px-2 py-1 text-sm text-white">
               <FaPlus /> New unpaid purchase
             </button>
           }
         </Balance>
       </div>
-      {data.length > 0 ?
+      {loading ?
+        <div className="pt-2 bg-[#111]">
+          <Pending Columns={Columns} data={data} loading={loading} />
+        </div>
+      : data.length > 0 ?
         <div className="pt-2 bg-[#111]">
           <Pending Columns={Columns} data={data} loading={loading} />
         </div>
