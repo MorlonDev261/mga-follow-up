@@ -134,7 +134,7 @@ export default function PendingContent() {
   const Columns = [...baseColumns, ...additionalColumns, {
     id: "actions",
     enableHiding: false,
-    cell: ({ row }) => {
+    cell: ({ row }: { row: Row<DataType> }) => {
       const payment = row.original;
       return (
         <DropdownMenu>
