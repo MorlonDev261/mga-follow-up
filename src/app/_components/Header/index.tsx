@@ -42,7 +42,7 @@ export default function Header({ children }: HeaderProps) {
           width={30}
           height={30}
           alt="logo"
-          className="w-full h-50 contain"
+          className="w-full h-30 contain"
         />
 
         {/* Mode Toggle (Dashboard / Excel) */}
