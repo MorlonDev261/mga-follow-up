@@ -127,7 +127,7 @@ export default function PendingContent() {
         {
           accessorKey: "sum",
           header: "Total",
-          cell: { row }: { row: Row<dataType> }) => <div className="text-center">{row.getValue("sum")}</div>,
+          cell: ({ row }: { row: Row<dataType> }) => <div className="text-center">{row.getValue("sum")}</div>,
         },
       ];
 
