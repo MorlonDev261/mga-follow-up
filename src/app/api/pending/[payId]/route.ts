@@ -18,9 +18,9 @@ const payments: Payment[] = [
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: Record<string, string> }
+  { params }: { params: any } // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ) {
-  const payId = params.payId;
+  const payId = params;
 
   const payment = payments.find((p) => p.id === payId);
 
