@@ -4,6 +4,7 @@ import { ReactNode } from "react"
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import { FaRegEnvelope } from "react-icons/fa6";
