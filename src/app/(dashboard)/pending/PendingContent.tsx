@@ -122,12 +122,12 @@ export default function PendingContent() {
         {
           accessorKey: "Qte",
           header: "Qte",
-          cell: ({ row }) => <div className="text-center">{row.getValue("Qte")}</div>,
+          cell: ({ row }: { row: Row<dataType> }) => <div className="text-center">{row.getValue("Qte")}</div>,
         },
         {
           accessorKey: "sum",
           header: "Total",
-          cell: ({ row }) => <div className="text-center">{row.getValue("sum")}</div>,
+          cell: { row }: { row: Row<dataType> }) => <div className="text-center">{row.getValue("sum")}</div>,
         },
       ];
 
