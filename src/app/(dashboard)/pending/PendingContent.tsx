@@ -5,7 +5,6 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { FaPlus } from "react-icons/fa";
 import { FiClock } from 'react-icons/fi';
 import { MoreHorizontal } from "lucide-react";
-import { format } from 'date-fns';
 import Pending from "@components/Table/Pending";
 import Counter from "@components/Counter";
 import Balance from "@components/Balance";
@@ -38,232 +37,188 @@ export default function PendingContent() {
 
   const [data, setData] = React.useState<dataType[]>([]);
   const [loading, setLoading] = React.useState(true);
-  const [error, setError] = React.useState<string | null>(null);
 
-  // Memoized calculations
-  const { totalPending, numberOfCustomers } = React.useMemo(() => ({
-    totalPending: data.reduce((acc, item) => acc + (item.sum || item.price), 0),
-    numberOfCustomers: new Set(data.map(item => item.customer)).size
-  }), [data]);
-
-  // Data fetching with abort controller
+  // Récupération des données depuis l'API
   React.useEffect(() => {
-    const abortController = new AbortController();
-
     const fetchData = async () => {
-      setLoading(true);
-      setError(null);
-
       try {
-        const response = await fetch("/api/pending", { 
-          signal: abortController.signal 
-        });
-        
-        if (!response.ok) throw new Error('Failed to fetch');
-        
-        const result: Payment[] = await response.json();
-        const processedData = show 
-          ? result.filter(item => item.customer === show)
-          : groupByCustomer(result);
+        const response = await fetch("/api/pending");
+        if (!response.ok) throw new Error("Failed to fetch data");
 
-        setData(processedData);
-      } catch (error) {
-        if (!abortController.signal.aborted) {
-          setError("Failed to load pending payments");
-          console.error("Fetch error:", error);
+        let result: Payment[] = await response.json();
+
+        if (!show) {
+          result = groupByCustomer(result); // Regrouper uniquement si show est absent
+        } else {
+          result = result.filter((item) => item.customer === show); // Pas de regroupement
         }
+
+        setData(result);
+      } catch (error) {
+        console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
-    return () => abortController.abort();
   }, [show]);
 
-  // Optimized grouping function
-  const groupByCustomer = React.useCallback((data: Payment[]): dataType[] => {
-    const grouped = data.reduce((acc: Record<string, dataType>, item) => {
+  // Fonction pour regrouper les données par customer
+  const groupByCustomer = (data: Payment[]): dataType[] => {
+    const grouped: Record<string, dataType> = {};
+
+    data.forEach((item) => {
       const key = item.customer;
-      
-      if (!acc[key]) {
-        acc[key] = { 
-          ...item, 
-          Qte: 1, 
-          sum: item.price, 
-          designation: [item.designation] 
-        };
+
+      if (!grouped[key]) {
+        grouped[key] = { ...item, Qte: 1, sum: item.price, designation: item.designation };
       } else {
-        acc[key].Qte! += 1;
-        acc[key].sum! += item.price;
-        acc[key].designation!.push(item.designation);
+        grouped[key].Qte! += 1;
+        grouped[key].sum! += item.price;
+        grouped[key].designation += `, ${item.designation}`;
       }
-      
-      return acc;
-    }, {});
+    });
 
-    return Object.values(grouped).map(item => ({
-      ...item,
-      designation: item.designation.join(', ')
-    }));
-  }, []);
+    return Object.values(grouped);
+  };
 
-  // Memoized columns configuration
-  const Columns = React.useMemo<ColumnDef<dataType>[]>(() => [
+  // Calcul du total des paiements en attente et du nombre de clients
+  const totalPending = data.reduce((acc, item) => acc + (item.sum || item.price), 0);
+  const numberOfCustomers = new Set(data.map(item => item.customer)).size;
+
+  // Ajustement du sous-titre en fonction du filtre
+  const subtitle = show
+    ? `Pending payment from ${data[0]?.customer || "unknown customer"}.`
+    : `${numberOfCustomers} customers have pending payments.`;
+
+
+  const Columns: ColumnDef<dataType>[] = [
     {
       accessorKey: "date",
       header: "Date",
-      cell: ({ row }) => format(new Date(row.getValue("date")), 'dd/MM/yyyy')
+      cell: ({ row }) => {
+        const date = row.getValue("date") as string;
+        const [day, month, year] = date.split("-");
+        return <div>{`${day}/${month}/20${year}`}</div>;
+      },
     },
     {
       accessorKey: "customer",
-      header: "Customer"
+      header: "Customer",
+      cell: ({ row }) => <div>{row.getValue("customer")}</div>,
     },
     {
       accessorKey: "designation",
-      header: "Designation"
+      header: "Designation",
+      cell: ({ row }) => <div>{row.getValue("designation")}</div>,
     },
     ...(show
-      ? [{
-          accessorKey: "price",
-          header: "Price",
-          cell: ({ row }) => (
-            <div className="text-center">{row.getValue("price")}</div>
-          )
-        }]
-      : [{
-          accessorKey: "Qte",
-          header: () => <div className="text-center">Qte</div>,
-          cell: ({ row }) => (
-            <div className="text-center">{row.getValue("Qte")}</div>
-          )
-        },
-        {
-          accessorKey: "sum",
-          header: () => <div className="text-center">Total</div>,
-          cell: ({ row }) => (
-            <div className="text-center">{row.getValue("sum")}</div>
-          )
-        }]),
+      ? [
+          {
+            accessorKey: "price",
+            header: "Price",
+            cell: ({ row }: { row: Row<Payment> }) => (
+              <div className="text-center">{row.getValue("price")}</div>
+            ),
+          },
+        ]
+      : [
+          {
+            accessorKey: "Qte",
+            header: () => <div className="text-center">Qte</div>,
+            cell: ({ row }: { row: Row<Payment> }) => (
+              <div className="text-center">{row.getValue("Qte")}</div>
+            ),
+          },
+          {
+            accessorKey: "sum",
+            header: () => <div className="text-center">Total</div>,
+            cell: ({ row }: { row: Row<Payment> }) => (
+              <div className="text-center">{row.getValue("sum")}</div>
+            ),
+          },
+        ]),
     {
-      id: "actions",
-      enableHiding: false,
-      cell: ({ row }) => {
-        const payment = row.original;
+    id: "actions",
+    enableHiding: false,
+    cell: ({ row }) => {
+      const payment = row.original;
 
-        return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              {show ? (
-                <DropdownMenuItem
-                  onClick={() => router.push(`/view/pending/${payment.id}`)}
-                >
-                  Show details
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            {show ? (
+              // Lorsque la liste n'est pas groupée, afficher seulement "Show details"
+              <DropdownMenuItem
+                onClick={() => router.push(`/view/pending?id=${payment.id}`)}
+              >
+                Show details
+              </DropdownMenuItem>
+            ) : (
+              // Lorsque la liste est groupée, afficher le menu complet
+              <>
+                <DropdownMenuItem onClick={() => navigator.clipboard.writeText(payment.id)}>
+                  Copy payment ID
                 </DropdownMenuItem>
-              ) : (
-                <>
-                  <DropdownMenuItem 
-                    onClick={() => navigator.clipboard.writeText(payment.id)}
-                  >
-                    Copy payment ID
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem>View customer</DropdownMenuItem>
-                  <DropdownMenuItem>View payment details</DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem
-                    onClick={() => router.push(`?show=${encodeURIComponent(payment.customer)}`)}
-                  >
-                    Show pending payments
-                  </DropdownMenuItem>
-                </>
-              )}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        );
-      }
-    }
-  ], [show, router]);
-
-  // Subtitle calculation
-  const subtitle = React.useMemo(() => 
-    show
-      ? `Pending payment from ${data[0]?.customer || "unknown customer"}.`
-      : `${numberOfCustomers} customers have pending payments.`,
-    [show, data, numberOfCustomers]
-  );
-
-  if (error) {
-    return (
-      <div className="w-full h-[65vh] flex items-center justify-center bg-[#111]">
-        <div className="text-red-500 text-center">
-          <p>Error: {error}</p>
-          <Button 
-            variant="outline" 
-            onClick={() => window.location.reload()}
-            className="mt-4"
-          >
-            Retry
-          </Button>
-        </div>
-      </div>
-    );
-  }
-
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>View customer</DropdownMenuItem>
+                <DropdownMenuItem>View payment details</DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={() => router.push(`?show=${encodeURIComponent(payment.customer)}`)}
+                >
+                  Show list pending payment
+                </DropdownMenuItem>
+              </>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    },
+  },
+];
+  
   return (
     <main className={cn(data.length <= 0 && "bg-[#111]")}>
       <div className="px-2 bg-[#111]">
         <Balance 
-          title={<><FiClock /> Pending Payment</>} 
-          balance={loading ? "Loading..." : data.length > 0 ? (
-            <><Counter end={totalPending} duration={0.8} /> Ar.</>
-          ) : "No pending payments found."}
+          title={<><FiClock /> Pending Payement</>} 
+          balance={loading ? "Loading..." : data.length > 0 ? <><Counter end={totalPending} duration={0.8} /> Ar.</> : "No pending payement added."}
           balanceColor="text-yellow-500 hover:text-yellow-600"
           subtitle={subtitle}
           subtitleSize="text-sm"
         >
-          {!loading && data.length > 0 && (
+          {!loading && data.length > 0 &&
             <button className="flex items-center gap-1 rounded bg-yellow-500 hover:bg-yellow-600 px-2 py-1 text-sm text-white">
               <FaPlus /> New unpaid purchase
             </button>
-          )}
+          }
         </Balance>
       </div>
-
-      {loading ? (
-        <PendingSkeleton />
-      ) : data.length > 0 ? (
+      {loading ?
         <div className="pt-2 bg-[#111]">
-          <Pending Columns={Columns} data={data} />
+          <Pending Columns={Columns} data={data} loading={loading} />
         </div>
-      ) : (
-        <EmptyState />
-      )}
+      : data.length > 0 ?
+        <div className="pt-2 bg-[#111]">
+          <Pending Columns={Columns} data={data} loading={loading} />
+        </div>
+        :
+        <div className="w-full h-[65vh] flex items-center justify-center bg-[#111]">
+          <div className="-mt-5 flex items-center justify-center flex-col ">
+            <p>There is nothing to see. Please record a first sale that has not been paid yet.</p>
+            <button className="px-4 mt-2 flex items-center gap-2 py-2 bg-yellow-500 hover:bg-yellow-600"><FaPlus /> Add First Pending Payement</button>
+          </div>
+        </div>
+      }
     </main>
   );
 }
-
-// Components supplémentaires
-const PendingSkeleton = () => (
-  <div className="pt-2 bg-[#111] animate-pulse">
-    <div className="h-64 bg-gray-800 rounded-lg" />
-  </div>
-);
-
-const EmptyState = () => (
-  <div className="w-full h-[65vh] flex items-center justify-center bg-[#111]">
-    <div className="-mt-5 text-center">
-      <p className="mb-4">No pending payments found. Start by adding a new unpaid sale.</p>
-      <Button className="bg-yellow-500 hover:bg-yellow-600">
-        <FaPlus className="mr-2" /> Add First Pending Payment
-      </Button>
-    </div>
-  </div>
-);
