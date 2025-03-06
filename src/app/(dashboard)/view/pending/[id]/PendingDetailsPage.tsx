@@ -63,14 +63,7 @@ export default function PendingDetailsPage({ params }: { params: { id: string } 
 
   return (
     <div className="container mx-auto p-4">
-      <Button
-        variant="ghost"
-        className="mb-4"
-        onClick={() => router.back()}
-      >
-        <FiArrowLeft className="mr-2" /> Back
-      </Button>
-
+      
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
