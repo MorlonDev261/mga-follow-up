@@ -158,7 +158,7 @@ export default function PendingContent() {
             {show ? (
               // Lorsque la liste n'est pas groupée, afficher seulement "Show details"
               <DropdownMenuItem
-                onClick={() => router.push(`/view/pending?id=${payment.id}`)}
+                onClick={() => router.push(`/view/pending/${payment.id}`)}
               >
                 Show details
               </DropdownMenuItem>
