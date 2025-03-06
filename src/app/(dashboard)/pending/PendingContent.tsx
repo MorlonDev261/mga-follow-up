@@ -126,17 +126,17 @@ export default function PendingContent() {
   {
     accessorKey: "date",
     header: "Date",
-    cell: ({ row }: { row: { getValue: (key: string) => any } }) => 
-      format(new Date(row.getValue("date")), 'dd/MM/yyyy')
+    cell: ({ row }) => format(new Date(row.getValue("date") as string), 'dd/MM/yyyy')
   },
   {
     accessorKey: "customer",
     header: "Customer"
+    cell: ({ row }) => <div>{row.getValue("customer") as string}</div>
   },
   {
     accessorKey: "designation",
     header: "Designation",
-    cell: ({ row }: { row: { getValue: (key: string) => any } }) => (
+    cell: ({ row }: { row: { getValue: (key: string) => string } }) => (
       <div>{(row.getValue("designation") as string[]).join(', ')}</div>
     )
   },
@@ -144,21 +144,21 @@ export default function PendingContent() {
     ? [{
         accessorKey: "price",
         header: "Price",
-        cell: ({ row }: { row: { getValue: (key: string) => any } }) => (
+        cell: ({ row }: { row: { getValue: (key: string) => number } }) => (
           <div className="text-center">{row.getValue("price")}</div>
         )
       }]
     : [{
         accessorKey: "Qte",
         header: () => <div className="text-center">Qte</div>,
-        cell: ({ row }: { row: { getValue: (key: string) => any } }) => (
+        cell: ({ row }: { row: { getValue: (key: string) => number } }) => (
           <div className="text-center">{row.getValue("Qte")}</div>
         )
       },
       {
         accessorKey: "sum",
         header: () => <div className="text-center">Total</div>,
-        cell: ({ row }: { row: { getValue: (key: string) => any } }) => (
+        cell: ({ row }: { row: { getValue: (key: string) => number } }) => (
           <div className="text-center">{row.getValue("sum")}</div>
         )
       }]),
