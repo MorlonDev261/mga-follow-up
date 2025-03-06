@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import PendingDetailsPage from "./PendingDetailsPage"; // Import du composant côté client
+import PendingDetailsPage from "./PendingDetailsPage";
 
 type Payment = {
   id: string;
