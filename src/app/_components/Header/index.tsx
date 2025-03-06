@@ -36,13 +36,13 @@ export default function Header({ children }: HeaderProps) {
     <header className="sticky top-0 z-50 w-full bg-[#111] p-2">
       {/* Top section */}
       <div className="flex items-center justify-between gap-4">
-        {/* Profile Image */}
+        {/* Logo Image */}
         <Image
-          src="/profile.jpg"
+          src="/logo.png"
           width={30}
           height={30}
-          alt="profile"
-          className="rounded-full w-50 h-50 border border-white cover"
+          alt="logo"
+          className="w-full h-50 contain"
         />
 
         {/* Mode Toggle (Dashboard / Excel) */}
@@ -69,6 +69,14 @@ export default function Header({ children }: HeaderProps) {
           <Link href="/notifications">
             <FiBell className="text-xl" />
           </Link>
+          {/* Logo Image */}
+        <Image
+          src="/profile.jpg"
+          width={30}
+          height={30}
+          alt="logo"
+          className="rounded-full w-50 h-50 border border-white cover"
+        />
         </div>
       </div>
 
