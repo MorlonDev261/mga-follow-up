@@ -91,11 +91,14 @@ export default function PendingContent() {
         
         const result: Payment[] = await response.json();
         const processedData = show 
-          ? result.filter(item => item.customer === show)
+          ? result.filter(item => item.customer === show).map(item => ({
+            ...item, 
+            designation: [item.designation] // S'assurer que c'est un tableau
+          }))
           : groupByCustomer(result);
 
-        setData(processedData);
-      } catch (error) {
+       setData(processedData);
+    } catch (error) {
         if (!abortController.signal.aborted) {
           setError("Failed to load pending payments");
           console.error("Fetch error:", error);
