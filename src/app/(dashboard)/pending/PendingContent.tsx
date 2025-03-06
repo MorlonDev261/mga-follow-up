@@ -51,31 +51,36 @@ export default function PendingContent() {
 
   // Optimized grouping function with useCallback
   const groupByCustomer = React.useCallback((data: Payment[]): dataType[] => {
-    const grouped = data.reduce((acc: Record<string, dataType>, item) => {
-      const key = item.customer;
-      const currentDesignation = Array.isArray(item.designation) 
-        ? item.designation 
-        : [item.designation];
+  const grouped = data.reduce((acc: Record<string, dataType>, item) => {
+    const key = item.customer;
+    const currentDesignation = Array.isArray(item.designation) 
+      ? item.designation 
+      : [item.designation]; // S'assurer que c'est un tableau
 
-      if (!acc[key]) {
-        acc[key] = { 
-          ...item, 
-          Qte: 1, 
-          sum: item.price, 
-          designation: currentDesignation // Ensure it's a flat array
-        };
-      } else {
-        acc[key].Qte! += 1;
-        acc[key].sum! += item.price;
-        acc[key].designation.push(...currentDesignation); // Spread to avoid nested arrays
+    if (!acc[key]) {
+      acc[key] = { 
+        ...item, 
+        Qte: 1, 
+        sum: item.price, 
+        designation: currentDesignation // Déjà un tableau
+      };
+    } else {
+      acc[key].Qte! += 1;
+      acc[key].sum! += item.price;
+
+      // S'assurer que acc[key].designation est un tableau avant d'utiliser push
+      if (!Array.isArray(acc[key].designation)) {
+        acc[key].designation = [acc[key].designation as string]; // Convertir en tableau si nécessaire
       }
-      
-      return acc;
-    }, {});
+      acc[key].designation.push(...currentDesignation); // Ajouter les éléments
+    }
+    
+    return acc;
+  }, {});
 
-    return Object.values(grouped);
-  }, []);
-
+  return Object.values(grouped);
+}, []);
+  
   // Data fetching with abort controller
   React.useEffect(() => {
     const abortController = new AbortController();
