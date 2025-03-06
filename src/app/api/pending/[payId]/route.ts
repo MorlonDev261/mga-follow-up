@@ -18,7 +18,8 @@ const payments: Payment[] = [
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: any } // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  { params }: { params: any }
 ) {
   const payId = params;
 
