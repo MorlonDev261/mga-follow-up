@@ -40,16 +40,15 @@ export default function Header({ children }: HeaderProps) {
       <div className="flex items-center justify-between gap-4">
         <Button
           variant="ghost"
-          className="mb-4"
           onClick={() => router.back()}
         >
-          <MdOutlineArrowBackIosNew />
+          <MdOutlineArrowBackIosNew className="text-xl" />
         </Button>
         {/* Logo Image */}
         <Image
           src="/logo.png"
-          width={10}
-          height={10}
+          width={50}
+          height={50}
           alt="logo"
         />
 
