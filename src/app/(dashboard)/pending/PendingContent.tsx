@@ -11,7 +11,7 @@ import Counter from "@components/Counter";
 import Balance from "@components/Balance";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Row, ColumnDef } from "@tanstack/react-table";
+import { ColumnDef } from "@tanstack/react-table"; // ✅ Suppression de Row
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -39,7 +39,6 @@ export default function PendingContent() {
   const [rawData, setRawData] = React.useState<Payment[]>([]);
   const [loading, setLoading] = React.useState(true);
 
-  // Récupération des données depuis l'API
   React.useEffect(() => {
     const fetchData = async () => {
       try {
@@ -58,7 +57,6 @@ export default function PendingContent() {
     fetchData();
   }, []);
 
-  // Fonction pour regrouper les données par customer
   const groupByCustomer = (data: Payment[]): DataType[] => {
     const grouped: Record<string, DataType> = {};
 
@@ -77,13 +75,11 @@ export default function PendingContent() {
     return Object.values(grouped);
   };
 
-  // Application du filtrage ou du regroupement
   const data = React.useMemo(() => {
     if (!show) return groupByCustomer(rawData);
     return rawData.filter((item) => item.customer === show);
   }, [rawData, show]);
 
-  // Calcul du total des paiements et du nombre de clients
   const totalPending = React.useMemo(
     () => data.reduce((acc, item) => acc + (item.sum || item.price), 0),
     [data]
@@ -93,13 +89,11 @@ export default function PendingContent() {
     [data]
   );
 
-  // Définition du sous-titre
   const subtitle = React.useMemo(() => {
     if (show) return `Pending payment from ${data[0]?.customer || "unknown customer"}.`;
     return `${numberOfCustomers} customers have pending payments.`;
-  }, [show, data]);
+  }, [show, data, numberOfCustomers]); // ✅ Ajout de numberOfCustomers
 
-  // Définition des colonnes du tableau
   const baseColumns: ColumnDef<DataType>[] = [
     {
       accessorKey: "date",
