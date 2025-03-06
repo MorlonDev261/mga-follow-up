@@ -11,7 +11,7 @@ import Counter from "@components/Counter";
 import Balance from "@components/Balance";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Row, ColumnDef } from "@tanstack/react-table";
+import { ColumnDef } from "@tanstack/react-table";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -46,6 +46,33 @@ export default function PendingContent() {
     numberOfCustomers: new Set(data.map(item => item.customer)).size
   }), [data]);
 
+  // Optimized grouping function with useCallback
+  const groupByCustomer = React.useCallback((data: Payment[]): dataType[] => {
+    const grouped = data.reduce((acc: Record<string, dataType>, item) => {
+      const key = item.customer;
+      
+      if (!acc[key]) {
+        acc[key] = { 
+          ...item, 
+          Qte: 1, 
+          sum: item.price, 
+          designation: [item.designation] 
+        };
+      } else {
+        acc[key].Qte! += 1;
+        acc[key].sum! += item.price;
+        acc[key].designation!.push(item.designation);
+      }
+      
+      return acc;
+    }, {});
+
+    return Object.values(grouped).map(item => ({
+      ...item,
+      designation: item.designation.join(', ')
+    }));
+  }, []);
+
   // Data fetching with abort controller
   React.useEffect(() => {
     const abortController = new AbortController();
@@ -79,34 +106,7 @@ export default function PendingContent() {
 
     fetchData();
     return () => abortController.abort();
-  }, [show]);
-
-  // Optimized grouping function
-  const groupByCustomer = React.useCallback((data: Payment[]): dataType[] => {
-    const grouped = data.reduce((acc: Record<string, dataType>, item) => {
-      const key = item.customer;
-      
-      if (!acc[key]) {
-        acc[key] = { 
-          ...item, 
-          Qte: 1, 
-          sum: item.price, 
-          designation: [item.designation] 
-        };
-      } else {
-        acc[key].Qte! += 1;
-        acc[key].sum! += item.price;
-        acc[key].designation!.push(item.designation);
-      }
-      
-      return acc;
-    }, {});
-
-    return Object.values(grouped).map(item => ({
-      ...item,
-      designation: item.designation.join(', ')
-    }));
-  }, []);
+  }, [show, groupByCustomer]); // Ajout de groupByCustomer dans les dépendances
 
   // Memoized columns configuration
   const Columns = React.useMemo<ColumnDef<dataType>[]>(() => [
@@ -250,7 +250,7 @@ export default function PendingContent() {
   );
 }
 
-// Components supplémentaires
+// Composants supplémentaires
 const PendingSkeleton = () => (
   <div className="pt-2 bg-[#111] animate-pulse">
     <div className="h-64 bg-gray-800 rounded-lg" />
