@@ -53,18 +53,21 @@ export default function PendingContent() {
   const groupByCustomer = React.useCallback((data: Payment[]): dataType[] => {
     const grouped = data.reduce((acc: Record<string, dataType>, item) => {
       const key = item.customer;
-      
+      const currentDesignation = Array.isArray(item.designation) 
+        ? item.designation 
+        : [item.designation];
+
       if (!acc[key]) {
         acc[key] = { 
           ...item, 
           Qte: 1, 
           sum: item.price, 
-          designation: [item.designation] // Correction : Forcer en tableau
+          designation: currentDesignation // Ensure it's a flat array
         };
       } else {
         acc[key].Qte! += 1;
         acc[key].sum! += item.price;
-        acc[key].designation.push(item.designation); // Ajouter au tableau
+        acc[key].designation.push(...currentDesignation); // Spread to avoid nested arrays
       }
       
       return acc;
@@ -92,12 +95,14 @@ export default function PendingContent() {
         const processedData = show 
           ? result.filter(item => item.customer === show).map(item => ({
             ...item, 
-            designation: [item.designation] // S'assurer que c'est un tableau
+            designation: Array.isArray(item.designation) 
+              ? item.designation 
+              : [item.designation] // Ensure it's a flat array
           }))
           : groupByCustomer(result);
 
-       setData(processedData);
-    } catch (error) {
+        setData(processedData);
+      } catch (error) {
         if (!abortController.signal.aborted) {
           setError("Failed to load pending payments");
           console.error("Fetch error:", error);
@@ -109,7 +114,7 @@ export default function PendingContent() {
 
     fetchData();
     return () => abortController.abort();
-  }, [show, groupByCustomer]); // Ajout de groupByCustomer dans les dépendances
+  }, [show, groupByCustomer]); // Add groupByCustomer to dependencies
 
   // Memoized columns configuration
   const Columns = React.useMemo<ColumnDef<dataType>[]>(() => [
@@ -256,7 +261,7 @@ export default function PendingContent() {
   );
 }
 
-// Composants supplémentaires
+// Additional components
 const PendingSkeleton = () => (
   <div className="pt-2 bg-[#111] animate-pulse">
     <div className="h-64 bg-gray-800 rounded-lg" />
