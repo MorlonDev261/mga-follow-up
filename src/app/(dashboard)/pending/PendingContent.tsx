@@ -29,7 +29,11 @@ type Payment = {
   price: number;
 };
 
-type dataType = Payment & { Qte?: number; sum?: number };
+type dataType = Payment & { 
+  Qte?: number; 
+  sum?: number; 
+  designation: string | string[]; // Mise à jour du type
+};
 
 export default function PendingContent() {
   const router = useRouter();
@@ -56,20 +60,30 @@ export default function PendingContent() {
           ...item, 
           Qte: 1, 
           sum: item.price, 
-          designation: [item.designation] 
+          designation: [item.designation] // Initialiser comme un tableau
         };
       } else {
         acc[key].Qte! += 1;
         acc[key].sum! += item.price;
-        acc[key].designation!.push(item.designation);
+
+        // Gérer designation comme un tableau
+        if (Array.isArray(acc[key].designation)) {
+          acc[key].designation.push(item.designation);
+        } else {
+          // Si ce n'est pas un tableau, le convertir en tableau
+          acc[key].designation = [acc[key].designation, item.designation];
+        }
       }
       
       return acc;
     }, {});
 
+    // Convertir designation en chaîne pour l'affichage
     return Object.values(grouped).map(item => ({
       ...item,
-      designation: item.designation.join(', ')
+      designation: Array.isArray(item.designation) 
+        ? item.designation.join(', ') 
+        : item.designation
     }));
   }, []);
 
