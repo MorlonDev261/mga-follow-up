@@ -122,8 +122,6 @@ export default function PendingContent() {
   }, [show, groupByCustomer]); // Add groupByCustomer to dependencies
 
   // Memoized columns configuration
-  
-  ) => navigator.clipboard.writeText(payment.id)}
   const Columns = React.useMemo<ColumnDef<dataType>[]>(() => [
   {
     accessorKey: "date",
