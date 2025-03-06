@@ -16,11 +16,8 @@ const payments: Payment[] = [
   { id: "bhqecj4p", date: "2025-02-23", customer: "Shop Cell", designation: "iPhone 7plus", price: 10034 },
 ];
 
-export async function GET(
-  req: NextRequest,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  { params }: { params: any }
-) {
+ // eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function GET(req: NextRequest, { params }: { params: any }) {
   const payId = params;
 
   const payment = payments.find((p) => p.id === payId);
