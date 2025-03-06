@@ -122,91 +122,94 @@ export default function PendingContent() {
   }, [show, groupByCustomer]); // Add groupByCustomer to dependencies
 
   // Memoized columns configuration
+  
+  ) => navigator.clipboard.writeText(payment.id)}
   const Columns = React.useMemo<ColumnDef<dataType>[]>(() => [
-    {
-      accessorKey: "date",
-      header: "Date",
-      cell: ({ row }) => format(new Date(row.getValue("date")), 'dd/MM/yyyy')
-    },
-    {
-      accessorKey: "customer",
-      header: "Customer"
-    },
-    {
-      accessorKey: "designation",
-      header: "Designation",
-      cell: ({ row }) => (
-        <div>{(row.getValue("designation") as string[]).join(', ')}</div>
-      )
-    },
-    ...(show
-      ? [{
-          accessorKey: "price",
-          header: "Price",
-          cell: ({ row }) => (
-            <div className="text-center">{row.getValue("price")}</div>
-          )
-        }]
-      : [{
-          accessorKey: "Qte",
-          header: () => <div className="text-center">Qte</div>,
-          cell: ({ row }) => (
-            <div className="text-center">{row.getValue("Qte")}</div>
-          )
-        },
-        {
-          accessorKey: "sum",
-          header: () => <div className="text-center">Total</div>,
-          cell: ({ row }) => (
-            <div className="text-center">{row.getValue("sum")}</div>
-          )
-        }]),
-    {
-      id: "actions",
-      enableHiding: false,
-      cell: ({ row }) => {
-        const payment = row.original;
+  {
+    accessorKey: "date",
+    header: "Date",
+    cell: ({ row }: { row: { getValue: (key: string) => any } }) => 
+      format(new Date(row.getValue("date")), 'dd/MM/yyyy')
+  },
+  {
+    accessorKey: "customer",
+    header: "Customer"
+  },
+  {
+    accessorKey: "designation",
+    header: "Designation",
+    cell: ({ row }: { row: { getValue: (key: string) => any } }) => (
+      <div>{(row.getValue("designation") as string[]).join(', ')}</div>
+    )
+  },
+  ...(show
+    ? [{
+        accessorKey: "price",
+        header: "Price",
+        cell: ({ row }: { row: { getValue: (key: string) => any } }) => (
+          <div className="text-center">{row.getValue("price")}</div>
+        )
+      }]
+    : [{
+        accessorKey: "Qte",
+        header: () => <div className="text-center">Qte</div>,
+        cell: ({ row }: { row: { getValue: (key: string) => any } }) => (
+          <div className="text-center">{row.getValue("Qte")}</div>
+        )
+      },
+      {
+        accessorKey: "sum",
+        header: () => <div className="text-center">Total</div>,
+        cell: ({ row }: { row: { getValue: (key: string) => any } }) => (
+          <div className="text-center">{row.getValue("sum")}</div>
+        )
+      }]),
+  {
+    id: "actions",
+    enableHiding: false,
+    cell: ({ row }: { row: { original: dataType } }) => {
+      const payment = row.original;
 
-        return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              {show ? (
-                <DropdownMenuItem
-                  onClick={() => router.push(`/view/pending/${payment.id}`)}
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            {show ? (
+              <DropdownMenuItem
+                onClick={() => router.push(`/view/pending/${payment.id}`)}
+              >
+                Show details
+              </DropdownMenuItem>
+            ) : (
+              <>
+                <DropdownMenuItem 
+                  onClick={() => navigator.clipboard.writeText(payment.id)}
                 >
-                  Show details
+                  Copy payment ID
                 </DropdownMenuItem>
-              ) : (
-                <>
-                  <DropdownMenuItem 
-                    onClick={() => navigator.clipboard.writeText(payment.id)}
-                  >
-                    Copy payment ID
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem>View customer</DropdownMenuItem>
-                  <DropdownMenuItem>View payment details</DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem
-                    onClick={() => router.push(`?show=${encodeURIComponent(payment.customer)}`)}
-                  >
-                    Show pending payments
-                  </DropdownMenuItem>
-                </>
-              )}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        );
-      }
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>View customer</DropdownMenuItem>
+                <DropdownMenuItem>View payment details</DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={() => router.push(`?show=${encodeURIComponent(payment.customer)}`)}
+                >
+                  Show pending payments
+                </DropdownMenuItem>
+              </>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
     }
-  ], [show, router]);
+  }
+], [show, router]);
 
   // Subtitle calculation
   const subtitle = React.useMemo(() => 
