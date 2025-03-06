@@ -32,7 +32,7 @@ type Payment = {
 type dataType = Payment & { 
   Qte?: number; 
   sum?: number; 
-  designation: string[]; // Correction : Toujours un tableau de string
+  designation: string | string[]; // Correction : Toujours un tableau de string
 };
 
 export default function PendingContent() {
