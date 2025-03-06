@@ -4,7 +4,6 @@ import { ReactNode } from "react"
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import { FaRegEnvelope } from "react-icons/fa6";
@@ -38,13 +37,12 @@ export default function Header({ children }: HeaderProps) {
     <header className="sticky top-0 z-50 w-full bg-[#111] p-2">
       {/* Top section */}
       <div className="flex items-center justify-between">
-        <Button
-          variant="ghost"
-          className="rounded-full"
+        <div
+          className="rounded-full p-1 hover:bg-gray-500"
           onClick={() => router.back()}
         >
           <MdOutlineArrowBackIosNew className="text-xl" />
-        </Button>
+        </div>
         {/* Logo Image */}
         <Image
           src="/logo.png"
