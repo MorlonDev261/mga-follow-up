@@ -11,7 +11,7 @@ import Counter from "@components/Counter";
 import Balance from "@components/Balance";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { ColumnDef } from "@tanstack/react-table"; // ✅ Suppression de Row
+import { ColumnDef, Row } from "@tanstack/react-table";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -115,7 +115,7 @@ export default function PendingContent() {
         {
           accessorKey: "price",
           header: "Price",
-          cell: ({ row }) => <div className="text-center">{row.getValue("price")}</div>,
+          cell: ({ row }: { row: Row<dataType> }) => (<div className="text-center">{row.getValue("price")}</div>),
         },
       ]
     : [
