@@ -232,7 +232,13 @@ export default function PendingContent() {
           balanceColor="text-yellow-500 hover:text-yellow-600"
           subtitle={subtitle}
           subtitleSize="text-sm"
-        />
+        >
+          {!loading && data.length > 0 && (
+            <button className="flex items-center gap-1 rounded bg-yellow-500 hover:bg-yellow-600 px-2 py-1 text-sm text-white">
+              <FaPlus /> New unpaid purchase
+            </button>
+          )}
+        </Balance>
       </div>
 
       {loading ? (
@@ -247,3 +253,21 @@ export default function PendingContent() {
     </main>
   );
 }
+
+// Composants supplémentaires
+const PendingSkeleton = () => (
+  <div className="pt-2 bg-[#111] animate-pulse">
+    <div className="h-64 bg-gray-800 rounded-lg" />
+  </div>
+);
+
+const EmptyState = () => (
+  <div className="w-full h-[65vh] flex items-center justify-center bg-[#111]">
+    <div className="-mt-5 text-center">
+      <p className="mb-4">No pending payments found. Start by adding a new unpaid sale.</p>
+      <Button className="bg-yellow-500 hover:bg-yellow-600">
+        <FaPlus className="mr-2" /> Add First Pending Payment
+      </Button>
+    </div>
+  </div>
+);
