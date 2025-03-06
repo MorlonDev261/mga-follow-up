@@ -18,9 +18,9 @@ const payments: Payment[] = [
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { payId: string } } // ✅ Correction ici
+  { params }: { params: Record<string, string> }
 ) {
-  const { payId } = params;
+  const payId = params.payId;
 
   const payment = payments.find((p) => p.id === payId);
 
