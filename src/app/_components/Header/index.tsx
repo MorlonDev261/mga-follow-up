@@ -37,9 +37,10 @@ export default function Header({ children }: HeaderProps) {
   return (
     <header className="sticky top-0 z-50 w-full bg-[#111] p-2">
       {/* Top section */}
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex items-center justify-between">
         <Button
           variant="ghost"
+          className="rounded-full"
           onClick={() => router.back()}
         >
           <MdOutlineArrowBackIosNew className="text-xl" />
@@ -53,7 +54,7 @@ export default function Header({ children }: HeaderProps) {
         />
 
         {/* Mode Toggle (Dashboard / Excel) */}
-        <div className="flex w-full max-w-[250px] items-center rounded bg-white/10 p-1">
+        <div className="flex w-full max-w-[250px] items-center rounded bg-white/10 p-1 text-sm sm:text-md">
           <button
             className={cn("w-1/2 rounded p-1", !pathname.startsWith("/rows") && "bg-white/40 pointer-events-none")}
             onClick={() => togglePath("dashboard")}
