@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import { FaRegEnvelope } from "react-icons/fa6";
 import { FiBell } from "react-icons/fi";
 
@@ -15,7 +16,7 @@ type HeaderProps = {
 export default function Header({ children }: HeaderProps) {
   const pathname = usePathname();
   const { push } = useRouter();
-
+  const router = useRouter();
   const togglePath = (type: "dashboard" | "rows") => {
     let newPath = pathname;
 
@@ -36,13 +37,19 @@ export default function Header({ children }: HeaderProps) {
     <header className="sticky top-0 z-50 w-full bg-[#111] p-2">
       {/* Top section */}
       <div className="flex items-center justify-between gap-4">
+        <Button
+          variant="ghost"
+          className="mb-4"
+          onClick={() => router.back()}
+        >
+          <MdOutlineArrowBackIosNew />
+        </Button>
         {/* Logo Image */}
         <Image
           src="/logo.png"
-          width={30}
-          height={30}
+          width={10}
+          height={10}
           alt="logo"
-          className="w-full h-30 contain"
         />
 
         {/* Mode Toggle (Dashboard / Excel) */}
