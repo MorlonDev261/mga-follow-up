@@ -25,14 +25,13 @@ type Payment = {
   id: string;
   date: string;
   customer: string;
-  designation: string;
+  designation: string | string[];
   price: number;
 };
 
 type dataType = Payment & { 
   Qte?: number; 
-  sum?: number; 
-  designation: string[]; // Correction : Toujours un tableau de string
+  sum?: number;
 };
 
 export default function PendingContent() {
