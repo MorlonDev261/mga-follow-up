@@ -11,7 +11,7 @@ import Counter from "@components/Counter";
 import Balance from "@components/Balance";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { ColumnDef } from "@tanstack/react-table";
+import { Row, ColumnDef } from "@tanstack/react-table";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,14 +25,11 @@ type Payment = {
   id: string;
   date: string;
   customer: string;
-  designation: string | string[];
+  designation: string;
   price: number;
 };
 
-type dataType = Payment & { 
-  Qte?: number; 
-  sum?: number;
-};
+type dataType = Payment & { Qte?: number; sum?: number };
 
 export default function PendingContent() {
   const router = useRouter();
@@ -49,38 +46,6 @@ export default function PendingContent() {
     numberOfCustomers: new Set(data.map(item => item.customer)).size
   }), [data]);
 
-  // Optimized grouping function with useCallback
-  const groupByCustomer = React.useCallback((data: Payment[]): dataType[] => {
-  const grouped = data.reduce((acc: Record<string, dataType>, item) => {
-    const key = item.customer;
-    const currentDesignation = Array.isArray(item.designation) 
-      ? item.designation 
-      : [item.designation]; // S'assurer que c'est un tableau
-
-    if (!acc[key]) {
-      acc[key] = { 
-        ...item, 
-        Qte: 1, 
-        sum: item.price, 
-        designation: currentDesignation // Déjà un tableau
-      };
-    } else {
-      acc[key].Qte! += 1;
-      acc[key].sum! += item.price;
-
-      // S'assurer que acc[key].designation est un tableau avant d'utiliser push
-      if (!Array.isArray(acc[key].designation)) {
-        acc[key].designation = [acc[key].designation as string]; // Convertir en tableau si nécessaire
-      }
-      acc[key].designation.push(...currentDesignation); // Ajouter les éléments
-    }
-    
-    return acc;
-  }, {});
-
-  return Object.values(grouped);
-}, []);
-  
   // Data fetching with abort controller
   React.useEffect(() => {
     const abortController = new AbortController();
@@ -98,12 +63,7 @@ export default function PendingContent() {
         
         const result: Payment[] = await response.json();
         const processedData = show 
-          ? result.filter(item => item.customer === show).map(item => ({
-            ...item, 
-            designation: Array.isArray(item.designation) 
-              ? item.designation 
-              : [item.designation] // Ensure it's a flat array
-          }))
+          ? result.filter(item => item.customer === show)
           : groupByCustomer(result);
 
         setData(processedData);
@@ -119,95 +79,118 @@ export default function PendingContent() {
 
     fetchData();
     return () => abortController.abort();
-  }, [show, groupByCustomer]); // Add groupByCustomer to dependencies
+  }, [show]);
+
+  // Optimized grouping function
+  const groupByCustomer = React.useCallback((data: Payment[]): dataType[] => {
+    const grouped = data.reduce((acc: Record<string, dataType>, item) => {
+      const key = item.customer;
+      
+      if (!acc[key]) {
+        acc[key] = { 
+          ...item, 
+          Qte: 1, 
+          sum: item.price, 
+          designation: [item.designation] 
+        };
+      } else {
+        acc[key].Qte! += 1;
+        acc[key].sum! += item.price;
+        acc[key].designation!.push(item.designation);
+      }
+      
+      return acc;
+    }, {});
+
+    return Object.values(grouped).map(item => ({
+      ...item,
+      designation: item.designation.join(', ')
+    }));
+  }, []);
 
   // Memoized columns configuration
   const Columns = React.useMemo<ColumnDef<dataType>[]>(() => [
-  {
-    accessorKey: "date",
-    header: "Date",
-    cell: ({ row }) => format(new Date(row.getValue("date") as string), 'dd/MM/yyyy')
-  },
-  {
-    accessorKey: "customer",
-    header: "Customer"
-    cell: ({ row }) => <div>{row.getValue("customer") as string}</div>
-  },
-  {
-    accessorKey: "designation",
-    header: "Designation",
-    cell: ({ row }: { row: { getValue: (key: string) => string } }) => (
-      <div>{(row.getValue("designation") as string[]).join(', ')}</div>
-    )
-  },
-  ...(show
-    ? [{
-        accessorKey: "price",
-        header: "Price",
-        cell: ({ row }: { row: { getValue: (key: string) => number } }) => (
-          <div className="text-center">{row.getValue("price")}</div>
-        )
-      }]
-    : [{
-        accessorKey: "Qte",
-        header: () => <div className="text-center">Qte</div>,
-        cell: ({ row }: { row: { getValue: (key: string) => number } }) => (
-          <div className="text-center">{row.getValue("Qte")}</div>
-        )
-      },
-      {
-        accessorKey: "sum",
-        header: () => <div className="text-center">Total</div>,
-        cell: ({ row }: { row: { getValue: (key: string) => number } }) => (
-          <div className="text-center">{row.getValue("sum")}</div>
-        )
-      }]),
-  {
-    id: "actions",
-    enableHiding: false,
-    cell: ({ row }: { row: { original: dataType } }) => {
-      const payment = row.original;
+    {
+      accessorKey: "date",
+      header: "Date",
+      cell: ({ row }) => format(new Date(row.getValue("date")), 'dd/MM/yyyy')
+    },
+    {
+      accessorKey: "customer",
+      header: "Customer"
+    },
+    {
+      accessorKey: "designation",
+      header: "Designation"
+    },
+    ...(show
+      ? [{
+          accessorKey: "price",
+          header: "Price",
+          cell: ({ row }) => (
+            <div className="text-center">{row.getValue("price")}</div>
+          )
+        }]
+      : [{
+          accessorKey: "Qte",
+          header: () => <div className="text-center">Qte</div>,
+          cell: ({ row }) => (
+            <div className="text-center">{row.getValue("Qte")}</div>
+          )
+        },
+        {
+          accessorKey: "sum",
+          header: () => <div className="text-center">Total</div>,
+          cell: ({ row }) => (
+            <div className="text-center">{row.getValue("sum")}</div>
+          )
+        }]),
+    {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }) => {
+        const payment = row.original;
 
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            {show ? (
-              <DropdownMenuItem
-                onClick={() => router.push(`/view/pending/${payment.id}`)}
-              >
-                Show details
-              </DropdownMenuItem>
-            ) : (
-              <>
-                <DropdownMenuItem 
-                  onClick={() => navigator.clipboard.writeText(payment.id)}
-                >
-                  Copy payment ID
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>View customer</DropdownMenuItem>
-                <DropdownMenuItem>View payment details</DropdownMenuItem>
-                <DropdownMenuSeparator />
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              {show ? (
                 <DropdownMenuItem
-                  onClick={() => router.push(`?show=${encodeURIComponent(payment.customer)}`)}
+                  onClick={() => router.push(`/view/pending/${payment.id}`)}
                 >
-                  Show pending payments
+                  Show details
                 </DropdownMenuItem>
-              </>
-            )}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
+              ) : (
+                <>
+                  <DropdownMenuItem 
+                    onClick={() => navigator.clipboard.writeText(payment.id)}
+                  >
+                    Copy payment ID
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>View customer</DropdownMenuItem>
+                  <DropdownMenuItem>View payment details</DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={() => router.push(`?show=${encodeURIComponent(payment.customer)}`)}
+                  >
+                    Show pending payments
+                  </DropdownMenuItem>
+                </>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      }
     }
-  }
-], [show, router]);
+  ], [show, router]);
 
   // Subtitle calculation
   const subtitle = React.useMemo(() => 
@@ -267,7 +250,7 @@ export default function PendingContent() {
   );
 }
 
-// Additional components
+// Components supplémentaires
 const PendingSkeleton = () => (
   <div className="pt-2 bg-[#111] animate-pulse">
     <div className="h-64 bg-gray-800 rounded-lg" />
