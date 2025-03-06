@@ -5,6 +5,7 @@ import { FaPlus } from "react-icons/fa6";
 import { BsShopWindow } from "react-icons/bs";
 import Balance from "@components/Balance";
 import Counter from "@components/Counter";
+import StockList from "@components/StockList";
 import Statistique from "@components/Statistique";
 import TableStock from "@components/DataTable/TableStock";
 import { Suspense } from "react";
@@ -46,13 +47,17 @@ export default function Stock() {
           {/* Statistique Component */}
           <div className="bg-[#111] text-white p-2">
             <h3 className="mb-4">Statistique de vente:</h3>
-            <div className="mb-5 w-full">
+            <div className="w-full">
               <Statistique type="bar" legende={false} />
             </div>
           </div>
         </div>
       </div>
 
+      <div className="p-2 bg-[#111]">
+        <StockList />
+      </div>
+      
       {/* Data Table */}
       <Suspense>
         <TableStock />
