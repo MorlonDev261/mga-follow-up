@@ -32,7 +32,7 @@ type Payment = {
 type dataType = Payment & { 
   Qte?: number; 
   sum?: number; 
-  designation: string | string[]; // Mise à jour du type
+  designation: string[]; // Toujours un tableau de string
 };
 
 export default function PendingContent() {
@@ -60,31 +60,18 @@ export default function PendingContent() {
           ...item, 
           Qte: 1, 
           sum: item.price, 
-          designation: [item.designation] // Initialiser comme un tableau
+          designation: [item.designation] // Toujours un tableau
         };
       } else {
         acc[key].Qte! += 1;
         acc[key].sum! += item.price;
-
-        // Gérer designation comme un tableau
-        if (Array.isArray(acc[key].designation)) {
-          acc[key].designation.push(item.designation);
-        } else {
-          // Si ce n'est pas un tableau, le convertir en tableau
-          acc[key].designation = [acc[key].designation, item.designation];
-        }
+        acc[key].designation.push(item.designation); // Ajouter au tableau
       }
       
       return acc;
     }, {});
 
-    // Convertir designation en chaîne pour l'affichage
-    return Object.values(grouped).map(item => ({
-      ...item,
-      designation: Array.isArray(item.designation) 
-        ? item.designation.join(', ') 
-        : item.designation
-    }));
+    return Object.values(grouped);
   }, []);
 
   // Data fetching with abort controller
@@ -135,7 +122,10 @@ export default function PendingContent() {
     },
     {
       accessorKey: "designation",
-      header: "Designation"
+      header: "Designation",
+      cell: ({ row }) => (
+        <div>{(row.getValue("designation") as string[]).join(', ')}</div>
+      )
     },
     ...(show
       ? [{
