@@ -75,11 +75,11 @@ export default function PendingContent() {
     return Object.values(grouped);
   };
 
-  const data = React.useMemo(() => {
+  const data: DataType[] = React.useMemo(() => {
     if (!show) return groupByCustomer(rawData);
-    return rawData.filter((item) => item.customer === show);
+    return rawData.filter((item) => item.customer === show).map((item) => ({ ...item, Qte: 1, sum: item.price }));
   }, [rawData, show]);
-
+  
   const totalPending = React.useMemo(
     () => data.reduce((acc, item) => acc + (item.sum || item.price), 0),
     [data]
