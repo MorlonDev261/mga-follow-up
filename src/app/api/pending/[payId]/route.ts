@@ -16,7 +16,7 @@ const payments: Payment[] = [
   { id: "bhqecj4p", date: "23-02-25", customer: "Shop Cell", designation: "iPhone 7plus", price: 10034 },
 ];
 
-export async function GET(req: NextRequest, context: { params: { payId: string } }) {
+export async function GET(req: NextRequest, context: { params: any }) {
   const { payId } = context.params;
 
   const payment = payments.find((p) => p.id === payId);
