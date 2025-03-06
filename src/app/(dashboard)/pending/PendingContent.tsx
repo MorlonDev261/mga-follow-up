@@ -115,7 +115,7 @@ export default function PendingContent() {
         {
           accessorKey: "price",
           header: "Price",
-          cell: ({ row }: { row: Row<dataType> }) => (<div className="text-center">{row.getValue("price")}</div>),
+          cell: ({ row }: { row: Row<DataType> }) => (<div className="text-center">{row.getValue("price")}</div>),
         },
       ]
     : [
