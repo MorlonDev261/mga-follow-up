@@ -13,27 +13,29 @@ const stocks = [
 
 const StockList = () => {
   return (
-    <>
-      {stocks.map((stock) => (
+    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+      {stocks.map((stock, index) => (
         <div
           key={stock.label}
-          className="flex flex-col my-1 h-15 w-full justify-between rounded bg-green-500 hover:bg-green-600 p-2 transition-colors duration-300"
+          className={`flex flex-col p-4 rounded-lg shadow-lg transition-transform transform hover:scale-105
+            ${index % 2 === 0 ? "bg-gradient-to-r from-green-400 to-green-600" : "bg-gradient-to-r from-blue-400 to-blue-600"}
+            text-white`}
         >
-          <span className="text-lg flex items-center gap-1">
+          <span className="text-lg flex items-center gap-2 font-semibold">
             <FaRegCalendarAlt />
-            <span className="text-xs">{stock.label}</span>
+            {stock.label}
           </span>
-          {stock.inStock > 0 ?
-            <div className="flex items-center justify-between">
-              <span>In stock: <b className="text-xs">{stock.inStock}pcs</b></span>
-              <span>Sales: <b>{stock.sales}pcs</b></span>
+          {stock.inStock > 0 ? (
+            <div className="mt-2 text-sm">
+              <span className="block">In stock: <b>{stock.inStock} pcs</b></span>
+              <span className="block">Sales: <b>{stock.sales} pcs</b></span>
             </div>
-            :
-            <span className="text-green-500">Out of stock</span>
-          }
+          ) : (
+            <span className="mt-2 text-red-500 font-semibold">Out of stock</span>
+          )}
         </div>
       ))}
-    </>
+    </div>
   );
 };
 
