@@ -58,14 +58,15 @@ export default function Header({ children }: HeaderProps) {
             <Image
               src="/logo.png"
               width={50}
-              height={50}
+              height={40}
               alt="logo"
+              className="cover"
             />
             <Image
               src="/logo-name.png"
               className="flex"
               width={80}
-              height={80}
+              height={40}
               alt="logo"
             />
           </div>
