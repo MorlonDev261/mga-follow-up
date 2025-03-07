@@ -59,7 +59,7 @@ export default function Header({ children }: HeaderProps) {
             <Image
               src="/logo-name.png"
               width={200}
-              height={30}
+              height={20}
               alt="logo"
             />
           </div>
