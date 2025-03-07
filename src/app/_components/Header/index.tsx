@@ -40,11 +40,7 @@ export default function Header({ children }: HeaderProps) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           {/* Bouton de navigation */}
-          {pathname === "/" ? (
-            <div className="rounded-full p-1 hover:bg-gray-500">
-              <FaBars className="text-xl" />
-            </div>
-          ) : (
+          {pathname !== "/" && (
             <div
               className="rounded-full p-1 hover:bg-gray-500"
               onClick={() => router.back()}
@@ -65,9 +61,10 @@ export default function Header({ children }: HeaderProps) {
             <Image
               src="/logo-name.png"
               className="flex"
-              width={100}
-              height={100}
+              width={30}
+              height={30}
               alt="logo"
+              className="w-auto h-12"
             />
           </div>
         </div>
