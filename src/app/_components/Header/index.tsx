@@ -63,9 +63,9 @@ export default function Header({ children }: HeaderProps) {
             />
             <Image
               src="/logo-name.png"
-              className="hidden sm:flex"
-              width={50}
-              height={50}
+              className="flex"
+              width={80}
+              height={80}
               alt="logo"
             />
           </div>
