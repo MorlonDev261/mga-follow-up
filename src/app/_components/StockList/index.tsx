@@ -35,7 +35,7 @@ const StockList = () => {
               key={stock.label}
               className={`flex flex-col p-4 rounded-lg shadow-lg transform transition-all duration-500 ease-in-out
                 ${index % 2 === 0 ? "bg-gradient-to-r from-green-400 to-green-600" : "bg-gradient-to-r from-blue-400 to-blue-600"}
-                text-white opacity-0 translate-y-5 animate-fade-in`}
+                text-white translate-y-5 animate-fade-in`}
             >
               <span className="text-lg flex items-center gap-2 font-semibold">
                 <FaRegCalendarAlt />
