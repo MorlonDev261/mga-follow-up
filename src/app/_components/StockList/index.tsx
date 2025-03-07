@@ -1,8 +1,8 @@
 import { FaRegCalendarAlt } from "react-icons/fa";
 
 const stocks = [
-  { label: 'Stock', inStock: 457900, sales: 3636 },
-  { label: 'Expenses', inStock: 457900, sales: 846 },
+  { label: 'Stock 24-03-25', inStock: 457900, sales: 3636 },
+  { label: 'Stock 01-02-25', inStock: 457900, sales: 846 },
   { label: 'Pending', inStock: 457900, sales: 5353 },
   { label: 'Employers', inStock: 7, sales: 35 },
   { label: 'Payement', inStock: 53, sales: 386 },
@@ -17,7 +17,7 @@ const StockList = () => {
       {stocks.map((stock) => (
         <div
           key={stock.label}
-          className="flex h-15 w-full items-center justify-between rounded bg-blue-200 hover:bg-blue-400 p-2 transition-colors duration-300"
+          className="flex flex-col mx-1 h-15 w-full justify-between rounded bg-blue-500 hover:bg-blue-600 p-2 transition-colors duration-300"
         >
           <span className="text-lg flex items-center gap-1">
             <FaRegCalendarAlt />
@@ -26,7 +26,7 @@ const StockList = () => {
           {stock.inStock > 0 ?
             <div>
               <span>In stock: <b className="text-xs">{stock.inStock}pcs</b></span>
-              <span>Sales: <b className="text-xs">{stock.sales}pcs</b></span>
+              <span>Sales: <b>{stock.sales}pcs</b></span>
             </div>
             :
             <span className="text-green-500">Out of stock</span>
