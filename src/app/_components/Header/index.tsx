@@ -48,7 +48,7 @@ export default function Header({ children }: HeaderProps) {
           )}
 
           {/* Logo Image */}
-          <div className="flex items-center gap-1">
+          <div className="flex items-center">
             <Image
               src="/logo.png"
               width={50}
