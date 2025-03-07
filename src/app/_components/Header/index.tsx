@@ -52,7 +52,7 @@ export default function Header({ children }: HeaderProps) {
             <Image
               src="/logo.png"
               width={50}
-              height={40}
+              height={30}
               alt="logo"
               className="cover hidden"
             />
