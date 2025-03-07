@@ -6,6 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
+import { FaBars } from "react-icons/fa";
 import { FaRegEnvelope } from "react-icons/fa6";
 import { FiBell } from "react-icons/fi";
 
@@ -37,23 +38,41 @@ export default function Header({ children }: HeaderProps) {
     <header className="sticky top-0 z-50 w-full bg-[#111] p-2">
       {/* Top section */}
       <div className="flex items-center justify-between">
-        <div
-          className="rounded-full p-1 hover:bg-gray-500"
-          onClick={() => router.back()}
-        >
-          <MdOutlineArrowBackIosNew className="text-xl" />
-        </div>
+        <div className="flex items-center gap-2">
+          {
+          if(pathname == "/") {
+            <div className="rounded-full p-1 hover:bg-gray-500">
+              <FaBars className="text-xl" />
+            </div>
+          } else {
+            <div
+              className="rounded-full p-1 hover:bg-gray-500"
+              onClick={() => router.back()}
+            >
+              <MdOutlineArrowBackIosNew className="text-xl" />
+            </div>
+          }
+        }
         {/* Logo Image */}
-        <Image
-          src="/logo.png"
-          className="hidden sm:flex"
-          width={50}
-          height={50}
-          alt="logo"
-        />
+        <div className="logo flex items-center gap-1">
+          <Image
+            src="/logo.png"
+            width={50}
+            height={50}
+            alt="logo"
+          />
+          <Image
+            src="/logo.jpg"
+            className="hidden sm:flex"
+            width={50}
+            height={50}
+            alt="logo"
+          />
+        </div>
+        </div>
 
         {/* Mode Toggle (Dashboard / Excel) */}
-        <div className="flex w-full max-w-[250px] items-center rounded bg-white/10 p-1 text-sm sm:text-md">
+        <div className="hidden sm:flex w-full max-w-[250px] items-center rounded bg-white/10 p-1 text-sm sm:text-md">
           <button
             className={cn("w-1/2 rounded p-1", !pathname.startsWith("/rows") && "bg-white/40 pointer-events-none")}
             onClick={() => togglePath("dashboard")}
