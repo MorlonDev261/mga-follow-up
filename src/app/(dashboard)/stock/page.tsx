@@ -11,6 +11,10 @@ import TableStock from "@components/DataTable/TableStock";
 import { Suspense } from "react";
 
 export default function Stock() {
+  const [loading, setLoading] = React.useState(true);
+
+  setTimeout(() => setLoading(false), 2000);
+
   return (
     <main className="p-2">
       <div className="grid gap-4 md:grid-cols-2">
