@@ -61,7 +61,6 @@ export default function Header({ children }: HeaderProps) {
               width={30}
               height={30}
               alt="logo"
-              className="w-12 h-12 contain"
             />
           </div>
         </div>
