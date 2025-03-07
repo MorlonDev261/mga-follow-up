@@ -24,7 +24,7 @@ const StockList = ({ loading }: {loading: boolean}) => {
        // bg-gradient-to-r from-green-400 to-green-600
         <div
           key={stock.label}
-          className="flex flex-col p-4 rounded-lg shadow-lg transition-transform transform hover:scale-105 bg-gradient-to-r from-blue-400 to-blue-600 text-white"
+          className="flex flex-col p-2 rounded-lg shadow-lg transition-transform transform hover:scale-105 bg-gradient-to-r from-blue-400 to-blue-600 text-white"
         > 
           <span className="text-lg flex items-center gap-2 font-semibold">
             <FaRegCalendarAlt />
