@@ -11,9 +11,11 @@ import { FiBell } from "react-icons/fi";
 
 type HeaderProps = {
   children?: ReactNode;
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function Header({ children }: HeaderProps) {
+export default function Header({ open, setOpen, children }: HeaderProps) {
   const pathname = usePathname();
   const { push } = useRouter(); // On garde uniquement cette version de useRouter
   
@@ -31,7 +33,6 @@ export default function Header({ children }: HeaderProps) {
     }
     push(newPath);
   };
-
   return (
     <header className="sticky top-0 z-50 w-full bg-[#111] p-2">
       {/* Top section */}
@@ -98,6 +99,7 @@ export default function Header({ children }: HeaderProps) {
             width={30}
             height={30}
             alt="profile"
+            onClick={() => setOpen(!open)}
             className="rounded-full border border-white"
           />
         </div>
