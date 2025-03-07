@@ -58,7 +58,7 @@ export default function Header({ children }: HeaderProps) {
             />
             <Image
               src="/logo-name.png"
-              width={30}
+              width={100}
               height={30}
               alt="logo"
             />
