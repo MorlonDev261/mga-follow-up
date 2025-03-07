@@ -4,12 +4,12 @@ import { useState } from "react";
 import Header from "@components/Header";
 import Sidebar from "@components/Sidebar";
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
-  const [SidebarStatus, setSidebarStatus] = useState(false);
+  const [open, setOpen] = useState(false);
   return (
     <div className="flex">
-      <Header open={SidebarStatus} setOpen={setSidebarStatus} />
+      <Header open={open} setOpen={setOpen} />
       <aside>
-        <Sidebar open={SidebarStatus} setOpen={setSidebarStatus} />
+        <Sidebar open={open} setOpen={setOpen} />
       </aside>
       <main>
         {children}
