@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils"; // Assurez-vous que cette fonction existe dans lib/utils.ts
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import { FaRegEnvelope } from "react-icons/fa6";
 import { FiBell } from "react-icons/fi";
@@ -15,8 +15,7 @@ type HeaderProps = {
 
 export default function Header({ children }: HeaderProps) {
   const pathname = usePathname();
-  const { push } = useRouter();
-  const router = useRouter();
+  const { push } = useRouter(); // On garde uniquement cette version de useRouter
   
   const togglePath = (type: "dashboard" | "rows") => {
     let newPath = pathname;
@@ -42,14 +41,14 @@ export default function Header({ children }: HeaderProps) {
           {pathname !== "/" && (
             <div
               className="rounded-full p-1 hover:bg-gray-500"
-              onClick={() => router.back()}
+              onClick={() => push("/")} // Utilisation de push pour revenir à la page précédente
             >
               <MdOutlineArrowBackIosNew className="text-xl" />
             </div>
           )}
 
           {/* Logo Image */}
-          <div className="logo flex items-center gap-1">
+          <div className="flex items-center gap-1">
             <Image
               src="/logo.png"
               width={50}
@@ -59,7 +58,6 @@ export default function Header({ children }: HeaderProps) {
             />
             <Image
               src="/logo-name.png"
-              className="flex"
               width={30}
               height={30}
               alt="logo"
@@ -71,12 +69,14 @@ export default function Header({ children }: HeaderProps) {
         {/* Mode Toggle (Dashboard / Excel) */}
         <div className="hidden sm:flex w-full max-w-[250px] items-center rounded bg-white/10 p-1 text-sm sm:text-md">
           <button
+            aria-label="Switch to Dashboard"
             className={cn("w-1/2 rounded p-1", !pathname.startsWith("/rows") && "bg-white/40 pointer-events-none")}
             onClick={() => togglePath("dashboard")}
           >
             Dashboard
           </button>
           <button
+            aria-label="Switch to Excel"
             className={cn("w-1/2 rounded p-1", pathname.startsWith("/rows") && "bg-white/40 pointer-events-none")}
             onClick={() => togglePath("rows")}
           >
