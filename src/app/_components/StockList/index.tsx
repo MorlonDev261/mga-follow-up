@@ -21,12 +21,11 @@ const StockList = ({ loading }: {loading: boolean}) => {
     ) : (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
       {stocks.map((stock, index) => (
+       // bg-gradient-to-r from-green-400 to-green-600
         <div
           key={stock.label}
-          className={`flex flex-col p-4 rounded-lg shadow-lg transition-transform transform hover:scale-105
-            ${index % 2 === 0 ? "bg-gradient-to-r from-green-400 to-green-600" : "bg-gradient-to-r from-blue-400 to-blue-600"}
-            text-white`}
-        >
+          className="flex flex-col p-4 rounded-lg shadow-lg transition-transform transform hover:scale-105 bg-gradient-to-r from-blue-400 to-blue-600 text-white"
+        > 
           <span className="text-lg flex items-center gap-2 font-semibold">
             <FaRegCalendarAlt />
             {stock.label}
