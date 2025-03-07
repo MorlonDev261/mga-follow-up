@@ -20,7 +20,7 @@ const StockList = ({ loading }: {loading: boolean}) => {
       </div>
     ) : (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-      {stocks.map((stock, index) => (
+      {stocks.map((stock) => (
        // bg-gradient-to-r from-green-400 to-green-600
         <div
           key={stock.label}
