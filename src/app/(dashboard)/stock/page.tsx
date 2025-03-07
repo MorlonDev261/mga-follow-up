@@ -59,7 +59,7 @@ export default function Stock() {
       </div>
 
       <div className="p-2 bg-[#111]">
-        <StockList />
+        <StockList loading={loading} />
       </div>
       
       {/* Data Table */}
