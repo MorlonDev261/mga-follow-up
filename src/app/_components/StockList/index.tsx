@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { FaRegCalendarAlt } from "react-icons/fa";
 
 const stocks = [
@@ -12,16 +11,7 @@ const stocks = [
   { label: '08-03-25', inStock: 567, sales: 56 },
 ];
 
-const StockList = () => {
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    // Simule un chargement de 2 secondes
-    const timer = setTimeout(() => setLoading(false), 2000);
-    
-    return () => clearTimeout(timer); // Nettoie le timer au démontage du composant
-  }, []);
-
+const StockList = ({ loading }: { loading: boolean }) => {
   return (
     <div className="p-4">
       {loading ? (
@@ -29,13 +19,13 @@ const StockList = () => {
           <span className="text-lg font-semibold text-gray-500 animate-pulse">Loading...</span>
         </div>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 transition-all duration-700 ease-in-out">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {stocks.map((stock, index) => (
             <div
               key={stock.label}
               className={`flex flex-col p-4 rounded-lg shadow-lg transform transition-all duration-500 ease-in-out
                 ${index % 2 === 0 ? "bg-gradient-to-r from-green-400 to-green-600" : "bg-gradient-to-r from-blue-400 to-blue-600"}
-                text-white translate-y-5 animate-fade-in`}
+                text-white scale-90 animate-fade-in`}
             >
               <span className="text-lg flex items-center gap-2 font-semibold">
                 <FaRegCalendarAlt />
