@@ -12,8 +12,13 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { FaPen } from "react-icons/fa";
 
-export default function Sidebar() {
-  const [open, setOpen] = useState(false);
+interface SidebarProps {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export default function Sidebar({ open, setOpen }: SidebarProps) {
+
   const [fullname, setFullname] = useState("John Doe");
   const [isEditing, setIsEditing] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState("Français");
