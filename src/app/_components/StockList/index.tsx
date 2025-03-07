@@ -17,14 +17,14 @@ const StockList = () => {
       {stocks.map((stock) => (
         <div
           key={stock.label}
-          className="flex flex-col mx-1 h-15 w-full justify-between rounded bg-blue-500 hover:bg-blue-600 p-2 transition-colors duration-300"
+          className="flex flex-col my-1 h-15 w-full justify-between rounded bg-green-500 hover:bg-green-600 p-2 transition-colors duration-300"
         >
           <span className="text-lg flex items-center gap-1">
             <FaRegCalendarAlt />
             <span className="text-xs">{stock.label}</span>
           </span>
           {stock.inStock > 0 ?
-            <div>
+            <div className="flex items-center justify-between">
               <span>In stock: <b className="text-xs">{stock.inStock}pcs</b></span>
               <span>Sales: <b>{stock.sales}pcs</b></span>
             </div>
