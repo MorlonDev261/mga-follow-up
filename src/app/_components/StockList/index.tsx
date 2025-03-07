@@ -11,30 +11,38 @@ const stocks = [
   { label: '08-03-25', inStock: 567, sales: 56 },
 ];
 
-const StockList = () => {
+const StockList = ({ loading }: { loading: boolean }) => {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-      {stocks.map((stock, index) => (
-        <div
-          key={stock.label}
-          className={`flex flex-col p-4 rounded-lg shadow-lg transition-transform transform hover:scale-105
-            ${index % 2 === 0 ? "bg-gradient-to-r from-green-400 to-green-600" : "bg-gradient-to-r from-blue-400 to-blue-600"}
-            text-white`}
-        >
-          <span className="text-lg flex items-center gap-2 font-semibold">
-            <FaRegCalendarAlt />
-            {stock.label}
-          </span>
-          {stock.inStock > 0 ? (
-            <div className="mt-2 text-sm">
-              <span className="block">In stock: <b>{stock.inStock} pcs</b></span>
-              <span className="block">Sales: <b>{stock.sales} pcs</b></span>
-            </div>
-          ) : (
-            <span className="mt-2 text-red-500 font-semibold">Out of stock</span>
-          )}
+    <div className="p-4">
+      {loading ? (
+        <div className="flex justify-center items-center h-40">
+          <span className="text-lg font-semibold text-gray-500 animate-pulse">Loading...</span>
         </div>
-      ))}
+      ) : (
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {stocks.map((stock, index) => (
+            <div
+              key={stock.label}
+              className={`flex flex-col p-4 rounded-lg shadow-lg transform transition-all duration-500 ease-in-out
+                ${index % 2 === 0 ? "bg-gradient-to-r from-green-400 to-green-600" : "bg-gradient-to-r from-blue-400 to-blue-600"}
+                text-white scale-90 opacity-0 animate-fade-in`}
+            >
+              <span className="text-lg flex items-center gap-2 font-semibold">
+                <FaRegCalendarAlt />
+                {stock.label}
+              </span>
+              {stock.inStock > 0 ? (
+                <div className="mt-2 text-sm">
+                  <span className="block">In stock: <b>{stock.inStock} pcs</b></span>
+                  <span className="block">Sales: <b>{stock.sales} pcs</b></span>
+                </div>
+              ) : (
+                <span className="mt-2 text-red-500 font-semibold">Out of stock</span>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
