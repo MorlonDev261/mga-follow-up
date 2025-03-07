@@ -159,7 +159,7 @@ export default function PendingContent() {
                 <DropdownMenuItem>View customer</DropdownMenuItem>
                 <DropdownMenuItem>View payment details</DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => router.push(`?show=${encodeURIComponent(payment.customer)}`)}>
+                <DropdownMenuItem onClick={() => router.push(`/${encodeURIComponent(payment.customer)}`)}>
                   Show list pending payment
                 </DropdownMenuItem>
               </>
