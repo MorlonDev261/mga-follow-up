@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { cn } from "@/lib/utils"; // Assurez-vous que cette fonction existe dans lib/utils.ts
+import { cn } from "@/lib/utils";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import { FaRegEnvelope } from "react-icons/fa6";
 import { FiBell } from "react-icons/fi";
@@ -54,6 +54,7 @@ export default function Header({ children }: HeaderProps) {
               width={50}
               height={40}
               alt="logo"
+              className="cover hidden"
             />
             <Image
               src="/logo-name.png"
