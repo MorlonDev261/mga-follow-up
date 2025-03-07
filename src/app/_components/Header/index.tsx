@@ -52,23 +52,23 @@ export default function Header({ children }: HeaderProps) {
               <MdOutlineArrowBackIosNew className="text-xl" />
             </div>
           )}
-        </div>
 
-        {/* Logo Image */}
-        <div className="logo flex items-center gap-1">
-          <Image
-            src="/logo.png"
-            width={50}
-            height={50}
-            alt="logo"
-          />
-          <Image
-            src="/logo.jpg"
-            className="hidden sm:flex"
-            width={50}
-            height={50}
-            alt="logo"
-          />
+          {/* Logo Image */}
+          <div className="logo flex items-center gap-1">
+            <Image
+              src="/logo.png"
+              width={50}
+              height={50}
+              alt="logo"
+            />
+            <Image
+              src="/logo.jpg"
+              className="hidden sm:flex"
+              width={50}
+              height={50}
+              alt="logo"
+            />
+          </div>
         </div>
 
         {/* Mode Toggle (Dashboard / Excel) */}
@@ -102,7 +102,7 @@ export default function Header({ children }: HeaderProps) {
             width={30}
             height={30}
             alt="profile"
-            className="rounded-full w-12 h-12 border border-white"
+            className="rounded-full border border-white"
           />
         </div>
       </div>
