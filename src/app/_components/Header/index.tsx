@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode } from "react"
+import { ReactNode } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -18,6 +18,7 @@ export default function Header({ children }: HeaderProps) {
   const pathname = usePathname();
   const { push } = useRouter();
   const router = useRouter();
+  
   const togglePath = (type: "dashboard" | "rows") => {
     let newPath = pathname;
 
@@ -27,32 +28,32 @@ export default function Header({ children }: HeaderProps) {
       }
     } else if (type === "rows") {
       if (!pathname.startsWith("/rows")) {
-        newPath = "/rows" + pathname; // Ajoute "/excel"
+        newPath = "/rows" + pathname; // Ajoute "/rows"
       }
     }
     push(newPath);
   };
-
 
   return (
     <header className="sticky top-0 z-50 w-full bg-[#111] p-2">
       {/* Top section */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          {
-          if(pathname == "/") {
+          {/* Bouton de navigation */}
+          {pathname === "/" ? (
             <div className="rounded-full p-1 hover:bg-gray-500">
               <FaBars className="text-xl" />
             </div>
-          } else {
+          ) : (
             <div
               className="rounded-full p-1 hover:bg-gray-500"
               onClick={() => router.back()}
             >
               <MdOutlineArrowBackIosNew className="text-xl" />
             </div>
-          }
-        }
+          )}
+        </div>
+
         {/* Logo Image */}
         <div className="logo flex items-center gap-1">
           <Image
@@ -68,7 +69,6 @@ export default function Header({ children }: HeaderProps) {
             height={50}
             alt="logo"
           />
-        </div>
         </div>
 
         {/* Mode Toggle (Dashboard / Excel) */}
@@ -95,14 +95,15 @@ export default function Header({ children }: HeaderProps) {
           <Link href="/notifications">
             <FiBell className="text-xl" />
           </Link>
-          {/* Logo Image */}
-        <Image
-          src="/profile.jpg"
-          width={30}
-          height={30}
-          alt="logo"
-          className="rounded-full w-50 h-50 border border-white cover"
-        />
+
+          {/* Profil */}
+          <Image
+            src="/profile.jpg"
+            width={30}
+            height={30}
+            alt="profile"
+            className="rounded-full w-12 h-12 border border-white"
+          />
         </div>
       </div>
 
