@@ -48,11 +48,11 @@ export default function Header({ children }: HeaderProps) {
           )}
 
           {/* Logo Image */}
-          <div className="flex items-center">
+          <div className="flex mb-1 items-center">
             <Image
               src="/logo.png"
               width={50}
-              height={30}
+              height={40}
               alt="logo"
               className="cover hidden"
             />
