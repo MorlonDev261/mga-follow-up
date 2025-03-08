@@ -70,7 +70,9 @@ export default function ProfileAvatar({ auth=false }: ProfileProps) {
     </Avatar>
 
     {/* Icône d'édition de profile */}
-    <FaCamera className="absolute bottom-1 right-1 text-lg bg-white text-gray-900 p-1 rounded-full shadow cursor-pointer" />
+    <span className="absolute bottom-1 right-1 flex items-center justify-center p-1 bg-white rounded-full shadow cursor-pointer">
+      <FaCamera className="text-lg text-gray-900" />
+    </span>
   </div>
 </div>
 
