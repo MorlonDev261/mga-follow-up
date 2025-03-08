@@ -1,6 +1,7 @@
 "use client";
 
 import { ReactNode } from "react";
+import Sidebar from "@components/Sidebar";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -11,11 +12,10 @@ import { FiBell } from "react-icons/fi";
 
 type HeaderProps = {
   children?: ReactNode;
-  open?: boolean;
-  setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function Header({ open, setOpen, children }: HeaderProps) {
+export default function Header({ children }: HeaderProps) {
+  const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
   const { push } = router;
@@ -102,7 +102,7 @@ export default function Header({ open, setOpen, children }: HeaderProps) {
           />
         </div>
       </div>
-
+       <Sidebar open={open} setOpen={setOpen} />
       {/* Search & Scan */}
       {children}
     </header>
