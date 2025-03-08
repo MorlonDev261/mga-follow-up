@@ -15,7 +15,7 @@ import DataTableMain from "@components/DataTable/DataTableMain";
 export default function Dashboard() {
 
   return (
-   <main className="p-2">
+   <main>
       <div className="grid gap-4 md:grid-cols-2">
             
         <div className="bg-[#111] p-2">
