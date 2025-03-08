@@ -29,12 +29,12 @@ export default function ProfileAvatar({ auth=false }: ProfileProps) {
   return (
           <div className="flex flex-col items-center space-y-2 mt-4">
             <div className="relative">
-              <Avatar className="w-16 h-16">
+              <Avatar className="w-24 h-24">
       {!error ? (
         <AvatarImage 
             src={src}
             alt="Profile"
-            className="rounded-full h-16 w-16 object-cover"
+            className="object-cover"
             onError={() => setError(true)}
         />
       ) : (
