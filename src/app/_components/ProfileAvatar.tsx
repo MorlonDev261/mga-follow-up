@@ -13,7 +13,7 @@ interface ProfileProps {
   auth?: boolean
 }
 
-export default function ProfileAvatar({ src, auth=false }: ProfileProps) {
+export default function ProfileAvatar({ src="", auth=false }: ProfileProps) {
   const [error, setError] = useState(false);
   const [fullname, setFullname] = useState("John Doe");
   const [isEditing, setIsEditing] = useState(false);
