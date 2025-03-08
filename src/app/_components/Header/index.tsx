@@ -98,7 +98,7 @@ export default function Header({ children }: HeaderProps) {
           
           {/* Profil */}
           <div className="profile flex items-center gap-1">
-            <Avatar className="h-4 w-4 border border-white cursor-pointer" onClick={() => setOpen(!open)}>
+            <Avatar className="h-6 w-6 border border-white cursor-pointer" onClick={() => setOpen(!open)}>
               <AvatarImage src="/profile.jpg" />
               <AvatarFallback>C</AvatarFallback>
             </Avatar>
