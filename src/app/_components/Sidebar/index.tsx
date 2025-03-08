@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import ProfileAvatar from "@components/ProfileAvatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -39,36 +40,7 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
       <SheetContent className="w-80 flex overflow-x-auto flex-col justify-between">
         <div>
           {/* Profil */}
-          <div className="flex flex-col items-center space-y-2 mt-4">
-            <div className="relative">
-              <Image
-                src="/profile.jpg"
-                alt="Profile"
-                width={80}
-                height={80}
-                className="rounded-full"
-              />
-            </div>
-            <div className="flex items-center gap-2">
-              {isEditing ? (
-                <Input
-                  value={fullname}
-                  onChange={handleFullnameChange}
-                  onBlur={saveFullname}
-                  onKeyDown={(e) => e.key === "Enter" && saveFullname()}
-                  autoFocus
-                  className="w-40 text-center"
-                />
-              ) : (
-                <h2 className="text-lg font-semibold">{fullname}</h2>
-              )}
-              <FaPen
-                className="cursor-pointer text-gray-500 hover:text-gray-700"
-                onClick={() => setIsEditing(true)}
-              />
-            </div>
-            <p className="text-sm text-gray-500">Inscrit le 12/01/2023</p>
-          </div>
+          <ProfileAvatar auth={true} />
 
           <Separator className="my-4" />
 
