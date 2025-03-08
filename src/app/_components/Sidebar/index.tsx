@@ -9,7 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { FaPen } from "react-icons/fa";
 
 interface SidebarProps {
@@ -36,9 +36,6 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger asChild>
-        <Button variant="outline">Open</Button>
-      </SheetTrigger>
       <SheetContent className="w-80 flex flex-col justify-between">
         <div>
           {/* Profil */}
