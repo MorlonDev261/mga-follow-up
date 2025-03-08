@@ -57,7 +57,7 @@ export default function Header({ children }: HeaderProps) {
             <Image
               src="/main-logo.png"
               width={150}
-              height={40}
+              height={30}
               alt="logo"
               priority
             />
