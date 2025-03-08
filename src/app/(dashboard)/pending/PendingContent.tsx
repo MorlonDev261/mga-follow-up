@@ -171,7 +171,7 @@ export default function PendingContent() {
   }];
 
   return (
-    <main className={cn(data.length <= 0 && "bg-[#111]")}>
+    <div className={cn(data.length <= 0 && "bg-[#111]")}>
       <div className="px-2 bg-[#111]">
         <Balance 
           title={<><FiClock /> Pending Payment</>} 
@@ -204,6 +204,6 @@ export default function PendingContent() {
           </div>
         )}
       </div>
-    </main>
+    </div>
   );
 }
