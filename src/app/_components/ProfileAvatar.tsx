@@ -3,6 +3,8 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
+import { MdOutlineReportGmailerrorred } from "react-icons/md";
+import { FaCircleCheck } from "react-icons/fa6";
 import { FaPen, FaUser } from "react-icons/fa";
 import { useState } from "react";
 
@@ -48,7 +50,7 @@ export default function ProfileAvatar({ src, auth=false }: ProfileProps) {
           </Avatar>
             </div>
             <div className="flex items-center gap-2">
-              {isEditing ? (
+              {auth && isEditing ? (
                 <Input
                   value={fullname}
                   onChange={handleFullnameChange}
@@ -65,6 +67,7 @@ export default function ProfileAvatar({ src, auth=false }: ProfileProps) {
                 onClick={() => setIsEditing(true)}
               />
             </div>
+            <p className="text-sm text-gray-500">morlonrnd@gmail.com <MdOutlineReportGmailerrorred /> <FaCircleCheck /> </p>
             <p className="text-sm text-gray-500">Inscrit le 12/01/2023</p>
           </div>
   );
