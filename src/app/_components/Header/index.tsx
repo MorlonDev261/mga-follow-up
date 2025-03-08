@@ -11,8 +11,8 @@ import { FiBell } from "react-icons/fi";
 
 type HeaderProps = {
   children?: ReactNode;
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  open?: boolean;
+  setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default function Header({ open, setOpen, children }: HeaderProps) {
