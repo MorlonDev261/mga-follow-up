@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { BsMoonStarsFill } from "react-icons/bs"
-import { MdWbSunny } from "react-icons/md";
+import { MdWbSunny } from "react-icons/md"
 import { useTheme } from "next-themes"
 
 import {
@@ -13,18 +13,31 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 export default function ToggleTheme() {
-  const { setTheme } = useTheme()
+  const { resolvedTheme, setTheme } = useTheme()
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <span className="text-xl hover">
-          <MdWbSunny className="text-xl rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-          <BsMoonStarsFill className="absolute text-xl rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+        <span
+          role="button"
+          tabIndex={0}
+          className="relative flex items-center justify-center w-10 h-10 p-2 rounded-full cursor-pointer transition-all duration-300 
+                     hover:bg-gray-200 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-600"
+        >
+          <MdWbSunny
+            className={`absolute text-xl text-yellow-400 transition-transform duration-500 ${
+              resolvedTheme === "dark" ? "opacity-0 scale-0 rotate-90" : "opacity-100 scale-100 rotate-0"
+            }`}
+          />
+          <BsMoonStarsFill
+            className={`absolute text-xl text-gray-800 dark:text-gray-200 transition-transform duration-500 ${
+              resolvedTheme === "dark" ? "opacity-100 scale-100 rotate-0" : "opacity-0 scale-0 -rotate-90"
+            }`}
+          />
           <span className="sr-only">Toggle theme</span>
         </span>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="center">
+      <DropdownMenuContent align="right">
         <DropdownMenuItem onClick={() => setTheme("light")}>
           Light
         </DropdownMenuItem>
