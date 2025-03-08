@@ -49,7 +49,9 @@ export default function ProfileAvatar({ auth=false }: ProfileProps) {
     )}
     
     {/* Icône d'édition de cover */}
-    <FaCamera className="absolute bottom-2 right-2 h-6 w-6 text-lg bg-white text-gray-900 p-1 rounded-full shadow cursor-pointer" />
+    <span className="absolute bottom-2 right-2 flex items-center justify-center p-1 bg-white rounded-full shadow cursor-pointer">
+      <FaCamera className="text-md text-gray-900" />
+    </span>
   </div>
 
   {/* Avatar (Profile Picture) */}
@@ -70,8 +72,8 @@ export default function ProfileAvatar({ auth=false }: ProfileProps) {
     </Avatar>
 
     {/* Icône d'édition de profile */}
-    <span className="absolute bottom-1 right-1 flex items-center justify-center p-1 bg-white rounded-full shadow cursor-pointer">
-      <FaCamera className="text-lg text-gray-900" />
+    <span className="absolute bottom-1 right-0 flex items-center justify-center p-1 bg-white rounded-full shadow cursor-pointer">
+      <FaCamera className="text-md text-gray-900" />
     </span>
   </div>
 </div>
