@@ -36,7 +36,7 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetContent className="w-80 flex flex-col justify-between">
+      <SheetContent className="w-80 flex overflow-x-auto flex-col justify-between">
         <div>
           {/* Profil */}
           <div className="flex flex-col items-center space-y-2 mt-4">
