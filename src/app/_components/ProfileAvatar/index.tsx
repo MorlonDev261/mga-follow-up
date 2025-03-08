@@ -51,7 +51,7 @@ export default function ProfileAvatar({ auth = false }: ProfileProps) {
     <div className="flex flex-col items-center space-y-2 mt-4">
       <div className="relative w-full max-w-lg">
         {/* Cover Picture */}
-        <div className="relative h-32 w-full bg-gray-300">
+        <div className="relative h-32 w-full rounded-t-lg bg-gray-300">
           {coverSrc && !coverError ? (
             <Image
               src={coverSrc}
@@ -61,7 +61,7 @@ export default function ProfileAvatar({ auth = false }: ProfileProps) {
               onError={() => setCoverError(true)}
             />
           ) : (
-            <div className="h-full w-full flex items-center justify-center bg-gray-300">
+            <div className="h-full w-full flex items-center justify-center rounded-t-lg bg-gray-300">
               <FaImage className="text-4xl text-gray-500" />
             </div>
           )}
