@@ -17,7 +17,9 @@ type HeaderProps = {
 
 export default function Header({ open, setOpen, children }: HeaderProps) {
   const pathname = usePathname();
-  const { push } = useRouter();
+  const router = useRouter();
+  const { push } = router;
+
 
   const togglePath = (type: "dashboard" | "rows") => {
     let newPath = pathname;
@@ -44,7 +46,7 @@ export default function Header({ open, setOpen, children }: HeaderProps) {
           {pathname !== "/" && (
             <div
               className="rounded-full p-1 hover:bg-gray-500 cursor-pointer"
-              onClick={() => push(-1)} // Revient en arrière
+              onClick={() => router.back()}
             >
               <MdOutlineArrowBackIosNew className="text-xl" />
             </div>
