@@ -34,9 +34,7 @@ export default function ProfileAvatar({ auth=false }: ProfileProps) {
         <AvatarImage 
             src={src}
             alt="Profile"
-            width={100}
-            height={100}
-            className="rounded-full object-cover"
+            className="rounded-full h-16 w-16 object-cover"
             onError={() => setError(true)}
         />
       ) : (
