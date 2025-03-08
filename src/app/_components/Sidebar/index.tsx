@@ -17,21 +17,10 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ open, setOpen }: SidebarProps) {
-
-  const [fullname, setFullname] = useState("John Doe");
-  const [isEditing, setIsEditing] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState("Français");
   const [selectedCurrency, setSelectedCurrency] = useState("$");
   const [exchangeRate, setExchangeRate] = useState("");
   const [rounding, setRounding] = useState(false);
-
-  const handleFullnameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFullname(e.target.value);
-  };
-
-  const saveFullname = () => {
-    setIsEditing(false);
-  };
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
