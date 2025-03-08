@@ -16,7 +16,7 @@ export default function Stock() {
   setTimeout(() => setLoading(false), 2000);
 
   return (
-    <main className="p-2">
+    <main>
       <div className="grid gap-4 md:grid-cols-2">
         {/* Balance Component */}
         <div className="bg-[#111] p-2">
