@@ -9,15 +9,14 @@ import { FaPen, FaUser } from "react-icons/fa";
 import { useState } from "react";
 
 interface ProfileProps {
-  src?: string
+  src: string
   auth?: boolean
 }
 
-export default function ProfileAvatar({ src="", auth=false }: ProfileProps) {
+export default function ProfileAvatar({ src, auth=false }: ProfileProps) {
   const [error, setError] = useState(false);
   const [fullname, setFullname] = useState("John Doe");
   const [isEditing, setIsEditing] = useState(false);
-  const validSrc = src && src.trim() !== "" ? src : null;
   
   const handleFullnameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFullname(e.target.value);
@@ -31,10 +30,10 @@ export default function ProfileAvatar({ src="", auth=false }: ProfileProps) {
           <div className="flex flex-col items-center space-y-2 mt-4">
             <div className="relative">
               <Avatar className="w-16 h-16">
-      {!error || validSrc ? (
+      {!error ? (
         <AvatarImage asChild>
           <Image
-            src={validSrc}
+            src={src}
             alt="Profile"
             width={80}
             height={80}
