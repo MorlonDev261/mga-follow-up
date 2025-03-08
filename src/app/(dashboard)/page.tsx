@@ -15,7 +15,7 @@ import DataTableMain from "@components/DataTable/DataTableMain";
 export default function Dashboard() {
 
   return (
-   <main>
+   <>
       <div className="grid gap-4 md:grid-cols-2">
             
         <div className="bg-[#111] p-2">
@@ -63,6 +63,6 @@ export default function Dashboard() {
       </div>
 
       <DataTableMain />
-  </main>
+  </>
   );
 }
