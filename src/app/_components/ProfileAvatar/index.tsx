@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { MdOutlineReportGmailerrorred } from "react-icons/md";
@@ -12,7 +13,8 @@ interface ProfileProps {
 }
 
 export default function ProfileAvatar({ auth=false }: ProfileProps) {
-  const [error, setError] = useState(false);
+  const [coverError, setCoverError] = useState(false);
+  const [profileError, setProfileError] = useState(false);
   const [fullname, setFullname] = useState("John Doe");
   const [isEditing, setIsEditing] = useState(false);
   
@@ -24,7 +26,8 @@ export default function ProfileAvatar({ auth=false }: ProfileProps) {
     setIsEditing(false);
   };
 
-  const src = "profile.jpg";
+  const coverSrc = "cover.jpg";
+  const profileSrc = "profile.jpg";
 
   return (
           <div className="flex flex-col items-center space-y-2 mt-4">
