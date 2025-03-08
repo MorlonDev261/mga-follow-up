@@ -57,13 +57,15 @@ export default function ProfileAvatar({ auth=false }: ProfileProps) {
               ) : (
                 <h2 className="text-lg font-semibold">{fullname}</h2>
               )}
+              {auth && (
               <FaPen
                 className="cursor-pointer text-gray-500 hover:text-gray-700"
                 onClick={() => setIsEditing(true)}
               />
+              )}
             </div>
-            <p className="text-sm text-gray-500">morlonrnd@gmail.com <MdOutlineReportGmailerrorred /> <FaCircleCheck /> </p>
-            <p className="text-sm text-gray-500">Inscrit le 12/01/2023</p>
+            <p className="flex gap-1 text-sm text-gray-500">morlonrnd@gmail.com <MdOutlineReportGmailerrorred /> <FaCircleCheck /> </p>
+            <p className="flex gap-1 text-sm text-gray-500">Inscrit le 12/01/2023</p>
           </div>
   );
 }
