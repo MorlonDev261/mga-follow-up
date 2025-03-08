@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, ReactNode } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import Sidebar from "@components/Sidebar";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
@@ -92,14 +93,13 @@ export default function Header({ children }: HeaderProps) {
           </Link>
 
           {/* Profil */}
-          <Image
-            src="/profile.jpg"
-            width={30}
-            height={25}
-            alt="profile"
-            onClick={() => setOpen(!open)}
-            className="rounded-full border border-white cursor-pointer"
-          />
+          <div className="profile flex items-center gap-1">
+            <Avatar className="border border-white cursor-pointer" onClick={() => setOpen(!open)}>
+              <AvatarImage src="/profile.jpg" />
+              <AvatarFallback>C</AvatarFallback>
+            </Avatar>
+            <span className="hidden md:flex">Hi, Morlon</span>
+          </div>
         </div>
       </div>
        <Sidebar open={open} setOpen={setOpen} />
