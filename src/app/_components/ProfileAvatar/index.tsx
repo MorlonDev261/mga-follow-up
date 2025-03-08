@@ -36,7 +36,6 @@ export default function ProfileAvatar({ auth=false }: ProfileProps) {
             alt="Profile"
             width={80}
             height={80}
-            priority
             className="rounded-full object-cover"
             onError={() => setError(true)}
         />
