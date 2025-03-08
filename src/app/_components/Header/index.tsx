@@ -95,7 +95,7 @@ export default function Header({ children }: HeaderProps) {
           <Image
             src="/profile.jpg"
             width={30}
-            height={30}
+            height={25}
             alt="profile"
             onClick={() => setOpen(!open)}
             className="rounded-full border border-white cursor-pointer"
