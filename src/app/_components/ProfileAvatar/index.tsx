@@ -9,11 +9,10 @@ import { FaPen, FaUser } from "react-icons/fa";
 import { useState } from "react";
 
 interface ProfileProps {
-  src: string
   auth?: boolean
 }
 
-export default function ProfileAvatar({ src, auth=false }: ProfileProps) {
+export default function ProfileAvatar({ auth=false }: ProfileProps) {
   const [error, setError] = useState(false);
   const [fullname, setFullname] = useState("John Doe");
   const [isEditing, setIsEditing] = useState(false);
@@ -25,6 +24,8 @@ export default function ProfileAvatar({ src, auth=false }: ProfileProps) {
   const saveFullname = () => {
     setIsEditing(false);
   };
+
+  const src = "profile.jpg";
 
   return (
           <div className="flex flex-col items-center space-y-2 mt-4">
