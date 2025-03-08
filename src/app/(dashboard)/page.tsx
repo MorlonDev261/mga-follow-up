@@ -8,26 +8,42 @@ import Counter from "@components/Counter";
 import Dropdown from "@components/Dropdown";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import Balance from "@components/Balance";
-import ShortcutList from '@components/ShortcutList';
-import Statistique from '@components/Statistique';
+import ShortcutList from "@components/ShortcutList";
+import Statistique from "@components/Statistique";
 import DataTableMain from "@components/DataTable/DataTableMain";
 
 export default function Dashboard() {
-
   return (
-   <>
+    <>
       <div className="grid gap-4 md:grid-cols-2">
-            
-        <div className="bg-[#111] p-2">
-              
-          <Balance 
-            title={<><MdOutlineAccountBalanceWallet /> Net Available</>} 
-            subtitle={<>= AED <Counter end={4350} duration={0.8} /></>}
-            balance={<><Counter end={5220500} duration={0.8} sound="on" src="/sounds/money-sound.mp3" /> Ar</>}
+        {/* Bloc gauche */}
+        <div className="bg-white dark:bg-gray-900 p-2 rounded shadow-md">
+          <Balance
+            title={
+              <>
+                <MdOutlineAccountBalanceWallet /> Net Available
+              </>
+            }
+            subtitle={
+              <>
+                = AED <Counter end={4350} duration={0.8} />
+              </>
+            }
+            balance={
+              <>
+                <Counter
+                  end={5220500}
+                  duration={0.8}
+                  sound="on"
+                  src="/sounds/money-sound.mp3"
+                />{" "}
+                Ar
+              </>
+            }
           >
             <Dropdown
               btn={
-                <button className="flex items-center justify-center gap-1 rounded bg-blue-500 px-2 py-1 text-sm text-white">
+                <button className="flex items-center justify-center gap-1 rounded bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 px-2 py-1 text-sm text-white">
                   <FaPlus /> New
                 </button>
               }
@@ -43,26 +59,27 @@ export default function Dashboard() {
                 <FaClipboardUser /> New employer
               </DropdownMenuItem>
             </Dropdown>
-        </Balance>
-              
+          </Balance>
+
           <div className="mb-5 max-h-[100px] max-w-[250px]">
             <Statistique position="right" />
           </div>
+
           <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-4">
             <ShortcutList />
           </div>
         </div>
 
-        <div className="bg-[#111] text-white p-2">
-          <h3 className="mb-4">Statistique de vente:</h3>
+        {/* Bloc droit */}
+        <div className="bg-white dark:bg-gray-900 text-gray-900 dark:text-white p-2 rounded shadow-md">
+          <h3 className="mb-4 font-semibold">Statistique de vente :</h3>
           <div className="mb-5 w-full">
             <Statistique type="courbe" legende={false} />
           </div>
         </div>
-            
       </div>
 
       <DataTableMain />
-  </>
+    </>
   );
 }
