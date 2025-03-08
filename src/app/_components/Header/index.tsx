@@ -17,22 +17,24 @@ type HeaderProps = {
 
 export default function Header({ open, setOpen, children }: HeaderProps) {
   const pathname = usePathname();
-  const { push } = useRouter(); // On garde uniquement cette version de useRouter
-  
+  const { push } = useRouter();
+
   const togglePath = (type: "dashboard" | "rows") => {
     let newPath = pathname;
 
     if (type === "dashboard") {
       if (pathname.startsWith("/rows")) {
-        newPath = pathname.replace(/^\/rows/, "") || "/"; // Supprime uniquement si au début
+        newPath = pathname.replace(/^\/rows/, "") || "/";
       }
     } else if (type === "rows") {
       if (!pathname.startsWith("/rows")) {
-        newPath = "/rows" + pathname; // Ajoute "/rows"
+        newPath = "/rows" + pathname.replace(/^\/+/, ""); // Évite "/rows/rows"
       }
     }
-    push(newPath);
+    
+    push(newPath.replace("//", "/")); // Nettoyage final
   };
+
   return (
     <header className="sticky top-0 z-50 w-full bg-[#111] p-2">
       {/* Top section */}
@@ -41,8 +43,8 @@ export default function Header({ open, setOpen, children }: HeaderProps) {
           {/* Bouton de navigation */}
           {pathname !== "/" && (
             <div
-              className="rounded-full p-1 hover:bg-gray-500"
-              onClick={() => push("/")} // Utilisation de push pour revenir à la page précédente
+              className="rounded-full p-1 hover:bg-gray-500 cursor-pointer"
+              onClick={() => push(-1)} // Revient en arrière
             >
               <MdOutlineArrowBackIosNew className="text-xl" />
             </div>
@@ -51,17 +53,11 @@ export default function Header({ open, setOpen, children }: HeaderProps) {
           {/* Logo Image */}
           <div className="flex mb-3 items-center">
             <Image
-              src="/logo.png"
-              width={50}
-              height={40}
-              alt="logo"
-              className="cover hidden"
-            />
-            <Image
               src="/main-logo.png"
               width={150}
               height={40}
               alt="logo"
+              priority
             />
           </div>
         </div>
@@ -87,10 +83,10 @@ export default function Header({ open, setOpen, children }: HeaderProps) {
         {/* Notifications & Messages */}
         <div className="flex items-center gap-4">
           <Link href="/messages">
-            <FaRegEnvelope className="text-xl" />
+            <FaRegEnvelope className="text-xl cursor-pointer" />
           </Link>
           <Link href="/notifications">
-            <FiBell className="text-xl" />
+            <FiBell className="text-xl cursor-pointer" />
           </Link>
 
           {/* Profil */}
@@ -100,7 +96,7 @@ export default function Header({ open, setOpen, children }: HeaderProps) {
             height={30}
             alt="profile"
             onClick={() => setOpen(!open)}
-            className="rounded-full border border-white"
+            className="rounded-full border border-white cursor-pointer"
           />
         </div>
       </div>
