@@ -2,6 +2,7 @@
 
 import { useState, ReactNode } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import Theme from "@components/Theme";
 import Sidebar from "@components/Sidebar";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
@@ -92,6 +93,9 @@ export default function Header({ children }: HeaderProps) {
             <FiBell className="text-xl cursor-pointer" />
           </Link>
 
+          {/* --Theme-- */}
+          <Theme />
+          
           {/* Profil */}
           <div className="profile flex items-center gap-1">
             <Avatar className="border border-white cursor-pointer" onClick={() => setOpen(!open)}>
