@@ -32,8 +32,7 @@ export default function ProfileAvatar({ auth=false }: ProfileProps) {
             <div className="relative">
               <Avatar className="w-16 h-16">
       {!error ? (
-        <AvatarImage asChild>
-          <Image
+        <AvatarImage 
             src={src}
             alt="Profile"
             width={80}
@@ -41,8 +40,7 @@ export default function ProfileAvatar({ auth=false }: ProfileProps) {
             priority
             className="rounded-full object-cover"
             onError={() => setError(true)}
-          />
-        </AvatarImage>
+        />
       ) : (
         <AvatarFallback className="flex items-center justify-center bg-gray-200 text-gray-600">
           <FaUser className="text-2xl" />
