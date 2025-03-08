@@ -49,7 +49,7 @@ export default function ProfileAvatar({ auth=false }: ProfileProps) {
     )}
     
     {/* Icône d'édition de cover */}
-    <FaCamera className="absolute bottom-2 right-2 text-xl bg-white text-gray-900 p-1 rounded-full shadow cursor-pointer" />
+    <FaCamera className="absolute bottom-2 right-2 h-6 w-6 text-xl bg-white text-gray-900 p-1 rounded-full shadow cursor-pointer" />
   </div>
 
   {/* Avatar (Profile Picture) */}
