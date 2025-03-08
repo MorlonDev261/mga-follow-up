@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode } from "react";
+import { useState, ReactNode } from "react";
 import Sidebar from "@components/Sidebar";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
