@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from "next/link";
 import clsx from 'clsx';
-import { FaCog, FaUsers, FaRegUserCircle } from 'react-icons/fa';
+import { FaUsers } from 'react-icons/fa';
 import { BsShopWindow, BsPersonWorkspace } from "react-icons/bs";
 import { HiOutlineBanknotes } from "react-icons/hi2";
 import { FiDollarSign, FiClock } from 'react-icons/fi';
