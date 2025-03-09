@@ -98,15 +98,21 @@ export default function PendingContent() {
     {
       accessorKey: "date",
       header: "Date",
+      enableColumnFilter: true,
+      filterFn: "includesString",
       cell: ({ row }) => <div>{moment(row.getValue("date"), "DD-MM-YY").format("DD/MM/YYYY")}</div>,
     },
     {
       accessorKey: "customer",
       header: "Customer",
+      enableColumnFilter: true,
+      filterFn: "includesString",
     },
     {
       accessorKey: "designation",
       header: "Designation",
+      enableColumnFilter: true,
+      filterFn: "includesString",
     },
   ];
 
