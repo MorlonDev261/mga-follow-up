@@ -10,7 +10,7 @@ import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import Balance from "@components/Balance";
 import ShortcutList from "@components/ShortcutList";
 import Statistique from "@components/Statistique";
-import DataTableMain from "@components/DataTable/DataTableMain";
+import MainTable from "@components/Table/MainTable";
 
 export default function Dashboard() {
   return (
@@ -79,7 +79,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <DataTableMain />
+      <MainTable />
     </>
   );
 }
