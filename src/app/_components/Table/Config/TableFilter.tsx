@@ -1,37 +1,35 @@
 "use client";
 
+import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Table } from "@tanstack/react-table";
-import moment from "moment";
 
-interface TableFilterInputProps<TData> {
+interface TableFilterProps<TData> {
   table: Table<TData>;
-  accessorKeys: string[]; // Colonnes à filtrer
+  accessorKey?: string[]; // Liste des colonnes à filtrer
 }
 
-export default function TableFilterInput<TData>({ table, accessorKeys }: TableFilterInputProps<TData>) {
-  const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value.toLowerCase();
+export default function TableFilter<TData>({ table, accessorKey }: TableFilterProps<TData>) {
+  const [filterValue, setFilterValue] = useState("");
 
-    accessorKeys.forEach((key) => {
-      const column = table.getColumn(key);
-      if (column) {
-        if (key === "date") {
-          // Convertir la date si l'entrée est valide
-          const formattedDate = moment(value, "DD/MM/YYYY", true).isValid()
-            ? moment(value, "DD/MM/YYYY").format("YYYY-MM-DD")
-            : value;
-          column.setFilterValue(formattedDate);
-        } else {
-          column.setFilterValue(value);
-        }
-      }
-    });
+  const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    setFilterValue(value);
+
+    // Construire les filtres pour chaque colonne spécifiée
+    const filters = (accessorKey && accessorKey.length > 0
+      ? accessorKey
+      : ["date"] // Si aucune colonne spécifiée, filtrer la date
+    ).map((key) => ({ id: key, value }));
+
+    // Appliquer les filtres
+    table.setColumnFilters(filters);
   };
 
   return (
     <Input
       placeholder="Search..."
+      value={filterValue}
       onChange={handleFilterChange}
       className="max-w-sm"
     />
