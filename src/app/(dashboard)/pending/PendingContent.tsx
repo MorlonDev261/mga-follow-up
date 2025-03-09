@@ -79,7 +79,7 @@ export default function PendingContent() {
     if (!show) return groupByCustomer(rawData);
     return rawData.filter((item) => item.customer === show).map((item) => ({ ...item, Qte: 1, sum: item.price }));
   }, [rawData, show]);
-  
+
   const totalPending = React.useMemo(
     () => data.reduce((acc, item) => acc + (item.sum || item.price), 0),
     [data]
@@ -92,7 +92,7 @@ export default function PendingContent() {
   const subtitle = React.useMemo(() => {
     if (show) return `Pending payment from ${data[0]?.customer || "unknown customer"}.`;
     return `${numberOfCustomers} customers have pending payments.`;
-  }, [show, data, numberOfCustomers]); // ✅ Ajout de numberOfCustomers
+  }, [show, data, numberOfCustomers]);
 
   const baseColumns: ColumnDef<DataType>[] = [
     {
@@ -171,8 +171,8 @@ export default function PendingContent() {
   }];
 
   return (
-    <main className={cn(data.length <= 0 && "bg-[#111]")}>
-      <div className="px-2 bg-[#111]">
+    <main className={cn("dark:bg-[#111] bg-white")}>
+      <div className="px-2 dark:bg-[#111] bg-white">
         <Balance 
           title={<><FiClock /> Pending Payment</>} 
           balance={loading ? "Loading..." : data.length > 0 ? <><Counter end={totalPending} duration={0.8} /> Ar.</> : "No pending payment added."}
@@ -181,23 +181,23 @@ export default function PendingContent() {
           subtitleSize="text-sm"
         >
           {!loading && data.length > 0 && (
-            <button className="flex items-center gap-1 rounded bg-yellow-500 hover:bg-yellow-600 px-2 py-1 text-sm text-white">
+            <button className="flex items-center gap-1 rounded bg-yellow-500 text-white hover:bg-yellow-600 px-2 py-1 text-sm">
               <FaPlus /> New unpaid purchase
             </button>
           )}
         </Balance>
       </div>
 
-      <div className="pt-2 bg-[#111]">
+      <div className="pt-2 dark:bg-[#111] bg-white">
         {loading ? (
           <Pending Columns={Columns} data={[]} loading={true} />
         ) : data.length > 0 ? (
           <Pending Columns={Columns} data={data} loading={false} />
         ) : (
           <div className="w-full h-[65vh] flex items-center justify-center">
-            <div className="-mt-5 flex items-center justify-center flex-col">
-              <p>No pending payments. Please add one.</p>
-              <button className="px-4 mt-2 flex items-center gap-2 py-2 bg-yellow-500 hover:bg-yellow-600">
+            <div className="-mt-5 flex flex-col items-center">
+              <p className="text-gray-900 dark:text-white">No pending payments. Please add one.</p>
+              <button className="px-4 mt-2 flex items-center gap-2 py-2 bg-yellow-500 text-white hover:bg-yellow-600 rounded">
                 <FaPlus /> Add First Pending Payment
               </button>
             </div>
