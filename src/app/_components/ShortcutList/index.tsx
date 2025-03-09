@@ -13,8 +13,6 @@ const shortcuts = [
   { label: 'Employers', to: '/employers', value: 7, icon: <BsPersonWorkspace /> },
   { label: 'Payement', to: '/payement', icon: <HiOutlineBanknotes /> },
   { label: 'Customers', to: '/customers', value: 7, icon: <FaUsers /> },
-  { label: 'Profile', to: '/profile', icon: <FaRegUserCircle /> },
-  { label: 'Settings', to: '/settings', icon: <FaCog /> },
 ];
 
 const ShortcutList = () => {
@@ -25,7 +23,7 @@ const ShortcutList = () => {
           key={shortcut.label}
           href={shortcut.to}
           className={clsx(
-            "flex h-20 flex-col items-center justify-center rounded bg-[#222] hover:bg-[#333] p-2 transition-colors duration-300",
+            "flex h-20 flex-col items-center justify-center rounded shadow-md dark:shadow-none dark:bg-[#262a2e] p-2 transition-colors duration-300",
             shortcut.color !== undefined ? shortcut.color : "text-white" // Ajoute la couleur en hover dynamiquement
           )}
         >
