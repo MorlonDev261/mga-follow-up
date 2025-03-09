@@ -34,7 +34,7 @@ export default function TableFilter<T>({
         } else {
           // 🔍 Mode global : Vérifier que chaque mot existe dans AU MOINS UNE colonne
           table.setGlobalFilter((row: Row<T>) => {
-            const rowValues = Object.values(row.original as Record<string, any>) // ✅ Cast en objet exploitable
+            const rowValues = Object.values(row.original as Record<string, string | number | boolean>) // ✅ Cast en objet exploitable
               .join(" ") // Concaténer les valeurs
               .toLowerCase(); // Passer en minuscule
 
