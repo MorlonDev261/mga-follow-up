@@ -131,7 +131,7 @@ export default function DataTableDemo() {
     React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
 
-  const table = useReactTable({
+  const table = useReactTable<Payment>({
     data,
     columns,
     onSortingChange: setSorting,
