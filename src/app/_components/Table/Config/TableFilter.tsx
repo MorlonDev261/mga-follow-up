@@ -6,28 +6,24 @@ import { Table } from "@tanstack/react-table";
 
 interface TableFilterProps<TData> {
   table: Table<TData>;
-  accessorKey?: string[]; // Facultatif : Liste des colonnes à filtrer
+  accessorKey?: string[]; // Liste des colonnes à filtrer
 }
 
-export default function TableFilter<TData>({
-  table,
-  accessorKey,
-}: TableFilterProps<TData>) {
+export default function TableFilter<TData>({ table, accessorKey }: TableFilterProps<TData>) {
   const [filterValue, setFilterValue] = useState("");
 
   const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
     setFilterValue(value);
 
-    // Si aucune colonne n'est spécifiée, filtrer uniquement la date
-    if (!accessorKey || accessorKey.length === 0) {
-      table.getColumn("date")?.setFilterValue(value);
-      return;
-    }
+    // Construire les filtres pour chaque colonne spécifiée
+    const filters = (accessorKey && accessorKey.length > 0
+      ? accessorKey
+      : ["date"] // Si aucune colonne spécifiée, filtrer la date
+    ).map((key) => ({ id: key, value }));
 
-    // Filtrer toutes les colonnes spécifiées + la date
-    table.getColumn("date")?.setFilterValue(value);
-    accessorKey.forEach((key) => table.getColumn(key)?.setFilterValue(value));
+    // Appliquer les filtres
+    table.setColumnFilters(filters);
   };
 
   return (
