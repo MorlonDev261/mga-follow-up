@@ -17,7 +17,7 @@ export default function Dashboard() {
     <>
       <div className="grid gap-4 md:grid-cols-2 shadow-sm">
         {/* Bloc gauche */}
-        <div className="bg-white dark:bg-theme-primary p-2 rounded">
+        <div className="p-2 rounded">
           <Balance
             title={
               <>
@@ -71,7 +71,7 @@ export default function Dashboard() {
         </div>
 
         {/* Bloc droit */}
-        <div className="bg-white dark:bg-theme-primary text-gray-900 dark:text-white p-2 rounded shadow-md">
+        <div className="text-gray-900 dark:text-white p-2">
           <h3 className="mb-4 font-semibold">Statistique de vente :</h3>
           <div className="mb-5 w-full">
             <Statistique type="courbe" legende={false} />
