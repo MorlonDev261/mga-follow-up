@@ -15,9 +15,9 @@ import DataTableMain from "@components/DataTable/DataTableMain";
 export default function Dashboard() {
   return (
     <>
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4 md:grid-cols-2 shadow-sm">
         {/* Bloc gauche */}
-        <div className="bg-white dark:bg-gray-900 p-2 rounded shadow-md">
+        <div className="bg-white dark:bg-gray-900 p-2 rounded">
           <Balance
             title={
               <>
