@@ -52,7 +52,7 @@ export default function DataTableDemo({ Columns, data, loading }: DataTableProps
   return (
     <div className="w-full px-2">
       <div className="flex items-center gap-2 py-2">
-        <TableFilter table={table} accessorKey={["customer", "designation"]} />
+        <TableFilter table={table} />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
