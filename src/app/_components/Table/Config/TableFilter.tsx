@@ -1,16 +1,17 @@
+import { Table } from "@tanstack/react-table";
 import { Input } from "@/components/ui/input";
 
-type GlobalTableFilterProps = {
-  table: any; // Type du tableau, peut être affiné selon ton implémentation
+type GlobalTableFilterProps<T> = {
+  table: Table<T>;
   placeholder?: string;
   className?: string;
 };
 
-export default function GlobalTableFilter({
+export default function GlobalTableFilter<T>({
   table,
   placeholder = "Search...",
   className = "max-w-sm",
-}: GlobalTableFilterProps) {
+}: GlobalTableFilterProps<T>) {
   return (
     <Input
       placeholder={placeholder}
