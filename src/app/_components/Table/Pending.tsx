@@ -5,7 +5,7 @@ import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRende
 import { ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
+import TableFilter from "@components/Table/TableFilter"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 
 type dataType = {
@@ -52,14 +52,7 @@ export default function DataTableDemo({ Columns, data, loading }: DataTableProps
   return (
     <div className="w-full px-4 bg-[#111]">
       <div className="flex items-center py-4">
-        <Input
-          placeholder="Filter customer..."
-          value={(table.getColumn("customer")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("customer")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
+        <TableFilter table={table} />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
