@@ -21,7 +21,7 @@ export default function ToggleTheme() {
         <span
           role="button"
           tabIndex={0}
-          className="relative flex items-center justify-center w-10 h-10 rounded-full cursor-pointer transition-all duration-300 
+          className="relative flex items-center justify-center p-1 rounded-full cursor-pointer transition-all duration-300 
                      hover:bg-gray-200 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-600"
         >
           <MdWbSunny
