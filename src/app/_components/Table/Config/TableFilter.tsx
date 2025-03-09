@@ -53,7 +53,12 @@ export default function TableFilter<T extends Record<string, unknown>>({
   );
 
   // Debounce pour limiter les appels de filtrage pendant la saisie
-  const debouncedFilter = useCallback(debounce(applyFilter, 300), [applyFilter]);
+  const debouncedFilter = useCallback(
+    debounce((searchValue: string) => {
+      applyFilter(searchValue);
+    }, 300),
+    [applyFilter] // Dépendances explicitement listées
+  );
 
   // Gestion du changement de l'input
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
