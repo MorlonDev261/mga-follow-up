@@ -1,35 +1,37 @@
 "use client";
 
-import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Table } from "@tanstack/react-table";
+import moment from "moment";
 
-interface TableFilterProps<TData> {
+interface TableFilterInputProps<TData> {
   table: Table<TData>;
-  accessorKey?: string[]; // Liste des colonnes à filtrer
+  accessorKeys: string[]; // Colonnes à filtrer
 }
 
-export default function TableFilter<TData>({ table, accessorKey }: TableFilterProps<TData>) {
-  const [filterValue, setFilterValue] = useState("");
-
+export default function TableFilterInput<TData>({ table, accessorKeys }: TableFilterInputProps<TData>) {
   const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    setFilterValue(value);
+    const value = event.target.value.toLowerCase();
 
-    // Construire les filtres pour chaque colonne spécifiée
-    const filters = (accessorKey && accessorKey.length > 0
-      ? accessorKey
-      : ["date"] // Si aucune colonne spécifiée, filtrer la date
-    ).map((key) => ({ id: key, value }));
-
-    // Appliquer les filtres
-    table.setColumnFilters(filters);
+    accessorKeys.forEach((key) => {
+      const column = table.getColumn(key);
+      if (column) {
+        if (key === "date") {
+          // Convertir la date si l'entrée est valide
+          const formattedDate = moment(value, "DD/MM/YYYY", true).isValid()
+            ? moment(value, "DD/MM/YYYY").format("YYYY-MM-DD")
+            : value;
+          column.setFilterValue(formattedDate);
+        } else {
+          column.setFilterValue(value);
+        }
+      }
+    });
   };
 
   return (
     <Input
       placeholder="Search..."
-      value={filterValue}
       onChange={handleFilterChange}
       className="max-w-sm"
     />
