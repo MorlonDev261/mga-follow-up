@@ -12,7 +12,7 @@ export const multiWordGlobalFilter: FilterFn<unknown> = (row, columnIds, filterV
 
   // Pour chaque mot, vérifier qu’il est trouvé dans au moins une des colonnes sélectionnées.
   return words.every((word: string) =>
-    accessorKeys.some((key) => {
+    accessorKeys.some((key: string) => {
       const cellValue = row.getValue(key);
       return cellValue && String(cellValue).toLowerCase().includes(word.toLowerCase());
     })
