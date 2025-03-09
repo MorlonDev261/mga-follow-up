@@ -150,16 +150,9 @@ export default function DataTableDemo() {
   })
 
   return (
-    <div className="w-full px-4 bg-[#111]">
-      <div className="flex items-center py-4">
-        <Input
-          placeholder="Filter name..."
-          value={(table.getColumn("fullName")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("fullName")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
+    <div className="w-full px-2">
+      <div className="flex items-center gap-2 py-2">
+        <TableFilter table={table} />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
