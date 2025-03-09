@@ -2,7 +2,7 @@ import { FilterFn } from "@tanstack/react-table";
 
 // Cette fonction reçoit la ligne, la liste des colonnes disponibles pour le filtrage
 // et la valeur du filtre (ici un objet personnalisé).
-export const multiWordGlobalFilter: FilterFn<any> = (row, columnIds, filterValue) => {
+export const multiWordGlobalFilter: FilterFn<unknown> = (row, columnIds, filterValue) => {
   const { search, accessorKeys } = filterValue || { search: "", accessorKeys: [] };
 
   if (!search) return true;
