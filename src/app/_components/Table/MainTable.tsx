@@ -111,7 +111,7 @@ export const columns: ColumnDef<Payment>[] = [
   },
 ]
 
-export default function DataTableDemo() {
+export default function MainTable() {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -140,8 +140,8 @@ export default function DataTableDemo() {
   })
 
   return (
-    <div className="w-full">
-      <div className="flex items-center py-4">
+    <div className="w-full p-2">
+      <div className="flex items-center gap-2 py-4">
         <Input
           placeholder="Filter emails..."
           value={(table.getColumn("comments")?.getFilterValue() as string) ?? ""}
