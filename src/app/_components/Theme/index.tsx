@@ -41,7 +41,7 @@ export default function ToggleTheme() {
               <MdWbSunny className="text-xl text-yellow-400" />
             )
           ) : (
-            <div className="w-5 h-5 bg-gray-300 dark:bg-gray-700 rounded-full animate-pulse" />
+            <AiFillMoon className="text-xl text-gray-800 dark:text-gray-200" />
           )}
           <span className="sr-only">Toggle theme</span>
         </span>
