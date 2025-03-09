@@ -11,7 +11,7 @@ export const multiWordGlobalFilter: FilterFn<unknown> = (row, columnIds, filterV
   const words = search.split(" ").filter(Boolean);
 
   // Pour chaque mot, vérifier qu’il est trouvé dans au moins une des colonnes sélectionnées.
-  return words.every((word) =>
+  return words.every((word: string) =>
     accessorKeys.some((key) => {
       const cellValue = row.getValue(key);
       return cellValue && String(cellValue).toLowerCase().includes(word.toLowerCase());
