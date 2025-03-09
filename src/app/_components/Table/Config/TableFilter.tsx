@@ -1,4 +1,4 @@
-import { Table } from "@tanstack/react-table";
+import { Table, Row } from "@tanstack/react-table";
 import { Input } from "@/components/ui/input";
 
 type TableFilterProps<T> = {
@@ -31,7 +31,7 @@ export default function TableFilter<T>({
           );
         } else {
           // 🔍 Mode global : vérifier que tous les mots existent dans AU MOINS UNE colonne
-          table.setGlobalFilter((row) => {
+          table.setGlobalFilter((row: Row<T>) => {
             const rowValues = Object.values(row.original) // Récupérer toutes les valeurs
               .join(" ") // Les concaténer en une seule string
               .toLowerCase(); // Passer en minuscule pour une recherche insensible à la casse
