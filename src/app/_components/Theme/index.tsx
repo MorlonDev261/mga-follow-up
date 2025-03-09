@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { BsMoonStarsFill } from "react-icons/bs";
+import { AiFillMoon } from "react-icons/ai";
 import { MdWbSunny } from "react-icons/md";
 import { useTheme } from "next-themes";
 
@@ -36,7 +36,7 @@ export default function ToggleTheme() {
         >
           {mounted ? (
             currentTheme === "dark" ? (
-              <BsMoonStarsFill className="text-xl text-gray-800 dark:text-gray-200" />
+              <AiFillMoon className="text-xl text-gray-800 dark:text-gray-200" />
             ) : (
               <MdWbSunny className="text-xl text-yellow-400" />
             )
