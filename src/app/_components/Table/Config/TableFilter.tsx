@@ -19,22 +19,24 @@ export default function TableFilter<T>({
       placeholder={placeholder}
       onChange={(event) => {
         const searchValue = event.target.value.trim().toLowerCase();
-        const searchWords = searchValue.split(/\s+/); // Découper par espace
+        const searchWords = searchValue.split(/\s+/); // Séparer par espaces
 
         if (accessorKeys) {
-          // 🎯 Mode multi-colonnes : applique un filtre sur plusieurs colonnes
+          // 🎯 Mode multi-colonnes : Filtrer chaque colonne pour qu'elle contienne au moins un des mots
           table.setColumnFilters(
-            accessorKeys.map((key) => ({
-              id: key,
-              value: searchWords, // Stocker un tableau de mots
-            }))
+            accessorKeys.flatMap((key) =>
+              searchWords.map((word) => ({
+                id: key,
+                value: word, // Chaque mot doit être pris individuellement pour chaque colonne
+              }))
+            )
           );
         } else {
-          // 🔍 Mode global : vérifier que tous les mots existent dans AU MOINS UNE colonne
+          // 🔍 Mode global : Vérifier que chaque mot existe dans AU MOINS UNE colonne
           table.setGlobalFilter((row: Row<T>) => {
-            const rowValues = Object.values(row.original) // Récupérer toutes les valeurs
-              .join(" ") // Les concaténer en une seule string
-              .toLowerCase(); // Passer en minuscule pour une recherche insensible à la casse
+            const rowValues = Object.values(row.original as Record<string, any>) // ✅ Cast en objet exploitable
+              .join(" ") // Concaténer les valeurs
+              .toLowerCase(); // Passer en minuscule
 
             return searchWords.every((word) => rowValues.includes(word));
           });
