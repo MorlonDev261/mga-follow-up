@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table"
+import TableFilter from "@components/Table/Config/TableFilter"
 import { multiWordGlobalFilter } from "./Config/filterFns";
 import { ChevronDown, MoreHorizontal } from "lucide-react"
 import { Button } from "@/components/ui/button"
