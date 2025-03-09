@@ -3,7 +3,6 @@
 import * as React from "react"
 import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table"
 import TableFilter from "@components/Table/Config/TableFilter"
-import { multiWordGlobalFilter } from "./Config/filterFns";
 import { ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
@@ -35,7 +34,6 @@ export default function DataTableDemo({ Columns, data, loading }: DataTableProps
     data,
     columns,
     onSortingChange: setSorting,
-    globalFilterFn: multiWordGlobalFilter,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
