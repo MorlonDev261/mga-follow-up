@@ -23,7 +23,7 @@ const ShortcutList = () => {
           key={shortcut.label}
           href={shortcut.to}
           className={clsx(
-            "flex h-20 flex-col items-center justify-center rounded shadow-md dark:shadow-none dark:bg-[#262a2e] p-2 transition-colors duration-300",
+            "flex h-20 flex-col items-center justify-center rounded shadow-[0px_0px_10px_rgba(0,0,0,0.2)] dark:shadow-none dark:bg-[#262a2e] p-2 transition-colors duration-300",
             shortcut.color !== undefined ? shortcut.color : "text-white" // Ajoute la couleur en hover dynamiquement
           )}
         >
