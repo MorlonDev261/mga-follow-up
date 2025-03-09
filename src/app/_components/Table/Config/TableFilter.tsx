@@ -57,7 +57,7 @@ export default function TableFilter<T extends Record<string, unknown>>({
     debounce((searchValue: string) => {
       applyFilter(searchValue);
     }, 300),
-    [applyFilter] // Dépendances explicitement listées
+    [applyFilter] // Dépendance explicite de applyFilter ici
   );
 
   // Gestion du changement de l'input
