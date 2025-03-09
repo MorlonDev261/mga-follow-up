@@ -152,7 +152,7 @@ export default function DataTableDemo() {
   return (
     <div className="w-full px-2">
       <div className="flex items-center gap-2 py-2">
-        <TableFilter table={table} accessorKey={["customer"]} />
+        <TableFilter table={table} accessorKey={["fullName"]} />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
