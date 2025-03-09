@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table"
+import { multiWordGlobalFilter } from "./Config/filterFns";
 import { ChevronDown, MoreHorizontal } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
@@ -124,6 +125,7 @@ export default function MainTable() {
     data,
     columns,
     onSortingChange: setSorting,
+    globalFilterFn: multiWordGlobalFilter,
     onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -141,15 +143,8 @@ export default function MainTable() {
 
   return (
     <div className="w-full p-2">
-      <div className="flex items-center gap-2 py-4">
-        <Input
-          placeholder="Filter emails..."
-          value={(table.getColumn("comments")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("comments")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
+      <div className="flex items-center gap-2 py-2">
+        <TableFilter table={table} accessorKey={["comments"]} />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
