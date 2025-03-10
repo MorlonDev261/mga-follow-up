@@ -1,6 +1,7 @@
 import { cookies } from 'next/headers';
 import { ThemeProvider } from "@/components/theme-provider";
 import { Geist, Geist_Mono } from "next/font/google";
+import { cn } from "@/components/utils";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -54,7 +55,7 @@ export default async function RootLayout({
   const isDark = theme === 'dark';
 
   return (
-    <html lang="en" className={isDark ? 'dark' : ''}>
+    <html lang="en" className={cn("dark", isDark ? 'dark' : '')}>
       <head>
         <link rel="icon" href="/logo.jpg" />
         <link rel="apple-touch-icon" href="/logo.jpg" />
