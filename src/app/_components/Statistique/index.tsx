@@ -1,9 +1,9 @@
 import React from 'react';
 import { Line, Doughnut, Bar } from 'react-chartjs-2';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement, BarElement, ChartOptions } from 'chart.js';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement, Filler, BarElement, ChartOptions } from 'chart.js';
 
 // Enregistrement des éléments nécessaires pour chaque type de graphique
-ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement, BarElement);
+ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement, Filler, BarElement);
 
 interface StatistiqueProps {
   type?: 'courbe' | 'rond' | 'bar';
