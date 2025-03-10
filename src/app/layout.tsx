@@ -1,3 +1,4 @@
+import { cookies } from 'next/headers';
 import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -48,8 +49,16 @@ export function generateMetadata(): Metadata {
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const cookieStore = cookies();
+  const theme = cookieStore.get('theme')?.value || 'system';
+  const isDark = theme === 'dark';
+
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html 
+      lang="en" 
+      className={isDark ? 'dark' : ''} 
+      suppressHydrationWarning
+    >
       <head>
         {/* Favicon */}
         <link rel="icon" href="/logo.jpg" />
@@ -57,19 +66,6 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-        {/* Script pour éviter le flash blanc */}
-        <script dangerouslySetInnerHTML={{
-          __html: `
-            (function() {
-              const theme = localStorage.getItem("theme") || "system";
-              const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-              if (theme === "dark" || (theme === "system" && prefersDark)) {
-                document.documentElement.classList.add("dark");
-              }
-            })();
-          `
-        }} />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ThemeProvider
