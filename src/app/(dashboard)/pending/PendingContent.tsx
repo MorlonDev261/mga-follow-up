@@ -9,6 +9,7 @@ import moment from "moment";
 import Pending from "@components/Table/Pending";
 import Counter from "@components/Counter";
 import Balance from "@components/Balance";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ColumnDef, Row } from "@tanstack/react-table";
 import {
