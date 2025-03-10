@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers';
 import { ThemeProvider } from "@/components/theme-provider";
 import { Geist, Geist_Mono } from "next/font/google";
-import { cn } from "@/components/utils";
+import { cn } from "@/lib/utils";
 import "./globals.css";
 
 const geistSans = Geist({
