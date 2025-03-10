@@ -26,33 +26,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ThemeProvider
-      attribute="class"
-      defaultTheme="dark"
-      enableSystem={false} // Désactive le mode automatique (optionnel)
-      disableTransitionOnChange
-    >
-      <html lang="en" suppressHydrationWarning>
-        <head>
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
-                (function() {
-                  if (localStorage.getItem('theme') === 'dark' || 
-                      (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                    document.documentElement.classList.add('dark');
-                  } else {
-                    document.documentElement.classList.remove('dark');
-                  }
-                })();
-              `,
-            }}
-          />
-        </head>
-        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+    <html lang="en" className="dark" suppressHydrationWarning>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <ThemeProvider attribute="class" defaultTheme="dark" disableTransitionOnChange>
           <div className="min-h-screen">{children}</div>
-        </body>
-      </html>
-    </ThemeProvider>
+        </ThemeProvider>
+      </body>
+    </html>
   );
 }
