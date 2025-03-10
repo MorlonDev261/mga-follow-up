@@ -15,8 +15,33 @@ const geistMono = Geist_Mono({
 
 export function generateMetadata(): Metadata {
   return {
-    title: "MGA Follow UP",
-    description: "Manage your moulaa easily 😎.",
+    title: "MGA Follow UP | Simplify Your Finances",
+    description: "Manage your moulaa easily 😎. Track your payments, customers, and more.",
+    keywords: "finance, tracking, payments, MGA Follow UP",
+    authors: [{ name: "Your Name", url: "https://yourwebsite.com" }],
+    creator: "Your Company",
+    openGraph: {
+      title: "MGA Follow UP",
+      description: "Manage your finances easily with MGA Follow UP.",
+      url: "https://yourwebsite.com",
+      siteName: "MGA Follow UP",
+      type: "website",
+      images: [
+        {
+          url: "https://yourwebsite.com/og-image.jpg",
+          width: 1200,
+          height: 630,
+          alt: "MGA Follow UP Dashboard",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      site: "@your_twitter_handle",
+      creator: "@your_twitter_handle",
+      images: ["https://yourwebsite.com/twitter-image.jpg"],
+    },
+    robots: "index, follow",
   };
 }
 
@@ -26,6 +51,14 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        {/* Favicon */}
+        <link rel="icon" href="/logo.jpg" />
+        <link rel="apple-touch-icon" href="/logo.jpg" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        {/* Script pour éviter le flash blanc */}
         <script dangerouslySetInnerHTML={{
           __html: `
             (function() {
@@ -38,7 +71,7 @@ export default function RootLayout({
           `
         }} />
       </head>
-      <body className="antialiased">
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
