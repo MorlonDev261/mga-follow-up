@@ -46,11 +46,12 @@ export function generateMetadata(): Metadata {
   };
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   // Utilisation correcte avec les types Next.js 15
-  const theme = cookies().get('theme')?.value || 'system';
+  const cookieStore = cookies();
+  const theme = cookieStore.get('theme')?.value || 'system';
   const isDark = theme === 'dark';
 
   return (
