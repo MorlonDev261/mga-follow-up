@@ -8,7 +8,7 @@ export default function MyComponent() {
   const customers = 12;
   
   return (
-    <main className={cn(customers <= 0 && "bg-[#111]")}>
+    <>
       <div className="px-2 bg-[#111]">
         <Balance 
           title={<><FaUsers /> List of Customers</>} 
@@ -35,6 +35,6 @@ export default function MyComponent() {
           </div>
         </div>
       }
-    </main>
+  </>
   );
 }
