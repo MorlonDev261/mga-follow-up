@@ -30,14 +30,14 @@ export default function MyComponent() {
       </div>
 
       {customers > 0 ? (
-        <div className="pt-2 bg-white dark:bg-gray-900">
+        <div className="pt-2">
           <Suspense>
             <Customers />
           </Suspense>
         </div>
       ) : (
-        <div className="w-full h-[65vh] flex items-center justify-center bg-white dark:bg-gray-900">
-          <div className="-mt-5 flex items-center justify-center flex-col text-gray-900 dark:text-white">
+        <div className="w-full h-[65vh] flex items-center justify-center">
+          <div className="-mt-5 flex items-center justify-center flex-col">
             <p>There is no customer. Please add your first customer!</p>
             <button className="px-4 mt-2 flex items-center gap-2 py-2 bg-green-500 hover:bg-green-600 text-white rounded">
               <FaPlus /> Add First Customer
