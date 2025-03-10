@@ -46,11 +46,12 @@ export default function Header({ children }: HeaderProps) {
           {/* Bouton de navigation */}
             <div
               className={cn(
-               "rounded-full p-1 cursor-pointer dark:hover:bg-gray-500 transition",
-               "overflow-hidden transition-[max-width] duration-1000",
-                pathname !== "/" ? "max-w-[50px] hover:bg-gray-200" : "max-w-0"
+                "rounded-full cursor-pointer dark:hover:bg-gray-500 transition",
+                "overflow-hidden transition-[max-width] duration-1000",
+                "hover:bg-gray-200 p-0", // Toujours actif
+                pathname !== "/" ? "max-w-[50px] p-1" : "max-w-0"
               )}
-              onClick={() => router.back()}
+              onClick={() => pathname !== "/" && router.back()}
             >
               <MdOutlineArrowBackIosNew className="text-xl text-gray-800 dark:text-white" />
             </div>
@@ -110,7 +111,7 @@ export default function Header({ children }: HeaderProps) {
           {/* Profil */}
           <div className="profile flex items-center gap-1">
             <Avatar
-              className="h-6 w-6 border border-gray-300 dark:border-white cursor-pointer"
+              className="h-8 w-8 border border-gray-300 dark:border-white cursor-pointer"
               onClick={() => setOpen(!open)}
             >
               <AvatarImage src="/profile.jpg" />
