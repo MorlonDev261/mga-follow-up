@@ -9,7 +9,6 @@ import moment from "moment";
 import Pending from "@components/Table/Pending";
 import Counter from "@components/Counter";
 import Balance from "@components/Balance";
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ColumnDef, Row } from "@tanstack/react-table";
 import {
@@ -177,8 +176,11 @@ export default function PendingContent() {
   }];
 
   return (
-    <main className={cn("dark:bg-[#111] bg-white")}>
-      <div className="px-2 dark:bg-[#111] bg-white">
+    <>
+      <div className={cn(
+         "px-2 transition-opacity", 
+         { "opacity-100": !loading && data.length > 0, "opacity-0": loading || data.length === 0 }
+       )}>
         <Balance 
           title={<><FiClock /> Pending Payment</>} 
           balance={loading ? "Loading..." : data.length > 0 ? <><Counter end={totalPending} duration={0.8} /> Ar.</> : "No pending payment added."}
@@ -194,7 +196,7 @@ export default function PendingContent() {
         </Balance>
       </div>
 
-      <div className="pt-2 dark:bg-[#111] bg-white">
+      <div className="pt-2">
         {loading ? (
           <Pending Columns={Columns} data={[]} loading={true} />
         ) : data.length > 0 ? (
@@ -210,6 +212,6 @@ export default function PendingContent() {
           </div>
         )}
       </div>
-    </main>
+    </>
   );
 }
