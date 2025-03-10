@@ -47,7 +47,7 @@ export default function Header({ children }: HeaderProps) {
             <div
               className={cn(
                 "rounded-full cursor-pointer dark:hover:bg-gray-500 transition",
-                "overflow-hidden transition-[max-width] duration-1000",
+                "overflow-hidden transition-all duration-1000",
                 "hover:bg-gray-200 p-0", // Toujours actif
                 pathname !== "/" ? "max-w-[50px] p-1" : "max-w-0"
               )}
