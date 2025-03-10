@@ -1,4 +1,4 @@
-import Cookie from 'js-cookie';
+import { cookies } from 'next/headers';
 import { ThemeProvider } from "@/components/theme-provider";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -48,23 +48,36 @@ export function generateMetadata() {
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  // Récupération du cookie côté client avec js-cookie
-  const theme = Cookie.get('theme') || 'system';
+  // Récupération du thème côté serveur (cookie `theme`)
+  const cookieStore = cookies();
+  const theme = cookieStore.get('theme')?.value || 'system';
   const isDark = theme === 'dark';
 
   return (
-    <html 
-      lang="en" 
-      className={isDark ? 'dark' : ''} 
-      suppressHydrationWarning
-    >
+    <html lang="en" className={isDark ? 'dark' : ''}>
       <head>
-        {/* Favicon */}
         <link rel="icon" href="/logo.jpg" />
         <link rel="apple-touch-icon" href="/logo.jpg" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        {/* Script inline pour éviter le flash blanc (fallback si cookie indisponible) */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  const theme = localStorage.getItem('theme') || 'system';
+                  if (theme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                  } else {
+                    document.documentElement.classList.remove('dark');
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ThemeProvider
