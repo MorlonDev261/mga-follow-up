@@ -15,9 +15,9 @@ import MainTable from "@components/Table/MainTable";
 export default function Dashboard() {
   return (
     <>
-      <div className="grid gap-4 md:grid-cols-2 shadow-sm">
+      <div className="p-2">
+      <div className="grid gap-4 md:grid-cols-2 shadow-md">
         {/* Bloc gauche */}
-        <div className="p-2 rounded">
           <Balance
             title={
               <>
@@ -63,6 +63,7 @@ export default function Dashboard() {
 
           <div className="mb-5 max-h-[100px] max-w-[250px]">
             <Statistique position="right" />
+          </div>
           </div>
 
           <div className="grid grid-cols-3 gap-2">
