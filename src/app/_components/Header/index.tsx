@@ -46,7 +46,8 @@ export default function Header({ children }: HeaderProps) {
           {/* Bouton de navigation */}
             <div
               className={cn(
-                "rounded-full p-1 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-500 transition",
+               "rounded-full p-1 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-500 transition",
+               "overflow-hidden transition-[max-width] duration-300",
                 pathname !== "/" ? "max-w-[50px]" : "max-w-0"
               )}
               onClick={() => router.back()}
