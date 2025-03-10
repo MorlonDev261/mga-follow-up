@@ -2,7 +2,6 @@ import React, { Suspense } from "react";
 import Customers from "@components/Table/Customers";
 import Balance from "@components/Balance";
 import { FaPlus, FaUsers } from "react-icons/fa";
-import { cn } from "@/lib/utils";
 
 export default function MyComponent() {
   const expenses = 12;
