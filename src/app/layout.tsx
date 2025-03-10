@@ -45,11 +45,11 @@ export function generateMetadata() {
   };
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  // Récupération du thème côté serveur (cookie `theme`)
-  const cookieStore = cookies();
+  // ✅ Attendre la résolution de la promesse `cookies()`
+  const cookieStore = await cookies();
   const theme = cookieStore.get('theme')?.value || 'system';
   const isDark = theme === 'dark';
 
@@ -61,7 +61,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        {/* Script inline pour éviter le flash blanc (fallback si cookie indisponible) */}
+        {/* Script inline pour éviter le flash blanc en fallback */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
