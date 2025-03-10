@@ -34,8 +34,6 @@ export default function Dashboard() {
                 <Counter
                   end={5220500}
                   duration={0.8}
-                  sound="on"
-                  src="/sounds/money-sound.mp3"
                 />{" "}
                 Ar
               </>
