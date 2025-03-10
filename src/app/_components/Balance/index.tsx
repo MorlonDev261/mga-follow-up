@@ -18,7 +18,7 @@ interface BalanceProps {
 export default function Balance({ title, titleColor, titleSize, balance, balanceColor, balanceSize, subtitle, subtitleColor, subtitleSize, children }: BalanceProps) {
   
   return (
-    <div>
+    <div className="p-1">
       <h3 className={cn("flex items-center gap-1", titleColor ? titleColor: "text-gray-400", titleSize)}>
         {title}
       </h3>
