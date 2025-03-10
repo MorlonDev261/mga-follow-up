@@ -8,7 +8,7 @@ type Props = {
 
 export function ThemeProvider({ children, ...props }: Props) {
   return (
-    <NextThemesProvider {...props} cookie="theme">
+    <NextThemesProvider {...props}>
       {children}
     </NextThemesProvider>
   );
