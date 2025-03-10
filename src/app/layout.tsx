@@ -1,7 +1,6 @@
-import { cookies } from 'next/headers';
+import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Geist, Geist_Mono } from "next/font/google";
-import { cn } from "@/lib/utils";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -14,7 +13,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export function generateMetadata() {
+export function generateMetadata(): Metadata {
   return {
     title: "MGA Follow UP | Simplify Your Finances",
     description: "Manage your moulaa easily 😎. Track your payments, customers, and more.",
@@ -46,39 +45,31 @@ export function generateMetadata() {
   };
 }
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  // ✅ Attendre la résolution de la promesse `cookies()`
-  const cookieStore = await cookies();
-  const theme = cookieStore.get('theme')?.value || 'system';
-  const isDark = theme === 'dark';
-
   return (
-    <html lang="en" className={cn("dark", isDark ? 'dark' : '')}>
+    <html lang="en" suppressHydrationWarning>
       <head>
+        {/* Favicon */}
         <link rel="icon" href="/logo.jpg" />
         <link rel="apple-touch-icon" href="/logo.jpg" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        {/* Script inline pour éviter le flash blanc en fallback */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  const theme = localStorage.getItem('theme') || 'system';
-                  if (theme === 'dark') {
-                    document.documentElement.classList.add('dark');
-                  } else {
-                    document.documentElement.classList.remove('dark');
-                  }
-                } catch (e) {}
-              })();
-            `,
-          }}
-        />
+
+        {/* Script pour éviter le flash blanc */}
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            (function() {
+              const theme = localStorage.getItem("theme") || "system";
+              const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+              if (theme === "dark" || (theme === "system" && prefersDark)) {
+                document.documentElement.classList.add("dark");
+              }
+            })();
+          `
+        }} />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ThemeProvider
