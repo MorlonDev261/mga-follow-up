@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { ColumnDef, ColumnFiltersState, SortingState, VisibilityState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table"
-import TableFilter from "@components/Table/Config/TableFilter"
+// import TableFilter from "@components/Table/Config/TableFilter"
 import { ChevronDown, MoreHorizontal } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
@@ -142,7 +142,7 @@ export default function MainTable() {
   return (
     <div className="w-full p-2">
       <div className="flex items-center gap-2 py-2">
-        <TableFilter table={table} />
+        
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
