@@ -16,7 +16,7 @@ export default function Dashboard() {
   return (
     <>
       <div className="p-2">
-      <div className="grid gap-4 md:grid-cols-2 shadow-md">
+      <div className="grid gap-4 md:grid-cols-2 mb-3 shadow-md">
         {/* Bloc gauche */}
           <Balance
             title={
