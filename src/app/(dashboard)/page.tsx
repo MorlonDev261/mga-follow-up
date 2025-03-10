@@ -69,7 +69,6 @@ export default function Dashboard() {
           <div className="grid grid-cols-3 gap-2">
             <ShortcutList />
           </div>
-        </div>
 
         {/* Bloc droit */}
         <div className="text-gray-900 dark:text-white p-2">
