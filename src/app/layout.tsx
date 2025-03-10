@@ -1,5 +1,4 @@
-import { cookies } from 'next/headers';
-import type { Metadata } from "next";
+import Cookie from 'js-cookie';
 import { ThemeProvider } from "@/components/theme-provider";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -14,7 +13,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export function generateMetadata(): Metadata {
+export function generateMetadata() {
   return {
     title: "MGA Follow UP | Simplify Your Finances",
     description: "Manage your moulaa easily 😎. Track your payments, customers, and more.",
@@ -46,12 +45,11 @@ export function generateMetadata(): Metadata {
   };
 }
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  // Utilisation correcte avec les types Next.js 15
-  const cookieStore = cookies();
-  const theme = cookieStore.get('theme')?.value || 'system';
+  // Récupération du cookie côté client avec js-cookie
+  const theme = Cookie.get('theme') || 'system';
   const isDark = theme === 'dark';
 
   return (
