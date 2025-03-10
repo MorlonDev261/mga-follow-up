@@ -1,36 +1,26 @@
-import { useCallback } from "react";
+import { useCallback, useMemo, useRef } from "react";
 import { Table, Row } from "@tanstack/react-table";
 import { Input } from "@/components/ui/input";
 import debounce from "lodash/debounce";
 
 type TableFilterProps<T extends Record<string, unknown>> = {
   table: Table<T>;
-  accessorKeys?: (keyof T)[]; // Colonnes spécifiques à filtrer (optionnel)
+  accessorKeys?: (keyof T)[];
   placeholder?: string;
   className?: string;
 };
 
-/**
- * TableFilter component for filtering table rows globally or by specific columns.
- *
- * @param {Table<T>} table - The table instance from @tanstack/react-table.
- * @param {(keyof T)[]} [accessorKeys] - Optional array of column keys to filter.
- * @param {string} [placeholder="Search..."] - Placeholder text for the input.
- * @param {string} [className="max-w-sm"] - CSS class for the input.
- */
 export default function TableFilter<T extends Record<string, unknown>>({
   table,
   accessorKeys,
   placeholder = "Search...",
   className = "max-w-sm",
 }: TableFilterProps<T>) {
-  // Fonction de filtrage
   const applyFilter = useCallback(
     (searchValue: string) => {
       const searchWords = searchValue.trim().toLowerCase().split(/\s+/);
 
       if (accessorKeys) {
-        // Mode multi-colonnes : Filtrer chaque colonne pour qu'elle contienne au moins un des mots
         table.setColumnFilters(
           accessorKeys.flatMap((key) =>
             searchWords.map((word) => ({
@@ -40,11 +30,8 @@ export default function TableFilter<T extends Record<string, unknown>>({
           )
         );
       } else {
-        // Mode global : Vérifier que chaque mot existe dans AU MOINS UNE colonne
         table.setGlobalFilter((row: Row<T>) => {
-          const rowValues = Object.values(row.original)
-            .join(" ")
-            .toLowerCase();
+          const rowValues = Object.values(row.original).join(" ").toLowerCase();
           return searchWords.every((word) => rowValues.includes(word));
         });
       }
@@ -52,18 +39,15 @@ export default function TableFilter<T extends Record<string, unknown>>({
     [accessorKeys, table]
   );
 
-  // Debounce pour limiter les appels de filtrage pendant la saisie
-  const debouncedFilter = useCallback(
-    debounce((searchValue: string) => {
-      applyFilter(searchValue);
-    }, 300),
-    [applyFilter] // Dépendance explicite de applyFilter ici
+  // Utilisation de useRef pour éviter la recréation du debounce
+  const debouncedFilterRef = useRef(
+    debounce((searchValue: string) => applyFilter(searchValue), 300)
   );
 
   // Gestion du changement de l'input
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const searchValue = event.target.value;
-    debouncedFilter(searchValue);
+    debouncedFilterRef.current(searchValue);
   };
 
   return (
