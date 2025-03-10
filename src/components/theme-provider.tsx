@@ -1,13 +1,14 @@
-'use client';
+"use client";
 
-import { ThemeProvider as NextThemesProvider } from 'next-themes';
+import { ThemeProvider as NextThemesProvider, type ThemeProviderProps } from "next-themes";
 
-export function ThemeProvider({ children, ...props }) {
+type Props = {
+  children: React.ReactNode;
+} & ThemeProviderProps;
+
+export function ThemeProvider({ children, ...props }: Props) {
   return (
-    <NextThemesProvider
-      {...props}
-      cookie="theme" // Assurez-vous que ce nom correspond à celui utilisé
-    >
+    <NextThemesProvider {...props} cookie="theme">
       {children}
     </NextThemesProvider>
   );
