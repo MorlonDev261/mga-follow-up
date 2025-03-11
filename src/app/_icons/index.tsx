@@ -5,7 +5,7 @@ export function SwapWallet() {
   return (
     <div className="relative">
       <IoWalletOutline size={24} />
-      <CgArrowsExchangeAlt className="absolute bottom-0 -right-2" size={15} />
+      <CgArrowsExchangeAlt className="absolute rounded-full bg-white dark:bg-gray-500 text-sm bottom-0 w-10 h-10 -right-2" />
     </div>
   );
 }
