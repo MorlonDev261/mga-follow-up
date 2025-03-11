@@ -47,11 +47,11 @@ export default function Header({ children }: HeaderProps) {
             <div
               className={cn(
   "rounded-full cursor-pointer dark:hover:bg-gray-500 transition",
-  "overflow-hidden transition-[clip-path] transition-[padding] duration-1000",
+  "overflow-hidden transition-[opacity,transform] duration-1000",
   "hover:bg-gray-200",
   pathname !== "/"
-    ? "clip-path-[inset(0px_0px_0px_0px)] p-1"
-    : "clip-path-[inset(0px_100%_0px_0px)] p-0"
+    ? "opacity-100 scale-100 p-1"
+    : "opacity-0 scale-0 p-0"
 )}
               onClick={() => pathname !== "/" && router.back()}
             >
