@@ -15,7 +15,8 @@ const Download = () => {
   useEffect(() => {
     const userAgent = navigator.userAgent;
     setIsMobile(/Mobi|Android/i.test(userAgent));
-    setIsIOS(/iPhone|iPad|iPod/i.test(userAgent) && !window.navigator.standalone);
+    const isStandalone = "standalone" in window.navigator && (window.navigator as any).standalone;
+    setIsIOS(/iPhone|iPad|iPod/i.test(userAgent) && !isStandalone);
 
     // Capturer l'événement pour Android
     const handleBeforeInstallPrompt = (event: Event) => {
