@@ -271,7 +271,7 @@ const table = useReactTable({
 });
 
 return (
-  <div className="w-full bg-[#111] p-4">
+  <div className="w-full p-4">
     <div className="flex flex-wrap items-center py-4 gap-2">
       <Input
         placeholder="Rechercher..."
