@@ -15,6 +15,7 @@ const Download = () => {
   useEffect(() => {
     const userAgent = navigator.userAgent;
     setIsMobile(/Mobi|Android/i.test(userAgent));
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const isStandalone = "standalone" in window.navigator && (window.navigator as any).standalone;
     setIsIOS(/iPhone|iPad|iPod/i.test(userAgent) && !isStandalone);
 
