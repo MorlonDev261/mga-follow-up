@@ -34,6 +34,7 @@ export default function Dashboard() {
                 <Counter
                   end={5220500}
                   duration={0.8}
+                  sound="on"
                 />{" "}
                 Ar
               </>
