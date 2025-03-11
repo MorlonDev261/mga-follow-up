@@ -3,7 +3,7 @@ import Link from "next/link";
 import clsx from "clsx";
 import { FaUsers } from "react-icons/fa";
 import { BsShopWindow, BsPersonWorkspace } from "react-icons/bs";
-import { HiOutlineBanknotes } from "react-icons/hi2";
+import SwapWallet from "/icons/SwapWallet";
 import { FiDollarSign, FiClock } from "react-icons/fi";
 
 const shortcuts = [
@@ -11,7 +11,7 @@ const shortcuts = [
   { label: "Expenses", to: "/expenses", value: 457900, icon: <FiDollarSign />, color: "text-red-500" },
   { label: "Pending", to: "/pending", value: 457900, icon: <FiClock />, color: "text-yellow-500" },
   { label: "Employers", to: "/employers", value: 7, icon: <BsPersonWorkspace /> },
-  { label: "Payement", to: "/payement", icon: <HiOutlineBanknotes /> },
+  { label: "Transactions", to: "/transactions", icon: <SwapWallet /> },
   { label: "Customers", to: "/customers", value: 7, icon: <FaUsers /> },
 ];
 
