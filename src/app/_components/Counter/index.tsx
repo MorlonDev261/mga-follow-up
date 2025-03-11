@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import CountUp from "react-countup";
 import useSound from "use-sound";
 
@@ -20,7 +21,19 @@ export default function Counter({
   src = "/sounds/default-count.mp3",
   volume = 1,
 }: CounterProps) {
+  const [isUserInteracted, setIsUserInteracted] = useState(false);
   const [play, { stop }] = useSound(src, { volume });
+
+  useEffect(() => {
+    const enableAudio = () => setIsUserInteracted(true);
+    document.addEventListener("click", enableAudio);
+    document.addEventListener("keydown", enableAudio);
+
+    return () => {
+      document.removeEventListener("click", enableAudio);
+      document.removeEventListener("keydown", enableAudio);
+    };
+  }, []);
 
   return (
     <CountUp
@@ -29,7 +42,7 @@ export default function Counter({
       duration={duration}
       separator=","
       onStart={() => {
-        if (sound === "on") {
+        if (sound === "on" && isUserInteracted) {
           play();
         }
       }}
