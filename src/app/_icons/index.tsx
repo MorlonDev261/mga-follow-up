@@ -1,7 +1,7 @@
 import { IoWalletOutline } from "react-icons/io5";
 import { CgArrowsExchangeAlt } from "react-icons/cg";
 
-function SwapWallet() {
+export function SwapWallet() {
   return (
     <div className="relative">
       <IoWalletOutline size={24} />
@@ -9,5 +9,3 @@ function SwapWallet() {
     </div>
   );
 }
-
-export default SwapWallet;
