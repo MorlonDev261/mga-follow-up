@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import ThemeScript from '@/components/ThemeScript';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -19,7 +20,14 @@ export function generateMetadata(): Metadata {
     description: "Manage your moulaa easily 😎. Track your payments, customers, and more.",
     keywords: "finance, tracking, payments, MGA Follow UP",
     authors: [{ name: "Your Name", url: "https://yourwebsite.com" }],
-    creator: "Your Company",
+    creator: "AZTEK DWC LLC",
+    manifest: "/manifest.json",
+    icons: { 
+      icon: "/icon-512x512.png", // Icône par défaut
+      shortcut: "/icon-192x192.png", // Icône pour les raccourcis
+      apple: "/icon-512x512.png", // Icône pour les appareils Apple
+    },
+    themeColor: "#000000",
     openGraph: {
       title: "MGA Follow UP",
       description: "Manage your finances easily with MGA Follow UP.",
@@ -51,26 +59,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* Favicon */}
-        <link rel="icon" href="/logo.jpg" />
-        <link rel="apple-touch-icon" href="/logo.jpg" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="manifest" href="/manifest.json" />
-
-        {/* Script pour éviter le flash blanc */}
-        <script dangerouslySetInnerHTML={{
-          __html: `
-            (function() {
-              const theme = localStorage.getItem("theme") || "system";
-              const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-              if (theme === "dark" || (theme === "system" && prefersDark)) {
-                document.documentElement.classList.add("dark");
-              }
-            })();
-          `
-        }} />
+        <ThemeScript />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ThemeProvider
