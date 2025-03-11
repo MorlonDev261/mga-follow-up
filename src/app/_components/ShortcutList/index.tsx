@@ -3,7 +3,7 @@ import Link from "next/link";
 import clsx from "clsx";
 import { FaUsers } from "react-icons/fa";
 import { BsShopWindow, BsPersonWorkspace } from "react-icons/bs";
-import SwapWallet from "/icons/SwapWallet";
+import { SwapWallet } from "@icons/SwapWallet";
 import { FiDollarSign, FiClock } from "react-icons/fi";
 
 const shortcuts = [
