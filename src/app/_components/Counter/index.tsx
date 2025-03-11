@@ -8,9 +8,9 @@ interface CounterProps {
   start?: number;
   end: number;
   duration?: number;
-  sound?: "on" | "off"; // Activer ou désactiver le son
-  src?: string; // Chemin du fichier audio
-  volume?: number; // Volume du son (0 - 1)
+  sound?: "on" | "off";
+  src?: string;
+  volume?: number;
 }
 
 export default function Counter({
@@ -22,10 +22,18 @@ export default function Counter({
   volume = 1,
 }: CounterProps) {
   const [isUserInteracted, setIsUserInteracted] = useState(false);
-  const [play, { stop }] = useSound(src, { volume });
+  const [play, { stop, sound: soundInstance }] = useSound(src, { volume });
 
   useEffect(() => {
-    const enableAudio = () => setIsUserInteracted(true);
+    const enableAudio = () => {
+      setIsUserInteracted(true);
+
+      // Vérifier si l'AudioContext existe et le reprendre
+      if (soundInstance?._ctx && soundInstance._ctx.state === "suspended") {
+        soundInstance._ctx.resume();
+      }
+    };
+
     document.addEventListener("click", enableAudio);
     document.addEventListener("keydown", enableAudio);
 
@@ -33,7 +41,7 @@ export default function Counter({
       document.removeEventListener("click", enableAudio);
       document.removeEventListener("keydown", enableAudio);
     };
-  }, []);
+  }, [soundInstance]);
 
   return (
     <CountUp
