@@ -1,6 +1,6 @@
-import TableStock from "@components/DataTable/TableStock";
+import TableStock from "@components/Table/Stock";
 
-export default function MyComponent() {
+export default function WithStockId() {
   const inStock = false;
   
   return (
