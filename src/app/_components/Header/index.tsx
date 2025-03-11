@@ -49,7 +49,7 @@ export default function Header({ children }: HeaderProps) {
                 "rounded-full cursor-pointer dark:hover:bg-gray-500 transition",
                 "transition-[width] transition-[padding] duration-1000",
                 "hover:bg-gray-200",
-                pathname !== "/" ? "w-[50px] p-1" : "w-0 p-0"
+                pathname !== "/" ? "w-[20px] p-1" : "w-0 p-0"
               )}
               onClick={() => pathname !== "/" && router.back()}
             >
