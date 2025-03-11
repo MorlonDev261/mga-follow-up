@@ -2,31 +2,33 @@ import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import ThemeScript from '@/components/ThemeScript';
-import PWA from '@/components/PWA';
+import ThemeScript from "@/components/ThemeScript";
+import PWA from "@/components/PWA";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap",
 });
 
 export function generateMetadata(): Metadata {
   return {
     title: "MGA Follow UP | Simplify Your Finances",
     description: "Manage your moulaa easily 😎. Track your payments, customers, and more.",
-    keywords: "finance, tracking, payments, MGA Follow UP",
+    keywords: ["finance", "tracking", "payments", "MGA Follow UP"],
     authors: [{ name: "Your Name", url: "https://yourwebsite.com" }],
     creator: "AZTEK DWC LLC",
     manifest: "/manifest.json",
-    icons: { 
-      icon: "/icon-512x512.png", // Icône par défaut
-      shortcut: "/icon-192x192.png", // Icône pour les raccourcis
-      apple: "/icon-512x512.png", // Icône pour les appareils Apple
+    icons: {
+      icon: "/icon-512x512.png",
+      shortcut: "/icon-192x192.png",
+      apple: "/icon-180x180.png",
     },
     themeColor: "#000000",
     openGraph: {
@@ -38,9 +40,11 @@ export function generateMetadata(): Metadata {
       images: [
         {
           url: "https://yourwebsite.com/og-image.jpg",
+          secure_url: "https://yourwebsite.com/og-image.jpg",
           width: 1200,
           height: 630,
           alt: "MGA Follow UP Dashboard",
+          type: "image/jpeg",
         },
       ],
     },
@@ -60,9 +64,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <ThemeScript />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
