@@ -41,7 +41,7 @@ export default function ToggleTheme() {
               <MdWbSunny className="text-xl text-yellow-400" />
             )
           ) : (
-            <div className="w-xl text-gray-800 dark:text-gray-200" />
+            <MdWbSunny className="text-xl hidden text-gray-800 dark:text-gray-200" />
           )}
           <span className="sr-only">Toggle theme</span>
         </span>
