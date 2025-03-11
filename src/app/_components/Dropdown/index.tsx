@@ -22,7 +22,7 @@ export default function Dropdown({ btn, title, children }: DropdownProps) {
       <DropdownMenuTrigger asChild>
         {btn}
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-48 bg-[#222] mr-5">
+      <DropdownMenuContent className="w-48 mr-5">
         <DropdownMenuLabel className="text-center">{title} Insertion</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {children}
