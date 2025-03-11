@@ -44,17 +44,14 @@ export default function Header({ children }: HeaderProps) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           {/* Bouton de navigation */}
+          {pathname !== "/" && (
             <div
-              className={cn(
-                "rounded-full cursor-pointer dark:hover:bg-gray-500 transition",
-                "transition-[width] transition-[padding] duration-1000",
-                "hover:bg-gray-200",
-                pathname !== "/" ? "w-[20px] p-1" : "w-0 p-0"
-              )}
+              className="rounded-full p-1 cursor-pointer dark:hover:bg-gray-500 transition hover:bg-gray-200"
               onClick={() => pathname !== "/" && router.back()}
             >
               <MdOutlineArrowBackIosNew className="text-xl text-gray-800 dark:text-white" />
             </div>
+           )}
 
           {/* Logo Image */}
           <div className="flex mb-3 items-center">
