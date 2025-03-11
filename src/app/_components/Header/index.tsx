@@ -46,11 +46,11 @@ export default function Header({ children }: HeaderProps) {
           {/* Bouton de navigation */}
             <div
               className={cn(
-               "rounded-full p-1 cursor-pointer dark:hover:bg-gray-500 transition",
-               "overflow-hidden transition-[max-width] duration-1000",
-                pathname !== "/" ? "max-w-[50px] hover:bg-gray-200" : "max-w-0"
+               "rounded-full cursor-pointer dark:hover:bg-gray-500 transition",
+               "overflow-hidden transition-[max-width] transition-[padding] duration-1000",
+                pathname !== "/" ? "max-w-[50px] p-1 hover:bg-gray-200" : "max-w-0 p-0"
               )}
-              onClick={() => router.back()}
+              onClick={() => pathname !== "/" && router.back()}
             >
               <MdOutlineArrowBackIosNew className="text-xl text-gray-800 dark:text-white" />
             </div>
