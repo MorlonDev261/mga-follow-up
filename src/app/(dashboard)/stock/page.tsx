@@ -7,7 +7,7 @@ import Balance from "@components/Balance";
 import Counter from "@components/Counter";
 import StockList from "@components/StockList";
 import Statistique from "@components/Statistique";
-import TableStock from "@components/DataTable/TableStock";
+import TableStock from "@components/Table/Stock";
 import { Suspense } from "react";
 
 export default function Stock() {
