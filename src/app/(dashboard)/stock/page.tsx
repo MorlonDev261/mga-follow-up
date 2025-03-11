@@ -19,7 +19,7 @@ export default function Stock() {
     <main>
       <div className="grid gap-4 md:grid-cols-2">
         {/* Balance Component */}
-        <div className="bg-[#111] p-2">
+        <div className="p-2">
           <Balance
             title={
               <>
@@ -49,7 +49,7 @@ export default function Stock() {
           </Balance>
 
           {/* Statistique Component */}
-          <div className="bg-[#111] text-white p-2">
+          <div className="text-white p-2">
             <h3 className="mb-4">Statistique de vente:</h3>
             <div className="w-full">
               <Statistique type="bar" legende={false} />
@@ -58,7 +58,7 @@ export default function Stock() {
         </div>
       </div>
 
-      <div className="p-2 bg-[#111]">
+      <div className="p-2">
         <StockList loading={loading} />
       </div>
       
