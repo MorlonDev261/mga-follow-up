@@ -2,11 +2,15 @@
 
 import { useEffect, useState } from "react";
 
+interface BeforeInstallPromptEvent extends Event {
+  prompt: () => void;
+  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>;
+}
+
 const Download = () => {
-  const [deferredPrompt, setDeferredPrompt] = useState<Event | null>(null);
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isMobile, setIsMobile] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
-  const [showIOSPrompt, setShowIOSPrompt] = useState(false);
 
   useEffect(() => {
     const userAgent = navigator.userAgent;
@@ -16,7 +20,7 @@ const Download = () => {
     // Capturer l'événement pour Android
     const handleBeforeInstallPrompt = (event: Event) => {
       event.preventDefault();
-      setDeferredPrompt(event);
+      setDeferredPrompt(event as BeforeInstallPromptEvent);
     };
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
@@ -29,10 +33,9 @@ const Download = () => {
   const handleInstall = async () => {
     if (!deferredPrompt) return;
 
-    // @ts-ignore : TypeScript ne connaît pas ce type d'événement
     deferredPrompt.prompt();
-    const choiceResult = await (deferredPrompt as any).userChoice;
-    
+    const choiceResult = await deferredPrompt.userChoice;
+
     if (choiceResult.outcome === "accepted") {
       console.log("L'utilisateur a installé la PWA");
     } else {
@@ -44,7 +47,6 @@ const Download = () => {
 
   return (
     <div className="flex flex-col items-center">
-      {/* Bouton pour Android et Desktop */}
       {!isIOS && (
         <button
           onClick={handleInstall}
@@ -55,12 +57,11 @@ const Download = () => {
         </button>
       )}
 
-      {/* Message pour iOS */}
       {isIOS && (
         <div className="bg-yellow-100 text-yellow-800 p-3 rounded-md text-center mt-2">
-          📌 <strong>iOS :</strong> Pour installer l'application, ouvre Safari et  
+          📌 <strong>iOS :</strong> Pour installer l&apos;application, ouvre Safari et  
           <br /> appuie sur <strong>Partager</strong> (icône 🔗) puis  
-          <br /> sélectionne <strong>"Ajouter à l'écran d'accueil"</strong>.
+          <br /> sélectionne <strong>&quot;Ajouter à l&apos;écran d&apos;accueil&quot;</strong>.
         </div>
       )}
     </div>
