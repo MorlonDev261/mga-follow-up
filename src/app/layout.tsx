@@ -3,6 +3,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ThemeScript from '@/components/ThemeScript';
+import PWA from '@/components/PWA';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -72,6 +73,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <div className="min-h-screen">{children}</div>
+          <PWA />
         </ThemeProvider>
       </body>
     </html>
