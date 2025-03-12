@@ -1,0 +1,38 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "name": "Alice",
+      "avatar": "/avatar/alice.png",
+      "isOnline": true
+    },
+    {
+      "id": "2",
+      "name": "Bob",
+      "avatar": "/avatar/bob.png",
+      "isOnline": false
+    }
+  ],
+  "chats": [
+    {
+      "id": "1",
+      "name": "Alice",
+      "avatar": "/avatar/alice.png",
+      "lastMessage": "Hello!",
+      "lastMessageTimestamp": 1710234000000,
+      "unread": 2
+    }
+  ],
+  "messages": [
+    {
+      "id": "msg1",
+      "text": "Salut, comment ça va ?",
+      "timestamp": "2025-03-12T10:30:00Z",
+      "isOwn": false,
+      "senderId": "2",
+      "chatId": "1",
+      "read": true,
+      "avatar": "/avatar/bob.png"
+    }
+  ]
+}
