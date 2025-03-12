@@ -1,13 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
-import db from "@/lib/db";
-import { v4 as uuidv4 } from "uuid";
-import { Message } from "@/models/message";
-
 export async function POST(req: NextRequest) {
   try {
-    const { senderId, receiverId, content } = await req.json();
+    const { senderId, chatId, text, isOwn, avatar } = await req.json();
 
-    if (!senderId || !receiverId || !content) {
+    if (!senderId || !chatId || !text) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
@@ -16,11 +11,13 @@ export async function POST(req: NextRequest) {
 
     const newMessage: Message = {
       id: uuidv4(),
+      text,
+      timestamp: new Date(),
+      isOwn,
       senderId,
-      receiverId,
-      content,
-      timestamp: Date.now(),
-      isRead: false,
+      chatId,
+      read: false,
+      avatar,
     };
 
     db.data.messages.push(newMessage);
