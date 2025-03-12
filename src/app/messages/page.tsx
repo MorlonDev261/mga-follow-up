@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { useMediaQuery } from "@/hooks/use-media-query";
+import useMediaQuery from "@/hooks/use-media-query";
 import ChatList from "./_components/ChatList";
 import MessageList from "./_components/MessageList";
 import ChatHeader from "./_components/ChatHeader";
