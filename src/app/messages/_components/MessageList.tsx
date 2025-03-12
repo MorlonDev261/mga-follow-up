@@ -50,4 +50,7 @@ const MessageList = memo(({ messages }: { messages: Message[] }) => {
   );
 });
 
+// Ajout du displayName pour éviter l'erreur ESLint
+MessageList.displayName = "MessageList";
+
 export default MessageList;
