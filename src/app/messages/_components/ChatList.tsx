@@ -1,6 +1,7 @@
 "use client";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { IoIosArrowBack, IoMdMore } from "react-icons/io";
 import { Card } from "@/components/ui/card";
 import { Chat } from "@/lib/types";
 
@@ -15,6 +16,11 @@ const ChatList = ({
 }) => {
   return (
     <Card className="h-full rounded-none border-r-0 w-full md:w-80 overflow-y-auto">
+      <div className="flex items-center justify-between sticky top-0 px-2">
+        <IoIosArrowBack />
+        <h2>Discussion</h2>
+        <IoMdMore />
+      </div>
       <div className="p-2 space-y-1">
         {chats.map((chat) => (
           <div
