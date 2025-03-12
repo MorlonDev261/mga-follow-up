@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
     const newMessage: Message = {
       id: uuidv4(),
       text,
-      timestamp: new Date(),
+      timestamp: new Date().getTime(),
       isOwn,
       senderId,
       chatId,
