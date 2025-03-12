@@ -36,7 +36,7 @@ const ChatList = ({
               <div className="flex justify-between items-center">
                 <h3 className="font-semibold truncate">{chat.name}</h3>
                 <span className="text-xs text-gray-500 dark:text-gray-400">
-                  {new Date(chat.timestamp).toLocaleTimeString([], { 
+                  {new Date(chat.lastMessageTimestamp).toLocaleTimeString([], {
                     hour: '2-digit', 
                     minute: '2-digit' 
                   })}
