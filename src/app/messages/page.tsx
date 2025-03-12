@@ -6,7 +6,7 @@ import { MessageList } from "./_components/MessageList";
 import { ChatHeader } from "./_components/ChatHeader";
 import { MessageInput } from "./_components/MessageInput";
 
-export const MainLayout = () => {
+export const MainPage = () => {
   const [selectedChat, setSelectedChat] = useState<string | null>(null);
   const isDesktop = useMediaQuery("(min-width: 768px)");
   
