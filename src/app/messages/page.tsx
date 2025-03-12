@@ -8,7 +8,7 @@ import MessageInput from "./_components/MessageInput";
 
 const Messenger = () => {
   const [selectedChat, setSelectedChat] = useState<string | null>(null);
-  const isDesktop = useMediaQuery("(min-width: 768px)");
+  const { isDesktop } = useMediaQuery();
   
   // Mock data
   const chats = [
