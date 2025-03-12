@@ -36,7 +36,7 @@ const ChatHeader = ({
           </p>
         </div>
       </div>
-      <div className="flex items-center w-[40px] gap-2">
+      <div className="flex items-center w-[80px] gap-2">
         <span className="text-gray-500 hover:text-gray-600 cursor-pointer">
           <FaPhoneAlt size={20} />
         </span>
