@@ -12,14 +12,48 @@ const Messenger = () => {
   
   // Mock data
   const chats = [
-    { id: "1", name: "Alice", avatar: "/avatars/alice.png" },
-    { id: "2", name: "Bob", avatar: "/avatars/bob.png" },
+    {
+      id: "1",
+      name: "Alice",
+      avatar: "/avatar1.png",
+      lastMessage: "Hello!",
+      lastMessageTimestamp: Date.now(), // Assurer un timestamp valide
+      unread: 2,
+    },
   ];
 
-  const messages = [
-    { id: "1", chatId: "1", sender: "Alice", text: "Hello!" },
-    { id: "2", chatId: "1", sender: "You", text: "Hi Alice!" },
-  ];
+  const messages [
+    {
+      id: "msg1",
+      text: "Salut, comment ça va ?",
+      timestamp: new Date("2025-03-12T10:30:00Z"),
+      isOwn: false,
+      senderId: "user_2",
+      chatId: "chat_1",
+      read: true,
+      avatar: "/avatars/user2.png",
+    },
+    {
+      id: "msg2",
+      text: "Ça va bien, merci ! Et toi ?",
+      timestamp: new Date("2025-03-12T10:32:00Z"),
+      isOwn: true,
+      senderId: "user_1",
+      chatId: "chat_1",
+      read: true,
+      avatar: "/avatars/user1.png",
+    },
+    {
+      id: "msg3",
+      text: "Je vais bien aussi, merci 😊",
+      timestamp: new Date("2025-03-12T10:35:00Z"),
+      isOwn: false,
+      senderId: "user_2",
+      chatId: "chat_1",
+      read: false,
+      avatar: "/avatars/user2.png",
+    },
+];
 
   if (!isDesktop && selectedChat) {
     return (
