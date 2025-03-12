@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
+import Download from "@components/Download";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 
@@ -98,6 +99,9 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
                 onCheckedChange={setRounding}
               />
             </div>
+
+            {/* Télécharger l'app */}
+            <Download />
           </div>
         </div>
 
