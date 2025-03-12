@@ -11,8 +11,15 @@ export const MainLayout = () => {
   const isDesktop = useMediaQuery("(min-width: 768px)");
   
   // Mock data
-  const chats = [...];
-  const messages = [...];
+  const chats = [
+    { id: "1", name: "Alice", avatar: "/avatars/alice.png" },
+    { id: "2", name: "Bob", avatar: "/avatars/bob.png" },
+  ];
+
+  const messages = [
+    { id: "1", chatId: "1", sender: "Alice", text: "Hello!" },
+    { id: "2", chatId: "1", sender: "You", text: "Hi Alice!" },
+  ];
 
   if (!isDesktop && selectedChat) {
     return (
