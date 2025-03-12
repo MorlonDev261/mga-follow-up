@@ -35,12 +35,12 @@
   "screenshots": [
     {
       "src": "/logo/screenshot-1.png",
-      "sizes": "1080x1920",
+      "sizes": "1020x1920",
       "type": "image/png"
     },
     {
       "src": "/logo/screenshot-2.png",
-      "sizes": "1080x1920",
+      "sizes": "1020x1920",
       "type": "image/png"
     }
   ],
