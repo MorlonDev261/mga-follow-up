@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 
-export const MessageInput = ({
+export default const MessageInput = ({
   onSend,
 }: {
   onSend: (message: string) => void;
