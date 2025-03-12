@@ -2,14 +2,14 @@
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
-import { Message } from "@/lib/types";
+import { Chat } from "@/lib/types";
 
 const ChatList = ({
   chats,
   selectedChat,
   onSelectChat,
 }: {
-  chats: Message[];
+  chats: Chat[];
   selectedChat: string | null;
   onSelectChat: (chatId: string) => void;
 }) => {
