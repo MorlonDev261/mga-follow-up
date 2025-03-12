@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
 import { Message } from "@/lib/types";
 
-export const ChatList = ({
+const ChatList = ({
   chats,
   selectedChat,
   onSelectChat,
@@ -60,3 +60,4 @@ export const ChatList = ({
     </Card>
   );
 };
+export default ChatList;
