@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { db } from "@/lib/db";
+import db from "@/lib/db";
 import { v4 as uuidv4 } from "uuid";
 import { Message } from "@/models/message";
 
@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(newMessage, { status: 201 });
   } catch (error) {
     return NextResponse.json(
-      { error: "Internal Server Error" },
+      { error: "Internal Server Error", details: error instanceof Error ? error.message : String(error) },
       { status: 500 }
     );
   }
