@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import { FaRegEnvelope } from "react-icons/fa6";
 import { FiBell } from "react-icons/fi";
+import { FaBell } from "react-icons/fa";
 
 type HeaderProps = {
   children?: ReactNode;
@@ -98,9 +99,15 @@ export default function Header({ children }: HeaderProps) {
           <Link href="/messages">
             <FaRegEnvelope className="text-xl cursor-pointer text-gray-800 dark:text-white" />
           </Link>
-          <Link href="/notifications">
-            <FiBell className="text-xl cursor-pointer text-gray-800 dark:text-white" />
-          </Link>
+          {pathname == "/notifications" ? (
+            <div>
+              <FaBell className="text-xl cursor-pointer text-gray-800 dark:text-white" />
+            </div>
+          ) : (
+            <Link href="/notifications">
+              <FiBell className="text-xl cursor-pointer text-gray-800 dark:text-white" />
+            </Link>
+          )}
 
           {/* --Theme Toggle-- */}
           <Theme />
