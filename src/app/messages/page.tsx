@@ -206,7 +206,7 @@ const Messenger = () => {
       {isDesktop ? (
         <>
           <ChatList chats={chats} selectedChat={selectedChat} onSelectChat={handleSelectChat} />
-          <div className="flex-1">
+          <div className="">
             {selectedChat ? (
               <>
                 <ChatHeader chat={chats.find(c => c.id === selectedChat)} />
