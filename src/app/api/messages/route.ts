@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
     const newMessage: Message = {
       id: uuidv4(),
       text,
-      timestamp: Date.now() - 1000 * 60 * 30, // Convertit la date en string ISO
+      timestamp: Date.now() - 1000 * 60 * 2,
       isOwn,
       senderId,
       chatId,
