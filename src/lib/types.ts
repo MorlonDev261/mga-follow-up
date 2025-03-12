@@ -23,7 +23,7 @@ export interface Chat {
   lastMessage: string; // Dernier message envoyé
   lastMessageTimestamp: string | number; // Date du dernier message
   unread: number; // Nombre de messages non lus
-  participants: string[]; // Liste des ID des participants
+  participants?: string[]; // Liste des ID des participants
   isGroup?: boolean; // Si c'est un groupe ou une conversation privée
 }
 
