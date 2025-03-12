@@ -173,31 +173,34 @@ const Messenger = () => {
   },
 ];
   
-  if (!isDesktop && selectedChat) {
+  const renderChatView = () => {
+    if (!selectedChat) {
+      return isDesktop ? (
+        <div className="flex-1 flex items-center justify-center text-gray-500">
+          Sélectionnez une conversation
+        </div>
+      ) : (
+        <ChatList chats={chats} selectedChat={selectedChat} onSelectChat={setSelectedChat} />
+      );
+    }
+
     return (
-      <div className="h-screen flex flex-col">
+      <div className="h-screen flex flex-col flex-1">
         <ChatHeader chat={chats.find(c => c.id === selectedChat)} />
         <MessageList messages={messages} />
         <MessageInput onSend={(msg) => console.log(msg)} />
       </div>
     );
-  }
+  };
 
   return (
-    <div className="h-screen flex">
-      <ChatList 
-        chats={chats}
-        selectedChat={selectedChat}
-        onSelectChat={setSelectedChat}
-      />
-      
-      <div className="flex-1 flex flex-col">
-        <ChatHeader chat={chats.find(c => c.id === selectedChat)} />
-        <MessageList messages={messages} />
-        <MessageInput onSend={(msg) => console.log(msg)} />
-      </div>
+    <div className={`h-screen ${isDesktop ? "flex" : "flex flex-col"}`}>
+      <ChatList chats={chats} selectedChat={selectedChat} onSelectChat={setSelectedChat} />
+      {isDesktop && <div className="flex-1">{renderChatView()}</div>}
+      {!isDesktop && selectedChat && renderChatView()}
     </div>
   );
+  
 };
 
 export default Messenger;
