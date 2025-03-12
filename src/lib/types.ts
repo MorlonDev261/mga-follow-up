@@ -8,7 +8,7 @@ export interface User {
 export interface Message {
   id: string;
   text: string;
-  timestamp: string; // Date et heure du message
+  timestamp: string | number; // Date et heure du message
   isOwn: boolean; // Si le message est envoyé par l'utilisateur actuel
   senderId: string; // ID de l'expéditeur
   chatId: string; // ID du chat associé
