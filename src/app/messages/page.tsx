@@ -90,7 +90,7 @@ const Messenger = () => {
     senderId: "user_2",
     chatId: "1",
     read: true,
-    avatar: "/avatar/user2.png",
+    avatar: "/avatar/avatar2.png",
   },
   {
     id: "msg2",
@@ -100,7 +100,7 @@ const Messenger = () => {
     senderId: "user_1",
     chatId: "1",
     read: true,
-    avatar: "/avatar/user1.png",
+    avatar: "/avatar/avatar1.png",
   },
   {
     id: "msg3",
@@ -110,7 +110,7 @@ const Messenger = () => {
     senderId: "user_2",
     chatId: "1",
     read: false,
-    avatar: "/avatar/user2.png",
+    avatar: "/avatar/avatar2.png",
   },
   {
     id: "msg4",
@@ -120,7 +120,7 @@ const Messenger = () => {
     senderId: "user_3",
     chatId: "2",
     read: false,
-    avatar: "/avatar/user3.png",
+    avatar: "/avatar/avatar3.png",
   },
   {
     id: "msg5",
@@ -130,7 +130,7 @@ const Messenger = () => {
     senderId: "user_1",
     chatId: "2",
     read: true,
-    avatar: "/avatar/user1.png",
+    avatar: "/avatar/avatar1.png",
   },
   {
     id: "msg6",
@@ -140,7 +140,7 @@ const Messenger = () => {
     senderId: "user_3",
     chatId: "2",
     read: false,
-    avatar: "/avatar/user3.png",
+    avatar: "/avatar/avatar3.png",
   },
   {
     id: "msg7",
@@ -150,7 +150,7 @@ const Messenger = () => {
     senderId: "user_4",
     chatId: "3",
     read: true,
-    avatar: "/avatar/user4.png",
+    avatar: "/avatar/avatar4.png",
   },
   {
     id: "msg8",
@@ -160,7 +160,7 @@ const Messenger = () => {
     senderId: "user_1",
     chatId: "3",
     read: true,
-    avatar: "/avatar/user1.png",
+    avatar: "/avatar/avatar1.png",
   },
   {
     id: "msg9",
@@ -170,7 +170,7 @@ const Messenger = () => {
     senderId: "user_4",
     chatId: "3",
     read: false,
-    avatar: "/avatar/user4.png",
+    avatar: "/avatar/avatar4.png",
   },
   {
     id: "msg10",
@@ -180,7 +180,7 @@ const Messenger = () => {
     senderId: "user_1",
     chatId: "3",
     read: false,
-    avatar: "/avatar/user1.png",
+    avatar: "/avatar/avatar1.png",
   },
 ];
 
