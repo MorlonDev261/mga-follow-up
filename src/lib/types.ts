@@ -21,7 +21,7 @@ export interface Chat {
   name: string; // Nom du chat ou de l'utilisateur
   avatar?: string; // URL de l'image de profil
   lastMessage: string; // Dernier message envoyé
-  lastMessageTimestamp: string || number; // Date du dernier message
+  lastMessageTimestamp: string | number; // Date du dernier message
   unread: number; // Nombre de messages non lus
   participants?: string[]; // Liste des ID des participants
   isGroup?: boolean; // Si c'est un groupe ou une conversation privée
