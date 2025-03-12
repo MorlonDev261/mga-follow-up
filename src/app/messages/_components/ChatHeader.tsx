@@ -37,11 +37,11 @@ const ChatHeader = ({
         </div>
       </div>
       <div className="flex items-center gap-2">
-        <span className="bg-gradient-to-r from-green-500 to-orange-500 bg-clip-text">
-          <FaPhoneAlt size={24} />
+        <span className="text-orange-600 hover:text-orange-800 cursor-pointer">
+          <FaPhoneAlt />
         </span>
-        <span className="bg-gradient-to-r from-green-500 to-orange-500 bg-clip-text">
-          <FaVideo size={24} />
+        <span className="text-green-600 hover:text-green-800 cursor-pointer">
+          <FaVideo />
         </span>
       </div>
     </div>
