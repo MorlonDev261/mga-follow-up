@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 
-export default const MessageInput = ({
+const MessageInput = ({
   onSend,
 }: {
   onSend: (message: string) => void;
@@ -54,3 +54,4 @@ function SendIcon(props: React.SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+export default MessageInput;
