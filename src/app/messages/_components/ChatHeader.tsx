@@ -1,6 +1,6 @@
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 
-export default const ChatHeader = ({ chat }: { chat?: { name: string; avatar: string } }) => {
+const ChatHeader = ({ chat }: { chat?: { name: string; avatar: string } }) => {
   return (
     <div className="border-b p-4 flex items-center gap-3">
       <Avatar>
@@ -15,3 +15,5 @@ export default const ChatHeader = ({ chat }: { chat?: { name: string; avatar: st
     </div>
   );
 };
+
+export default ChatHeader;
