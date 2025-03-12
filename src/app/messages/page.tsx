@@ -26,7 +26,7 @@ const Messenger = () => {
   {
     id: "1",
     name: "Alice",
-    avatar: "/avatar1.png",
+    avatar: "/avatar/avatar1.png",
     lastMessage: "Hello!",
     lastMessageTimestamp: Date.now() - 1000 * 60 * 2, // Il y a 2 minutes
     unread: 2,
@@ -34,7 +34,7 @@ const Messenger = () => {
   {
     id: "2",
     name: "Bob",
-    avatar: "/avatar2.png",
+    avatar: "/avatar/avatar2.png",
     lastMessage: "À plus tard.",
     lastMessageTimestamp: Date.now() - 1000 * 60 * 10, // Il y a 10 minutes
     unread: 0,
@@ -42,7 +42,7 @@ const Messenger = () => {
   {
     id: "3",
     name: "Charlie",
-    avatar: "/avatar3.png",
+    avatar: "/avatar/avatar3.png",
     lastMessage: "Ok, c'est noté.",
     lastMessageTimestamp: Date.now() - 1000 * 60 * 30, // Il y a 30 minutes
     unread: 1,
@@ -50,7 +50,7 @@ const Messenger = () => {
   {
     id: "4",
     name: "David",
-    avatar: "/avatar4.png",
+    avatar: "/avatar/avatar4.png",
     lastMessage: "Bonne nuit !",
     lastMessageTimestamp: Date.now() - 1000 * 60 * 60 * 5, // Il y a 5 heures
     unread: 4,
@@ -58,7 +58,7 @@ const Messenger = () => {
   {
     id: "5",
     name: "Emma",
-    avatar: "/avatar5.png",
+    avatar: "/avatar/avatar5.png",
     lastMessage: "Je suis en route.",
     lastMessageTimestamp: Date.now() - 1000 * 60 * 60 * 24, // Hier
     unread: 0,
@@ -66,7 +66,7 @@ const Messenger = () => {
   {
     id: "6",
     name: "François",
-    avatar: "/avatar6.png",
+    avatar: "/avatar/avatar6.png",
     lastMessage: "Appelle-moi dès que possible.",
     lastMessageTimestamp: Date.now() - 1000 * 60 * 60 * 48, // Il y a 2 jours
     unread: 3,
@@ -74,7 +74,7 @@ const Messenger = () => {
   {
     id: "7",
     name: "Sophie",
-    avatar: "/avatar7.png",
+    avatar: "/avatar/avatar7.png",
     lastMessage: "C'était super hier !",
     lastMessageTimestamp: Date.now() - 1000 * 60 * 60 * 72, // Il y a 3 jours
     unread: 1,
@@ -90,7 +90,7 @@ const Messenger = () => {
     senderId: "user_2",
     chatId: "1",
     read: true,
-    avatar: "/avatars/user2.png",
+    avatar: "/avatar/user2.png",
   },
   {
     id: "msg2",
@@ -100,7 +100,7 @@ const Messenger = () => {
     senderId: "user_1",
     chatId: "1",
     read: true,
-    avatar: "/avatars/user1.png",
+    avatar: "/avatar/user1.png",
   },
   {
     id: "msg3",
@@ -110,7 +110,7 @@ const Messenger = () => {
     senderId: "user_2",
     chatId: "1",
     read: false,
-    avatar: "/avatars/user2.png",
+    avatar: "/avatar/user2.png",
   },
   {
     id: "msg4",
@@ -120,7 +120,7 @@ const Messenger = () => {
     senderId: "user_3",
     chatId: "2",
     read: false,
-    avatar: "/avatars/user3.png",
+    avatar: "/avatar/user3.png",
   },
   {
     id: "msg5",
@@ -130,7 +130,7 @@ const Messenger = () => {
     senderId: "user_1",
     chatId: "2",
     read: true,
-    avatar: "/avatars/user1.png",
+    avatar: "/avatar/user1.png",
   },
   {
     id: "msg6",
@@ -140,7 +140,7 @@ const Messenger = () => {
     senderId: "user_3",
     chatId: "2",
     read: false,
-    avatar: "/avatars/user3.png",
+    avatar: "/avatar/user3.png",
   },
   {
     id: "msg7",
@@ -150,7 +150,7 @@ const Messenger = () => {
     senderId: "user_4",
     chatId: "3",
     read: true,
-    avatar: "/avatars/user4.png",
+    avatar: "/avatar/user4.png",
   },
   {
     id: "msg8",
@@ -160,7 +160,7 @@ const Messenger = () => {
     senderId: "user_1",
     chatId: "3",
     read: true,
-    avatar: "/avatars/user1.png",
+    avatar: "/avatar/user1.png",
   },
   {
     id: "msg9",
@@ -170,7 +170,7 @@ const Messenger = () => {
     senderId: "user_4",
     chatId: "3",
     read: false,
-    avatar: "/avatars/user4.png",
+    avatar: "/avatar/user4.png",
   },
   {
     id: "msg10",
@@ -180,7 +180,7 @@ const Messenger = () => {
     senderId: "user_1",
     chatId: "3",
     read: false,
-    avatar: "/avatars/user1.png",
+    avatar: "/avatar/user1.png",
   },
 ];
 
