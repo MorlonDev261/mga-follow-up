@@ -22,7 +22,7 @@ const Messenger = () => {
     },
   ];
 
-  const messages [
+  const messages = [
     {
       id: "msg1",
       text: "Salut, comment ça va ?",
