@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Message } from "@/lib/types";
+import { db } from "@/lib/db";
+import { v4 as uuidv4 } from "uuid";
+import { Message } from "@/models/message";
 
 export async function POST(req: NextRequest) {
   try {
