@@ -6,7 +6,7 @@ import MessageList from "./_components/MessageList";
 import ChatHeader from "./_components/ChatHeader";
 import MessageInput from "./_components/MessageInput";
 
-const Messanger = () => {
+const Messenger = () => {
   const [selectedChat, setSelectedChat] = useState<string | null>(null);
   const isDesktop = useMediaQuery("(min-width: 768px)");
   
@@ -16,7 +16,7 @@ const Messanger = () => {
     { id: "2", name: "Bob", avatar: "/avatars/bob.png" },
   ];
 
-  const Chat = [
+  const messages = [
     { id: "1", chatId: "1", sender: "Alice", text: "Hello!" },
     { id: "2", chatId: "1", sender: "You", text: "Hi Alice!" },
   ];
@@ -48,4 +48,4 @@ const Messanger = () => {
   );
 };
 
-export default Chat;
+export default Messenger;
