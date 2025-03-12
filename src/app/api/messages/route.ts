@@ -1,3 +1,5 @@
+import { NextRequest, NextResponse } from "next/server";
+
 export async function POST(req: NextRequest) {
   try {
     const { senderId, chatId, text, isOwn, avatar } = await req.json();
