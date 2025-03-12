@@ -16,7 +16,7 @@ const Messanger = () => {
     { id: "2", name: "Bob", avatar: "/avatars/bob.png" },
   ];
 
-  const messages = [
+  const Chat = [
     { id: "1", chatId: "1", sender: "Alice", text: "Hello!" },
     { id: "2", chatId: "1", sender: "You", text: "Hi Alice!" },
   ];
@@ -48,4 +48,4 @@ const Messanger = () => {
   );
 };
 
-export default Messenger;
+export default Chat;
