@@ -21,7 +21,7 @@ const ChatHeader = ({
 
       <Avatar>
         <AvatarImage
-          src={chat.avatar || ""}
+          src={chat?.avatar || ""}
           alt={chat?.name || "User"}
         />
       </Avatar>
