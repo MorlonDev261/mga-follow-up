@@ -2,7 +2,7 @@
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
-import { Message } from "@/types";
+import { Message } from "@/lib/types";
 
 export const ChatList = ({
   chats,
