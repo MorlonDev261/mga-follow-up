@@ -16,7 +16,7 @@ const ChatList = ({
 }) => {
   return (
     <Card className="h-full rounded-none border-r-0 w-full md:w-80 overflow-y-auto">
-      <div className="flex items-center justify-between sticky top-0 px-2">
+      <div className="flex items-center justify-between sticky top-0 p-2">
         <IoIosArrowBack />
         <h2>Discussion</h2>
         <IoMdMore />
