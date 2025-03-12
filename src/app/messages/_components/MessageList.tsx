@@ -10,7 +10,7 @@ type Message = {
   avatar?: string;
 };
 
-export const MessageList = ({ messages }: { messages: Message[] }) => {
+const MessageList = ({ messages }: { messages: Message[] }) => {
   return (
     <div className="flex-1 overflow-y-auto p-4 space-y-4">
       {messages.map((message) => (
@@ -50,3 +50,4 @@ export const MessageList = ({ messages }: { messages: Message[] }) => {
     </div>
   );
 };
+export default MessageList;
