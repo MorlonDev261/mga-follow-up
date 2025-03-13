@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { HiDevicePhoneMobile } from "react-icons/hi2";
 import { FaLaptop } from "react-icons/fa";
+import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => void;
@@ -88,7 +89,7 @@ const Download = () => {
       {/* Message si l'application est déjà installée */}
       {isInstalled && (
         <div className="bg-green-100 text-green-800 p-3 rounded-md text-center mt-2">
-          ✅ L&apos;application est déjà installée sur votre appareil.
+          <IoMdCheckmarkCircleOutline /> L&apos;application est déjà installée sur votre appareil.
         </div>
       )}
     </div>
