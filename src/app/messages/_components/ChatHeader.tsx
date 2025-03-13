@@ -17,8 +17,8 @@ const ChatHeader = ({
       {/* Bouton Retour sur mobile */}
       <div className="flex items-center gap-1">
         {onBack && (
-          <button onClick={onBack} className="mr-2 p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
-            <MdOutlineArrowBackIosNew className="w-5 h-5" />
+          <button onClick={onBack} className="mr-2 p-1 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700">
+            <MdOutlineArrowBackIosNew size={18} />
           </button>
         )}
 
