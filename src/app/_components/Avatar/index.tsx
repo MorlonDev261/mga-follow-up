@@ -17,7 +17,7 @@ const ProfileAvatar = ({ src, fallback= <FaUser />, isOnline = false, isStory = 
   return (
     <span className={cn("relative", className)}>
       <Avatar className={cn(isStory && "border-2 border-green-700")}>
-        <AvatarImage className="p-1" src={src} alt="Profile" />
+        <AvatarImage src={src} alt="Profile" />
         <AvatarFallback>{fallback}</AvatarFallback>
       </Avatar>
       {isOnline && (
