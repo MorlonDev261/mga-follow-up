@@ -1,4 +1,4 @@
-import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { ProfileAvatar, AvatarImage } from "@components/Avatar";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import { FaPhoneAlt, FaVideo } from "react-icons/fa";
 
@@ -22,12 +22,12 @@ const ChatHeader = ({
           </button>
         )}
 
-        <Avatar>
+        <ProfileAvatar isOnline={isOnline} isStory={true}>
           <AvatarImage
             src={chat?.avatar || ""}
             alt={chat?.name || "User"}
           />
-        </Avatar>
+        </ProfileAvatar>
 
         <div>
           <h2 className="font-semibold">{chat?.name || "Sélectionnez une discussion"}</h2>
