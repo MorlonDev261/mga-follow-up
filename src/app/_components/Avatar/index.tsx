@@ -29,4 +29,4 @@ const ProfileAvatar = ({ src, Fallback= <FaUser />, isOnline = false, isStory = 
 };
 
 // Export multiple pour un import propre
-export { ProfileAvatar, AvatarImage, AvatarFallback };
+export default ProfileAvatar;
