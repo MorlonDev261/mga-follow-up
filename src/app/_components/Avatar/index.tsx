@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { FaUser } from "react-ivons/fa";
+import { FaUser } from "react-icons/fa";
 
 interface ChatAvatarProps {
   src?: string;
