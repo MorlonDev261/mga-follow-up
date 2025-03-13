@@ -71,7 +71,7 @@ const Download = () => {
         <button
           onClick={handleInstall}
           disabled={!deferredPrompt}
-          className="px-4 py-2 bg-blue-600 text-white rounded-md disabled:bg-gray-400"
+          className="flex items-center gap-1 px-4 py-2 bg-blue-600 text-white rounded-md disabled:bg-gray-400"
         >
           {isMobile ? (
             <><HiDevicePhoneMobile /> Télécharger l&apos;application</>
@@ -92,7 +92,7 @@ const Download = () => {
 
       {/* Message si l'application est déjà installée */}
       {isInstalled && (
-        <div className="text-green-600 flex gap-1">
+        <div className="text-green-600 flex items-center gap-1">
           <IoMdCheckmarkCircleOutline /> L&apos;application est déjà installée sur votre appareil.
         </div>
       )}
