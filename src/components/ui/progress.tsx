@@ -1,23 +1,15 @@
-"use client"
-
-import * as React from "react"
-import * as ProgressPrimitive from "@radix-ui/react-progress"
-
-import { cn } from "@/lib/utils"
-
 const Progress = React.forwardRef<
   React.ElementRef<typeof ProgressPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root> & { progressColor?: string }
 >(({ className, value = 0, progressColor = "bg-primary", ...props }, ref) => {
 
-  const baseColor = progressColor.replace(/-\d+$/, "") + "/20";
-  console.log(baseColor);
   return (
     <ProgressPrimitive.Root
       ref={ref}
       className={cn(
-        "relative h-2 w-full overflow-hidden bg-primary/20 rounded-full",
-        baseColor,
+        "relative h-2 w-full overflow-hidden rounded-full",
+        progressColor,
+        "opacity-20",
         className
       )}
       {...props}
@@ -29,7 +21,3 @@ const Progress = React.forwardRef<
     </ProgressPrimitive.Root>
   )
 })
-
-Progress.displayName = "Progress"
-
-export { Progress }
