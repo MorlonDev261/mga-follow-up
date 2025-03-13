@@ -1,6 +1,5 @@
 "use client";
 
-import { Card } from "@/components/ui/card";
 import Avatar from "@components/Avatar";
 import Progression from "@components/Progression";
 
