@@ -51,7 +51,7 @@ const TopList = () => {
                 </div>
 
                 {/* Barre de progression */}
-                <Progression value={percentage} className={textColor} />
+                <Progression value={percentage} className={progressColor} />
               </div>
             </div>
           );
