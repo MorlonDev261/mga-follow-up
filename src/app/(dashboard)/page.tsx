@@ -8,6 +8,7 @@ import Counter from "@components/Counter";
 import Dropdown from "@components/Dropdown";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import Balance from "@components/Balance";
+import Progression from "@components/Progression";
 import ShortcutList from "@components/ShortcutList";
 import Statistique from "@components/Statistique";
 import MainTable from "@components/Table/MainTable";
@@ -63,7 +64,7 @@ export default function Dashboard() {
             <Statistique position="right" />
           </div>
           </div>
-
+          <Progression />
           <div className="grid grid-cols-3 gap-2">
             <ShortcutList />
           </div>
