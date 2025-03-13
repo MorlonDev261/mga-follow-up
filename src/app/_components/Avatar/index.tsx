@@ -5,7 +5,7 @@ import { FaUser } from "react-icons/fa";
 
 interface ChatAvatarProps {
   src?: string;
-  Fallback?: ReactNode;
+  fallback?: ReactNode;
   isOnline?: boolean;
   isStory?: boolean;
   className?: string;
