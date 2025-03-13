@@ -10,11 +10,10 @@ interface ChatAvatarProps {
   isStory?: boolean;
   className?: string;
   children?: ReactNode;
-  badge?: ReactNode;
 
 }
 
-const ProfileAvatar = ({ src, Fallback= <FaUser />, isOnline = false, isStory = false, className, children, badge }: ChatAvatarProps) => {
+const ProfileAvatar = ({ src, Fallback= <FaUser />, isOnline = false, isStory = false, className, children }: ChatAvatarProps) => {
   return (
     <span className={cn("relative", className)}>
       <Avatar className={cn(isStory && "border-2 border-green-700")}>
