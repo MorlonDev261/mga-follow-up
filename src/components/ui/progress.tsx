@@ -11,7 +11,7 @@ const Progress = React.forwardRef<
 >(({ className, value = 0, progressColor = "bg-primary", ...props }, ref) => {
 
   const baseColor = progressColor.replace(/-\d+$/, "") + "/20";
-
+  console.log(baseColor);
   return (
     <ProgressPrimitive.Root
       ref={ref}
