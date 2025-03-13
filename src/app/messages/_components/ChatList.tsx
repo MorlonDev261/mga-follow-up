@@ -37,7 +37,7 @@ const ChatList = ({
             <Avatar 
               className="mr-3"
               src={chat.avatar}
-              Fallback={chat.name[0]}
+              fallback={chat.name[0]}
             />
             <div className="flex-1 min-w-0">
               <div className="flex justify-between items-center">
