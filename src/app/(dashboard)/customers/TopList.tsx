@@ -1,15 +1,15 @@
 "use client";
+
 import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
 import Avatar from "@components/Avatar";
 import Progression from "@components/Progression";
 
-const TopList = {
-  const stats = [
+const stats = [
   {
     id: 1,
     name: "John Doe",
-    avatar: "/avatars/john.jpg",
+    avatar: "/avatar/avatar1.png",
     lastActivity: new Date().toISOString(),
     value: 75,
     isOnline: true,
@@ -17,7 +17,7 @@ const TopList = {
   {
     id: 2,
     name: "Jane Smith",
-    avatar: "/avatars/jane.jpg",
+    avatar: "/avatar/avatar2.png",
     lastActivity: new Date(Date.now() - 3600000).toISOString(),
     value: 50,
     isOnline: false,
@@ -25,7 +25,7 @@ const TopList = {
   {
     id: 3,
     name: "Alice Johnson",
-    avatar: "/avatars/alice.jpg",
+    avatar: "/avatar/avatar3.png",
     lastActivity: new Date(Date.now() - 7200000).toISOString(),
     value: 90,
     isOnline: true,
@@ -33,7 +33,7 @@ const TopList = {
   {
     id: 4,
     name: "Bob Brown",
-    avatar: "/avatars/bob.jpg",
+    avatar: "/avatar/avatar4.png",
     lastActivity: new Date(Date.now() - 10800000).toISOString(),
     value: 30,
     isOnline: false,
@@ -41,7 +41,7 @@ const TopList = {
   {
     id: 5,
     name: "Charlie White",
-    avatar: "/avatars/charlie.jpg",
+    avatar: "/avatar/avatar5.png",
     lastActivity: new Date(Date.now() - 14400000).toISOString(),
     value: 65,
     isOnline: true,
@@ -49,7 +49,7 @@ const TopList = {
   {
     id: 6,
     name: "David Green",
-    avatar: "/avatars/david.jpg",
+    avatar: "/avatar/avatar6.png",
     lastActivity: new Date(Date.now() - 18000000).toISOString(),
     value: 85,
     isOnline: false,
@@ -57,7 +57,7 @@ const TopList = {
   {
     id: 7,
     name: "Emma Blue",
-    avatar: "/avatars/emma.jpg",
+    avatar: "/avatar/avatar7.png",
     lastActivity: new Date(Date.now() - 21600000).toISOString(),
     value: 40,
     isOnline: true,
@@ -65,7 +65,7 @@ const TopList = {
   {
     id: 8,
     name: "Frank Black",
-    avatar: "/avatars/frank.jpg",
+    avatar: "/avatar/avatar1.png",
     lastActivity: new Date(Date.now() - 25200000).toISOString(),
     value: 95,
     isOnline: false,
@@ -73,7 +73,7 @@ const TopList = {
   {
     id: 9,
     name: "Grace Yellow",
-    avatar: "/avatars/grace.jpg",
+    avatar: "/avatar/avatar4.png",
     lastActivity: new Date(Date.now() - 28800000).toISOString(),
     value: 55,
     isOnline: true,
@@ -81,13 +81,14 @@ const TopList = {
   {
     id: 10,
     name: "Hank Gray",
-    avatar: "/avatars/hank.jpg",
+    avatar: "/avatar/avatar6.png",
     lastActivity: new Date(Date.now() - 32400000).toISOString(),
     value: 70,
     isOnline: false,
   },
 ];
 
+const TopList = () => {
   return (
     <Card className="h-full rounded-none border-r-0 w-full md:w-80 overflow-y-auto">
       <div className="p-2 space-y-1">
@@ -98,24 +99,24 @@ const TopList = {
           >
             <Avatar
               className="mr-3"
-              isOnline={isOnline}
+              isOnline={stat.isOnline}
               isStory={true}
               src={stat.avatar}
-              Fallback={stat.name[0]}
+              fallback={stat.name[0]}
             />
-            
+
             <div className="flex-1 min-w-0">
               <div className="flex justify-between items-center">
                 <h3 className="font-semibold truncate">{stat.name}</h3>
                 <span className="text-xs text-gray-500 dark:text-gray-400">
-                  Last activity:
+                  Last activity:{" "}
                   {new Date(stat.lastActivity).toLocaleTimeString([], {
-                    hour: '2-digit', 
-                    minute: '2-digit' 
+                    hour: "2-digit",
+                    minute: "2-digit",
                   })}
                 </span>
               </div>
-              
+
               <div className="flex justify-between items-center">
                 <p className="text-sm text-gray-600 dark:text-gray-300 truncate">
                   <Progression value={stat.value} />
@@ -128,4 +129,5 @@ const TopList = {
     </Card>
   );
 };
+
 export default TopList;
