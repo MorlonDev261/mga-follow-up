@@ -1,10 +1,10 @@
 "use client";
 import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@components/Avatar";
+import Avatar from "@components/Avatar";
 import Progression from "@components/Progression";
 
-const TopList = ({  }) => {
+const TopList = {
   const stats = [
   {
     id: 1,
