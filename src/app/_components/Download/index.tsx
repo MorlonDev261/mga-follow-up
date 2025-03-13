@@ -1,8 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { HiDevicePhoneMobile } from "react-icons/hi2";
-import { FaLaptop } from "react-icons/fa";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 
 interface BeforeInstallPromptEvent extends Event {
@@ -73,7 +71,7 @@ const Download = () => {
           disabled={!deferredPrompt}
           className="px-4 py-2 bg-blue-600 text-white rounded-md disabled:bg-gray-400"
         >
-          {isMobile ? (<HiDevicePhoneMobile /> Télécharger l&apos;application) : (<FaLaptop /> Télécharger le logiciel)}
+          {isMobile ? "HiDevicePhoneMobile Télécharger l&apos;application" : "FaLaptop  Télécharger le logiciel"}
         </button>
       )}
 
