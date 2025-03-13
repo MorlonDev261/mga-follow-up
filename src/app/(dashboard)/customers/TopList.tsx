@@ -30,8 +30,8 @@ const TopList = () => {
           const percentage = Math.round((stat.deals / maxDeals) * 100);
 
           // Couleurs pour les 3 premiers
-          const rankColors = ["text-green-500", "text-orange-500", "text-yellow-500"];
-          const textColor = rankColors[index] || "text-gray-500";
+          const rankColors = ["bg-green-500", "bg-orange-500", "bg-yellow-500"];
+          const progressColor = rankColors[index] || "bg-gray-500";
 
           return (
             <div
