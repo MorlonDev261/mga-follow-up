@@ -1,6 +1,5 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
 import Avatar from "@components/Avatar";
 import Progression from "@components/Progression";
@@ -98,7 +97,7 @@ const TopList = () => {
             className="flex items-center p-3 rounded-lg cursor-pointer transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
           >
             <Avatar
-              className={cn("mr-3")}
+              className="mr-3"
               isOnline={stat.isOnline}
               isStory={true}
               src={stat.avatar}
