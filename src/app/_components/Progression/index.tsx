@@ -7,10 +7,11 @@ type ProgressProps = {
   className?: string;
   debut?: number;
   value: number;
+  progressColor?: string;
   timer?: number;
 };
 
-export default function Progression({ className, debut = 0, value, timer = 500 }: ProgressProps) {
+export default function Progression({ className, debut = 0, value, progressColor, timer = 500 }: ProgressProps) {
   const [progress, setProgress] = React.useState(debut);
 
   React.useEffect(() => {
@@ -18,5 +19,5 @@ export default function Progression({ className, debut = 0, value, timer = 500 }
     return () => clearTimeout(execute);
   }, [value, timer]); // Ajout de `value` et `timer` comme dépendances
 
-  return <Progress value={progress} className={className} />;
+  return <Progress value={progress} progressColor={progressColor} className={className} />;
 }
