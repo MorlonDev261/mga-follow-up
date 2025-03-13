@@ -26,9 +26,9 @@ export function generateMetadata(): Metadata {
     creator: "AZTEK DWC LLC",
     manifest: "/manifest.json",
     icons: {
-      icon: "/icon-512x512.png",
-      shortcut: "/icon-192x192.png",
-      apple: "/icon-180x180.png",
+      icon: "/logo/icon-512x512.png",
+      shortcut: "/logo/icon-192x192.png",
+      apple: "/logo/icon-180x180.png",
     },
     themeColor: "#000000",
     openGraph: {
