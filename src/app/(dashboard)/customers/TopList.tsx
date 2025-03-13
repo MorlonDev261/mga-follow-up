@@ -98,7 +98,7 @@ const TopList = () => {
             className="flex items-center p-3 rounded-lg cursor-pointer transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
           >
             <Avatar
-              className="mr-3"
+              className={cn("mr-3")}
               isOnline={stat.isOnline}
               isStory={true}
               src={stat.avatar}
