@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { HiDevicePhoneMobile } from "react-icons/hi2";
+import { FaLaptop } from "react-icons/fa";
 import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 
 interface BeforeInstallPromptEvent extends Event {
@@ -63,7 +65,7 @@ const Download = () => {
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col">
       {/* Bouton d'installation pour Android */}
       {!isIOS && !isInstalled && (
         <button
@@ -71,7 +73,11 @@ const Download = () => {
           disabled={!deferredPrompt}
           className="px-4 py-2 bg-blue-600 text-white rounded-md disabled:bg-gray-400"
         >
-          {isMobile ? "HiDevicePhoneMobile Télécharger l&apos;application" : "FaLaptop  Télécharger le logiciel"}
+          {isMobile ? (
+            <><HiDevicePhoneMobile /> Télécharger l&apos;application</>
+          ) : (
+            <><FaLaptop /> Télécharger le logiciel</>
+          )}
         </button>
       )}
 
@@ -86,7 +92,7 @@ const Download = () => {
 
       {/* Message si l'application est déjà installée */}
       {isInstalled && (
-        <div className="bg-green-100 text-green-800 p-3 rounded-md text-center mt-2">
+        <div className="text-green-600 flex gap-1">
           <IoMdCheckmarkCircleOutline /> L&apos;application est déjà installée sur votre appareil.
         </div>
       )}
