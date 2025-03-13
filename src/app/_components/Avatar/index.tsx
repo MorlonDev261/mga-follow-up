@@ -6,10 +6,10 @@ interface ChatAvatarProps {
   isOnline?: boolean;
   isStory?: boolean;
   className?: string;
-  children: ReactNode;
+  children?: ReactNode;
 }
 
-const ProfileAvatar({isOnline= false, isStory= false, className, children }: ChatAvatarProps) {
+const ProfileAvatar = ({ isOnline = false, isStory = false, className, children }: ChatAvatarProps) => {
   return (
     <Avatar className={cn("relative", isStory && "border-2 border-orange-500", className)}>
       {children}
@@ -18,6 +18,7 @@ const ProfileAvatar({isOnline= false, isStory= false, className, children }: Cha
       )}
     </Avatar>
   );
-}
+};
 
+// Export multiple pour un import propre
 export { ProfileAvatar, AvatarImage, AvatarFallback };
