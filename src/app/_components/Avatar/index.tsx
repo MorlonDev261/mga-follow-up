@@ -11,12 +11,14 @@ interface ChatAvatarProps {
 
 const ProfileAvatar = ({ isOnline = false, isStory = false, className, children }: ChatAvatarProps) => {
   return (
-    <Avatar className={cn("relative", isStory && "border-2 border-orange-500", className)}>
-      {children}
+    <div className="relative">
+      <Avatar className={cn(isStory && "border-2 p-1 border-orange-500", className)}>
+        {children}
+      </Avatar>
       {isOnline && (
         <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
       )}
-    </Avatar>
+    </div>
   );
 };
 
