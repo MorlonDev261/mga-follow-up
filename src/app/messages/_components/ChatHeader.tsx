@@ -2,14 +2,17 @@ import Avatar from "@components/Avatar";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import { FaPhoneAlt, FaVideo } from "react-icons/fa";
 
+type chatProps {
+  name: string; 
+  avatar: string;
+}
 
-const ChatHeader = ({
-  chat,
-  onBack,
-}: {
-  chat?: { name: string; avatar: string };
+type HeaderProps {
+  chat?: chatProps[];
   onBack?: () => void;
-}) => {
+}
+
+const ChatHeader = ({ chat = ["name": "Username Undefined", "avatar": ""], onBack }: HeaderProps) => {
   const isOnline = chat ? true : false; // Remplace ceci par un vrai état "online"
 
   return (
