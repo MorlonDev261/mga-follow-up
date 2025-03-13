@@ -89,8 +89,8 @@ const stats = [
 
 const TopList = () => {
   return (
-    <Card className="h-full rounded-none border-r-0 w-full md:w-80 overflow-y-auto">
-      <div className="p-2 space-y-1">
+    <div className="h-full overflow-y-auto">
+      <div className="p-2">
         {stats.map((stat) => (
           <div
             key={stat.id}
@@ -125,7 +125,7 @@ const TopList = () => {
           </div>
         ))}
       </div>
-    </Card>
+    </div>
   );
 };
 
