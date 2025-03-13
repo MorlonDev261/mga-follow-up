@@ -73,7 +73,7 @@ const Download = () => {
           disabled={!deferredPrompt}
           className="px-4 py-2 bg-blue-600 text-white rounded-md disabled:bg-gray-400"
         >
-          {isMobile ? (<HiDevicePhoneMobile /> Télécharger l'application) : (<FaLaptop /> Télécharger le logiciel)}
+          {isMobile ? (<HiDevicePhoneMobile /> Télécharger l&apos;application) : (<FaLaptop /> Télécharger le logiciel)}
         </button>
       )}
 
