@@ -2,18 +2,18 @@ import Avatar from "@components/Avatar";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import { FaPhoneAlt, FaVideo } from "react-icons/fa";
 
-type chatProps {
-  name: string; 
+type ChatProps = {
+  name: string;
   avatar: string;
-}
+};
 
-type HeaderProps {
-  chat?: chatProps[];
+type HeaderProps = {
+  chat?: ChatProps;
   onBack?: () => void;
-}
+};
 
-const ChatHeader = ({ chat = ["name": "Username Undefined", "avatar": ""], onBack }: HeaderProps) => {
-  const isOnline = chat ? true : false; // Remplace ceci par un vrai état "online"
+const ChatHeader = ({ chat = { name: "Username Undefined", avatar: "" }, onBack }: HeaderProps) => {
+  const isOnline = true;
 
   return (
     <div className="border-b p-2 flex items-center justify-between">
@@ -34,12 +34,13 @@ const ChatHeader = ({ chat = ["name": "Username Undefined", "avatar": ""], onBac
         />
 
         <div>
-          <h2 className="font-semibold">{chat?.name || "Sélectionnez une discussion"}</h2>
+          <h2 className="font-semibold">{chat.name}</h2>
           <p className="text-sm text-gray-500 dark:text-gray-400">
             {isOnline ? "En ligne" : "Commencez une conversation"}
           </p>
         </div>
       </div>
+
       <div className="flex items-center justify-around w-[80px] gap-2">
         <span className="text-gray-500 hover:text-gray-600 cursor-pointer">
           <FaPhoneAlt size={20} />
