@@ -2,6 +2,7 @@ import React, { Suspense } from "react";
 import Customers from "@components/Table/Customers";
 import Balance from "@components/Balance";
 import { FaPlus, FaUsers } from "react-icons/fa";
+import TopList from "./TopList";
 
 export default function MyComponent() {
   const customers = 12;
@@ -28,7 +29,9 @@ export default function MyComponent() {
           )}
         </Balance>
       </div>
-
+      <div className="p-2">
+        <TopList />
+      </div>
       {customers > 0 ? (
         <div className="pt-2">
           <Suspense>
