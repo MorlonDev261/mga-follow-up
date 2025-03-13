@@ -18,9 +18,9 @@ const ChatList = ({
   return (
     <Card className="h-full rounded-none border-r-0 w-full md:w-80 overflow-y-auto">
       <div className="flex items-center justify-between sticky top-0 p-2 border-b">
-        <IoIosArrowBack size={20} />
+        <IoIosArrowBack size={24} />
         <h2 className="text-lg">Discussion</h2>
-        <FaPlus size={16} />
+        <FaPlus size={20} />
       </div>
       <div className="p-2 space-y-1">
         {chats.map((chat) => (
