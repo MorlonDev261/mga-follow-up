@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { HiDevicePhoneMobile } from "react-icons/hi2";
+import { FaLaptop } from "react-icons/fa";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => void;
@@ -70,7 +72,7 @@ const Download = () => {
           disabled={!deferredPrompt}
           className="px-4 py-2 bg-blue-600 text-white rounded-md disabled:bg-gray-400"
         >
-          {isMobile ? "📱 Télécharger l'application" : "💻 Télécharger le logiciel"}
+          {isMobile ? (<HiDevicePhoneMobile /> Télécharger l'application) : (<FaLaptop /> Télécharger le logiciel)}
         </button>
       )}
 
