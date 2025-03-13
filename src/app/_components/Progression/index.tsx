@@ -10,7 +10,7 @@ type ProgressProps {
   timer?: number;
 }
 
-export default function ProgressDemo({ className, debut= 0, value, timer= 500 }: ProgressProps) {
+export default function Progression({ className, debut= 0, value, timer= 500 }: ProgressProps) {
   const [progress, setProgress] = React.useState(debut)
 
   React.useEffect(() => {
