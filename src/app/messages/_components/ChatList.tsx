@@ -1,6 +1,6 @@
 "use client";
 import { cn } from "@/lib/utils";
-import { Avatar, AvatarFallback, AvatarImage } from "@components/Avatar";
+import Avatar from "@components/Avatar";
 import { IoIosArrowBack } from "react-icons/io";
 import { FaPlus } from "react-icons/fa";
 import { Card } from "@/components/ui/card";
@@ -34,11 +34,11 @@ const ChatList = ({
                 : "hover:bg-gray-100 dark:hover:bg-gray-800"
             )}
           >
-            <Avatar className="mr-3">
-              <AvatarImage src={chat.avatar} />
-              <AvatarFallback>{chat.name[0]}</AvatarFallback>
-            </Avatar>
-            
+            <Avatar 
+              className="mr-3"
+              src={chat.avatar}
+              Fallback={chat.name[0]}
+            />
             <div className="flex-1 min-w-0">
               <div className="flex justify-between items-center">
                 <h3 className="font-semibold truncate">{chat.name}</h3>
