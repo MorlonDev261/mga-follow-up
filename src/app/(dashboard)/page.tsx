@@ -64,7 +64,7 @@ export default function Dashboard() {
             <Statistique position="right" />
           </div>
           </div>
-          <Progression />
+          <Progression value={77} />
           <div className="grid grid-cols-3 gap-2">
             <ShortcutList />
           </div>
