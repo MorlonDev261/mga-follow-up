@@ -29,9 +29,9 @@ export default function MyComponent() {
           )}
         </Balance>
       </div>
-      <div className="p-2">
-        <TopList />
-      </div>
+      
+      <TopList />
+      
       {customers > 0 ? (
         <div className="pt-2">
           <Suspense>
