@@ -16,7 +16,7 @@ const ProfileAvatar = ({ isOnline = false, isStory = false, className, children 
         {children}
       </Avatar>
       {isOnline && (
-        <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-1 border-white rounded-full"></span>
+        <span className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
       )}
     </span>
   );
