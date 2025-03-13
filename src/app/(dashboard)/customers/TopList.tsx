@@ -115,11 +115,7 @@ const TopList = () => {
                 </span>
               </div>
 
-              <div className="flex justify-between items-center">
-                <p className="text-sm text-gray-600 dark:text-gray-300 truncate">
-                  <Progression value={stat.value} />
-                </p>
-              </div>
+              <Progression value={stat.value} />
             </div>
           </div>
         ))}
