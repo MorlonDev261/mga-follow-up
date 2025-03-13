@@ -27,7 +27,7 @@ const ChatHeader = ({
           isOnline={isOnline}
           isStory={true}
           src={chat.avatar}
-          Fallback={chat.name[0]}
+          fallback={chat.name[0]}
         />
 
         <div>
