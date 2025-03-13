@@ -4,10 +4,10 @@ import Avatar from "@components/Avatar";
 import Progression from "@components/Progression";
 
 const stats = [
-  { id: 1, name: "John Doe", avatar: "/avatar/avatar1.png", deals: 14083700, isOnline: true },
-  { id: 2, name: "Jane Smith", avatar: "/avatar/avatar2.png", deals: 100830000, isOnline: false },
-  { id: 3, name: "Alice Johnson", avatar: "/avatar/avatar3.png", deals: 1837000, isOnline: true },
-  { id: 4, name: "Bob Brown", avatar: "/avatar/avatar4.png", deals: 80837000, isOnline: false },
+  { id: 1, name: "High Tech", avatar: "/avatar/kiady.png", deals: 50837000, isOnline: true },
+  { id: 2, name: "Shop Cell", avatar: "/avatar/shopcell.png", deals: 47837000, isOnline: false },
+  { id: 3, name: "Top Mada", avatar: "/avatar/top-mada.png", deals: 34837000, isOnline: true },
+  { id: 4, name: "Bob Brown", avatar: "/avatar/avatar4.png", deals: 20837000, isOnline: false },
   { id: 5, name: "Charlie White", avatar: "/avatar/avatar5.png", deals: 1040000, isOnline: true },
   { id: 6, name: "David Green", avatar: "/avatar/avatar6.png", deals: 1040000, isOnline: false },
   { id: 7, name: "Emma Blue", avatar: "/avatar/avatar7.png", deals: 18040000, isOnline: true },
