@@ -166,4 +166,6 @@ const DataTable: React.FC<DataTableProps> = React.memo(({ Columns, data, loading
   );
 });
 
+DataTable.displayName = "DataTable";
+
 export default DataTable;
