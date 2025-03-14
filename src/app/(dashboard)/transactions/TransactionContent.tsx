@@ -31,6 +31,15 @@ type Payment = {
   caisse: string;
 };
 
+const dataCaisse = [
+  { id: "uzRt253", name: "Caisse 1", value: 457900, color: "from-blue-500 to-blue-700 text-white" },
+  { id: "7264Yehf", name: "Caisse 2", value: 457900, color: "from-orange-500 to-orange-700 text-white" },
+  { id: "jdjbe59Jz", name: "Caisse 3", value: 457900, color: "from-yellow-400 to-yellow-600 text-white" },
+  { id: "7uet357eH", name: "Caisse 4", value: 4476900, color: "bg-gray-200 dark:bg-gray-800 text-gray-600 dark:text-gray-300" },
+  { id: "zyegq753JsG", name: "Caisse 5", value: 4837900, color: "bg-gray-200 dark:bg-gray-800 text-gray-600 dark:text-gray-300" },
+  { id: "djhe5292H", name: "Caisse 6", value: 364900, color: "bg-gray-200 dark:bg-gray-800 text-gray-600 dark:text-gray-300" },
+];
+
 export default function PendingContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -57,16 +66,12 @@ export default function PendingContent() {
     fetchData();
   }, []);
 
-  // Filtrer les paiements par caisse si `caisse` est dans l'URL
   const data = React.useMemo(
     () => (caisseParam ? rawData.filter((item) => item.caisse === caisseParam) : rawData),
     [rawData, caisseParam]
   );
 
-  const totalPending = React.useMemo(
-    () => data.reduce((acc, item) => acc + item.amount, 0),
-    [data]
-  );
+  const totalPending = React.useMemo(() => data.reduce((acc, item) => acc + item.amount, 0), [data]);
 
   const subtitle = caisseParam
     ? `Pending payments from caisse: ${caisseParam}.`
@@ -76,25 +81,20 @@ export default function PendingContent() {
     {
       accessorKey: "date",
       header: "Date",
-      cell: ({ row }) => <div>{moment(row.getValue("date"), "DD-MM-YY").format("DD/MM/YYYY")}</div>,
+      cell: ({ row }) => <div>{moment(row.getValue("date")).format("DD/MM/YYYY")}</div>,
     },
-    {
-      accessorKey: "comments",
-      header: "Comments",
-    },
+    { accessorKey: "comments", header: "Comments" },
     {
       accessorKey: "amount",
       header: "Amount",
       cell: ({ row }: { row: Row<Payment> }) => (
-        <div className="text-center">{row.getValue("amount")}</div>
+        <div className="text-center">{row.getValue("amount").toLocaleString()} Ar</div>
       ),
     },
     {
       accessorKey: "caisse",
       header: "Caisse",
-      cell: ({ row }: { row: Row<Payment> }) => (
-        <div className="text-center">{row.getValue("caisse")}</div>
-      ),
+      cell: ({ row }: { row: Row<Payment> }) => <div className="text-center">{row.getValue("caisse")}</div>,
     },
   ];
 
@@ -143,77 +143,28 @@ export default function PendingContent() {
 
   return (
     <>
-      {/* SEO Optimisation */}
       <Head>
         <title>Pending Payments - {caisseParam ? caisseParam : "All Caisse"}</title>
-        <meta
-          name="description"
-          content={`View all pending payments${caisseParam ? ` from caisse ${caisseParam}` : ""}.`}
-        />
+        <meta name="description" content={`View all pending payments${caisseParam ? ` from caisse ${caisseParam}` : ""}.`} />
       </Head>
 
-      <div
-        className={cn(
-          "px-2 transition-opacity",
-          { "opacity-100": !loading && data.length > 0, "opacity-0": loading || data.length === 0 }
-        )}
+      <Balance
+        title={<><FiClock /> Pending Payment</>}
+        balance={loading ? "Loading..." : <><Counter end={totalPending} duration={0.8} /> Ar.</>}
+        balanceColor="text-yellow-500 hover:text-yellow-600"
+        subtitle={subtitle}
       >
-        <Balance
-          title={
-            <>
-              <FiClock /> Pending Payment
-            </>
-          }
-          balance={
-            loading
-              ? "Loading..."
-              : data.length > 0
-              ? <>
-                  <Counter end={totalPending} duration={0.8} /> Ar.
-                </>
-              : "No pending payment added."
-          }
-          balanceColor="text-yellow-500 hover:text-yellow-600"
-          subtitle={subtitle}
-          subtitleSize="text-sm"
-        >
-          <div className="flex gap-2">
-            {!loading && data.length > 0 && (
-              <button className="flex items-center gap-1 rounded bg-yellow-500 text-white hover:bg-yellow-600 px-2 py-1 text-sm">
-                <FaPlus /> New unpaid purchase
-              </button>
-            )}
-            {caisseParam && (
-              <button
-                className="flex items-center gap-1 rounded bg-gray-500 text-white hover:bg-gray-600 px-2 py-1 text-sm"
-                onClick={() => router.push("/view/pending")}
-              >
-                <FaSyncAlt /> Reset Filter
-              </button>
-            )}
-          </div>
-        </Balance>
-      </div>
-      
-      <Caisse />
-      
-      <div className="pt-2">
-        {loading ? (
-          <Transactions Columns={Columns} data={[]} loading={true} />
-        ) : data.length > 0 ? (
-          <Transactions Columns={Columns} data={data} loading={false} />
-        ) : (
-          <div className="w-full h-[65vh] flex items-center justify-center">
-            <div className="-mt-5 flex flex-col items-center">
-              <p className="text-gray-900 dark:text-white">
-                No pending payments. Please add one.
-              </p>
-              <button className="px-4 mt-2 flex items-center gap-2 py-2 bg-yellow-500 text-white hover:bg-yellow-600 rounded">
-                <FaPlus /> Add First Transaction
-              </button>
-            </div>
-          </div>
+        {caisseParam && (
+          <Button onClick={() => router.replace("/view/pending")} variant="secondary">
+            <FaSyncAlt /> Reset Filter
+          </Button>
         )}
+      </Balance>
+
+      <Caisse caisses={dataCaisse} />
+
+      <div className="pt-2">
+        <Transactions Columns={Columns} data={loading ? [] : data} loading={loading} />
       </div>
     </>
   );
