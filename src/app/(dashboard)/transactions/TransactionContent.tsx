@@ -41,7 +41,7 @@ export default function PendingContent() {
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/pending");
+        const response = await fetch("/api/transactions");
         if (!response.ok) throw new Error("Failed to fetch data");
 
         const result: Payment[] = await response.json();
