@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useMemo } from "react";
 import Avatar from "@components/Avatar";
 import Progression from "@components/Progression";
 
@@ -17,30 +18,45 @@ const stats = [
 ];
 
 const TopList = () => {
+  const [useMaxDeal, setUseMaxDeal] = useState(false);
+
   // Trier les clients par deals (du plus grand au plus petit)
-  const sortedStats = [...stats].sort((a, b) => b.deals - a.deals);
+  const sortedStats = useMemo(() => [...stats].sort((a, b) => b.deals - a.deals), []);
 
-  // Calculer le total des deals
-  const totalDeals = sortedStats.reduce((acc, stat) => acc + stat.deals, 0) || 1;
+  // Valeurs de référence pour le calcul des pourcentages
+  const totalDeals = useMemo(() => sortedStats.reduce((acc, stat) => acc + stat.deals, 0) || 1, [sortedStats]);
+  const maxDeal = sortedStats[0]?.deals || 1;
 
-  // Calculer les pourcentages avec correction de l'erreur d'arrondi
-  let percentageSum = 0;
-  const calculatedPercentages = sortedStats.map((stat, index) => {
-    if (index === sortedStats.length - 1) {
-      // Ajustement du dernier élément pour que la somme fasse exactement 100%
-      return (100 - percentageSum).toFixed(2);
-    }
-    const percentage = parseFloat(((stat.deals / totalDeals) * 100).toFixed(2));
-    percentageSum += percentage;
-    return percentage;
-  });
+  // Calcul des pourcentages
+  const calculatedPercentages = useMemo(() => {
+    const referenceValue = useMaxDeal ? maxDeal : totalDeals;
+    let percentageSum = 0;
+
+    return sortedStats.map((stat, index) => {
+      if (index === sortedStats.length - 1) {
+        return (100 - percentageSum).toFixed(2);
+      }
+      const percentage = parseFloat(((stat.deals / referenceValue) * 100).toFixed(2));
+      percentageSum += percentage;
+      return percentage;
+    });
+  }, [useMaxDeal, totalDeals, maxDeal, sortedStats]);
 
   return (
     <div className="h-full overflow-y-auto">
       <div className="p-2">
-        {/* Affichage du total */}
-        <h2 className="text-lg font-bold">Top 10 High-Value Customers</h2>
+        {/* Titre & Bouton de bascule */}
+        <div className="flex justify-between items-center mb-2">
+          <h2 className="text-lg font-bold">Top 10 Clients</h2>
+          <button
+            onClick={() => setUseMaxDeal((prev) => !prev)}
+            className="text-sm bg-gray-200 dark:bg-gray-700 px-3 py-1 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+          >
+            Basculer : {useMaxDeal ? "Total des Deals" : "Max Deal"}
+          </button>
+        </div>
 
+        {/* Liste des clients */}
         {sortedStats.map((stat, index) => {
           const percentage = calculatedPercentages[index];
 
@@ -52,6 +68,7 @@ const TopList = () => {
             <div
               key={stat.id}
               className="flex items-center p-3 rounded-lg cursor-pointer transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
+              aria-label={`Client ${stat.name}, ${stat.deals.toLocaleString()} Ar, ${percentage}%`}
             >
               {/* Avatar */}
               <Avatar className="mr-3" isOnline={stat.isOnline} isStory={true} src={stat.avatar} fallback={stat.name[0]} />
