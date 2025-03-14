@@ -7,7 +7,7 @@ import { FaPlus, FaSyncAlt } from "react-icons/fa";
 import { FiClock } from "react-icons/fi";
 import { MoreHorizontal } from "lucide-react";
 import moment from "moment";
-import Pending from "@components/Table/Pending";
+import Transactions from "@components/Table/Transactions";
 import Counter from "@components/Counter";
 import Balance from "@components/Balance";
 import { cn } from "@/lib/utils";
@@ -196,9 +196,9 @@ export default function PendingContent() {
 
       <div className="pt-2">
         {loading ? (
-          <Pending Columns={Columns} data={[]} loading={true} />
+          <Transactions Columns={Columns} data={[]} loading={true} />
         ) : data.length > 0 ? (
-          <Pending Columns={Columns} data={data} loading={false} />
+          <Transactions Columns={Columns} data={data} loading={false} />
         ) : (
           <div className="w-full h-[65vh] flex items-center justify-center">
             <div className="-mt-5 flex flex-col items-center">
