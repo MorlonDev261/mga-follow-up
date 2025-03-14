@@ -17,7 +17,7 @@ type Payment = {
 }
 
 interface DataTableProps {
-  Columns: ColumnDef<dataType>[];
+  Columns: ColumnDef<Payment>[];
   data: dataType[];
   loading: boolean;
 }
