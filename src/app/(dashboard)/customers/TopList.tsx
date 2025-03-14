@@ -20,14 +20,19 @@ const TopList = () => {
   // Trier les clients par deals (du plus grand au plus petit)
   const sortedStats = [...stats].sort((a, b) => b.deals - a.deals);
 
-  // Trouver le plus grand deals pour le pourcentage
-  const maxDeals = sortedStats[0]?.deals || 1;
+  // Calculer le total des deals
+  const totalDeals = sortedStats.reduce((acc, stat) => acc + stat.deals, 0) || 1;
 
   return (
     <div className="h-full overflow-y-auto">
       <div className="p-2">
+        {/* Affichage du total */}
+        <div className="mb-4 p-3 bg-gray-100 dark:bg-gray-800 rounded-lg text-center font-semibold text-gray-700 dark:text-gray-300">
+          Total Deals: {totalDeals.toLocaleString()} Ar
+        </div>
+
         {sortedStats.map((stat, index) => {
-          const percentage = Math.round((stat.deals / maxDeals) * 100);
+          const percentage = ((stat.deals / totalDeals) * 100).toFixed(2); // Arrondi à 2 décimales
 
           // Couleurs pour les 3 premiers
           const rankColors = ["bg-green-500", "bg-orange-500", "bg-yellow-500"];
@@ -38,7 +43,6 @@ const TopList = () => {
               key={stat.id}
               className="flex items-center p-3 rounded-lg cursor-pointer transition-colors hover:bg-gray-100 dark:hover:bg-gray-800"
             >
-
               {/* Avatar */}
               <Avatar className="mr-3" isOnline={stat.isOnline} isStory={true} src={stat.avatar} fallback={stat.name[0]} />
 
@@ -46,12 +50,12 @@ const TopList = () => {
                 <div className="flex justify-between items-center">
                   <h3 className="font-semibold truncate">{stat.name}</h3>
                   <span className="text-xs text-gray-500 dark:text-gray-400">
-                    Deals: {stat.deals.toLocaleString()} Ar
+                    {stat.deals.toLocaleString()} Ar ({percentage}%)
                   </span>
                 </div>
 
                 {/* Barre de progression */}
-                <Progression value={percentage} progressColor={progressColor} />
+                <Progression value={parseFloat(percentage)} progressColor={progressColor} />
               </div>
             </div>
           );
