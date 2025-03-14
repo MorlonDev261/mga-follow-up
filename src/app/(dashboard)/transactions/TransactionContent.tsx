@@ -9,6 +9,7 @@ import { MoreHorizontal } from "lucide-react";
 import moment from "moment";
 import Transactions from "@components/Table/Transactions";
 import Counter from "@components/Counter";
+import Caisse from "./Caisse";
 import Balance from "@components/Balance";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -193,7 +194,9 @@ export default function PendingContent() {
           </div>
         </Balance>
       </div>
-
+      
+      <Caisse />
+      
       <div className="pt-2">
         {loading ? (
           <Transactions Columns={Columns} data={[]} loading={true} />
