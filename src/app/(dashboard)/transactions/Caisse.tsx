@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
-
 // Liste des raccourcis
 const caisses = [
   {
@@ -49,7 +48,7 @@ const Caisse = () => {
     <nav aria-label="Shortcuts Navigation" className="grid grid-cols-4 md:grid-cols-8 sm:grid-cols-6 gap-3 p-2 w-full">
       {caisses.map((caisse) => (
         <Link
-          key=caisse.label}
+          key={caisse.label} // Correction ici
           href={caisse.to}
           title={caisse.label} // Ajout du title pour le SEO
           aria-label={caisse.label}
