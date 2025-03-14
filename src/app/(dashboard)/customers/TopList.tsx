@@ -39,7 +39,7 @@ const TopList = () => {
     <div className="h-full overflow-y-auto">
       <div className="p-2">
         {/* Affichage du total */}
-        <h2 className="text-md text-bold">Top 10 High-Value Customers</h2>
+        <h2 className="text-lg font-bold">Top 10 High-Value Customers</h2>
 
         {sortedStats.map((stat, index) => {
           const percentage = calculatedPercentages[index];
