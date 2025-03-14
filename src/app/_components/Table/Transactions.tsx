@@ -28,7 +28,7 @@ export default function DataTableDemo({ Columns, data, loading }: DataTableProps
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
 
-  const columns: ColumnDef<dataType>[] = Columns;
+  const columns: ColumnDef<Payment>[] = Columns;
 
   const table = useReactTable({
     data,
