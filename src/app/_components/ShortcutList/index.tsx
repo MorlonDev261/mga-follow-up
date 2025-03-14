@@ -42,7 +42,7 @@ const shortcuts = [
 
 const ShortcutList = () => {
   return (
-    <nav aria-label="Shortcuts Navigation" className="grid grid-cols-2 gap-3 p-4 md:grid-cols-3 lg:grid-cols-4">
+    <nav aria-label="Shortcuts Navigation" className="grid grid-cols-3 gap-3 p-4">
       {shortcuts.map((shortcut) => (
         <Link
           key={shortcut.label}
