@@ -33,7 +33,7 @@ const shortcuts = [
     to: "/pending",
     value: 457900,
     icon: <FiClock />,
-    color: "from-yellow-600 to-yellow-800 text-white",
+    color: "from-yellow-400 to-yellow-600 text-white",
   },
   { label: "Employers", to: "/employers", icon: <BsPersonWorkspace />, color: "bg-gray-200 dark:bg-gray-800 text-gray-600 dark:text-gray-300" },
   { label: "Transactions", to: "/transactions", icon: <SwapWallet />, color: "bg-gray-200 dark:bg-gray-800 text-gray-600 dark:text-gray-300" },
