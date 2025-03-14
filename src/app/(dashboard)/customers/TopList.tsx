@@ -23,16 +23,26 @@ const TopList = () => {
   // Calculer le total des deals
   const totalDeals = sortedStats.reduce((acc, stat) => acc + stat.deals, 0) || 1;
 
+  // Calculer les pourcentages avec correction de l'erreur d'arrondi
+  let percentageSum = 0;
+  const calculatedPercentages = sortedStats.map((stat, index) => {
+    if (index === sortedStats.length - 1) {
+      // Ajustement du dernier élément pour que la somme fasse exactement 100%
+      return (100 - percentageSum).toFixed(2);
+    }
+    const percentage = parseFloat(((stat.deals / totalDeals) * 100).toFixed(2));
+    percentageSum += percentage;
+    return percentage;
+  });
+
   return (
     <div className="h-full overflow-y-auto">
       <div className="p-2">
         {/* Affichage du total */}
-        <div className="mb-4 p-3 bg-gray-100 dark:bg-gray-800 rounded-lg text-center font-semibold text-gray-700 dark:text-gray-300">
-          Total Deals: {totalDeals.toLocaleString()} Ar
-        </div>
+        <h2 className="text-md text-bold">Top 10 High-Value Customers</h2>
 
         {sortedStats.map((stat, index) => {
-          const percentage = ((stat.deals / totalDeals) * 100).toFixed(2); // Arrondi à 2 décimales
+          const percentage = calculatedPercentages[index];
 
           // Couleurs pour les 3 premiers
           const rankColors = ["bg-green-500", "bg-orange-500", "bg-yellow-500"];
