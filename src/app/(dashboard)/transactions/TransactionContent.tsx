@@ -3,7 +3,7 @@
 import * as React from "react";
 import Head from "next/head";
 import { useSearchParams, useRouter } from "next/navigation";
-import { FaPlus, FaSyncAlt } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
 import { FiClock } from "react-icons/fi";
 import { MoreHorizontal } from "lucide-react";
 import moment from "moment";
@@ -148,18 +148,48 @@ export default function PendingContent() {
         <meta name="description" content={`View all pending payments${caisseParam ? ` from caisse ${caisseParam}` : ""}.`} />
       </Head>
 
-      <Balance
-        title={<><FiClock /> Pending Payment</>}
-        balance={loading ? "Loading..." : <><Counter end={totalPending} duration={0.8} /> Ar.</>}
-        balanceColor="text-yellow-500 hover:text-yellow-600"
-        subtitle={subtitle}
-      >
-        {caisseParam && (
-          <Button onClick={() => router.replace("/view/pending")} variant="secondary">
-            <FaSyncAlt /> Reset Filter
-          </Button>
+      <div
+        className={cn(
+          "px-2 transition-opacity",
+          { "opacity-100": !loading && data.length > 0, "opacity-0": loading || data.length === 0 }
         )}
-      </Balance>
+      >
+        <Balance
+          title={
+            <>
+              <FiClock /> Pending Payment
+            </>
+          }
+          balance={
+            loading
+              ? "Loading..."
+              : data.length > 0
+              ? <>
+                  <Counter end={totalPending} duration={0.8} /> Ar.
+                </>
+              : "No pending payment added."
+          }
+          balanceColor="text-yellow-500 hover:text-yellow-600"
+          subtitle={subtitle}
+          subtitleSize="text-sm"
+        >
+          <div className="flex gap-2">
+            {!loading && data.length > 0 && (
+              <button className="flex items-center gap-1 rounded bg-yellow-500 text-white hover:bg-yellow-600 px-2 py-1 text-sm">
+                <FaPlus /> New unpaid purchase
+              </button>
+            )}
+            {caisseParam && (
+              <button
+                className="flex items-center gap-1 rounded bg-gray-500 text-white hover:bg-gray-600 px-2 py-1 text-sm"
+                onClick={() => router.push("/view/pending")}
+              >
+                <FaSyncAlt /> Reset Filter
+              </button>
+            )}
+          </div>
+        </Balance>
+      </div>
 
       <Caisse caisses={dataCaisse} />
 
