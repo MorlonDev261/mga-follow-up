@@ -36,7 +36,7 @@ type Payment = {
   date: string;
   comments: string;
   amount: number;
-  caisse: string;
+  caisseId: string;
 };
 
 interface TransactionsProps {
