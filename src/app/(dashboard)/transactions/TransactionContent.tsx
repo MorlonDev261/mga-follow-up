@@ -28,7 +28,7 @@ type Payment = {
   date: string;
   comments: string;
   amount: number;
-  caisse: string;
+  caisseId: string;
 };
 
 const dataCaisse = [
@@ -184,7 +184,7 @@ export default function PendingContent() {
                 className="flex items-center gap-1 rounded bg-gray-500 text-white hover:bg-gray-600 px-2 py-1 text-sm"
                 onClick={() => router.push("/view/pending")}
               >
-                <FaSyncAlt /> Reset Filter
+                 Reset Filter
               </button>
             )}
           </div>
