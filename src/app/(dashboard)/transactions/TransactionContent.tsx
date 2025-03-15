@@ -68,7 +68,7 @@ export default function PendingContent() {
 
   // Filtrer les paiements par caisse si `caisse` est dans l'URL
   const data = React.useMemo(
-    () => (caisseParam ? rawData.filter((item) => item.caisse === caisseParam) : rawData),
+    () => (caisseParam ? rawData.filter((item) => item.caisseId === caisseParam) : rawData),
     [rawData, caisseParam]
   );
 
