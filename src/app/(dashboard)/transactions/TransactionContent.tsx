@@ -100,9 +100,14 @@ export default function PendingContent() {
     {
       accessorKey: "amount",
       header: "Amount",
-      cell: ({ row }: { row: Row<Payment> }) => (
-        <div className={cn("text-center", { "text-green-500": row.getValue("amount") > 0, "text-red-500": row.getValue("amount") <= 0 })}>{row.getValue("amount")}</div>
-      ),
+      cell: ({ row }: { row: Row<Payment> }) => {
+        const amount = row.getValue("amount") as number;
+        return (
+          <div className={cn("text-center", { "text-green-500": amount > 0, "text-red-500": amount <= 0 })}>
+            {amount}
+          </div>
+        );
+      }
     },
     {
       accessorKey: "caisseId",
