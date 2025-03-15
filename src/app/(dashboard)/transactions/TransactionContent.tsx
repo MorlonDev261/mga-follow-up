@@ -164,7 +164,13 @@ export default function PendingContent() {
           balanceColor="text-yellow-500 hover:text-yellow-600"
           subtitle={subtitle}
           subtitleSize="text-sm"
-        />
+        >
+          {!loading && data.length > 0 && (
+            <button className="flex items-center gap-1 rounded bg-yellow-500 text-white hover:bg-yellow-600 px-2 py-1 text-sm">
+              <FaPlus /> New unpaid purchase
+            </button>
+          )}
+        </Balance>
 
         <div className="pt-2">
           <Transactions Columns={Columns} data={loading ? [] : data} loading={loading} />
