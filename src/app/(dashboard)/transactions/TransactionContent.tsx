@@ -172,12 +172,12 @@ export default function PendingContent() {
           )}
         </Balance>
 
+       <Caisse caisses={dataCaisse} />
+       
         <div className="pt-2">
           <Transactions Columns={Columns} data={loading ? [] : data} loading={loading} />
         </div>
       </div>
-
-      <Caisse caisses={dataCaisse} />
     </>
   );
 }
