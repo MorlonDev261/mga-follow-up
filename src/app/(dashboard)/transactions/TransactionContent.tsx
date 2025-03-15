@@ -28,7 +28,7 @@ type Payment = {
   date: string;
   comments: string;
   amount: number;
-  caisse: string;
+  caisseId: string;
 };
 
 export default function PendingContent() {
@@ -99,10 +99,10 @@ export default function PendingContent() {
       ),
     },
     {
-      accessorKey: "caisse",
-      header: "Caisse",
+      accessorKey: "caisseId",
+      header: "Caisse ID",
       cell: ({ row }: { row: Row<Payment> }) => (
-        <div className="text-center">{row.getValue("caisse")}</div>
+        <div className="text-center">{row.getValue("caisseId")}</div>
       ),
     },
   ];
