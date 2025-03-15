@@ -1,4 +1,4 @@
-"use client";
+ "use client";
 
 import * as React from "react";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -101,7 +101,7 @@ export default function PendingContent() {
       accessorKey: "amount",
       header: "Amount",
       cell: ({ row }: { row: Row<Payment> }) => (
-        <div className="text-center">{row.getValue("amount")} Ar</div>
+        <div className="text-center">{row.getValue("amount").toLocaleString()} Ar</div>
       ),
     },
     {
