@@ -137,7 +137,7 @@ export default function PendingContent() {
                   <DropdownMenuItem>View payment details</DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
-                    onClick={() => router.push(`?caisse=${encodeURIComponent(payment.caisse)}`)}
+                    onClick={() => router.push(`?caisse=${encodeURIComponent(payment.caisseId)}`)}
                   >
                     Show payments from this caisse
                   </DropdownMenuItem>
