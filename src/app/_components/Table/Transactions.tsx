@@ -45,7 +45,7 @@ interface TransactionsProps {
   loading: boolean;
 }
 
-const DataTable: React.FC<DataTableProps> = React.memo(({ Columns, data, loading }) => {
+const DataTable: React.FC<TransactionsProps> = React.memo(({ Columns, data, loading }) => {
   const [sorting, setSorting] = React.useState<SortingState>([{ id: "date", desc: true }]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
