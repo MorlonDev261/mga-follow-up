@@ -5,7 +5,7 @@ type Payment = {
   date: string
   comments: string
   amount: number
-  caisse: string
+  caisseId: string
 }
 
 const payments: Payment[] = [
