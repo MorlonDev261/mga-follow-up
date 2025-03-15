@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { FaPlus } from "react-icons/fa";
-import { FiClock } from "react-icons/fi";
+import { SwapWallet } frore "@icons";
 import { MoreHorizontal } from "lucide-react";
 import moment from "moment";
 import { NextSeo } from "next-seo";
@@ -164,15 +164,15 @@ export default function PendingContent() {
 
       <div className={cn("px-2 transition-opacity", { "opacity-100": !loading, "opacity-0": loading })}>
         <Balance
-          title={<><FiClock /> Pending Payment</>}
+          title={<><SwapWallet /> Transactions</>}
           balance={loading ? "Loading..." : data.length > 0 ? <><Counter end={totalPending} duration={0.8} /> Ar.</> : "No pending payment added."}
-          balanceColor="text-yellow-500 hover:text-yellow-600"
+          balanceColor="text-green-500 hover:text-green-600"
           subtitle={subtitle}
           subtitleSize="text-sm"
         >
           {!loading && data.length > 0 && (
             <button className="flex items-center gap-1 rounded bg-yellow-500 text-white hover:bg-yellow-600 px-2 py-1 text-sm">
-              <FaPlus /> New unpaid purchase
+              <FaPlus /> Add new caisse
             </button>
           )}
         </Balance>
