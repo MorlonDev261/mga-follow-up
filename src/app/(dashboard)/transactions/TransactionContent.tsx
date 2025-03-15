@@ -39,6 +39,15 @@ export default function PendingContent() {
   const [rawData, setRawData] = React.useState<Payment[]>([]);
   const [loading, setLoading] = React.useState(true);
 
+  const dataCaisse = [
+    { id: "uzRt253", name: "Caisse 1", value: 457900, color: "from-blue-500 to-blue-700 text-white" },
+    { id: "7264Yehf", name: "Caisse 2", value: 457900, color: "from-orange-500 to-orange-700 text-white" },
+    { id: "jdjbe59Jz", name: "Caisse 3", value: 457900, color: "from-yellow-400 to-yellow-600 text-white" },
+    { id: "7uet357eH", name: "Caisse 4", value: 4476900, color: "bg-gray-200 dark:bg-gray-800 text-gray-600 dark:text-gray-300" },
+    { id: "zyegq753JsG", name: "Caisse 5", value: 4837900, color: "bg-gray-200 dark:bg-gray-800 text-gray-600 dark:text-gray-300" },
+    { id: "djhe5292H", name: "Caisse 6", value: 364900, color: "bg-gray-200 dark:bg-gray-800 text-gray-600 dark:text-gray-300" },
+  ];
+  
   React.useEffect(() => {
     const fetchData = async () => {
       try {
@@ -195,7 +204,7 @@ export default function PendingContent() {
         </Balance>
       </div>
       
-      <Caisse />
+      <Caisse caisses={dataCaisse} />
       
       <div className="pt-2">
         {loading ? (
