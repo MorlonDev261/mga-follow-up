@@ -39,7 +39,7 @@ type Payment = {
   caisse: string;
 };
 
-interface DataTableProps {
+interface TransactionsProps {
   Columns: ColumnDef<Payment>[];
   data: Payment[];
   loading: boolean;
