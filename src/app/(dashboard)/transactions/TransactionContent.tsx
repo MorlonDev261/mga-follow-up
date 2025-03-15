@@ -171,7 +171,7 @@ export default function PendingContent() {
           subtitleSize="text-sm"
         >
           {!loading && data.length > 0 && (
-            <button className="flex items-center gap-1 rounded bg-yellow-500 text-white hover:bg-yellow-600 px-2 py-1 text-sm">
+            <button className="flex items-center gap-1 rounded bg-green-500 text-white hover:bg-green-600 px-2 py-1 text-sm">
               <FaPlus /> Add new caisse
             </button>
           )}
