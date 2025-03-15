@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { FaPlus } from "react-icons/fa";
-import { SwapWallet } frore "@icons";
+import { SwapWallet } from "@icons";
 import { MoreHorizontal } from "lucide-react";
 import moment from "moment";
 import { NextSeo } from "next-seo";
