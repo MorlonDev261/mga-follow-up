@@ -17,7 +17,7 @@ const Caisse = ({ caisses }: { caisses: CaisseProps[] }) => {
   const activeCaisseId = searchParams.get("caisse"); // Récupérer la valeur du paramètre "caisse"
 
   return (
-    <nav aria-label="Shortcuts Navigation" className="grid grid-cols-4 md:grid-cols-8 sm:grid-cols-6 gap-3 p-2 w-full">
+    <nav aria-label="Shortcuts Navigation" className="grid grid-cols-3 md:grid-cols-7 sm:grid-cols-5 gap-3 p-2 w-full">
       {caisses.map((caisse) => {
         const isActive = caisse.id === activeCaisseId; // Vérifier si la caisse est active
 
