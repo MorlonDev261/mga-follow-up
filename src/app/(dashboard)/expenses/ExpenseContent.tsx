@@ -9,7 +9,7 @@ import moment from "moment";
 import { NextSeo } from "next-seo";
 import Transactions from "@components/Table/Transactions";
 import Counter from "@components/Counter";
-import Caisse from "../stocks/Caisse";
+import Caisse from "../transactions/Caisse";
 import Balance from "@components/Balance";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
