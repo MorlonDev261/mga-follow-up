@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { FaPlus } from "react-icons/fa";
-import { FiClock } from "@react-icons/fi";
+import { FiClock } from "react-icons/fi";
 import { MoreHorizontal } from "lucide-react";
 import moment from "moment";
 import { NextSeo } from "next-seo";
