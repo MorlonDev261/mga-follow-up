@@ -1,10 +1,10 @@
 import { Suspense } from "react";
-import StockContent from "./StockContent";
+import PendingContent from "./PendingContent";
 
 export default function Page() {
   return (
-    <Suspense fallback={<StockContent />}>
-      <StockContent />
+    <Suspense fallback={<PendingContent />}>
+      <PendingContent />
     </Suspense>
   );
 }
