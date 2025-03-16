@@ -295,7 +295,7 @@ return (
       <Table className="min-w-max w-full">
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id} className="bg-gray-800">
+            <TableRow key={headerGroup.id} className="bg-blue-500">
               {headerGroup.headers.map((header) => (
                 <TableHead key={header.id} className="px-2 py-3 text-xs sm:text-sm">
                   {flexRender(header.column.columnDef.header, header.getContext())}
