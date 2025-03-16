@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { FaPlus } from "react-icons/fa";
-import { FiClock } from "react-icons/fi";
+import { FaUsers } from "react-icons/fa";
 import { MoreHorizontal } from "lucide-react";
 import moment from "moment";
 import Pending from "@components/Table/Pending";
@@ -96,13 +96,6 @@ export default function PendingContent() {
 
   const baseColumns: ColumnDef<DataType>[] = [
     {
-      accessorKey: "date",
-      header: "Date",
-      enableColumnFilter: true,
-      filterFn: "includesString",
-      cell: ({ row }) => <div>{moment(row.getValue("date"), "DD-MM-YY").format("DD/MM/YYYY")}</div>,
-    },
-    {
       accessorKey: "customer",
       header: "Customer",
       enableColumnFilter: true,
@@ -134,6 +127,13 @@ export default function PendingContent() {
           accessorKey: "sum",
           header: "Total",
           cell: ({ row }: { row: Row<DataType> }) => <div className="text-center">{row.getValue("sum")}</div>,
+        },
+        {
+          accessorKey: "date",
+          header: "Date",
+          enableColumnFilter: true,
+          filterFn: "includesString",
+          cell: ({ row }) => <div>{moment(row.getValue("date"), "DD-MM-YY").format("DD/MM/YYYY")}</div>,
         },
       ];
 
@@ -183,9 +183,9 @@ export default function PendingContent() {
          { "opacity-100": !loading && data.length > 0, "opacity-0": loading || data.length === 0 }
        )}>
         <Balance 
-          title={<><FiClock /> Pending Payment</>} 
+          title={<><FaUsers /> Pending Payment</>} 
           balance={loading ? "Loading..." : data.length > 0 ? <><Counter end={totalPending} duration={0.8} /> Ar.</> : "No pending payment added."}
-          balanceColor="text-yellow-500 hover:text-yellow-600"
+          balanceColor="text-green-500 hover:text-green-600"
           subtitle={subtitle}
           subtitleSize="text-sm"
         >
