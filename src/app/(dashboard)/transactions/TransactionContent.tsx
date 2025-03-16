@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { FaPlus } from "react-icons/fa";
 import { SwapWallet } from "@icons";
 import { MoreHorizontal } from "lucide-react";
 import moment from "moment";
@@ -171,11 +170,11 @@ export default function PendingContent() {
           subtitleSize="text-sm"
         >
           {!loading && data.length > 0 && (
-            <button className="relative flex items-center gap-0 text-white rounded overflow-hidden">
-               <FaPlus className="text-gray-700 px-2" />
-               <span className="bg-red-500 px-4 py-2 relative z-10 clip-debit">Débit</span>
-               <span className="bg-green-500 px-4 py-2 relative z-10 clip-credit">Crédit</span>
+             <button className="relative flex items-center text-white rounded overflow-hidden">
+               <span className="bg-red-500 px-4 py-2 clip-debit">Débit</span>
+               <span className="bg-green-500 px-4 py-2 clip-credit">Crédit</span>
              </button>
+
           )}
         </Balance>
 
