@@ -5,17 +5,6 @@ import { cn } from "@/lib/utils";
 import { useSearchParams } from "next/navigation";
 import { FaRegCheckCircle, FaRegCalendarAlt } from "react-icons/fa";
 
-const stocks = [
-  { id: 'hzhe58', name: '24-03-25', value: 457900, sales: 3636 },
-  { id: 'jrfhz8', name: '01-02-25', value: 457900, sales: 846 },
-  { id: 'hzshr8', name: '24-01-25', value: 457900, sales: 5353 },
-  { id: 'ryhey6', name: '07-02-25', value: 7, sales: 35 },
-  { id: 'hry488', name: '10-02-25', value: 53, sales: 386 },
-  { id: 'hjfe58', name: '14-02-25', value: 7, sales: 5263 },
-  { id: 'hzjrj8', name: '06-03-25', value: 568, sales: 56 },
-  { id: 'hkrjra', name: '08-03-25', value: 567, sales: 56 },
-];
-
 type StockProps = {
   id: string;
   name: string;
