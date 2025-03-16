@@ -63,9 +63,9 @@ export default function Stock() {
         </div>
       </div>
 
-      <div className="p-2">
+      <Suspense className="p-2">
         <StockList stocks={stocks} />
-      </div>
+      </Suspense>
       
       {/* Data Table */}
       <Suspense>
