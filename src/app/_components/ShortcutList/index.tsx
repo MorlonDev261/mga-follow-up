@@ -16,7 +16,7 @@ const SwapWallet = lazy(() => import("@icons").then((m) => ({ default: m.SwapWal
 const shortcuts = [
   {
     label: "Stock",
-    to: "/stock",
+    to: "/stocks",
     value: 457900,
     icon: <BsShopWindow />,
     color: "from-blue-500 to-blue-700 text-white",
