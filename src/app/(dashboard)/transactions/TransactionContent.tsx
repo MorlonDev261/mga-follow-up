@@ -171,9 +171,11 @@ export default function PendingContent() {
           subtitleSize="text-sm"
         >
           {!loading && data.length > 0 && (
-            <button className="flex items-center gap-1 rounded bg-green-500 text-white hover:bg-green-600 px-2 py-1 text-sm">
-              <FaPlus /> Add new caisse
-            </button>
+            <button className="relative flex items-center gap-0 text-white rounded overflow-hidden">
+               <FaPlus className="text-gray-700 px-2" />
+               <span className="bg-red-500 px-4 py-2 relative z-10 clip-debit">Débit</span>
+               <span className="bg-green-500 px-4 py-2 relative z-10 clip-credit">Crédit</span>
+             </button>
           )}
         </Balance>
 
