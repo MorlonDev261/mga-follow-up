@@ -3,7 +3,7 @@ import PendingContent from "./PendingContent";
 
 export default function Page() {
   return (
-    <Suspense fallback={<PendingContent />}>
+    <Suspense>
       <PendingContent />
     </Suspense>
   );
