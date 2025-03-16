@@ -226,7 +226,7 @@ export default function PendingContent() {
       
       <div className="pt-2">
         {loading ? (
-          <TableStock Columns={Columns} data={[]} loading={true} />
+          <TableStock Columns={Columns} data={data} loading={false} />
         ) : data.length > 0 ? (
           <TableStock Columns={Columns} data={data} loading={false} />
         ) : (
