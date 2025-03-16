@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { useSearchParams } from "next/navigation"; // Pour accéder aux paramètres de l'URL
-import { FaCheck } from "react-icons/fa"; // Importez l'icône de vérification de Font Awesome
+import { FaRegCheckCircle } from "react-icons/fa"; // Importez l'icône de vérification de Font Awesome
 
 type CaisseProps = {
   id: string;
@@ -37,8 +37,8 @@ const Caisse = ({ caisses }: { caisses: CaisseProps[] }) => {
           >
             {/* Icône de vérification si la caisse est active */}
             {isActive && (
-              <div className="absolute top-1 right-1 text-green-500">
-                <FaCheck />
+              <div className="absolute bg-white p-1 rounded-full top-1 right-1 text-green-500">
+                <FaRegCheckCircle />
               </div>
             )}
 
