@@ -63,7 +63,7 @@ export default function Stock() {
         </div>
       </div>
 
-      <Suspense className="p-2">
+      <Suspense>
         <StockList stocks={stocks} />
       </Suspense>
       
