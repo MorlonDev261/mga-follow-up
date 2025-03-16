@@ -202,13 +202,12 @@ export default function PendingContent() {
           
         {/* Statistique Component */}
         <div className="text-white p-2">
-           <h3 className="mb-4">Statistique de vente:</h3>
-           <div className="w-full">
-             <Statistique type="bar" legende={false} />
-           </div>
+          <h3 className="mb-4">Statistique de vente:</h3>
+          <div className="w-full">
+            <Statistique type="bar" legende={false} />
           </div>
         </div>
-      </div>
+    </div>
     
       <Suspense>
         <StockList stocks={stocks} />
