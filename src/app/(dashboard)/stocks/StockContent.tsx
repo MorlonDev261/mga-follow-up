@@ -12,7 +12,6 @@ import Statistique from "@components/Statistique";
 import TableStock from "@components/Table/Stock";
 import Counter from "@components/Counter";
 import Balance from "@components/Balance";
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ColumnDef, Row } from "@tanstack/react-table";
 import {
@@ -192,10 +191,7 @@ export default function PendingContent() {
 
   return (
     <>
-      <div className={cn(
-         "px-2 transition-opacity", 
-         { "opacity-100": !loading && data.length > 0, "opacity-0": loading || data.length === 0 }
-       )}>
+      <div className="px-2 transition-opacity">
         <Balance 
           title={<><FiClock /> Pending Payment</>} 
           balance={loading ? "Loading..." : data.length > 0 ? <><Counter end={totalPending} duration={0.8} /> Ar.</> : "No pending payment added."}
