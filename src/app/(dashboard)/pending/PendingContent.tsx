@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { FaPlus } from "react-icons/fa";
 import { FiClock } from "react-icons/fi";
@@ -199,11 +198,8 @@ export default function PendingContent() {
       </div>
 
       <div className="pt-2">
-        <Suspense>
         {loading ? (
-          <div className="flex justify-center items-center h-32">
-            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-yellow-500"></div>
-          </div>
+          <Pending Columns={Columns} data={[]} loading={true} />
         ) : data.length > 0 ? (
           <Pending Columns={Columns} data={data} loading={false} />
         ) : (
@@ -216,7 +212,6 @@ export default function PendingContent() {
             </div>
           </div>
         )}
-        </Suspense>
       </div>
     </>
   );
