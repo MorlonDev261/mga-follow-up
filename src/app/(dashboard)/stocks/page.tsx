@@ -11,8 +11,6 @@ import TableStock from "@components/Table/Stock";
 import { Suspense } from "react";
 
 export default function Stock() {
-  const [loading, setLoading] = React.useState(true);
-
   const stocks = [
     { id: 'hzhe58', name: '24-03-25', value: 457900, sales: 3636 },
     { id: 'jrfhz8', name: '01-02-25', value: 457900, sales: 846 },
@@ -23,8 +21,6 @@ export default function Stock() {
     { id: 'hzjrj8', name: '06-03-25', value: 568, sales: 56 },
     { id: 'hkrjra', name: '08-03-25', value: 567, sales: 56 },
   ];
-
-  setTimeout(() => setLoading(false), 2000);
 
   return (
     <main>
@@ -68,7 +64,7 @@ export default function Stock() {
       </div>
 
       <div className="p-2">
-        <StockList stocks={stocks} loading={loading} />
+        <StockList stocks={stocks} />
       </div>
       
       {/* Data Table */}
