@@ -1,48 +1,64 @@
-import { FaRegCalendarAlt } from "react-icons/fa";
+"use client";
+
+import Link from "next/link";
+import { cn } from "@/lib/utils";
+import { useSearchParams } from "next/navigation";
+import { FaRegCheckCircle, FaRegCalendarAlt } from "react-icons/fa";
 
 const stocks = [
-  { label: '24-03-25', inStock: 457900, sales: 3636 },
-  { label: '01-02-25', inStock: 457900, sales: 846 },
-  { label: '24-01-25', inStock: 457900, sales: 5353 },
-  { label: '07-02-25', inStock: 7, sales: 35 },
-  { label: '10-02-25', inStock: 53, sales: 386 },
-  { label: '14-02-25', inStock: 7, sales: 5263 },
-  { label: '06-03-25', inStock: 568, sales: 56 },
-  { label: '08-03-25', inStock: 567, sales: 56 },
+  { id: 'hzhe58', name: '24-03-25', value: 457900, sales: 3636 },
+  { id: 'jrfhz8', name: '01-02-25', value: 457900, sales: 846 },
+  { id: 'hzshr8', name: '24-01-25', value: 457900, sales: 5353 },
+  { id: 'ryhey6', name: '07-02-25', value: 7, sales: 35 },
+  { id: 'hry488', name: '10-02-25', value: 53, sales: 386 },
+  { id: 'hjfe58', name: '14-02-25', value: 7, sales: 5263 },
+  { id: 'hzjrj8', name: '06-03-25', value: 568, sales: 56 },
+  { id: 'hkrjra', name: '08-03-25', value: 567, sales: 56 },
 ];
 
-const StockList = ({ loading }: {loading: boolean}) => {
+type StockProps = {
+  id: string;
+  name: string;
+  inStock?: number;
+  sales?: number;
+  value?: number;
+  color?: string;
+};
+
+type StockListProps = { stocks: StockProps[] };
+
+const StockList = ({ stocks }: StockListProps) => {
+  const searchParams = useSearchParams();
+  const activeStockId = searchParams.get("stock");
+
   return (
-   <>
-   {loading ? (
-      <div className="flex justify-center items-center h-40">
-        <span className="text-lg font-semibold text-gray-500 animate-pulse">Loading...</span>
-      </div>
-    ) : (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-      {stocks.map((stock) => (
-       // bg-gradient-to-r from-green-400 to-green-600
-        <div
-          key={stock.label}
-          className="flex flex-col p-2 rounded-lg shadow-lg transition-transform transform hover:scale-105 bg-gradient-to-r from-blue-400 to-blue-600 text-white"
-        > 
-          <span className="text-lg flex items-center gap-2 font-semibold">
+    <nav className="grid grid-cols-3 md:grid-cols-7 sm:grid-cols-5 gap-3 p-2 w-full">
+      {stocks.map((stock) => {
+        const isActive = stock.id === activeStockId;
+
+        return (
+          <Link
+            key={stock.id}
+            href={`?stock=${stock.id}`}
+            className={cn(
+              "flex h-20 flex-col items-center justify-center rounded shadow-md dark:shadow-none dark:bg-[#262a2e] p-2 relative",
+              "transition-all duration-300 transform hover:scale-105",
+              "hover:bg-gray-100 dark:hover:bg-gray-700",
+              stock.color || "bg-gray-200 dark:bg-gray-800 text-gray-600 dark:text-gray-300"
+            )}
+          >
+            {isActive && (
+              <div className="absolute bg-background p-1 rounded-full top-1 right-1 text-green-500">
+                <FaRegCheckCircle />
+              </div>
+            )}
             <FaRegCalendarAlt />
-            {stock.label}
-          </span>
-          {stock.inStock > 0 ? (
-            <div className="mt-2 text-sm">
-              <span className="block">In stock: <b>{stock.inStock} pcs</b></span>
-              <span className="block">Sales: <b>{stock.sales} pcs</b></span>
-            </div>
-          ) : (
-            <span className="mt-2 text-red-500 font-semibold">Out of stock</span>
-          )}
-        </div>
-      ))}
-    </div>
-    )}
-    </>
+            <span className="text-xs">{stock.name}</span>
+            {stock.value !== undefined && <b className="text-xs">{stock.value.toLocaleString()} Ar</b>}
+          </Link>
+        );
+      })}
+    </nav>
   );
 };
 
