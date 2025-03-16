@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useRouter } from "next/navigation";
 import { FaPlus } from "react-icons/fa";
 import { FiClock } from "react-icons/fi";
 import { MoreHorizontal } from "lucide-react";
@@ -32,7 +33,7 @@ type DataType = Payment & { Qte?: number; sum?: number };
 
 export default function PendingContent() {
   const show = "Mr+Tanjona";
-
+  const router = useRouter();
   const [rawData, setRawData] = React.useState<Payment[]>([]);
   const [loading, setLoading] = React.useState(true);
 
