@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { useParams } from "@/hooks/useParams";
 import { useRouter } from "next/navigation";
 import { FaPlus } from "react-icons/fa";
 import { FiClock } from "react-icons/fi";
@@ -33,9 +32,7 @@ type Payment = {
 type DataType = Payment & { Qte?: number; sum?: number };
 
 export default function PendingContent() {
-  const router = useRouter();
-  const { getParams } = useParams();
-  const show = getParams("show");
+  const show = "Mr+Tanjona";
 
   const [rawData, setRawData] = React.useState<Payment[]>([]);
   const [loading, setLoading] = React.useState(true);
