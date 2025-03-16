@@ -96,6 +96,13 @@ export default function PendingContent() {
 
   const baseColumns: ColumnDef<DataType>[] = [
     {
+      accessorKey: "date",
+      header: "Date",
+      enableColumnFilter: true,
+      filterFn: "includesString",
+      cell: ({ row }) => <div>{moment(row.getValue("date"), "DD-MM-YY").format("DD/MM/YYYY")}</div>,
+    },
+    {
       accessorKey: "customer",
       header: "Customer",
       enableColumnFilter: true,
@@ -127,13 +134,6 @@ export default function PendingContent() {
           accessorKey: "sum",
           header: "Total",
           cell: ({ row }: { row: Row<DataType> }) => <div className="text-center">{row.getValue("sum")}</div>,
-        },
-        {
-          accessorKey: "date",
-          header: "Date",
-          enableColumnFilter: true,
-          filterFn: "includesString",
-          cell: ({ row }) => <div>{moment(row.getValue("date"), "DD-MM-YY").format("DD/MM/YYYY")}</div>,
         },
       ];
 
