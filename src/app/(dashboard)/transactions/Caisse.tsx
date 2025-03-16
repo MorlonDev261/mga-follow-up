@@ -37,7 +37,7 @@ const Caisse = ({ caisses }: { caisses: CaisseProps[] }) => {
           >
             {/* Icône de vérification si la caisse est active */}
             {isActive && (
-              <div className="absolute bg-white p-[2px] rounded-full top-1 right-1 text-green-500">
+              <div className="absolute bg-background p-1 rounded-full top-1 right-1 text-green-500">
                 <FaRegCheckCircle />
               </div>
             )}
