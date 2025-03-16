@@ -5,7 +5,7 @@ import { FaPlus } from "react-icons/fa6";
 import { BsShopWindow } from "react-icons/bs";
 import Balance from "@components/Balance";
 import Counter from "@components/Counter";
-import StockList from "@components/StockList";
+import StockList from "./StockList";
 import Statistique from "@components/Statistique";
 import TableStock from "@components/Table/Stock";
 import { Suspense } from "react";
