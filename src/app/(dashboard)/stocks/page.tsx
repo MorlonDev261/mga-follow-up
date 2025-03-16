@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import StockContent from "./PendingContent";
+import StockContent from "./StockContent";
 
 export default function Page() {
   return (
