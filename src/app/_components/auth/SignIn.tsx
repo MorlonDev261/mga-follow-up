@@ -15,7 +15,6 @@ const LoginCard: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
   const [errors, setErrors] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
 
@@ -104,15 +103,6 @@ const LoginCard: React.FC = () => {
             )}
           </div>
           {errors.password && <div className="error">{errors.password}</div>}
-        </div>
-
-        <div className="checkbox-container">
-          <input
-            type="checkbox"
-            checked={rememberMe}
-            onCheckedChange={(checked) => setRememberMe(Boolean(checked))}
-          />
-          <p className="docs">Se souvenir de moi</p>
         </div>
 
         <Button type="submit" className="w-full" disabled={loading}>
