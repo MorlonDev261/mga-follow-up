@@ -6,7 +6,6 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Spinner } from "@/components/ui/spinner";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
@@ -27,7 +26,6 @@ const SignUpCard: React.FC = () => {
   const {
     register,
     handleSubmit,
-    setError,
     watch,
     formState: { errors },
   } = useForm<SignUpFormInputs>();
@@ -111,18 +109,9 @@ const SignUpCard: React.FC = () => {
 
         {/* Conditions générales */}
         <div className="flex items-center gap-2 mt-2">
-          <Popover>
-            <PopoverTrigger asChild>
-              <Checkbox {...register("acceptTerms", { required: "Vous devez accepter les CGU." })} />
-            </PopoverTrigger>
-            {errors.acceptTerms && (
-              <PopoverContent className="bg-white border p-2 shadow-md">
-                <p className="text-sm text-red-500">{errors.acceptTerms.message}</p>
-              </PopoverContent>
-            )}
-          </Popover>
+          <Checkbox {...register("acceptTerms", { required: "Vous devez accepter les CGU." })} />
           <p className="text-sm">
-            J'accepte les{" "}
+            J&apos;accepte les{" "}
             <Link href="/terms" className="underline">conditions générales</Link> et les{" "}
             <Link href="/rules" className="underline">règles</Link>.
           </p>
@@ -130,7 +119,7 @@ const SignUpCard: React.FC = () => {
 
         {/* Bouton d'inscription */}
         <Button type="submit" className="btn w-full mt-4">
-          {loading ? <Spinner size="sm" className="mr-2" /> : "S'inscrire"}
+          {loading ? <Spinner size="sm" className="mr-2" /> : "S&apos;inscrire"}
         </Button>
       </form>
 
@@ -140,7 +129,6 @@ const SignUpCard: React.FC = () => {
       </div>
       <ButtonSocials />
 
-      {/* Lien vers connexion */}
       <div className="link-to-login">
         Déjà un compte ? <Link href="/auth/sign-in">Connectez-vous ici</Link>.
       </div>
