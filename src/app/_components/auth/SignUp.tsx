@@ -4,10 +4,10 @@ import React, { useState, useRef } from "react";
 import Link from "next/link";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
-import Tooltip from "@/components/ui/tooltip";
-import Checkbox from "@/components/ui/checkbox";
-import Button from "@/components/ui/button";
-import Spinner from "@/components/ui/spinner";
+import { Tooltip } from "@/components/ui/tooltip";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 import ButtonSocials from "@components/ButtonSocials";
 
