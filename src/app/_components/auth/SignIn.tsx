@@ -5,8 +5,6 @@ import Link from "next/link";
 import "./CSS/styles.css";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 import { FaEnvelope, FaLock } from "react-icons/fa";
@@ -70,7 +68,7 @@ const LoginCard: React.FC = () => {
         <div className="form-group">
           <div className={cn("form-input", { "not-valid": errors.email })}>
             <FaEnvelope className="icon" />
-            <Input
+            <input
               type="email"
               ref={emailRef}
               placeholder="Adresse e-mail"
@@ -89,7 +87,7 @@ const LoginCard: React.FC = () => {
         <div className="form-group">
           <div className={cn("form-input", { "not-valid": errors.password })}>
             <FaLock className="icon" />
-            <Input
+            <input
               type={showPassword ? "text" : "password"}
               ref={passwordRef}
               placeholder="Mot de passe"
@@ -109,7 +107,8 @@ const LoginCard: React.FC = () => {
         </div>
 
         <div className="checkbox-container">
-          <Checkbox
+          <input
+            type="checkbox"
             checked={rememberMe}
             onCheckedChange={(checked) => setRememberMe(Boolean(checked))}
           />
