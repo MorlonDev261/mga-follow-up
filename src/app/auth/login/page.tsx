@@ -1,5 +1,5 @@
 import React from "react";
-import Login from "@components/ligin";
+import Login from "@components/Login";
 
 const LoginCard: React.FC = () => {
 
