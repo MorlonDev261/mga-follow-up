@@ -78,7 +78,7 @@ export default function RootLayout({
         >
           <div className="min-h-screen">{children}</div>
           <div className="fixed bottom-10 right-5 z-100 w-23 h-23 rounded-full p-2 bg-green-500 dark:bg-orange-500">
-            <Image src="/assistant.png" width="20" height="20" alt="Assistant MGA Follow UP" />
+            <Image src="/assistant.png" width="20" height="15" alt="Assistant MGA Follow UP" />
           </div>
           <PWA />
         </ThemeProvider>
