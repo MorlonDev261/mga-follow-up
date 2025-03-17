@@ -3,6 +3,8 @@
 import React, { useState, useRef } from "react";
 import Link from "next/link";
 import "./CSS/styles.css";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { Button } from "@/components/ui/button";
@@ -73,6 +75,9 @@ const [showPassword, setShowPassword] = useState(false);
   return (
     <div className="auth-container">
       <h2>Inscription</h2>
+      <Alert variant="destructive" className="mb-3">
+        <AlertDescription><AiOutlineExclamationCircle /> Email ou mot de passe incorrect!</AlertDescription>
+      </Alert>
       <form onSubmit={handleSubmit}>
         {/* Champ e-mail */}
         <div className="form-group">
