@@ -2,7 +2,7 @@
 
 import React, { useState, useRef } from "react";
 import Link from "next/link";
-import "CSS/styles.css";
+import "./CSS/styles.css";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -129,7 +129,7 @@ const LoginCard: React.FC = () => {
 
       <div className="link-to-login">
         Vous n&apos;avez pas encore un compte ?{" "}
-        <Link href="/signup" className="text-primary">Inscrivez-vous ici</Link>.
+        <Link href="/auth/sign-up" className="text-primary">Inscrivez-vous ici</Link>.
       </div>
     </div>
   );
