@@ -15,21 +15,18 @@ const SignUpCard: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [acceptTerms, setAcceptTerms] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
+const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errors, setErrors] = useState({
     email: "",
     password: "",
     confirmPassword: "",
-    acceptTerms: "",
   });
   const [loading, setLoading] = useState(false);
 
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const confirmPasswordRef = useRef<HTMLInputElement>(null);
-  const checkboxRef = useRef<HTMLLabelElement>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,11 +54,6 @@ const SignUpCard: React.FC = () => {
       valid = false;
     } else if (password !== confirmPassword) {
       newErrors.confirmPassword = "Les mots de passe ne correspondent pas.";
-      valid = false;
-    }
-
-    if (!acceptTerms) {
-      newErrors.acceptTerms = "Vous devez accepter les conditions générales.";
       valid = false;
     }
 
@@ -148,7 +140,7 @@ const SignUpCard: React.FC = () => {
           {errors.confirmPassword && <div className="error">{errors.confirmPassword}</div>}
         </div>
 
-        {/* Conditions générales */}
+        {/* Conditions générales 
         <div className={cn("checkbox-container", errors.acceptTerms && "not-valid")}>
           <Tooltip>
             <TooltipTrigger asChild>
@@ -171,7 +163,8 @@ const SignUpCard: React.FC = () => {
             <Link href="/terms">conditions générales</Link> et les{" "}
             <Link href="/rules">règles</Link>.
           </p>
-        </div>
+        </div> 
+          */}
 
         {/* Bouton de soumission */}
         <Button type="submit" className="btn" disabled={loading}>
