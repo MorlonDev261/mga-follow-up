@@ -1,6 +1,6 @@
 "use client";
 
-import { useBackgroundAnimation } from "@/hooks/useBackgroundAnimation";
+import { useBgAnime } from "@/hooks/use-bg-anime";
 import { cn } from "@/lib/utils";
 import { memo } from "react";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
