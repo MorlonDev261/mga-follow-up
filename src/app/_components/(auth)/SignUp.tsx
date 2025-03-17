@@ -142,7 +142,7 @@ const SignUpCard: React.FC = () => {
 
       {/* Lien vers connexion */}
       <div className="link-to-login">
-        Déjà un compte ? <Link href="/login">Connectez-vous ici</Link>.
+        Déjà un compte ? <Link href="/auth/sign-in">Connectez-vous ici</Link>.
       </div>
     </div>
   );
