@@ -171,7 +171,7 @@ export default function PendingContent() {
         >
           {!loading && data.length > 0 && (
              <button className="relative flex items-center text-white rounded overflow-hidden">
-               <span className="bg-red-500 p-2 -ml-1 clip-debit">Débit</span>
+               <span className="bg-red-500 p-2 -ml-3 clip-debit">Débit</span>
                <span className="bg-green-500 p-2 clip-credit">Crédit</span>
              </button>
 
