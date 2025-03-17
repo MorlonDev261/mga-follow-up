@@ -1,10 +1,10 @@
 import React from "react";
-import Signup from "@components/Signup";
+import SignUp from "@components/auth/SignUp";
 
 const Page: React.FC = () => {
 
   return (
-    <Signup />
+    <SignUp />
   );
 };
 
