@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { TooltipProvider } from "@/components/ui/tooltip";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -8,9 +7,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Image src="/logo.png" width="100" height="50" alt="Logo" />
         <Image src="/logo-name.png" width="50" height="50" alt="Logo name" />
       </div>
-      <TooltipProvider>
-        {children}
-      </TooltipProvider>
+      {children}
     </>
   );
 }
