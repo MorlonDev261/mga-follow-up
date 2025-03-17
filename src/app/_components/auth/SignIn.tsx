@@ -61,7 +61,7 @@ const LoginCard: React.FC = () => {
     <div className="auth-container">
       <h2>Connexion</h2>
       <Alert variant="destructive" className="mb-3">
-        <AlertDescription className="flex gap-1"><AiOutlineExclamationCircle /> Email ou mot de passe incorrect!</AlertDescription>
+        <AlertDescription className="flex items-center gap-1"><AiOutlineExclamationCircle /> Email ou mot de passe incorrect!</AlertDescription>
       </Alert>
 
       <form onSubmit={handleSubmit}>
