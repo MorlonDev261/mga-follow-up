@@ -9,7 +9,7 @@ interface AnimationConfig {
   spawnInterval?: { min: number; max: number }
 }
 
-export function useBackgroundAnimation(
+export function useBgAnime(
   containerClass: string,
   {
     imagePaths,
