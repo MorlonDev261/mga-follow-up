@@ -65,11 +65,11 @@ body {
 }
 
 .clip-debit {
-  clip-path: polygon(0 0, 100% 0, 85% 100%, 0 100%);
+  clip-path: polygon(0 0, 100% 0, 90% 100%, 0 100%);
 }
 
 .clip-credit {
-  clip-path: polygon(8% 0, 100% 0, 100% 100%, 0 100%);
+  clip-path: polygon(20% 0, 100% 0, 100% 100%, 0 100%);
 }
 
 @layer base {
