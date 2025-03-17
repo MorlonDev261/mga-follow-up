@@ -14,7 +14,7 @@ type Message = {
 };
 
 const MessageList = memo(({ messages }: { messages: Message[] }) => {
-  useBackgroundAnimation("bg-animation-261", {
+  useBgAnime("bg-animation-261", {
     imagePaths: [
       "/money/100ar.png",
       "/money/2000ar.png",
