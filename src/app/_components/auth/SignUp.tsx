@@ -76,7 +76,7 @@ const [showPassword, setShowPassword] = useState(false);
     <div className="auth-container">
       <h2>Inscription</h2>
       <Alert variant="destructive" className="mb-3">
-        <AlertDescription><AiOutlineExclamationCircle /> Email ou mot de passe incorrect!</AlertDescription>
+        <AlertDescription className="flex gap-1"><AiOutlineExclamationCircle /> Email ou mot de passe incorrect!</AlertDescription>
       </Alert>
       <form onSubmit={handleSubmit}>
         {/* Champ e-mail */}
