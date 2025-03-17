@@ -9,6 +9,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
+import { AiOutlineExclamationCircle } from "react-icons/ai";
 import ButtonSocials from "@components/ButtonSocials";
 
 const LoginCard: React.FC = () => {
@@ -60,7 +61,7 @@ const LoginCard: React.FC = () => {
     <div className="auth-container">
       <h2>Connexion</h2>
       <Alert variant="destructive" className="mb-3">
-        <AlertDescription>Email ou mot de passe incorrect!</AlertDescription>
+        <AlertDescription><AiOutlineExclamationCircle /> Email ou mot de passe incorrect!</AlertDescription>
       </Alert>
 
       <form onSubmit={handleSubmit}>
