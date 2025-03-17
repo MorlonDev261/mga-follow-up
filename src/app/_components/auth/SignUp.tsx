@@ -14,7 +14,7 @@ import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
-import ButtonSocials from "@/components/ButtonSocials";
+import ButtonSocials from "@components/ButtonSocials";
 
 // 🛠️ Définition du schéma de validation avec Zod
 const signUpSchema = z
