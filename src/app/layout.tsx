@@ -76,6 +76,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <div className="min-h-screen">{children}</div>
+          <div className="absolute bottom-5 right-3 h-4 w-4 rounded-full p-2 bg-green-500 dark:bg-orange-500">
+            <Image src="/assistant.png" alt="Assistant MGA Follow UP" />
+          </div>
           <PWA />
         </ThemeProvider>
       </body>
