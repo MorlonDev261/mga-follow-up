@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { useForm, UseFormRegister } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import axios from "axios";
@@ -31,10 +31,14 @@ const signUpSchema = z
 type SignUpFormValues = z.infer<typeof signUpSchema>;
 
 // 📌 Composant pour les champs de mot de passe (réutilisable)
-const PasswordInput = ({ label, register, error }: { 
+const PasswordInput = ({
+  label,
+  register,
+  error,
+}: { 
   label: string; 
-  register: any; 
-  error?: string; 
+  register: ReturnType<UseFormRegister<SignUpFormValues>>; // ✅ Correction ici
+  error?: string;
 }) => {
   const [show, setShow] = useState(false);
 
@@ -42,11 +46,7 @@ const PasswordInput = ({ label, register, error }: {
     <div className="form-group">
       <div className={cn("form-input", error && "not-valid")}>
         <FaLock className="icon" />
-        <input
-          type={show ? "text" : "password"}
-          placeholder={label}
-          {...register}
-        />
+        <input type={show ? "text" : "password"} placeholder={label} {...register} />
         {show ? (
           <IoEyeOffOutline className="icon" onClick={() => setShow(false)} />
         ) : (
