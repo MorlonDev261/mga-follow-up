@@ -4,9 +4,12 @@ import React, { useState, useRef } from "react";
 import Link from "next/link";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
-import { Tooltip, Checkbox, Button, Spinner } from "@/components/ui";
+import Tooltip from "@/components/ui/Tooltip";
+import Checkbox from "@/components/ui/Checkbox";
+import Button from "@/components/ui/Button";
+import Spinner from "@/components/ui/Spinner";
 import { cn } from "@/lib/utils";
-import ButtonSocials from "@components/ButtonSocials/ButtonSocials";
+import ButtonSocials from "@components/ButtonSocials";
 
 const SignUpCard: React.FC = () => {
   const [email, setEmail] = useState("");
