@@ -165,7 +165,7 @@ const SignUpCard: React.FC = () => {
               <TooltipContent>{errors.acceptTerms}</TooltipContent>
             )}
           </Tooltip>
-          <p className="docs">J'accepte les conditions générales</p>
+          <p className="docs">J&apos;accepte les conditions générales</p>
         </div>
 
         {/* Bouton de soumission */}
