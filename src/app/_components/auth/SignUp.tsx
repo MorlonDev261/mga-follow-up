@@ -6,7 +6,6 @@ import "./CSS/styles.css";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
@@ -153,11 +152,12 @@ const SignUpCard: React.FC = () => {
         <div className={cn("checkbox-container", errors.acceptTerms && "not-valid")}>
           <Tooltip>
             <TooltipTrigger asChild>
-              <label ref={checkboxRef} className="custom-checkbox">
-                <Checkbox
+              <label htmlFor="acceptTerms" className="custom-checkbox">
+                <input
+                  type="checkbox"
                   id="acceptTerms"
                   checked={acceptTerms}
-                  onCheckedChange={(checked) => setAcceptTerms(Boolean(checked))}
+                  onChange={(e) => setAcceptTerms(e.target.checked)}
                 />
                 <span className="checkmark"></span>
               </label>
@@ -166,7 +166,11 @@ const SignUpCard: React.FC = () => {
               <TooltipContent>{errors.acceptTerms}</TooltipContent>
             )}
           </Tooltip>
-          <p className="docs">J&apos;accepte les conditions générales</p>
+          <p className="docs">
+            J&apos;accepte les{" "}
+            <Link href="/terms">conditions générales</Link> et les{" "}
+            <Link href="/rules">règles</Link>.
+          </p>
         </div>
 
         {/* Bouton de soumission */}
