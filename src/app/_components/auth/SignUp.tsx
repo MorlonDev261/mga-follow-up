@@ -4,7 +4,7 @@ import React, { useState, useRef } from "react";
 import Link from "next/link";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
-import { Tooltip } from "@/components/ui/tooltip";
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
@@ -150,22 +150,22 @@ const SignUpCard: React.FC = () => {
 
         {/* Conditions générales */}
         <div className={cn("checkbox-container", errors.acceptTerms && "not-valid")}>
-          <Tooltip content={errors.acceptTerms} open={!!errors.acceptTerms}>
-            <label ref={checkboxRef} className="custom-checkbox">
-              <Checkbox
-                id="acceptTerms"
-                checked={acceptTerms}
-                onCheckedChange={(checked) => {
-                  setAcceptTerms(!!checked);
-                  setErrors((prev) => ({ ...prev, acceptTerms: "" }));
-                }}
-              />
-            </label>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <label ref={checkboxRef} className="custom-checkbox">
+                <Checkbox
+                  id="acceptTerms"
+                  checked={acceptTerms}
+                  onCheckedChange={(checked) => setAcceptTerms(Boolean(checked))}
+                />
+                <span className="checkmark"></span>
+              </label>
+            </TooltipTrigger>
+            {errors.acceptTerms && (
+              <TooltipContent>{errors.acceptTerms}</TooltipContent>
+            )}
           </Tooltip>
-          <p className="docs">
-            J&apos;accepte les <Link href="/terms">conditions générales</Link> et les{" "}
-            <Link href="/rules">règles</Link>.
-          </p>
+          <p className="docs">J'accepte les conditions générales</p>
         </div>
 
         {/* Bouton de soumission */}
