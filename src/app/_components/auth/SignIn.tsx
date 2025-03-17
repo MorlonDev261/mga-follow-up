@@ -10,7 +10,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
-import ButtonSocials from "@components/ButtonSocials/ButtonSocials";
+import ButtonSocials from "@components/ButtonSocials";
 
 const LoginCard: React.FC = () => {
   const [email, setEmail] = useState("");
