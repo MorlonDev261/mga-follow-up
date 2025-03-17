@@ -10,7 +10,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Spinner } from "@/components/ui/spinner";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
-import ButtonSocials from "@components/ButtonSocials/ButtonSocials";
+import ButtonSocials from "@components/ButtonSocials";
 
 type LoginFormInputs = {
   email: string;
