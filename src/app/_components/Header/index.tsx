@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, ReactNode } from "react";
+import { useSession } from "next-auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Theme from "@components/Theme";
 import Sidebar from "@components/Sidebar";
@@ -21,7 +22,9 @@ export default function Header({ children }: HeaderProps) {
   const pathname = usePathname();
   const router = useRouter();
   const { push } = router;
-
+  
+  const { data: session } = useSession();
+  
   const togglePath = (type: "dashboard" | "rows") => {
     let newPath = pathname;
 
@@ -47,7 +50,7 @@ export default function Header({ children }: HeaderProps) {
           {pathname !== "/" && (
             <div
               className="rounded-full p-1 cursor-pointer dark:hover:bg-gray-500 transition hover:bg-gray-200"
-              onClick={() => pathname !== "/" && router.back()}
+              onClick={() => router.back()}
             >
               <MdOutlineArrowBackIosNew className="text-xl text-gray-800 dark:text-white" />
             </div>
@@ -92,39 +95,51 @@ export default function Header({ children }: HeaderProps) {
             Excel
           </button>
         </div>
+        
+        {session?.user ? (
+          <>
+            {/* Notifications & Messages */}
+            <div className="flex items-center gap-4">
+              <Link href="/messages">
+                <FaRegEnvelope className="text-xl cursor-pointer text-gray-800 dark:text-white" />
+              </Link>
+              {pathname === "/notifications" ? (
+                <IoNotifications className="text-xl cursor-pointer text-gray-800 dark:text-white" />
+              ) : (
+                <Link href="/notifications">
+                  <IoNotificationsOutline className="text-xl cursor-pointer text-gray-800 dark:text-white" />
+                </Link>
+              )}
 
-        {/* Notifications & Messages */}
-        <div className="flex items-center gap-4">
-          <Link href="/messages">
-            <FaRegEnvelope className="text-xl cursor-pointer text-gray-800 dark:text-white" />
-          </Link>
-          {pathname == "/notifications" ? (
-            <div>
-              <IoNotifications className="text-xl cursor-pointer text-gray-800 dark:text-white" />
+              {/* --Theme Toggle-- */}
+              <Theme />
+
+              {/* Profil */}
+              <div className="profile flex items-center gap-1">
+                {session.user.image ? (
+                  <Avatar
+                    className="h-7 w-7 border border-gray-300 dark:border-white cursor-pointer"
+                    onClick={() => setOpen(!open)}
+                  >
+                    <AvatarImage src={session.user.image} />
+                  </Avatar>
+                ) : (
+                  <Avatar
+                    className="h-7 w-7 border border-gray-300 dark:border-white cursor-pointer"
+                    onClick={() => setOpen(!open)}
+                  >
+                    <AvatarFallback>C</AvatarFallback>
+                  </Avatar>
+                )}
+                <span className="hidden md:flex text-gray-800 dark:text-white">
+                  Hi, Morlon
+                </span>
+              </div>
             </div>
-          ) : (
-            <Link href="/notifications">
-              <IoNotificationsOutline className="text-xl cursor-pointer text-gray-800 dark:text-white" />
-            </Link>
-          )}
-
-          {/* --Theme Toggle-- */}
-          <Theme />
-
-          {/* Profil */}
-          <div className="profile flex items-center gap-1">
-            <Avatar
-              className="h-7 w-7 border border-gray-300 dark:border-white cursor-pointer"
-              onClick={() => setOpen(!open)}
-            >
-              <AvatarImage src="/profile.jpg" />
-              <AvatarFallback>C</AvatarFallback>
-            </Avatar>
-            <span className="hidden md:flex text-gray-800 dark:text-white">
-              Hi, Morlon
-            </span>
-          </div>
-        </div>
+          </>
+        ) : (
+          <Link href="auth/sign-in">Se connecter</Link>
+        )}
       </div>
 
       <Sidebar open={open} setOpen={setOpen} />
