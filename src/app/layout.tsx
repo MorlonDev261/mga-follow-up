@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { SessionProvider } from "next-auth/react";
 import Image from "next/image";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -23,7 +24,7 @@ export function generateMetadata(): Metadata {
     title: "MGA Follow UP | Simplify Your Finances",
     description: "Manage your moulaa easily 😎. Track your payments, customers, and more.",
     keywords: ["finance", "tracking", "payments", "MGA Follow UP"],
-    authors: [{ name: "Your Name", url: "https://yourwebsite.com" }],
+    authors: [{ name: "AZTEK DWC LLC", url: "https://yourwebsite.com" }],
     creator: "AZTEK DWC LLC",
     manifest: "/manifest.json",
     icons: {
@@ -64,7 +65,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <ThemeScript />
@@ -76,11 +77,13 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className="min-h-screen">{children}</div>
-          <div className="fixed bottom-10 right-5 z-100 w-23 h-23 rounded-full p-2 bg-green-500 dark:bg-orange-500">
-            <Image src="/assistant.png" width="20" height="15" alt="Assistant MGA Follow UP" />
-          </div>
-          <PWA />
+          <SessionProvider>
+            <div className="min-h-screen">{children}</div>
+            <div className="fixed bottom-10 right-5 z-50 w-16 h-16 rounded-full p-2 bg-green-500 dark:bg-orange-500">
+              <Image src="/assistant.png" width={48} height={48} alt="Assistant MGA Follow UP" />
+            </div>
+            <PWA />
+          </SessionProvider>
         </ThemeProvider>
       </body>
     </html>
