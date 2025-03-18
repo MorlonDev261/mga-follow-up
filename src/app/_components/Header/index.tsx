@@ -96,7 +96,7 @@ export default function Header({ children }: HeaderProps) {
           </button>
         </div>
         
-        {session?.user ? (
+        {session && session?.user ? (
           <>
             {/* Notifications & Messages */}
             <div className="flex items-center gap-4">
@@ -138,6 +138,7 @@ export default function Header({ children }: HeaderProps) {
             </div>
           </>
         ) : (
+          <Theme />
           <Link href="auth/sign-in">Se connecter</Link>
         )}
       </div>
