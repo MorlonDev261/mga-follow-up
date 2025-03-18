@@ -5,7 +5,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ThemeScript from "@/components/ThemeScript";
 import PWA from "@/components/PWA";
-import { Toaster } from "@/components/ui/toaster";
+import { Toast } from "@/components/ui/toaster";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -77,7 +77,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Toaster />
+          <Toast />
           <div className="min-h-screen">{children}</div>
           <div className="fixed bottom-10 right-5 z-100 w-23 h-23 rounded-full p-2 bg-green-500 dark:bg-orange-500">
             <Image src="/assistant.png" width="20" height="15" alt="Assistant MGA Follow UP" />
