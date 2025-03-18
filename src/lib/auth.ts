@@ -7,6 +7,7 @@ const authInstance = NextAuth({
   ...authConfig,
 } satisfies NextAuthOptions);
 
-console.log("Auth instance:", authInstance); // Debug
-
-export const { handlers, signIn, signOut, auth } = authInstance;
+export const handlers = authInstance.handlers ?? {};
+export const signIn = authInstance.signIn;
+export const signOut = authInstance.signOut;
+export const auth = authInstance.auth;
