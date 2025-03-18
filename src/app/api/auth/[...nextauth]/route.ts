@@ -1,5 +1,6 @@
-import { handlers } from "@/lib/auth"; 
+import NextAuth from "next-auth";
+import authConfig from "@/lib/auth";
 
-if (!handlers) throw new Error("NextAuth handlers is undefined"); // Debug
+const authInstance = NextAuth(authConfig);
 
-export const { GET, POST } = handlers;
+export const { GET, POST } = authInstance;
