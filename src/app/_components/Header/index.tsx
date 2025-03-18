@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, ReactNode } from "react";
+import { useState, ReactNode, Fragment } from "react";
 import { useSession } from "next-auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Theme from "@components/Theme";
@@ -24,128 +24,117 @@ export default function Header({ children }: HeaderProps) {
   const { push } = router;
   
   const { data: session } = useSession();
-  
-  const togglePath = (type: "dashboard" | "rows") => {
-    let newPath = pathname;
-
-    if (type === "dashboard") {
-      if (pathname.startsWith("/rows")) {
-        newPath = pathname.replace(/^\/rows/, "") || "/";
-      }
-    } else if (type === "rows") {
-      if (!pathname.startsWith("/rows")) {
-        newPath = "/rows" + pathname.replace(/^\/+/, ""); // Évite "/rows/rows"
-      }
-    }
-
-    push(newPath.replace("//", "/")); // Nettoyage final
-  };
 
   return (
     <header className="sticky top-0 z-50 w-full bg-white dark:bg-[#111] p-2 transition-colors border-b border-gray-300 dark:border-none">
       {/* Top section */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          {/* Bouton de navigation */}
+          {/* Back button */}
           {pathname !== "/" && (
-            <div
+            <button
               className="rounded-full p-1 cursor-pointer dark:hover:bg-gray-500 transition hover:bg-gray-200"
               onClick={() => router.back()}
             >
               <MdOutlineArrowBackIosNew className="text-xl text-gray-800 dark:text-white" />
-            </div>
-           )}
+            </button>
+          )}
 
-          {/* Logo Image */}
-          <div className="flex mb-3 items-center">
+          {/* Logo */}
+          <Link href="/" className="flex items-center mb-3">
             <Image
               src="/main-logo.png"
               width={150}
               height={30}
               alt="logo"
               priority
+              className="h-auto"
             />
-          </div>
+          </Link>
         </div>
 
-        {/* Mode Toggle (Dashboard / Excel) */}
+        {/* View Toggle */}
         <div className="hidden sm:flex w-full max-w-[250px] items-center rounded bg-gray-200 dark:bg-white/10 p-1 text-sm sm:text-md">
           <button
-            aria-label="Switch to Dashboard"
             className={cn(
               "w-1/2 rounded p-1 transition",
-              !pathname.startsWith("/rows")
+              !pathname.startsWith("/rows") 
                 ? "bg-white dark:bg-white/40 pointer-events-none"
                 : "hover:bg-white/60 dark:hover:bg-white/20"
             )}
-            onClick={() => togglePath("dashboard")}
+            onClick={() => push(pathname.replace(/^\/rows/, "") || "/")}
           >
             Dashboard
           </button>
           <button
-            aria-label="Switch to Excel"
             className={cn(
               "w-1/2 rounded p-1 transition",
               pathname.startsWith("/rows")
                 ? "bg-white dark:bg-white/40 pointer-events-none"
                 : "hover:bg-white/60 dark:hover:bg-white/20"
             )}
-            onClick={() => togglePath("rows")}
+            onClick={() => push(pathname.startsWith("/rows") ? pathname : `/rows${pathname}`)}
           >
             Excel
           </button>
         </div>
-        
+
+        {/* Right section */}
         {session?.user ? (
-          <>
-            {/* Notifications & Messages */}
-            <div className="flex items-center gap-4">
-              <Link href="/messages">
-                <FaRegEnvelope className="text-xl cursor-pointer text-gray-800 dark:text-white" />
-              </Link>
+          <div className="flex items-center gap-4">
+            {/* Messages */}
+            <Link 
+              href="/messages"
+              className="text-gray-800 dark:text-white hover:text-gray-600 dark:hover:text-gray-300"
+            >
+              <FaRegEnvelope className="text-xl" />
+            </Link>
+
+            {/* Notifications */}
+            <Link
+              href="/notifications"
+              className="text-gray-800 dark:text-white hover:text-gray-600 dark:hover:text-gray-300"
+            >
               {pathname === "/notifications" ? (
-                <IoNotifications className="text-xl cursor-pointer text-gray-800 dark:text-white" />
+                <IoNotifications className="text-xl" />
               ) : (
-                <Link href="/notifications">
-                  <IoNotificationsOutline className="text-xl cursor-pointer text-gray-800 dark:text-white" />
-                </Link>
+                <IoNotificationsOutline className="text-xl" />
               )}
+            </Link>
 
-              {/* --Theme Toggle-- */}
-              <Theme />
+            {/* Theme Toggle */}
+            <Theme />
 
-              {/* Profil */}
-              <div className="profile flex items-center gap-1">
+            {/* Profile */}
+            <div className="flex items-center gap-2 cursor-pointer" onClick={() => setOpen(!open)}>
+              <Avatar className="h-7 w-7 border border-gray-300 dark:border-white">
                 {session.user.image ? (
-                  <Avatar
-                    className="h-7 w-7 border border-gray-300 dark:border-white cursor-pointer"
-                    onClick={() => setOpen(!open)}
-                  >
-                    <AvatarImage src={session.user.image} />
-                  </Avatar>
+                  <AvatarImage src={session.user.image} />
                 ) : (
-                  <Avatar
-                    className="h-7 w-7 border border-gray-300 dark:border-white cursor-pointer"
-                    onClick={() => setOpen(!open)}
-                  >
-                    <AvatarFallback>C</AvatarFallback>
-                  </Avatar>
+                  <AvatarFallback>
+                    {session.user.name?.[0]?.toUpperCase() || 'U'}
+                  </AvatarFallback>
                 )}
-                <span className="hidden md:flex text-gray-800 dark:text-white">
-                  Hi, Morlon
-                </span>
-              </div>
+              </Avatar>
+              <span className="hidden md:block text-gray-800 dark:text-white">
+                Hi, {session.user.name?.split(' ')[0] || 'User'}
+              </span>
             </div>
-          </>
+          </div>
         ) : (
-          <Theme />
-          <Link href="auth/sign-in">Se connecter</Link>
+          <div className="flex items-center gap-4">
+            <Theme />
+            <Link
+              href="/auth/sign-in"
+              className="text-gray-800 dark:text-white hover:text-gray-600 dark:hover:text-gray-300"
+            >
+              Se connecter
+            </Link>
+          </div>
         )}
       </div>
 
       <Sidebar open={open} setOpen={setOpen} />
-
-      {/* Search & Scan */}
       {children}
     </header>
   );
