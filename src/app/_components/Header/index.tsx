@@ -96,7 +96,7 @@ export default function Header({ children }: HeaderProps) {
           </button>
         </div>
         
-        {session && session?.user ? (
+        {session?.user ? (
           <>
             {/* Notifications & Messages */}
             <div className="flex items-center gap-4">
