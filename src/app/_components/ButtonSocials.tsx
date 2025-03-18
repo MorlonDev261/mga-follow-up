@@ -1,24 +1,25 @@
 "use client";
 
 import { useState } from "react";
+import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import { FaGoogle, FaLinkedin, FaMicrosoft } from "react-icons/fa";
+import { FaGoogle, FaGithub } from "react-icons/fa";
 
 const ButtonSocials: React.FC = () => {
   const [loading, setLoading] = useState({
     google: false,
-    linkedin: false,
-    outlook: false,
+    github: false,
   });
 
-  const handleAuth = (provider: "google" | "linkedin" | "outlook") => {
+  const handleAuth = async (provider: "google" | "github") => {
     setLoading((prev) => ({ ...prev, [provider]: true }));
 
-    setTimeout(() => {
-      console.log(`Authentification via ${provider}`);
+    try {
+      await signIn(provider);
+    } finally {
       setLoading((prev) => ({ ...prev, [provider]: false }));
-    }, 2000);
+    }
   };
 
   return (
@@ -28,14 +29,9 @@ const ButtonSocials: React.FC = () => {
         Continuer avec Google
       </Button>
 
-      <Button variant="outline" className="flex items-center gap-2" onClick={() => handleAuth("linkedin")}>
-        {loading.linkedin ? <Spinner size="sm" /> : <FaLinkedin />}
-        Continuer avec LinkedIn
-      </Button>
-
-      <Button variant="outline" className="flex items-center gap-2" onClick={() => handleAuth("outlook")}>
-        {loading.outlook ? <Spinner size="sm" /> : <FaMicrosoft />}
-        Continuer avec Outlook
+      <Button variant="outline" className="flex items-center gap-2" onClick={() => handleAuth("github")}>
+        {loading.github ? <Spinner size="sm" /> : <FaGithub />}
+        Continuer avec GitHub
       </Button>
     </div>
   );
