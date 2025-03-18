@@ -1,5 +1,2 @@
-import { handlers } from "@/lib/auth"; 
-
-if (!handlers) throw new Error("NextAuth handlers is undefined"); // Debug
-
-export const { GET, POST } = handlers;
+import { handlers } from "@/lib/auth" // Referring to the auth.ts we just created
+export const { GET, POST } = handlers
