@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -17,17 +11,36 @@ model User {
   id        Int    @id @default(autoincrement())
   contact   String @unique
   name      String?
-  pdp       String?
-  pdc       String?
+  pdp       String?  // Photo de profil
+  pdc       String?  // Photo de couverture
+  purchase  String?
   createdAt DateTime @default(now())
-  owners    UserRelation[] @relation("OwnerRelation")
-  workers   UserRelation[] @relation("WorkerRelation")
+
+  // Relation avec WorkRelation (Entreprise ↔ Worker)
+  entreprises WorkRelation[] @relation("EntrepriseWorkerRelation")
+  workers     WorkRelation[] @relation("WorkerEntrepriseRelation")
+
+  // Relation avec CustomerRelation (Owner ↔ Customer)
+  owners     CustomerRelation[] @relation("OwnerCustomerRelation")
+  customers  CustomerRelation[] @relation("CustomerOwnerRelation")
 }
 
-model UserRelation {
-  id        Int   @id @default(autoincrement())
-  workerId  Int
-  worker    User @relation("WorkerRelation", fields: [workerId], references: [id])
-  ownerId   Int
-  owner     User @relation("OwnerRelation", fields: [ownerId], references: [id])
+model WorkRelation {
+  id           Int   @id @default(autoincrement())
+  
+  workerId     Int
+  worker       User @relation("WorkerEntrepriseRelation", fields: [workerId], references: [id])
+
+  entrepriseId Int
+  entreprise   User @relation("EntrepriseWorkerRelation", fields: [entrepriseId], references: [id])
+}
+
+model CustomerRelation {
+  id         Int   @id @default(autoincrement())
+
+  customerId Int
+  customer   User @relation("CustomerOwnerRelation", fields: [customerId], references: [id])
+
+  ownerId    Int
+  owner      User @relation("OwnerCustomerRelation", fields: [ownerId], references: [id])
 }
