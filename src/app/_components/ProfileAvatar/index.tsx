@@ -1,24 +1,48 @@
 "use client";
 
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { MdOutlineReportGmailerrorred } from "react-icons/md";
-import { FaCircleCheck } from "react-icons/fa6";
-import { FaImage, FaPen, FaUser, FaCamera } from "react-icons/fa";
-import { useState, useRef } from "react";
+import { FaCircleCheck, FaImage, FaPen, FaUser, FaCamera } from "react-icons/fa6";
+import { useState, useRef, useEffect } from "react";
 
 interface ProfileProps {
-  auth?: boolean;
+  userId?: string;
 }
 
-export default function ProfileAvatar({ auth = false }: ProfileProps) {
-  const [coverSrc, setCoverSrc] = useState("cover.jpg");
-  const [profileSrc, setProfileSrc] = useState("profile.jpg");
+export default function ProfileAvatar({ userId }: ProfileProps) {
+  const { data: session } = useSession();
+  const authorization = session?.user && !userId;
+  const [coverSrc, setCoverSrc] = useState("");
+  const [profileSrc, setProfileSrc] = useState("");
   const [coverError, setCoverError] = useState(false);
   const [profileError, setProfileError] = useState(false);
-  const [fullname, setFullname] = useState("John Doe");
+  const [fullname, setFullname] = useState("User");
   const [isEditing, setIsEditing] = useState(false);
+
+  useEffect(() => {
+    if (session?.user) {
+      setProfileSrc(session.user.image || "");
+      setFullname(session.user.name || "User");
+    }
+  }, [session]);
+
+  useEffect(() => {
+    if (userId) {
+      fetch(`/api/users/${userId}`)
+        .then((response) => response.json())
+        .then((res) => {
+          if (res) {
+            setCoverSrc(res?.pdc || "");
+            setProfileSrc(res?.pdp || "");
+            setFullname(res?.name || "User");
+          }
+        })
+        .catch((error) => console.error(error));
+    }
+  }, [userId]);
 
   const coverInputRef = useRef<HTMLInputElement>(null);
   const profileInputRef = useRef<HTMLInputElement>(null);
@@ -67,7 +91,7 @@ export default function ProfileAvatar({ auth = false }: ProfileProps) {
           )}
 
           {/* Icône d'édition de cover */}
-          {auth && (
+          {authorization && (
             <span
               className="absolute bottom-2 right-2 flex items-center justify-center p-1 bg-white rounded-full shadow cursor-pointer"
               onClick={() => coverInputRef.current?.click()}
@@ -102,7 +126,7 @@ export default function ProfileAvatar({ auth = false }: ProfileProps) {
           </Avatar>
 
           {/* Icône d'édition de profile */}
-          {auth && (
+          {authorization && (
             <span
               className="absolute bottom-1 right-0 flex items-center justify-center p-1 bg-white rounded-full shadow cursor-pointer"
               onClick={() => profileInputRef.current?.click()}
@@ -121,7 +145,7 @@ export default function ProfileAvatar({ auth = false }: ProfileProps) {
       </div>
 
       <div className="flex items-center gap-2">
-        {auth && isEditing ? (
+        {authorization && isEditing ? (
           <Input
             value={fullname}
             onChange={handleFullnameChange}
@@ -133,17 +157,10 @@ export default function ProfileAvatar({ auth = false }: ProfileProps) {
         ) : (
           <h2 className="text-lg font-semibold">{fullname}</h2>
         )}
-        {auth && (
-          <FaPen
-            className="cursor-pointer text-gray-500 hover:text-gray-700"
-            onClick={() => setIsEditing(true)}
-          />
+        {authorization && (
+          <FaPen className="cursor-pointer text-gray-500 hover:text-gray-700" onClick={() => setIsEditing(true)} />
         )}
       </div>
-      <p className="flex items-center gap-1 text-sm text-gray-500">
-        morlonrnd@gmail.com <MdOutlineReportGmailerrorred /> <FaCircleCheck />
-      </p>
-      <p className="flex gap-1 text-sm text-gray-500">Inscrit le 12/01/2023</p>
     </div>
   );
 }
