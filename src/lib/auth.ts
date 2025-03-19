@@ -7,7 +7,7 @@ const authInstance = NextAuth({
   ...authConfig,
 } satisfies NextAuthOptions);
 
-export const handlers = authInstance.handlers ?? {};
+export const handlers = authInstance.handlers;
 export const signIn = authInstance.signIn;
 export const signOut = authInstance.signOut;
 export const auth = authInstance.auth;
