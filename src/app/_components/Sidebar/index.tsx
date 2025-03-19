@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useSession, signOut } from "next-auth/react";
 import { Input } from "@/components/ui/input";
 import ProfileAvatar from "@components/ProfileAvatar";
 import { Button } from "@/components/ui/button";
@@ -11,6 +12,7 @@ import { Switch } from "@/components/ui/switch";
 import Download from "@components/Download";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { cn } from "@/lib/utils";
 
 interface SidebarProps {
   open: boolean;
@@ -26,6 +28,7 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetContent className="w-80 flex overflow-x-auto flex-col justify-between">
+        {session?.user ? (
         <div>
           {/* Profil */}
           <ProfileAvatar auth={true} />
@@ -104,11 +107,15 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
             <Download />
           </div>
         </div>
-
         {/* Bouton Déconnexion */}
-        <Button variant="destructive" className="mt-6 w-full">
-          Déconnexion
-        </Button>
+          <Button variant="destructive" className="mt-6 w-full" onClick={() => signOut()}>
+            Déconnexion
+          </Button>
+        ) : (
+          <Button variant="destructive" className="mt-6 w-full" onClick={() => signOut()}>
+            Se connecter
+          </Button>
+        )}
       </SheetContent>
     </Sheet>
   );
