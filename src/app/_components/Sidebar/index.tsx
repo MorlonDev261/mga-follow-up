@@ -33,7 +33,7 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
         {session?.user ? (
           <div>
             {/* Profil */}
-            <ProfileAvatar auth={true} />
+            <ProfileAvatar />
 
             <Separator className="my-4" />
 
