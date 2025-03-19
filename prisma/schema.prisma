@@ -12,3 +12,25 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id       Int    @id @default(autoincrement())
+  contact  String @unique
+  name     String?
+
+  // Relation many-to-many avec les propriétaires et travailleurs
+  owners   UserRelation[] @relation("OwnerRelation")
+  workers  UserRelation[] @relation("WorkerRelation")
+}
+
+model UserRelation {
+  id       Int   @id @default(autoincrement())
+  
+  // Référence vers l'utilisateur "worker"
+  workerId Int
+  worker   User @relation("WorkerRelation", fields: [workerId], references: [id])
+
+  // Référence vers l'utilisateur "owner"
+  ownerId  Int
+  owner    User @relation("OwnerRelation", fields: [ownerId], references: [id])
+}
