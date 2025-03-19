@@ -126,7 +126,7 @@ export default function Header({ children }: HeaderProps) {
             <Theme />
             <Link
               href="/auth/sign-in"
-              className="text-gray-800 dark:text-white hover:text-gray-600 dark:hover:text-gray-300"
+              className="text-white bg-blue-500 px-2 py-1 hover:bg-blue-600"
             >
               Se connecter
             </Link>
