@@ -102,7 +102,7 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center h-full">
-            <p className="text-center text-gray-500 mb-4">Vous n'êtes pas connecté</p>
+            <p className="text-center text-gray-500 mb-4">Vous n&apos;êtes pas connecté</p>
             <Button variant="primary" onClick={() => router.push("/auth/sign-in")}>
               Se connecter
             </Button>
