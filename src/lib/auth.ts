@@ -3,6 +3,7 @@ import authConfig from "./auth.config";
 import type { NextAuthOptions } from "next-auth";
 
 const authInstance = NextAuth({
+  debug: true,
   session: { strategy: "jwt" },
   ...authConfig,
 } satisfies NextAuthOptions);
