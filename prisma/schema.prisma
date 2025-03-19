@@ -17,6 +17,8 @@ model User {
   id       Int    @id @default(autoincrement())
   contact  String @unique
   name     String?
+  pdp     String?
+  pdc     String?
 
   // Relation many-to-many avec les propriétaires et travailleurs
   owners   UserRelation[] @relation("OwnerRelation")
