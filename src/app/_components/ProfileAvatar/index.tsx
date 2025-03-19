@@ -20,12 +20,14 @@ export default function ProfileAvatar({ userId }: ProfileProps) {
   const [coverError, setCoverError] = useState(false);
   const [profileError, setProfileError] = useState(false);
   const [fullname, setFullname] = useState("User");
+  const [contact, setContact] = useState("");
   const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     if (session?.user) {
       setProfileSrc(session.user.image || "");
       setFullname(session.user.name || "User");
+      setContact(session.user.email || "");
     }
   }, [session]);
 
@@ -38,6 +40,7 @@ export default function ProfileAvatar({ userId }: ProfileProps) {
             setCoverSrc(res?.pdc || "");
             setProfileSrc(res?.pdp || "");
             setFullname(res?.name || "User");
+            setContact(res?.contact || "");
           }
         })
         .catch((error) => console.error(error));
@@ -161,6 +164,10 @@ export default function ProfileAvatar({ userId }: ProfileProps) {
           <FaPen className="cursor-pointer text-gray-500 hover:text-gray-700" onClick={() => setIsEditing(true)} />
         )}
       </div>
+      <p className="flex items-center gap-1 text-sm text-gray-500">
+        {contact} <MdOutlineReportGmailerrorred /> <FaCircleCheck />
+      </p>
+      <p className="flex gap-1 text-sm text-gray-500">Inscrit le 12/01/2023</p>
     </div>
   );
 }
