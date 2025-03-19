@@ -16,7 +16,7 @@ const ButtonSocials: React.FC = () => {
     setLoading((prev) => ({ ...prev, [provider]: true }));
 
     try {
-      await signIn(provider);
+      await signIn(provider, { callbackUrl: "/" });
     } finally {
       setLoading((prev) => ({ ...prev, [provider]: false }));
     }
