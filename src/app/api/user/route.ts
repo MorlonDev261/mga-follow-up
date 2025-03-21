@@ -49,9 +49,9 @@ export async function POST(req: Request) {
     });
 
     // Exclure le mot de passe avant de renvoyer l'utilisateur
-    const { password, ...userWithoutPassword } = newUser;
+    // const { password, ...userWithoutPassword } = newUser;
 
-    return NextResponse.json({ user: userWithoutPassword, message: "Utilisateur créé avec succès" }, { status: 201 });
+    return NextResponse.json({ user: newUser, message: "Utilisateur créé avec succès" }, { status: 201 });
   } catch (error) {
     console.error(error); // Log de l'erreur
     return NextResponse.json({ error: "Erreur lors de la création de l'utilisateur" }, { status: 500 });
