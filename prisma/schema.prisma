@@ -10,37 +10,50 @@ datasource db {
 model User {
   id        Int    @id @default(autoincrement())
   contact   String @unique
-  name      String?
+  password  String
+  firstName String
+  lastName  String
   pdp       String?  // Photo de profil
   pdc       String?  // Photo de couverture
-  purchase  String?
+  purchase  String?  // À préciser si c'est un champ relationnel ou autre
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt // Ajout de la date de mise à jour
 
   // Relation avec WorkRelation (Entreprise ↔ Worker)
-  entreprises WorkRelation[] @relation("EntrepriseWorkerRelation")
-  workers     WorkRelation[] @relation("WorkerEntrepriseRelation")
+  entreprises WorkRelation[] @relation("WorkRelation")
+  workers     WorkRelation[] @relation("WorkRelation")
 
   // Relation avec CustomerRelation (Owner ↔ Customer)
-  owners     CustomerRelation[] @relation("OwnerCustomerRelation")
-  customers  CustomerRelation[] @relation("CustomerOwnerRelation")
+  owners     CustomerRelation[] @relation("CustomerRelation")
+  customers  CustomerRelation[] @relation("CustomerRelation")
 }
 
 model WorkRelation {
   id           Int   @id @default(autoincrement())
-  
+
   workerId     Int
-  worker       User @relation("WorkerEntrepriseRelation", fields: [workerId], references: [id])
+  worker       User @relation("WorkRelation", fields: [workerId], references: [id])
 
   entrepriseId Int
-  entreprise   User @relation("EntrepriseWorkerRelation", fields: [entrepriseId], references: [id])
+  entreprise   User @relation("WorkRelation", fields: [entrepriseId], references: [id])
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([workerId, entrepriseId]) // Évite les doublons
 }
 
 model CustomerRelation {
   id         Int   @id @default(autoincrement())
 
   customerId Int
-  customer   User @relation("CustomerOwnerRelation", fields: [customerId], references: [id])
+  customer   User @relation("CustomerRelation", fields: [customerId], references: [id])
 
   ownerId    Int
-  owner      User @relation("OwnerCustomerRelation", fields: [ownerId], references: [id])
+  owner      User @relation("CustomerRelation", fields: [ownerId], references: [id])
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@unique([customerId, ownerId]) // Évite les doublons
 }
