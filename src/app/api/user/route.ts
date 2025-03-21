@@ -8,6 +8,7 @@ export async function GET() {
     const users = await db.user.findMany();
     return NextResponse.json(users);
   } catch (error) {
+    console.error(error); // Log de l'erreur
     return NextResponse.json({ error: "Erreur lors de la récupération des utilisateurs" }, { status: 500 });
   }
 }
@@ -48,10 +49,11 @@ export async function POST(req: Request) {
     });
 
     // Exclure le mot de passe avant de renvoyer l'utilisateur
-    const { password: _, ...userWithoutPassword } = newUser;
+    const { password, ...userWithoutPassword } = newUser;
 
     return NextResponse.json({ user: userWithoutPassword, message: "Utilisateur créé avec succès" }, { status: 201 });
   } catch (error) {
+    console.error(error); // Log de l'erreur
     return NextResponse.json({ error: "Erreur lors de la création de l'utilisateur" }, { status: 500 });
   }
 }
