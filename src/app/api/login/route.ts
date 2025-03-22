@@ -28,7 +28,13 @@ export async function POST(req: Request) {
     // Vérifier si l'utilisateur existe
     const user = await db.user.findUnique({
       where: { contact },
-      select: { id: true, password: true, firstName: true, lastName: true }
+      select: { 
+        id: true, 
+        contact: true,
+        password: true, 
+        firstName: true, 
+        lastName: true 
+      }
     });
 
     if (!user) {
@@ -43,7 +49,11 @@ export async function POST(req: Request) {
 
     // Générer un token JWT sécurisé
     const token = jwt.sign(
-      { id: user.id, contact: user.contact, name: `${user.firstName} ${user.lastName}` },
+      { 
+        id: user.id, 
+        contact: user.contact, 
+        name: `${user.firstName} ${user.lastName}` 
+      },
       JWT_SECRET,
       { expiresIn: JWT_EXPIRATION }
     );
