@@ -17,10 +17,10 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { contact, pwd, firstName, lastName, profilePicture, coverPicture } = body;
+    const { contact, password, firstName, lastName, profilePicture, coverPicture } = body;
 
     // Vérifier si les champs obligatoires sont fournis
-    if (!contact || !pwd || !firstName || !lastName) {
+    if (!contact || !password || !firstName || !lastName) {
       return NextResponse.json({ error: "Tous les champs obligatoires doivent être remplis" }, { status: 400 });
     }
 
@@ -34,13 +34,13 @@ export async function POST(req: Request) {
     }
 
     // Hasher le mot de passe
-    const password = await hash(pwd, 10);
+    const hashedpassword = await hash(password, 10);
 
     // Créer le nouvel utilisateur
     const newUser = await db.user.create({
       data: {
         contact,
-        password,
+        password: hashedpassword,
         firstName,
         lastName,
         profilePicture,
