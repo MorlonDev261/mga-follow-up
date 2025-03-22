@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
       { message: "Connexion réussie" },
       { status: 200, headers: { "Set-Cookie": cookie } }
     );
-
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     return NextResponse.json({ error: "Erreur serveur" }, { status: 500 });
   }
