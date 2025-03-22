@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import "./CSS/styles.css";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -15,14 +15,31 @@ import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { z } from "zod";
 
-// Schéma de validation aligné avec l'API
 const signupSchema = z.object({
-  firstName: z.string().min(2, "Le prénom doit contenir au moins 2 caractères"),
-  lastName: z.string().min(2, "Le nom doit contenir au moins 2 caractères"),
-  email: z.string().email("Veuillez entrer une adresse e-mail valide."),
-  password: z.string().min(8, "Le mot de passe doit contenir au moins 8 caractères"),
-  profilePicture: z.string().url("URL invalide").optional().or(z.literal("")),
-  coverPicture: z.string().url("URL invalide").optional().or(z.literal("")),
+  firstName: z.string()
+    .min(2, "Minimum 2 caractères")
+    .max(50, "Maximum 50 caractères")
+    .regex(/^[a-zA-ZÀ-ÿ -]+$/, "Caractères non autorisés"),
+  lastName: z.string()
+    .min(2, "Minimum 2 caractères")
+    .max(50, "Maximum 50 caractères")
+    .regex(/^[a-zA-ZÀ-ÿ -]+$/, "Caractères non autorisés"),
+  email: z.string().email("Format d'email invalide").max(100),
+  password: z.string()
+    .min(8, "Minimum 8 caractères")
+    .regex(/[A-Z]/, "Au moins une majuscule")
+    .regex(/[0-9]/, "Au moins un chiffre")
+    .regex(/[!@#$%^&*]/, "Au moins un caractère spécial"),
+  profilePicture: z.string()
+    .url("URL invalide")
+    .regex(/\.(jpeg|jpg|png|webp)$/i, "Format d'image non supporté")
+    .optional()
+    .or(z.literal("")),
+  coverPicture: z.string()
+    .url("URL invalide")
+    .regex(/\.(jpeg|jpg|png|webp)$/i, "Format d'image non supporté")
+    .optional()
+    .or(z.literal("")),
 });
 
 type FormErrors = z.inferFlattenedErrors<typeof signupSchema>["fieldErrors"];
@@ -47,7 +64,6 @@ const SignUpCard: React.FC = () => {
     setLoading(true);
     setError(null);
 
-    // Validation côté client
     const validation = signupSchema.safeParse(formData);
     if (!validation.success) {
       setLoading(false);
@@ -61,17 +77,23 @@ const SignUpCard: React.FC = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...validation.data,
-          contact: validation.data.email,
+          contact: validation.data.email, // Adaptation pour l'API
         }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Erreur lors de l'inscription");
+        if (data.details) {
+          const apiErrors = data.details.reduce((acc: any, err: any) => ({
+            ...acc,
+            [err.field]: [err.message]
+          }), {});
+          setErrors(apiErrors);
+        }
+        throw new Error(data.message || "Erreur lors de l'inscription");
       }
 
-      // Redirection vers la page de connexion avec statut de succès
       router.push("/auth/login?signup=success");
     } catch (error) {
       setError(error instanceof Error ? error.message : "Erreur inattendue");
@@ -82,67 +104,87 @@ const SignUpCard: React.FC = () => {
 
   const handleChange = (field: keyof typeof formData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-    if (errors[field]) setErrors(prev => ({ ...prev, [field]: undefined }));
+    
+    if (errors[field]) {
+      const validation = signupSchema.safeParse({
+        ...formData,
+        [field]: value
+      });
+      
+      if (validation.success) {
+        setErrors(prev => ({ ...prev, [field]: undefined }));
+      }
+    }
   };
 
   return (
     <div className="auth-container">
-      <h2>Créer un compte</h2>
+      <h2 className="text-2xl font-bold mb-6">Créer un compte</h2>
       
       {error && (
-        <Alert variant="destructive" className="mb-3">
-          <AlertDescription className="flex items-center gap-1">
-            <AiOutlineExclamationCircle /> {error}
+        <Alert variant="destructive" className="mb-4">
+          <AlertDescription className="flex items-center gap-2">
+            <AiOutlineExclamationCircle className="shrink-0" />
+            {error}
           </AlertDescription>
         </Alert>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="flex flex-col gap-4 md:flex-row">
-          <div className="w-full">
+        <div className="grid gap-4 md:grid-cols-2">
+          <div className="space-y-2">
             <Label htmlFor="firstName" className="flex items-center gap-2">
-              <FaUser className="text-gray-500" /> Prénom *
+              <FaUser className="text-muted-foreground" /> Prénom *
             </Label>
             <Input
               id="firstName"
               value={formData.firstName}
               onChange={(e) => handleChange('firstName', e.target.value)}
-              className={cn(errors.firstName && "border-red-500")}
+              className={cn(errors.firstName && "border-destructive")}
+              aria-invalid={!!errors.firstName}
             />
-            {errors.firstName && <p className="text-sm text-red-500">{errors.firstName}</p>}
+            {errors.firstName?.map((msg, i) => (
+              <p key={i} className="text-sm text-destructive mt-1">{msg}</p>
+            ))}
           </div>
 
-          <div className="w-full">
+          <div className="space-y-2">
             <Label htmlFor="lastName" className="flex items-center gap-2">
-              <FaUser className="text-gray-500" /> Nom *
+              <FaUser className="text-muted-foreground" /> Nom *
             </Label>
             <Input
               id="lastName"
               value={formData.lastName}
               onChange={(e) => handleChange('lastName', e.target.value)}
-              className={cn(errors.lastName && "border-red-500")}
+              className={cn(errors.lastName && "border-destructive")}
+              aria-invalid={!!errors.lastName}
             />
-            {errors.lastName && <p className="text-sm text-red-500">{errors.lastName}</p>}
+            {errors.lastName?.map((msg, i) => (
+              <p key={i} className="text-sm text-destructive mt-1">{msg}</p>
+            ))}
           </div>
         </div>
 
         <div className="space-y-2">
           <Label htmlFor="email" className="flex items-center gap-2">
-            <FaEnvelope className="text-gray-500" /> Email *
+            <FaEnvelope className="text-muted-foreground" /> Email *
           </Label>
           <Input
             id="email"
             type="email"
             value={formData.email}
             onChange={(e) => handleChange('email', e.target.value)}
-            className={cn(errors.email && "border-red-500")}
+            className={cn(errors.email && "border-destructive")}
+            aria-invalid={!!errors.email}
           />
-          {errors.email && <p className="text-sm text-red-500">{errors.email}</p>}
+          {errors.email?.map((msg, i) => (
+            <p key={i} className="text-sm text-destructive mt-1">{msg}</p>
+          ))}
         </div>
 
         <div className="space-y-2">
           <Label htmlFor="password" className="flex items-center gap-2">
-            <FaLock className="text-gray-500" /> Mot de passe *
+            <FaLock className="text-muted-foreground" /> Mot de passe *
           </Label>
           <div className="relative">
             <Input
@@ -150,58 +192,71 @@ const SignUpCard: React.FC = () => {
               type={showPassword ? "text" : "password"}
               value={formData.password}
               onChange={(e) => handleChange('password', e.target.value)}
-              className={cn(errors.password && "border-red-500", "pr-10")}
+              className={cn(errors.password && "border-destructive", "pr-10")}
+              aria-invalid={!!errors.password}
             />
             <button
               type="button"
-              className="absolute right-3 top-3 text-gray-500"
+              className="absolute right-3 top-3 text-muted-foreground hover:text-foreground"
               onClick={() => setShowPassword(!showPassword)}
+              aria-label={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
             >
               {showPassword ? <IoEyeOffOutline /> : <IoEyeOutline />}
             </button>
           </div>
-          {errors.password && <p className="text-sm text-red-500">{errors.password}</p>}
+          {errors.password?.map((msg, i) => (
+            <p key={i} className="text-sm text-destructive mt-1">{msg}</p>
+          ))}
         </div>
 
         <div className="space-y-2">
           <Label htmlFor="profilePicture" className="flex items-center gap-2">
-            <FaImage className="text-gray-500" /> Photo de profil (URL)
+            <FaImage className="text-muted-foreground" /> Photo de profil (URL)
           </Label>
           <Input
             id="profilePicture"
             type="url"
             value={formData.profilePicture}
             onChange={(e) => handleChange('profilePicture', e.target.value)}
-            className={cn(errors.profilePicture && "border-red-500")}
+            className={cn(errors.profilePicture && "border-destructive")}
+            aria-invalid={!!errors.profilePicture}
           />
-          {errors.profilePicture && <p className="text-sm text-red-500">{errors.profilePicture}</p>}
+          {errors.profilePicture?.map((msg, i) => (
+            <p key={i} className="text-sm text-destructive mt-1">{msg}</p>
+          ))}
         </div>
 
         <div className="space-y-2">
           <Label htmlFor="coverPicture" className="flex items-center gap-2">
-            <FaImage className="text-gray-500" /> Photo de couverture (URL)
+            <FaImage className="text-muted-foreground" /> Photo de couverture (URL)
           </Label>
           <Input
             id="coverPicture"
             type="url"
             value={formData.coverPicture}
             onChange={(e) => handleChange('coverPicture', e.target.value)}
-            className={cn(errors.coverPicture && "border-red-500")}
+            className={cn(errors.coverPicture && "border-destructive")}
+            aria-invalid={!!errors.coverPicture}
           />
-          {errors.coverPicture && <p className="text-sm text-red-500">{errors.coverPicture}</p>}
+          {errors.coverPicture?.map((msg, i) => (
+            <p key={i} className="text-sm text-destructive mt-1">{msg}</p>
+          ))}
         </div>
 
         <Button type="submit" className="w-full" disabled={loading}>
-          {loading ? <Spinner size="sm" /> : "S'inscrire"}
+          {loading ? <Spinner size="sm" className="mx-auto" /> : "S'inscrire"}
         </Button>
       </form>
 
-      <div className="link-to-login">
+      <p className="mt-6 text-center text-sm text-muted-foreground">
         Déjà un compte ?{" "}
-        <Link href="/auth/login" className="text-primary">
+        <Link
+          href="/auth/login"
+          className="font-medium text-primary hover:underline"
+        >
           Connectez-vous ici
         </Link>
-      </div>
+      </p>
     </div>
   );
 };
