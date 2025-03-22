@@ -39,6 +39,7 @@ const LoginCard: React.FC = () => {
     // Validation côté client avec `zod`
     const validation = loginSchema.safeParse({ email, password });
     if (!validation.success) {
+      setLoading(false);
       const fieldErrors = validation.error.flatten().fieldErrors;
       setErrors({
         email: fieldErrors.email?.[0],
