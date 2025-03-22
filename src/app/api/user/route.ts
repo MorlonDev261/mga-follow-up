@@ -1,59 +1,109 @@
 import { NextResponse } from "next/server";
 import db from "@/lib/db";
 import { hash } from "bcryptjs";
+import { z } from "zod";
 
-// Récupérer tous les utilisateurs
+// Schéma de validation Zod
+const userSchema = z.object({
+  contact: z.string().email("Format d'email invalide"),
+  password: z.string().min(8, "Le mot de passe doit contenir au moins 8 caractères"),
+  firstName: z.string().min(2, "Le prénom doit contenir au moins 2 caractères"),
+  lastName: z.string().min(2, "Le nom doit contenir au moins 2 caractères"),
+  profilePicture: z.string().url("URL de photo de profil invalide").optional().or(z.literal("")),
+  coverPicture: z.string().url("URL de photo de couverture invalide").optional().or(z.literal("")),
+});
+
+// Type TypeScript dérivé du schéma Zod
+type UserData = z.infer<typeof userSchema>;
+
+// Récupérer tous les utilisateurs (sécurisé)
 export async function GET() {
   try {
-    const users = await db.user.findMany();
+    const users = await db.user.findMany({
+      select: {
+        id: true,
+        contact: true,
+        firstName: true,
+        lastName: true,
+        profilePicture: true,
+        coverPicture: true,
+        createdAt: true,
+      }
+    });
     return NextResponse.json(users);
   } catch (error) {
-    console.error(error); // Log de l'erreur
-    return NextResponse.json({ error: "Erreur lors de la récupération des utilisateurs" }, { status: 500 });
+    console.error("[GET /api/users]", error);
+    return NextResponse.json(
+      { error: "Échec de la récupération des utilisateurs" },
+      { status: 500 }
+    );
   }
 }
 
-// Ajouter un nouvel utilisateur
+// Créer un nouvel utilisateur
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
-    const { contact, password, firstName, lastName, profilePicture, coverPicture } = body;
-
-    // Vérifier si les champs obligatoires sont fournis
-    if (!contact || !password || !firstName || !lastName) {
-      return NextResponse.json({ error: "Tous les champs obligatoires doivent être remplis" }, { status: 400 });
+    const body: UserData = await req.json();
+    
+    // Validation avec Zod
+    const validationResult = userSchema.safeParse(body);
+    
+    if (!validationResult.success) {
+      return NextResponse.json(
+        { error: "Données invalides", details: validationResult.error.flatten() },
+        { status: 400 }
+      );
     }
 
-    // Vérifier si l'utilisateur existe déjà
+    const { contact, password, firstName, lastName, profilePicture, coverPicture } = validationResult.data;
+
+    // Vérifier l'existence de l'utilisateur
     const existingUser = await db.user.findUnique({
-      where: { contact }
+      where: { contact },
+      select: { id: true }
     });
 
     if (existingUser) {
-      return NextResponse.json({ error: "Ce compte est déjà enregistré" }, { status: 409 });
+      return NextResponse.json(
+        { error: "Un utilisateur avec cet email existe déjà" },
+        { status: 409 }
+      );
     }
 
-    // Hasher le mot de passe
-    const hashedpassword = await hash(password, 10);
+    // Hachage du mot de passe
+    const hashedPassword = await hash(password, 12);
 
-    // Créer le nouvel utilisateur
+    // Création de l'utilisateur
     const newUser = await db.user.create({
       data: {
         contact,
-        password: hashedpassword,
+        password: hashedPassword,
         firstName,
         lastName,
-        profilePicture,
-        coverPicture,
+        profilePicture: profilePicture || null,
+        coverPicture: coverPicture || null,
+      },
+      select: {
+        id: true,
+        contact: true,
+        firstName: true,
+        lastName: true,
+        profilePicture: true,
+        coverPicture: true,
+        createdAt: true
       }
     });
 
-    // Exclure le mot de passe avant de renvoyer l'utilisateur
-    // const { password, ...userWithoutPassword } = newUser;
+    return NextResponse.json(
+      { user: newUser, message: "Compte créé avec succès" },
+      { status: 201 }
+    );
 
-    return NextResponse.json({ user: newUser, message: "Utilisateur créé avec succès" }, { status: 201 });
   } catch (error) {
-    console.error(error); // Log de l'erreur
-    return NextResponse.json({ error: "Erreur lors de la création de l'utilisateur" }, { status: 500 });
+    console.error("[POST /api/users]", error);
+    return NextResponse.json(
+      { error: "Erreur interne du serveur" },
+      { status: 500 }
+    );
   }
 }
