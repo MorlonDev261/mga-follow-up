@@ -17,7 +17,7 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { contact, password, firstName, lastName, profilePicture, coverPicture } = body;
+    const { contact, pwd, firstName, lastName, profilePicture, coverPicture } = body;
 
     // Vérifier si les champs obligatoires sont fournis
     if (!contact || !password || !firstName || !lastName) {
@@ -34,13 +34,13 @@ export async function POST(req: Request) {
     }
 
     // Hasher le mot de passe
-    const hashedPassword = await hash(password, 10);
+    const password = await hash(pwd, 10);
 
     // Créer le nouvel utilisateur
     const newUser = await db.user.create({
       data: {
         contact,
-        password: hashedPassword,
+        password,
         firstName,
         lastName,
         profilePicture,
