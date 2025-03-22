@@ -20,7 +20,7 @@ export async function POST(req: Request) {
     const { contact, pwd, firstName, lastName, profilePicture, coverPicture } = body;
 
     // Vérifier si les champs obligatoires sont fournis
-    if (!contact || !password || !firstName || !lastName) {
+    if (!contact || !pwd || !firstName || !lastName) {
       return NextResponse.json({ error: "Tous les champs obligatoires doivent être remplis" }, { status: 400 });
     }
 
