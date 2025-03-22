@@ -8,31 +8,31 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  contact   String   @unique
-  password  String
-  firstName String
-  lastName  String
-  pdp       String?  // Photo de profil
-  pdc       String?  // Photo de couverture
-  purchase  String?  // À transformer en relation si nécessaire
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           Int              @id @default(autoincrement())
+  contact      String           @unique
+  password     String
+  firstName    String
+  lastName     String
+  profilePicture String?        // Photo de profil
+  coverPicture String?          // Photo de couverture
+  purchases    Purchase[]       // Relation avec les achats
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
 
-  // Relations corrigées avec des noms uniques
-  entreprises WorkRelation[]     @relation("EntrepriseWorkers")
-  workers     WorkRelation[]     @relation("WorkerEntreprises")
+  // Relations
+  entreprises WorkRelation[]    @relation("EntrepriseWorkers")
+  workers     WorkRelation[]    @relation("WorkerEntreprises")
 
-  owners     CustomerRelation[]  @relation("OwnerCustomers")
-  customers  CustomerRelation[]  @relation("CustomerOwners")
+  owners     CustomerRelation[] @relation("OwnerCustomers")
+  customers  CustomerRelation[] @relation("CustomerOwners")
 }
 
 model WorkRelation {
-  id           Int    @id @default(autoincrement())
+  id           Int      @id @default(autoincrement())
   workerId     Int
   entrepriseId Int
-  worker       User   @relation("WorkerEntreprises", fields: [workerId], references: [id])
-  entreprise   User   @relation("EntrepriseWorkers", fields: [entrepriseId], references: [id])
+  worker       User     @relation("WorkerEntreprises", fields: [workerId], references: [id])
+  entreprise   User     @relation("EntrepriseWorkers", fields: [entrepriseId], references: [id])
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
@@ -40,13 +40,23 @@ model WorkRelation {
 }
 
 model CustomerRelation {
-  id         Int    @id @default(autoincrement())
+  id         Int      @id @default(autoincrement())
   customerId Int
   ownerId    Int
-  customer   User   @relation("CustomerOwners", fields: [customerId], references: [id])
-  owner      User   @relation("OwnerCustomers", fields: [ownerId], references: [id])
+  customer   User     @relation("CustomerOwners", fields: [customerId], references: [id])
+  owner      User     @relation("OwnerCustomers", fields: [ownerId], references: [id])
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
   @@unique([customerId, ownerId])
+}
+
+model Purchase {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id])
+  productName String
+  amount      Float
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
