@@ -9,7 +9,7 @@ import type { NextRequest } from "next/server";
 export const config = {
   api: {
     bodyParser: {
-      sizeLimit: "1mb",
+      sizeLimit: "10mb",
     },
   },
 };
@@ -42,9 +42,14 @@ const userSchema = z.object({
     .or(z.literal("")),
 });
 
+type ApiErrorDetail = {
+  field: string;
+  message: string;
+};
+
 type ApiResponse = {
   message: string;
-  details?: any;
+  details?: ApiErrorDetail[];
   errorCode?: string;
 };
 
