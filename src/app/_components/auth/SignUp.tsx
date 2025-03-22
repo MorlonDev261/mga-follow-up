@@ -85,10 +85,13 @@ const SignUpCard: React.FC = () => {
 
       if (!response.ok) {
         if (data.details) {
-          const apiErrors = data.details.reduce((acc: any, err: any) => ({
-            ...acc,
-            [err.field]: [err.message]
-          }), {});
+          const apiErrors = data.details.reduce(
+            (acc: Record<string, string[]>, err: { field: string; message: string }) => ({
+              ...acc,
+              [err.field]: [err.message]
+            }), 
+            {} as Record<string, string[]>
+          );
           setErrors(apiErrors);
         }
         throw new Error(data.message || "Erreur lors de l'inscription");
