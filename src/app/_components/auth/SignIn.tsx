@@ -63,7 +63,7 @@ const LoginCard: React.FC = () => {
         throw new Error(data.error || "Erreur lors de la connexion");
       }
 
-      router.push("/dashboard"); // Redirection sécurisée
+      router.push("/"); // Redirection sécurisée
 
     } catch (error) {
       setError(error instanceof Error ? error.message : "Une erreur inattendue");
