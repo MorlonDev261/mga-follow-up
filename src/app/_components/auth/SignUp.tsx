@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
-import { FaUser, FaEnvelope, FaLock, FaImage } from "react-icons/fa";
+import { FaEnvelope, FaLock, FaImage } from "react-icons/fa";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { z } from "zod";
@@ -134,16 +134,16 @@ const SignUpCard: React.FC = () => {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="grid gap-4 md:grid-cols-2">
-          <div className="space-y-2">
+        <div className="flex justify-between">
+          <div className="space-y-2 w-[45%] form-group">
             <Label htmlFor="firstName" className="flex items-center gap-2">
-              <FaUser className="text-muted-foreground" /> Prénom *
+              Prénom *
             </Label>
-            <Input
+            <input
               id="firstName"
               value={formData.firstName}
               onChange={(e) => handleChange('firstName', e.target.value)}
-              className={cn(errors.firstName && "border-destructive")}
+              className={cn("form-input", errors.firstName && "border-destructive")}
               aria-invalid={!!errors.firstName}
             />
             {errors.firstName?.map((msg, i) => (
@@ -151,15 +151,15 @@ const SignUpCard: React.FC = () => {
             ))}
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-2 w-[45%] form-group">
             <Label htmlFor="lastName" className="flex items-center gap-2">
-              <FaUser className="text-muted-foreground" /> Nom *
+             Nom *
             </Label>
-            <Input
+            <input
               id="lastName"
               value={formData.lastName}
               onChange={(e) => handleChange('lastName', e.target.value)}
-              className={cn(errors.lastName && "border-destructive")}
+              className={cn("form-input", errors.lastName && "border-destructive")}
               aria-invalid={!!errors.lastName}
             />
             {errors.lastName?.map((msg, i) => (
@@ -168,18 +168,20 @@ const SignUpCard: React.FC = () => {
           </div>
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-2 from-group">
           <Label htmlFor="email" className="flex items-center gap-2">
-            <FaEnvelope className="text-muted-foreground" /> Email *
+           Email *
           </Label>
-          <Input
-            id="email"
-            type="email"
-            value={formData.email}
-            onChange={(e) => handleChange('email', e.target.value)}
-            className={cn(errors.email && "border-destructive")}
-            aria-invalid={!!errors.email}
-          />
+          <div className={cn("form-input", errors.email && "border-destructive")}>
+            <FaEnvelope className="text-muted-foreground" />
+            <input
+              id="email"
+              type="email"
+              value={formData.email}
+              onChange={(e) => handleChange('email', e.target.value)}
+              aria-invalid={!!errors.email}
+            />
+          </div>
           {errors.email?.map((msg, i) => (
             <p key={i} className="text-sm text-destructive mt-1">{msg}</p>
           ))}
