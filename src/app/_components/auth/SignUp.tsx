@@ -134,8 +134,8 @@ const SignUpCard: React.FC = () => {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="flex justify-between w-full">
-          <div className="space-y-2 w-[45%] form-group">
+        <div className="flex justify-between gap-2">
+          <div className="space-y-2 form-group">
             <Label htmlFor="firstName" className="flex items-center gap-2">
               Prénom *
             </Label>
@@ -151,7 +151,7 @@ const SignUpCard: React.FC = () => {
             ))}
           </div>
 
-          <div className="space-y-2 w-[45%] form-group">
+          <div className="space-y-2 form-group">
             <Label htmlFor="lastName" className="flex items-center gap-2">
              Nom *
             </Label>
