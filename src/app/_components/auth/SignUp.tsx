@@ -134,7 +134,7 @@ const SignUpCard: React.FC = () => {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="flex justify-between">
+        <div className="flex justify-between w-full">
           <div className="space-y-2 w-[45%] form-group">
             <Label htmlFor="firstName" className="flex items-center gap-2">
               Prénom *
@@ -168,7 +168,7 @@ const SignUpCard: React.FC = () => {
           </div>
         </div>
 
-        <div className="space-y-2 from-group">
+        <div className="space-y-2 form-group">
           <Label htmlFor="email" className="flex items-center gap-2">
            Email *
           </Label>
@@ -187,22 +187,22 @@ const SignUpCard: React.FC = () => {
           ))}
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-2 from-group">
           <Label htmlFor="password" className="flex items-center gap-2">
-            <FaLock className="text-muted-foreground" /> Mot de passe *
+           Mot de passe *
           </Label>
-          <div className="relative">
-            <Input
+          <div className={cn(errors.password && "border-destructive", "form-input")}>
+            <FaLock className="text-muted-foreground" />
+            <input
               id="password"
               type={showPassword ? "text" : "password"}
               value={formData.password}
               onChange={(e) => handleChange('password', e.target.value)}
-              className={cn(errors.password && "border-destructive", "pr-10")}
               aria-invalid={!!errors.password}
             />
             <button
               type="button"
-              className="absolute right-3 top-3 text-muted-foreground hover:text-foreground"
+              className="text-muted-foreground hover:text-foreground"
               onClick={() => setShowPassword(!showPassword)}
               aria-label={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
             >
