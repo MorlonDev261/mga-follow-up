@@ -41,7 +41,11 @@ const LoginCard: React.FC = () => {
       router.push("/dashboard"); // Rediriger vers la page principale
 
     } catch (error) {
-      setError(error.message);
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("Une erreur inconnue s'est produite");
+      }
     } finally {
       setLoading(false);
     }
