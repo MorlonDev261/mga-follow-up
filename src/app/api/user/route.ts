@@ -17,7 +17,7 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { contact, password, firstName, lastName, pdp, pdc } = body;
+    const { contact, password, firstName, lastName, profilePicture, coverPicture } = body;
 
     // Vérifier si les champs obligatoires sont fournis
     if (!contact || !password || !firstName || !lastName) {
@@ -43,8 +43,8 @@ export async function POST(req: Request) {
         password: hashedPassword,
         firstName,
         lastName,
-        pdp,
-        pdc,
+        profilePicture,
+        coverPicture,
       }
     });
 
