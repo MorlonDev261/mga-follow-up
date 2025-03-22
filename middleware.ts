@@ -9,16 +9,16 @@ const ratelimit = new Ratelimit({
 
 export async function middleware(request: NextRequest) {
   try {
-    // Configuration CORS pour les prérequêtes OPTIONS
+    // Handle CORS preflight requests
     if (request.method === 'OPTIONS') {
       return handleCors(request);
     }
 
-    // Vérification du rate limiting
+    // Apply rate limiting
     const rateLimitResult = await checkRateLimit(request);
     if (rateLimitResult) return rateLimitResult;
 
-    // Application des headers de sécurité
+    // Apply security headers
     const response = NextResponse.next();
     setSecurityHeaders(response);
 
@@ -33,6 +33,7 @@ function handleCors(request: NextRequest) {
   const origin = request.headers.get('origin');
   const response = new NextResponse(null, { status: 204 });
 
+  // Set CORS headers conditionally
   if (origin && process.env.NODE_ENV === 'production') {
     response.headers.set('Access-Control-Allow-Origin', origin);
   } else {
@@ -45,9 +46,10 @@ function handleCors(request: NextRequest) {
   );
   response.headers.set(
     'Access-Control-Allow-Headers',
-    'Content-Type, Authorization'
+    'Content-Type, Authorization, X-Requested-With'
   );
   response.headers.set('Access-Control-Max-Age', '86400');
+  response.headers.set('Vary', 'Origin');
 
   return response;
 }
@@ -55,7 +57,22 @@ function handleCors(request: NextRequest) {
 async function checkRateLimit(request: NextRequest) {
   if (process.env.NODE_ENV === 'development') return null;
 
-  const ip = request.ip ?? '127.0.0.1';
+  const getClientIp = () => {
+    // Try different headers in order of priority
+    const forwardedFor = request.headers.get('x-forwarded-for');
+    if (forwardedFor) {
+      const ips = forwardedFor.split(',');
+      return ips[0]?.trim() || '127.0.0.1';
+    }
+    
+    return (
+      request.headers.get('x-real-ip') ||
+      request.headers.get('cf-connecting-ip') ||
+      '127.0.0.1' // Fallback for local development
+    );
+  };
+
+  const ip = getClientIp();
   const { success, limit, reset, remaining } = await ratelimit.limit(ip);
 
   if (!success) {
@@ -75,9 +92,11 @@ async function checkRateLimit(request: NextRequest) {
 
 function setSecurityHeaders(response: NextResponse) {
   const headers = response.headers;
+  
+  // Content Security Policy
   const csp = [
     "default-src 'self'",
-    "script-src 'self' 'unsafe-inline'", // À adapter selon les besoins
+    "script-src 'self' 'unsafe-inline'", // Adapt based on needs
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: blob:",
     "font-src 'self'",
@@ -96,17 +115,20 @@ function setSecurityHeaders(response: NextResponse) {
     'Strict-Transport-Security',
     'max-age=31536000; includeSubDomains; preload'
   );
+  
+  // Permissions Policy
   headers.set('Permissions-Policy', [
     'camera=()',
     'microphone=()',
     'geolocation=()',
     'fullscreen=(self)',
+    'payment=()',
   ].join(', '));
 }
 
 export const config = {
   matcher: [
-    '/api/:path*', // Protège toutes les routes API
-    '/auth/:path*', // Routes d'authentification
+    '/api/:path*',
+    '/auth/:path*',
   ],
 };
