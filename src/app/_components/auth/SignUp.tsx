@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
-import { FaEnvelope, FaLock, FaImage } from "react-icons/fa";
+import { FaEnvelope, FaLock } from "react-icons/fa";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { z } from "zod";
@@ -30,16 +30,11 @@ const signupSchema = z.object({
     .regex(/[A-Z]/, "Au moins une majuscule")
     .regex(/[0-9]/, "Au moins un chiffre")
     .regex(/[!@#$%^&*]/, "Au moins un caractère spécial"),
-  profilePicture: z.string()
-    .url("URL invalide")
-    .regex(/\.(jpeg|jpg|png|webp)$/i, "Format d'image non supporté")
-    .optional()
-    .or(z.literal("")),
-  coverPicture: z.string()
-    .url("URL invalide")
-    .regex(/\.(jpeg|jpg|png|webp)$/i, "Format d'image non supporté")
-    .optional()
-    .or(z.literal("")),
+  confPassword: z.string()
+})
+.refine(data => data.password === data.confPassword, {
+  message: "Les mots de passe ne correspondent pas",
+  path: ["confPassword"]
 });
 
 type FormErrors = z.inferFlattenedErrors<typeof signupSchema>["fieldErrors"];
@@ -50,10 +45,10 @@ const SignUpCard: React.FC = () => {
     lastName: "",
     email: "",
     password: "",
-    profilePicture: "",
-    coverPicture: "",
+    confPassword: "",
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfPassword, setShowConfPassword] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -77,7 +72,7 @@ const SignUpCard: React.FC = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...validation.data,
-          contact: validation.data.email, // Adaptation pour l'API
+          contact: validation.data.email,
         }),
       });
 
@@ -136,13 +131,10 @@ const SignUpCard: React.FC = () => {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="flex justify-between gap-2">
           <div className="space-y-2 form-group">
-            <Label htmlFor="firstName" className="flex items-center gap-2">
-              Prénom *
-            </Label>
+            <Label htmlFor="firstName">Prénom</Label>
             <div className={cn(errors.firstName && "border-destructive")}>
-              <input
+              <Input
                 id="firstName"
-                className="not-grouped"
                 value={formData.firstName}
                 onChange={(e) => handleChange('firstName', e.target.value)}
                 aria-invalid={!!errors.firstName}
@@ -154,13 +146,10 @@ const SignUpCard: React.FC = () => {
           </div>
 
           <div className="space-y-2 form-group">
-            <Label htmlFor="lastName" className="flex items-center gap-2">
-             Nom *
-            </Label>
+            <Label htmlFor="lastName">Nom</Label>
             <div className={cn(errors.lastName && "border-destructive")}>
-              <input
+              <Input
                 id="lastName"
-                className="not-grouped"
                 value={formData.lastName}
                 onChange={(e) => handleChange('lastName', e.target.value)}
                 aria-invalid={!!errors.lastName}
@@ -173,12 +162,10 @@ const SignUpCard: React.FC = () => {
         </div>
 
         <div className="space-y-2 form-group">
-          <Label htmlFor="email" className="flex items-center gap-2">
-           Email *
-          </Label>
+          <Label htmlFor="email">Email</Label>
           <div className={cn("form-input", errors.email && "border-destructive")}>
             <FaEnvelope className="text-muted-foreground icon" />
-            <input
+            <Input
               id="email"
               type="email"
               value={formData.email}
@@ -192,12 +179,10 @@ const SignUpCard: React.FC = () => {
         </div>
 
         <div className="space-y-2 form-group">
-          <Label htmlFor="password" className="flex items-center gap-2">
-           Mot de passe *
-          </Label>
-          <div className={cn("form-input", errors.password && "border-destructive", "form-input")}>
+          <Label htmlFor="password">Mot de passe</Label>
+          <div className={cn("form-input", errors.password && "border-destructive")}>
             <FaLock className="text-muted-foreground icon" />
-            <input
+            <Input
               id="password"
               type={showPassword ? "text" : "password"}
               value={formData.password}
@@ -206,7 +191,7 @@ const SignUpCard: React.FC = () => {
             />
             <button
               type="button"
-              className="text-muted-foreground hover:text-foreground flex justify-center icon"
+              className="text-muted-foreground hover:text-foreground"
               onClick={() => setShowPassword(!showPassword)}
               aria-label={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
             >
@@ -218,36 +203,27 @@ const SignUpCard: React.FC = () => {
           ))}
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="profilePicture" className="flex items-center gap-2">
-            <FaImage className="text-muted-foreground" /> Photo de profil (URL)
-          </Label>
-          <Input
-            id="profilePicture"
-            type="url"
-            value={formData.profilePicture}
-            onChange={(e) => handleChange('profilePicture', e.target.value)}
-            className={cn(errors.profilePicture && "border-destructive")}
-            aria-invalid={!!errors.profilePicture}
-          />
-          {errors.profilePicture?.map((msg, i) => (
-            <p key={i} className="text-sm text-destructive mt-1">{msg}</p>
-          ))}
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="coverPicture" className="flex items-center gap-2">
-            <FaImage className="text-muted-foreground" /> Photo de couverture (URL)
-          </Label>
-          <Input
-            id="coverPicture"
-            type="url"
-            value={formData.coverPicture}
-            onChange={(e) => handleChange('coverPicture', e.target.value)}
-            className={cn(errors.coverPicture && "border-destructive")}
-            aria-invalid={!!errors.coverPicture}
-          />
-          {errors.coverPicture?.map((msg, i) => (
+        <div className="space-y-2 form-group">
+          <Label htmlFor="confPassword">Confirmer le mot de passe</Label>
+          <div className={cn("form-input", errors.confPassword && "border-destructive")}>
+            <FaLock className="text-muted-foreground icon" />
+            <Input
+              id="confPassword"
+              type={showConfPassword ? "text" : "password"}
+              value={formData.confPassword}
+              onChange={(e) => handleChange('confPassword', e.target.value)}
+              aria-invalid={!!errors.confPassword}
+            />
+            <button
+              type="button"
+              className="text-muted-foreground hover:text-foreground"
+              onClick={() => setShowConfPassword(!showConfPassword)}
+              aria-label={showConfPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
+            >
+              {showConfPassword ? <IoEyeOffOutline /> : <IoEyeOutline />}
+            </button>
+          </div>
+          {errors.confPassword?.map((msg, i) => (
             <p key={i} className="text-sm text-destructive mt-1">{msg}</p>
           ))}
         </div>
