@@ -42,7 +42,7 @@ couleur general :
 
 .auth-container input {
   width: 100%;
-  padding: 5px 5px 5px 0;
+  padding: 5px;
   border: none;
   background: none;
   color: #444;
@@ -51,6 +51,7 @@ couleur general :
 
 .auth-container .form-input input {
   width: calc(100% - 45px);
+  padding-left: 0;
 }
 
 .auth-container input:focus {
