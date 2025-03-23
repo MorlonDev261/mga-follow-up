@@ -204,7 +204,7 @@ const SignUpCard: React.FC = () => {
             />
             <button
               type="button"
-              className="text-muted-foreground hover:text-foreground"
+              className="text-muted-foreground hover:text-foreground icon"
               onClick={() => setShowPassword(!showPassword)}
               aria-label={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
             >
