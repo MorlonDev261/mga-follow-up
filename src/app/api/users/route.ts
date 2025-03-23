@@ -29,12 +29,13 @@ const userSchema = z.object({
     .regex(/^[a-zA-ZÀ-ÿ -]+$/, "Caractères non autorisés"),
 });
 
-type ApiErrorDetail = {
+// Correction : Déplacer l'interface avant son utilisation
+interface ErrorDetail {
   field: string;
   message: string;
-};
+}
 
-const formatZodError = (error: z.ZodError) => {
+const formatZodError = (error: z.ZodError): ErrorDetail[] => {
   return error.issues.map(issue => ({
     field: issue.path.join('.'),
     message: issue.message,
@@ -57,6 +58,7 @@ const securityHeaders = () => {
 export async function GET(req: NextRequest) {
   try {
     const authToken = req.headers.get('Authorization')?.replace('Bearer ', '');
+    
     if (!authToken) {
       return NextResponse.json(
         { message: "Authentification requise", errorCode: "MISSING_TOKEN" },
@@ -75,17 +77,12 @@ export async function GET(req: NextRequest) {
       orderBy: { createdAt: 'desc' },
     });
 
-    return NextResponse.json(users, {
-      headers: securityHeaders(),
-    });
+    return NextResponse.json(users, { headers: securityHeaders() });
 
   } catch (error) {
     console.error("[GET /api/users]", error);
     return NextResponse.json(
-      {
-        message: "Erreur de récupération des utilisateurs",
-        errorCode: "DB_FETCH_ERROR"
-      },
+      { message: "Erreur de récupération des utilisateurs", errorCode: "DB_FETCH_ERROR" },
       { status: 500, headers: securityHeaders() }
     );
   }
@@ -94,6 +91,7 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const contentType = req.headers.get('Content-Type');
+    
     if (!contentType?.includes('application/json')) {
       return NextResponse.json(
         { message: "Format de données non supporté", errorCode: "INVALID_CONTENT_TYPE" },
@@ -124,10 +122,7 @@ export async function POST(req: NextRequest) {
 
     if (existingUser) {
       return NextResponse.json(
-        {
-          message: "Un compte existe déjà avec cet email",
-          errorCode: "EMAIL_CONFLICT"
-        },
+        { message: "Un compte existe déjà avec cet email", errorCode: "EMAIL_CONFLICT" },
         { status: 409, headers: securityHeaders() }
       );
     }
@@ -159,19 +154,13 @@ export async function POST(req: NextRequest) {
 
     if (error instanceof Error && error.message.includes('Unique constraint')) {
       return NextResponse.json(
-        {
-          message: "Un compte existe déjà avec cet email",
-          errorCode: "EMAIL_CONFLICT"
-        },
+        { message: "Un compte existe déjà avec cet email", errorCode: "EMAIL_CONFLICT" },
         { status: 409, headers: securityHeaders() }
       );
     }
 
     return NextResponse.json(
-      {
-        message: "Erreur lors de la création du compte",
-        errorCode: "SERVER_ERROR"
-      },
+      { message: "Erreur lors de la création du compte", errorCode: "SERVER_ERROR" },
       { status: 500, headers: securityHeaders() }
     );
   }
