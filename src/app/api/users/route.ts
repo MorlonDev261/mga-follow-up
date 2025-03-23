@@ -1,11 +1,9 @@
-// api/users/route.ts
 import { NextResponse } from "next/server";
 import db from "@/lib/db";
 import { hash } from "bcryptjs";
 import { z } from "zod";
 import type { NextRequest } from "next/server";
 
-// Configuration sécurité
 export const config = {
   api: {
     bodyParser: {
@@ -14,7 +12,6 @@ export const config = {
   },
 };
 
-// Schéma de validation amélioré
 const userSchema = z.object({
   contact: z.string().email("Format d'email invalide").max(100),
   password: z.string()
@@ -30,16 +27,6 @@ const userSchema = z.object({
     .min(2, "Minimum 2 caractères")
     .max(50, "Maximum 50 caractères")
     .regex(/^[a-zA-ZÀ-ÿ -]+$/, "Caractères non autorisés"),
-  profilePicture: z.string()
-    .url("URL invalide")
-    .regex(/\.(jpeg|jpg|png|webp)$/i, "Format d'image non supporté")
-    .optional()
-    .or(z.literal("")),
-  coverPicture: z.string()
-    .url("URL invalide")
-    .regex(/\.(jpeg|jpg|png|webp)$/i, "Format d'image non supporté")
-    .optional()
-    .or(z.literal("")),
 });
 
 type ApiErrorDetail = {
@@ -53,7 +40,6 @@ type ApiResponse = {
   errorCode?: string;
 };
 
-// Formatter les erreurs Zod
 const formatZodError = (error: z.ZodError) => {
   return error.issues.map(issue => ({
     field: issue.path.join('.'),
@@ -61,26 +47,40 @@ const formatZodError = (error: z.ZodError) => {
   }));
 };
 
+// Headers de sécurité améliorés
+const securityHeaders = () => {
+  const headers = new Headers();
+  headers.set('Content-Security-Policy', 
+    "default-src 'self'; " +
+    "script-src 'self' 'unsafe-inline'; " +
+    "style-src 'self' 'unsafe-inline'"
+  );
+  headers.set('X-Content-Type-Options', 'nosniff');
+  headers.set('X-Frame-Options', 'DENY');
+  headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  return headers;
+};
+
 export async function GET(req: NextRequest) {
   try {
-    // Vérifier l'authentification
-    const authToken = req.headers.get('Authorization');
-    if (!authToken?.startsWith('Bearer ')) {
+    const authToken = req.headers.get('Authorization')?.replace('Bearer ', '');
+    if (!authToken) {
       return NextResponse.json(
-        { message: "Authentification requise" } as ApiResponse,
-        { status: 401 }
+        { message: "Authentification requise", errorCode: "MISSING_TOKEN" },
+        { status: 401, headers: securityHeaders() }
       );
     }
 
-    // Récupération sécurisée des utilisateurs
+    // Ici ajouter la logique de vérification du token
+    // const isValid = await verifyToken(authToken);
+    // if (!isValid) return unauthorizedResponse();
+
     const users = await db.user.findMany({
       select: {
         id: true,
         contact: true,
         firstName: true,
         lastName: true,
-        profilePicture: true,
-        coverPicture: true,
         createdAt: true,
       },
       orderBy: { createdAt: 'desc' },
@@ -96,7 +96,7 @@ export async function GET(req: NextRequest) {
       {
         message: "Erreur de récupération des utilisateurs",
         errorCode: "DB_FETCH_ERROR"
-      } as ApiResponse,
+      },
       { status: 500, headers: securityHeaders() }
     );
   }
@@ -104,33 +104,30 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    // Validation du Content-Type
     const contentType = req.headers.get('Content-Type');
-    if (contentType !== 'application/json') {
+    if (!contentType?.includes('application/json')) {
       return NextResponse.json(
-        { message: "Format de données non supporté" } as ApiResponse,
+        { message: "Format de données non supporté", errorCode: "INVALID_CONTENT_TYPE" },
         { status: 415, headers: securityHeaders() }
       );
     }
 
     const body = await req.json();
-
-    // Validation Zod
     const validation = userSchema.safeParse(body);
+    
     if (!validation.success) {
       return NextResponse.json(
         {
           message: "Données invalides",
           details: formatZodError(validation.error),
           errorCode: "VALIDATION_ERROR"
-        } as ApiResponse,
+        },
         { status: 400, headers: securityHeaders() }
       );
     }
 
     const { contact, password, ...userData } = validation.data;
 
-    // Vérification doublon
     const existingUser = await db.user.findUnique({
       where: { contact },
       select: { id: true },
@@ -141,22 +138,27 @@ export async function POST(req: NextRequest) {
         {
           message: "Un compte existe déjà avec cet email",
           errorCode: "EMAIL_CONFLICT"
-        } as ApiResponse,
+        },
         { status: 409, headers: securityHeaders() }
       );
     }
 
-    // Hachage mot de passe
-    const hashedPassword = await hash(password, 12);
+    let hashedPassword;
+    try {
+      hashedPassword = await hash(password, 12);
+    } catch (hashError) {
+      console.error("[HASH ERROR]", hashError);
+      return NextResponse.json(
+        { message: "Erreur de traitement", errorCode: "HASH_FAILURE" },
+        { status: 500, headers: securityHeaders() }
+      );
+    }
 
-    // Création utilisateur
     const newUser = await db.user.create({
       data: {
         contact,
         password: hashedPassword,
         ...userData,
-        profilePicture: userData.profilePicture || null,
-        coverPicture: userData.coverPicture || null,
       },
       select: {
         id: true,
@@ -175,13 +177,12 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error("[POST /api/users]", error);
 
-    // Gestion des erreurs de base de données
     if (error instanceof Error && error.message.includes('Unique constraint')) {
       return NextResponse.json(
         {
           message: "Un compte existe déjà avec cet email",
           errorCode: "EMAIL_CONFLICT"
-        } as ApiResponse,
+        },
         { status: 409, headers: securityHeaders() }
       );
     }
@@ -190,18 +191,8 @@ export async function POST(req: NextRequest) {
       {
         message: "Erreur lors de la création du compte",
         errorCode: "SERVER_ERROR"
-      } as ApiResponse,
+      },
       { status: 500, headers: securityHeaders() }
     );
   }
 }
-
-// Headers de sécurité
-const securityHeaders = () => {
-  const headers = new Headers();
-  headers.set('Content-Security-Policy', "default-src 'self'");
-  headers.set('X-Content-Type-Options', 'nosniff');
-  headers.set('X-Frame-Options', 'DENY');
-  headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
-  return headers;
-};
