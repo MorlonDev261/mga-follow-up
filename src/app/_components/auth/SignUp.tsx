@@ -142,6 +142,7 @@ const SignUpCard: React.FC = () => {
             <div className={cn("form-input", errors.firstName && "border-destructive")}>
               <input
                 id="firstName"
+                className="not-grouped"
                 value={formData.firstName}
                 onChange={(e) => handleChange('firstName', e.target.value)}
                 aria-invalid={!!errors.firstName}
@@ -159,6 +160,7 @@ const SignUpCard: React.FC = () => {
             <div className={cn("form-input", errors.lastName && "border-destructive")}>
               <input
                 id="lastName"
+                className="not-grouped"
                 value={formData.lastName}
                 onChange={(e) => handleChange('lastName', e.target.value)}
                 aria-invalid={!!errors.lastName}
