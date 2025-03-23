@@ -34,12 +34,6 @@ type ApiErrorDetail = {
   message: string;
 };
 
-type ApiResponse = {
-  message: string;
-  details?: ApiErrorDetail[];
-  errorCode?: string;
-};
-
 const formatZodError = (error: z.ZodError) => {
   return error.issues.map(issue => ({
     field: issue.path.join('.'),
@@ -47,7 +41,6 @@ const formatZodError = (error: z.ZodError) => {
   }));
 };
 
-// Headers de sécurité améliorés
 const securityHeaders = () => {
   const headers = new Headers();
   headers.set('Content-Security-Policy', 
@@ -70,10 +63,6 @@ export async function GET(req: NextRequest) {
         { status: 401, headers: securityHeaders() }
       );
     }
-
-    // Ici ajouter la logique de vérification du token
-    // const isValid = await verifyToken(authToken);
-    // if (!isValid) return unauthorizedResponse();
 
     const users = await db.user.findMany({
       select: {
@@ -143,16 +132,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    let hashedPassword;
-    try {
-      hashedPassword = await hash(password, 12);
-    } catch (hashError) {
-      console.error("[HASH ERROR]", hashError);
-      return NextResponse.json(
-        { message: "Erreur de traitement", errorCode: "HASH_FAILURE" },
-        { status: 500, headers: securityHeaders() }
-      );
-    }
+    const hashedPassword = await hash(password, 12);
 
     const newUser = await db.user.create({
       data: {
