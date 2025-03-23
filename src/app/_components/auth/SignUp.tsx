@@ -135,6 +135,7 @@ const SignUpCard: React.FC = () => {
               <input
                 id="firstName"
                 value={formData.firstName}
+                className="not-grouped"
                 onChange={(e) => handleChange('firstName', e.target.value)}
                 aria-invalid={!!errors.firstName}
               />
@@ -149,6 +150,7 @@ const SignUpCard: React.FC = () => {
             <div className={cn(errors.lastName && "border-destructive")}>
               <input
                 id="lastName"
+                className="not-grouped"
                 value={formData.lastName}
                 onChange={(e) => handleChange('lastName', e.target.value)}
                 aria-invalid={!!errors.lastName}
@@ -190,7 +192,7 @@ const SignUpCard: React.FC = () => {
             />
             <button
               type="button"
-              className="text-muted-foreground hover:text-foreground flex justify-center"
+              className="text-muted-foreground hover:text-foreground flex justify-center p-1"
               onClick={() => setShowPassword(!showPassword)}
               aria-label={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
             >
@@ -215,7 +217,7 @@ const SignUpCard: React.FC = () => {
             />
             <button
               type="button"
-              className="text-muted-foreground hover:text-foreground flex justify-center"
+              className="text-muted-foreground hover:text-foreground flex justify-center p-1"
               onClick={() => setShowConfPassword(!showConfPassword)}
               aria-label={showConfPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
             >
