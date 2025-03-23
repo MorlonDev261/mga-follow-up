@@ -175,7 +175,7 @@ const SignUpCard: React.FC = () => {
            Email *
           </Label>
           <div className={cn("form-input", errors.email && "border-destructive")}>
-            <FaEnvelope className="text-muted-foreground" />
+            <FaEnvelope className="text-muted-foreground icon" />
             <input
               id="email"
               type="email"
@@ -194,7 +194,7 @@ const SignUpCard: React.FC = () => {
            Mot de passe *
           </Label>
           <div className={cn("form-input", errors.password && "border-destructive", "form-input")}>
-            <FaLock className="text-muted-foreground" />
+            <FaLock className="text-muted-foreground icon" />
             <input
               id="password"
               type={showPassword ? "text" : "password"}
