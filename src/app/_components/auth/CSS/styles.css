@@ -25,7 +25,7 @@ couleur general :
   position: relative;
 }
 
-.auth-container .form-group .form-input {
+.auth-container .form-group .form-input, .auth-container input.not-grouped {
   display: flex;
   align-items: center;
   border: 2px solid #1260de;
@@ -40,13 +40,17 @@ couleur general :
   text-align: center;
 }
 
-.auth-container .form-input input {
-  max-width: 100%;
+.auth-container input {
+  width: 100%;
   padding: 5px 5px 5px 0;
   border: none;
   background: none;
   color: #444;
   font-size: 16px;
+}
+
+.auth-container .form-input input {
+  width: calc(100% - 45px);
 }
 
 .auth-container input:focus {
