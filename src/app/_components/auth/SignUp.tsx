@@ -139,7 +139,7 @@ const SignUpCard: React.FC = () => {
             <Label htmlFor="firstName" className="flex items-center gap-2">
               Prénom *
             </Label>
-            <div className={cn("form-input", errors.firstName && "border-destructive")}>
+            <div className={cn(errors.firstName && "border-destructive")}>
               <input
                 id="firstName"
                 className="not-grouped"
@@ -157,7 +157,7 @@ const SignUpCard: React.FC = () => {
             <Label htmlFor="lastName" className="flex items-center gap-2">
              Nom *
             </Label>
-            <div className={cn("form-input", errors.lastName && "border-destructive")}>
+            <div className={cn(errors.lastName && "border-destructive")}>
               <input
                 id="lastName"
                 className="not-grouped"
