@@ -187,11 +187,11 @@ const SignUpCard: React.FC = () => {
           ))}
         </div>
 
-        <div className="space-y-2 from-group">
+        <div className="space-y-2 form-group">
           <Label htmlFor="password" className="flex items-center gap-2">
            Mot de passe *
           </Label>
-          <div className={cn(errors.password && "border-destructive", "form-input")}>
+          <div className={cn("form-input", errors.password && "border-destructive", "form-input")}>
             <FaLock className="text-muted-foreground" />
             <input
               id="password"
