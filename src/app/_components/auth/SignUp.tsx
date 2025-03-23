@@ -139,13 +139,14 @@ const SignUpCard: React.FC = () => {
             <Label htmlFor="firstName" className="flex items-center gap-2">
               Prénom *
             </Label>
-            <input
-              id="firstName"
-              value={formData.firstName}
-              onChange={(e) => handleChange('firstName', e.target.value)}
-              className={cn("form-input", errors.firstName && "border-destructive")}
-              aria-invalid={!!errors.firstName}
-            />
+            <div className={cn("form-input", errors.firstName && "border-destructive")}>
+              <input
+                id="firstName"
+                value={formData.firstName}
+                onChange={(e) => handleChange('firstName', e.target.value)}
+                aria-invalid={!!errors.firstName}
+              />
+            </div>
             {errors.firstName?.map((msg, i) => (
               <p key={i} className="text-sm text-destructive mt-1">{msg}</p>
             ))}
@@ -155,13 +156,14 @@ const SignUpCard: React.FC = () => {
             <Label htmlFor="lastName" className="flex items-center gap-2">
              Nom *
             </Label>
-            <input
-              id="lastName"
-              value={formData.lastName}
-              onChange={(e) => handleChange('lastName', e.target.value)}
-              className={cn("form-input", errors.lastName && "border-destructive")}
-              aria-invalid={!!errors.lastName}
-            />
+            <div className={cn("form-input", errors.lastName && "border-destructive")}>
+              <input
+                id="lastName"
+                value={formData.lastName}
+                onChange={(e) => handleChange('lastName', e.target.value)}
+                aria-invalid={!!errors.lastName}
+              />
+            </div>
             {errors.lastName?.map((msg, i) => (
               <p key={i} className="text-sm text-destructive mt-1">{msg}</p>
             ))}
