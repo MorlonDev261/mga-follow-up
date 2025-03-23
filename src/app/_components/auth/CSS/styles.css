@@ -41,8 +41,8 @@ couleur general :
 }
 
 .auth-container .form-input input {
-  width: calc(100% - 40px);
-  padding: 10px 10px 10px 0;
+  max-width: 100%;
+  padding: 5px 5px 5px 0;
   border: none;
   background: none;
   color: #444;
