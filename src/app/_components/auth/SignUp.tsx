@@ -5,7 +5,6 @@ import "./CSS/styles.css";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
@@ -133,7 +132,7 @@ const SignUpCard: React.FC = () => {
           <div className="space-y-2 form-group">
             <Label htmlFor="firstName">Prénom</Label>
             <div className={cn(errors.firstName && "border-destructive")}>
-              <Input
+              <input
                 id="firstName"
                 value={formData.firstName}
                 onChange={(e) => handleChange('firstName', e.target.value)}
@@ -148,7 +147,7 @@ const SignUpCard: React.FC = () => {
           <div className="space-y-2 form-group">
             <Label htmlFor="lastName">Nom</Label>
             <div className={cn(errors.lastName && "border-destructive")}>
-              <Input
+              <input
                 id="lastName"
                 value={formData.lastName}
                 onChange={(e) => handleChange('lastName', e.target.value)}
@@ -165,7 +164,7 @@ const SignUpCard: React.FC = () => {
           <Label htmlFor="email">Email</Label>
           <div className={cn("form-input", errors.email && "border-destructive")}>
             <FaEnvelope className="text-muted-foreground icon" />
-            <Input
+            <input
               id="email"
               type="email"
               value={formData.email}
@@ -182,7 +181,7 @@ const SignUpCard: React.FC = () => {
           <Label htmlFor="password">Mot de passe</Label>
           <div className={cn("form-input", errors.password && "border-destructive")}>
             <FaLock className="text-muted-foreground icon" />
-            <Input
+            <input
               id="password"
               type={showPassword ? "text" : "password"}
               value={formData.password}
@@ -191,7 +190,7 @@ const SignUpCard: React.FC = () => {
             />
             <button
               type="button"
-              className="text-muted-foreground hover:text-foreground"
+              className="text-muted-foreground hover:text-foreground flex justify-center"
               onClick={() => setShowPassword(!showPassword)}
               aria-label={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
             >
@@ -207,7 +206,7 @@ const SignUpCard: React.FC = () => {
           <Label htmlFor="confPassword">Confirmer le mot de passe</Label>
           <div className={cn("form-input", errors.confPassword && "border-destructive")}>
             <FaLock className="text-muted-foreground icon" />
-            <Input
+            <input
               id="confPassword"
               type={showConfPassword ? "text" : "password"}
               value={formData.confPassword}
@@ -216,7 +215,7 @@ const SignUpCard: React.FC = () => {
             />
             <button
               type="button"
-              className="text-muted-foreground hover:text-foreground"
+              className="text-muted-foreground hover:text-foreground flex justify-center"
               onClick={() => setShowConfPassword(!showConfPassword)}
               aria-label={showConfPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
             >
