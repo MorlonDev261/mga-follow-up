@@ -128,7 +128,7 @@ const SignUpCard: React.FC = () => {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="flex justify-between gap-2">
+        <div className="b">
           <div className="form-group">
             <Label htmlFor="firstName">Prénom</Label>
             <div className={cn(errors.firstName && "border-destructive")}>
