@@ -54,7 +54,6 @@ const SignUpCard: React.FC = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfPassword, setShowConfPassword] = useState(false);
-  const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [errors, setErrors] = useState<FormErrors>({});
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -106,24 +105,19 @@ const SignUpCard: React.FC = () => {
     }
   };
 
-  const handleBlur = (field: keyof typeof formData) => {
-    setTouched(prev => ({ ...prev, [field]: true }));
-  };
-
   const handleChange = (field: keyof typeof formData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-
-    // Marquer le champ comme touché
-    if (!touched[field]) {
-      setTouched(prev => ({ ...prev, [field]: true }));
+    
+    if (errors[field]) {
+      const validation = signupSchema.safeParse({
+        ...formData,
+        [field]: value
+      });
+      
+      if (validation.success) {
+        setErrors(prev => ({ ...prev, [field]: undefined }));
+      }
     }
-
-    const validation = signupSchema.safeParse({ ...formData, [field]: value });
-
-    setErrors(prev => ({
-      ...prev,
-      [field]: validation.success ? undefined : validation.error.flatten().fieldErrors[field]
-    }));
   };
 
   return (
@@ -148,12 +142,11 @@ const SignUpCard: React.FC = () => {
               <input
                 id="firstName"
                 value={formData.firstName}
-                onBlur={() => handleBlur('firstName')}
                 onChange={(e) => handleChange('firstName', e.target.value)}
-                aria-invalid={!!errors.firstName && touched.firstName}
+                aria-invalid={!!errors.firstName}
               />
             </div>
-            {touched.firstName && errors.firstName?.map((msg, i) => (
+            {errors.firstName?.map((msg, i) => (
               <p key={i} className="text-sm text-destructive mt-1">{msg}</p>
             ))}
           </div>
@@ -166,10 +159,10 @@ const SignUpCard: React.FC = () => {
                 id="lastName"
                 value={formData.lastName}
                 onChange={(e) => handleChange('lastName', e.target.value)}
-                aria-invalid={!!errors.lastName && touched.lastName}
+                aria-invalid={!!errors.lastName}
               />
             </div>
-            {touched.lastName && errors.lastName?.map((msg, i) => (
+            {errors.lastName?.map((msg, i) => (
               <p key={i} className="text-sm text-destructive mt-1">{msg}</p>
             ))}
           </div>
@@ -183,12 +176,11 @@ const SignUpCard: React.FC = () => {
               id="email"
               type="email"
               value={formData.email}
-              onBlur={() => handleBlur('email')}
               onChange={(e) => handleChange('email', e.target.value)}
-              aria-invalid={!!errors.email && touched.email}
+              aria-invalid={!!errors.email}
             />
           </div>
-          {touched.email && errors.email?.map((msg, i) => (
+          {errors.email?.map((msg, i) => (
             <p key={i} className="text-sm text-destructive mt-1">{msg}</p>
           ))}
         </div>
@@ -201,9 +193,8 @@ const SignUpCard: React.FC = () => {
               id="password"
               type={showPassword ? "text" : "password"}
               value={formData.password}
-              onBlur={() => handleBlur('password')}
               onChange={(e) => handleChange('password', e.target.value)}
-              aria-invalid={!!errors.password && touched.password}
+              aria-invalid={!!errors.password}
             />
             {showPassword ? (
               <IoEyeOffOutline className="icon text-muted-foreground hover:text-foreground" onClick={() => setShowPassword(false)} />
@@ -211,7 +202,7 @@ const SignUpCard: React.FC = () => {
               <IoEyeOutline className="icon text-muted-foreground hover:text-foreground" onClick={() => setShowPassword(true)} />
             )}
           </div>
-          {touched.password && errors.password?.map((msg, i) => (
+          {errors.password?.map((msg, i) => (
             <p key={i} className="text-sm text-destructive mt-1">{msg}</p>
           ))}
         </div>
@@ -224,9 +215,8 @@ const SignUpCard: React.FC = () => {
               id="confPassword"
               type={showConfPassword ? "text" : "password"}
               value={formData.confPassword}
-              onBlur={() => handleBlur('confPassword')}
               onChange={(e) => handleChange('confPassword', e.target.value)}
-              aria-invalid={!!errors.confPassword && touched.confPassword}
+              aria-invalid={!!errors.confPassword}
             />
             {showConfPassword ? (
               <IoEyeOffOutline className="icon text-muted-foreground hover:text-foreground" onClick={() => setShowConfPassword(false)} />
@@ -234,7 +224,7 @@ const SignUpCard: React.FC = () => {
               <IoEyeOutline className="icon text-muted-foreground hover:text-foreground" onClick={() => setShowConfPassword(true)} />
             )}
           </div>
-          {touched.confPassword && errors.confPassword?.map((msg, i) => (
+          {errors.confPassword?.map((msg, i) => (
             <p key={i} className="text-sm text-destructive mt-1">{msg}</p>
           ))}
         </div>
