@@ -16,22 +16,28 @@ import { z } from "zod";
 
 const signupSchema = z.object({
   firstName: z.string()
+    .nonempty("Veuillez renseigner ce champ")
     .min(2, "Minimum 2 caractères")
     .max(50, "Maximum 50 caractères")
     .regex(/^[a-zA-ZÀ-ÿ -]+$/, "Caractères non autorisés"),
   lastName: z.string()
+    .nonempty("Veuillez renseigner ce champ")
     .min(2, "Minimum 2 caractères")
     .max(50, "Maximum 50 caractères")
     .regex(/^[a-zA-ZÀ-ÿ -]+$/, "Caractères non autorisés"),
-  email: z.string().email("Format d'email invalide").max(100),
+  email: z.string()
+    .nonempty("Veuillez renseigner ce champ")
+    .email("Format d'email invalide")
+    .max(100),
   password: z.string()
+    .nonempty("Veuillez renseigner ce champ")
     .min(8, "Minimum 8 caractères")
     .regex(/[A-Z]/, "Au moins une majuscule")
     .regex(/[0-9]/, "Au moins un chiffre")
     .regex(/[!@#$%^&*]/, "Au moins un caractère spécial"),
   confPassword: z.string()
-})
-.refine(data => data.password === data.confPassword, {
+    .nonempty("Veuillez renseigner ce champ")
+}).refine(data => data.password === data.confPassword, {
   message: "Les mots de passe ne correspondent pas",
   path: ["confPassword"]
 });
