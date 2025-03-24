@@ -52,32 +52,13 @@ const SignUpCard: React.FC = () => {
     password: "",
     confPassword: "",
   });
-  const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [showPassword, setShowPassword] = useState(false);
   const [showConfPassword, setShowConfPassword] = useState(false);
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [errors, setErrors] = useState<FormErrors>({});
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-
-  const handleChange = (field: keyof typeof formData, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-
-    if (!touched[field]) {
-      setTouched(prev => ({ ...prev, [field]: true }));
-    }
-
-    const validation = signupSchema.safeParse({ ...formData, [field]: value });
-
-    setErrors(prev => ({
-      ...prev,
-      [field]: validation.success ? undefined : validation.error.flatten().fieldErrors[field]
-    }));
-  };
-
-  const handleBlur = (field: keyof typeof formData) => {
-    setTouched(prev => ({ ...prev, [field]: true }));
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -95,7 +76,10 @@ const SignUpCard: React.FC = () => {
       const response = await fetch("/api/users", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...validation.data, contact: validation.data.email }),
+        body: JSON.stringify({
+          ...validation.data,
+          contact: validation.data.email,
+        }),
       });
 
       const data = await response.json();
@@ -122,6 +106,22 @@ const SignUpCard: React.FC = () => {
     }
   };
 
+  const handleChange = (field: keyof typeof formData, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+
+    // Marquer le champ comme touché
+    if (!touched[field]) {
+      setTouched(prev => ({ ...prev, [field]: true }));
+    }
+
+    const validation = signupSchema.safeParse({ ...formData, [field]: value });
+
+    setErrors(prev => ({
+      ...prev,
+      [field]: validation.success ? undefined : validation.error.flatten().fieldErrors[field]
+    }));
+  };
+
   return (
     <div className="auth-container">
       <h2 className="text-2xl font-bold mb-6">Créer un compte</h2>
@@ -136,41 +136,104 @@ const SignUpCard: React.FC = () => {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        {["firstName", "lastName", "email", "password", "confPassword"].map((field, i) => (
-          <div key={i} className="form-group">
-            <Label htmlFor={field}>{field === "confPassword" ? "Confirmer le mot de passe" : field.charAt(0).toUpperCase() + field.slice(1)}</Label>
-            <div className={cn("form-input", errors[field] && touched[field] && "border-destructive")}>
-              {field === "email" ? <FaEnvelope className="icon text-muted-foreground" /> :
-               field.includes("password") ? <FaLock className="icon text-muted-foreground" /> :
-               <FaUser className="icon text-muted-foreground" />}
-              
+        <div className="b">
+          <div className="form-group">
+            <Label htmlFor="firstName">Prénom</Label>
+            <div className={cn("form-input", errors.firstName && "border-destructive")}>
+              <FaUser className="text-muted-foreground icon" />
               <input
-                id={field}
-                type={field.includes("password") ? (field === "password" ? showPassword : showConfPassword) ? "text" : "password" : "text"}
-                value={formData[field]}
-                onChange={(e) => handleChange(field, e.target.value)}
-                onBlur={() => handleBlur(field)}
-                aria-invalid={!!errors[field] && touched[field]}
+                id="firstName"
+                value={formData.firstName}
+                onBlur={() => handleBlur('firstName')}
+                onChange={(e) => handleChange('firstName', e.target.value)}
+                aria-invalid={!!errors.firstName}
               />
-
-              {field === "password" && (
-                showPassword ? 
-                <IoEyeOffOutline className="icon cursor-pointer" onClick={() => setShowPassword(false)} /> :
-                <IoEyeOutline className="icon cursor-pointer" onClick={() => setShowPassword(true)} />
-              )}
-
-              {field === "confPassword" && (
-                showConfPassword ? 
-                <IoEyeOffOutline className="icon cursor-pointer" onClick={() => setShowConfPassword(false)} /> :
-                <IoEyeOutline className="icon cursor-pointer" onClick={() => setShowConfPassword(true)} />
-              )}
             </div>
-
-            {touched[field] && errors[field]?.map((msg, i) => (
+            {errors.firstName?.map((msg, i) => (
               <p key={i} className="text-sm text-destructive mt-1">{msg}</p>
             ))}
           </div>
-        ))}
+
+          <div className="form-group">
+            <Label htmlFor="lastName">Nom</Label>
+            <div className={cn("form-input", errors.lastName && "border-destructive")}>
+              <FaUser className="text-muted-foreground icon" />
+              <input
+                id="lastName"
+                value={formData.lastName}
+                onChange={(e) => handleChange('lastName', e.target.value)}
+                aria-invalid={!!errors.lastName}
+              />
+            </div>
+            {errors.lastName?.map((msg, i) => (
+              <p key={i} className="text-sm text-destructive mt-1">{msg}</p>
+            ))}
+          </div>
+        </div>
+
+        <div className="space-y-2 form-group">
+          <Label htmlFor="email">Email</Label>
+          <div className={cn("form-input", errors.email && "border-destructive")}>
+            <FaEnvelope className="text-muted-foreground icon" />
+            <input
+              id="email"
+              type="email"
+              value={formData.email}
+              onBlur={() => handleBlur('email')}
+              onChange={(e) => handleChange('email', e.target.value)}
+              aria-invalid={!!errors.email}
+            />
+          </div>
+          {errors.email?.map((msg, i) => (
+            <p key={i} className="text-sm text-destructive mt-1">{msg}</p>
+          ))}
+        </div>
+
+        <div className="space-y-2 form-group">
+          <Label htmlFor="password">Mot de passe</Label>
+          <div className={cn("form-input", errors.password && "border-destructive")}>
+            <FaLock className="text-muted-foreground icon" />
+            <input
+              id="password"
+              type={showPassword ? "text" : "password"}
+              value={formData.password}
+              onBlur={() => handleBlur('password')}
+              onChange={(e) => handleChange('password', e.target.value)}
+              aria-invalid={!!errors.password}
+            />
+            {showPassword ? (
+              <IoEyeOffOutline className="icon text-muted-foreground hover:text-foreground" onClick={() => setShowPassword(false)} />
+            ) : (
+              <IoEyeOutline className="icon text-muted-foreground hover:text-foreground" onClick={() => setShowPassword(true)} />
+            )}
+          </div>
+          {errors.password?.map((msg, i) => (
+            <p key={i} className="text-sm text-destructive mt-1">{msg}</p>
+          ))}
+        </div>
+
+        <div className="space-y-2 form-group">
+          <Label htmlFor="confPassword">Confirmer le mot de passe</Label>
+          <div className={cn("form-input", errors.confPassword && "border-destructive")}>
+            <FaLock className="text-muted-foreground icon" />
+            <input
+              id="confPassword"
+              type={showConfPassword ? "text" : "password"}
+              value={formData.confPassword}
+              onBlur={() => handleBlur('confPassword')}
+              onChange={(e) => handleChange('confPassword', e.target.value)}
+              aria-invalid={!!errors.confPassword}
+            />
+            {showConfPassword ? (
+              <IoEyeOffOutline className="icon text-muted-foreground hover:text-foreground" onClick={() => setShowConfPassword(false)} />
+            ) : (
+              <IoEyeOutline className="icon text-muted-foreground hover:text-foreground" onClick={() => setShowConfPassword(true)} />
+            )}
+          </div>
+          {errors.confPassword?.map((msg, i) => (
+            <p key={i} className="text-sm text-destructive mt-1">{msg}</p>
+          ))}
+        </div>
 
         <Button type="submit" className="w-full" disabled={loading}>
           {loading ? <Spinner size="sm" className="mx-auto" /> : "S'inscrire"}
@@ -179,7 +242,10 @@ const SignUpCard: React.FC = () => {
 
       <p className="mt-6 text-center text-sm text-muted-foreground">
         Déjà un compte ?{" "}
-        <Link href="/auth/login" className="font-medium text-primary hover:underline">
+        <Link
+          href="/auth/login"
+          className="font-medium text-primary hover:underline"
+        >
           Connectez-vous ici
         </Link>
       </p>
