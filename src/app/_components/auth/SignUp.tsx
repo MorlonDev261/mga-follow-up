@@ -15,28 +15,135 @@ import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { z } from "zod";
 
 const signupSchema = z.object({
-  firstName: z.string()
-    .nonempty("Veuillez renseigner ce champ")
-    .min(2, "Minimum 2 caractères")
-    .max(50, "Maximum 50 caractères")
-    .regex(/^[a-zA-ZÀ-ÿ -]+$/, "Caractères non autorisés"),
-  lastName: z.string()
-    .nonempty("Veuillez renseigner ce champ")
-    .min(2, "Minimum 2 caractères")
-    .max(50, "Maximum 50 caractères")
-    .regex(/^[a-zA-ZÀ-ÿ -]+$/, "Caractères non autorisés"),
-  email: z.string()
-    .nonempty("Veuillez renseigner ce champ")
-    .email("Format d'email invalide")
-    .max(100),
-  password: z.string()
-    .nonempty("Veuillez renseigner ce champ")
-    .min(8, "Minimum 8 caractères")
-    .regex(/[A-Z]/, "Au moins une majuscule")
-    .regex(/[0-9]/, "Au moins un chiffre")
-    .regex(/[!@#$%^&*]/, "Au moins un caractère spécial"),
-  confPassword: z.string()
-    .nonempty("Veuillez renseigner ce champ")
+  firstName: z.string().superRefine((val, ctx) => {
+    if (val === "") {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Veuillez renseigner ce champ"
+      });
+      return z.NEVER;
+    }
+    if (val.length < 2) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Minimum 2 caractères"
+      });
+      return z.NEVER;
+    }
+    if (val.length > 50) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Maximum 50 caractères"
+      });
+      return z.NEVER;
+    }
+    if (!/^[a-zA-ZÀ-ÿ -]+$/.test(val)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Caractères non autorisés"
+      });
+      return z.NEVER;
+    }
+  }),
+  lastName: z.string().superRefine((val, ctx) => {
+    if (val === "") {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Veuillez renseigner ce champ"
+      });
+      return z.NEVER;
+    }
+    if (val.length < 2) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Minimum 2 caractères"
+      });
+      return z.NEVER;
+    }
+    if (val.length > 50) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Maximum 50 caractères"
+      });
+      return z.NEVER;
+    }
+    if (!/^[a-zA-ZÀ-ÿ -]+$/.test(val)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Caractères non autorisés"
+      });
+      return z.NEVER;
+    }
+  }),
+  email: z.string().superRefine((val, ctx) => {
+    if (val === "") {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Veuillez renseigner ce champ"
+      });
+      return z.NEVER;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Format d'email invalide"
+      });
+      return z.NEVER;
+    }
+    if (val.length > 100) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Maximum 100 caractères"
+      });
+      return z.NEVER;
+    }
+  }),
+  password: z.string().superRefine((val, ctx) => {
+    if (val === "") {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Veuillez renseigner ce champ"
+      });
+      return z.NEVER;
+    }
+    if (val.length < 8) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Minimum 8 caractères"
+      });
+      return z.NEVER;
+    }
+    if (!/[A-Z]/.test(val)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Au moins une majuscule"
+      });
+      return z.NEVER;
+    }
+    if (!/[0-9]/.test(val)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Au moins un chiffre"
+      });
+      return z.NEVER;
+    }
+    if (!/[!@#$%^&*]/.test(val)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Au moins un caractère spécial"
+      });
+      return z.NEVER;
+    }
+  }),
+  confPassword: z.string().superRefine((val, ctx) => {
+    if (val === "") {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Veuillez renseigner ce champ"
+      });
+      return z.NEVER;
+    }
+  })
 }).refine(data => data.password === data.confPassword, {
   message: "Les mots de passe ne correspondent pas",
   path: ["confPassword"]
