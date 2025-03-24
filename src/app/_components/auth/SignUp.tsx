@@ -190,14 +190,11 @@ const SignUpCard: React.FC = () => {
               onChange={(e) => handleChange('password', e.target.value)}
               aria-invalid={!!errors.password}
             />
-            <button
-              type="button"
-              className="text-muted-foreground hover:text-foreground flex justify-center p-1"
-              onClick={() => setShowPassword(!showPassword)}
-              aria-label={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
-            >
-              {showPassword ? <IoEyeOffOutline /> : <IoEyeOutline />}
-            </button>
+            {showPassword ? (
+              <IoEyeOffOutline className="icon text-muted-foreground hover:text-foreground" onClick={() => setShowPassword(false)} />
+            ) : (
+              <IoEyeOutline className="icon text-muted-foreground hover:text-foreground" onClick={() => setShowPassword(true)} />
+            )}
           </div>
           {errors.password?.map((msg, i) => (
             <p key={i} className="text-sm text-destructive mt-1">{msg}</p>
@@ -215,14 +212,11 @@ const SignUpCard: React.FC = () => {
               onChange={(e) => handleChange('confPassword', e.target.value)}
               aria-invalid={!!errors.confPassword}
             />
-            <button
-              type="button"
-              className="text-muted-foreground hover:text-foreground flex justify-center p-1"
-              onClick={() => setShowConfPassword(!showConfPassword)}
-              aria-label={showConfPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
-            >
-              {showConfPassword ? <IoEyeOffOutline /> : <IoEyeOutline />}
-            </button>
+            {showConfPassword ? (
+              <IoEyeOffOutline className="icon text-muted-foreground hover:text-foreground" onClick={() => setShowConfPassword(false)} />
+            ) : (
+              <IoEyeOutline className="icon text-muted-foreground hover:text-foreground" onClick={() => setShowConfPassword(true)} />
+            )}
           </div>
           {errors.confPassword?.map((msg, i) => (
             <p key={i} className="text-sm text-destructive mt-1">{msg}</p>
