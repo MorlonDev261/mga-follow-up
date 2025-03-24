@@ -127,13 +127,6 @@ const signupSchema = z.object({
       });
       return z.NEVER;
     }
-    if (!/[!@#$%^&*]/.test(val)) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Au moins un caractère spécial"
-      });
-      return z.NEVER;
-    }
   }),
   confPassword: z.string().superRefine((val, ctx) => {
     if (val === "") {
@@ -144,7 +137,7 @@ const signupSchema = z.object({
       return z.NEVER;
     }
   })
-}).refine(data => data.password === data.confPassword, {
+}).refine(data => data.confPassword && data.password === data.confPassword, {
   message: "Les mots de passe ne correspondent pas",
   path: ["confPassword"]
 });
