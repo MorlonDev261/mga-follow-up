@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
-import { FaEnvelope, FaLock } from "react-icons/fa";
+import { FaUser, FaEnvelope, FaLock } from "react-icons/fa";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { z } from "zod";
@@ -131,11 +131,11 @@ const SignUpCard: React.FC = () => {
         <div className="b">
           <div className="form-group">
             <Label htmlFor="firstName">Prénom</Label>
-            <div className={cn(errors.firstName && "border-destructive")}>
+            <div className={cn("form-input", errors.firstName && "border-destructive")}>
+              <FaUser className="text-muted-foreground icon" />
               <input
                 id="firstName"
                 value={formData.firstName}
-                className="not-grouped"
                 onChange={(e) => handleChange('firstName', e.target.value)}
                 aria-invalid={!!errors.firstName}
               />
@@ -147,10 +147,10 @@ const SignUpCard: React.FC = () => {
 
           <div className="form-group">
             <Label htmlFor="lastName">Nom</Label>
-            <div className={cn(errors.lastName && "border-destructive")}>
+            <div className={cn("form-input", errors.lastName && "border-destructive")}>
+              <FaUser className="text-muted-foreground icon" />
               <input
                 id="lastName"
-                className="not-grouped"
                 value={formData.lastName}
                 onChange={(e) => handleChange('lastName', e.target.value)}
                 aria-invalid={!!errors.lastName}
