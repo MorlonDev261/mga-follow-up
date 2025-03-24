@@ -137,7 +137,7 @@ const signupSchema = z.object({
       return z.NEVER;
     }
   })
-}).refine(data => data.confPassword && data.password === data.confPassword, {
+}).refine(data => data.password === data.confPassword, {
   message: "Les mots de passe ne correspondent pas",
   path: ["confPassword"]
 });
