@@ -106,6 +106,10 @@ const SignUpCard: React.FC = () => {
     }
   };
 
+  const handleBlur = (field: keyof typeof formData) => {
+    setTouched(prev => ({ ...prev, [field]: true }));
+  };
+
   const handleChange = (field: keyof typeof formData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
 
@@ -146,10 +150,10 @@ const SignUpCard: React.FC = () => {
                 value={formData.firstName}
                 onBlur={() => handleBlur('firstName')}
                 onChange={(e) => handleChange('firstName', e.target.value)}
-                aria-invalid={!!errors.firstName}
+                aria-invalid={!!errors.firstName && touched.firstName}
               />
             </div>
-            {errors.firstName?.map((msg, i) => (
+            {touched.firstName && errors.firstName?.map((msg, i) => (
               <p key={i} className="text-sm text-destructive mt-1">{msg}</p>
             ))}
           </div>
@@ -162,10 +166,10 @@ const SignUpCard: React.FC = () => {
                 id="lastName"
                 value={formData.lastName}
                 onChange={(e) => handleChange('lastName', e.target.value)}
-                aria-invalid={!!errors.lastName}
+                aria-invalid={!!errors.lastName && touched.lastName}
               />
             </div>
-            {errors.lastName?.map((msg, i) => (
+            {touched.lastName && errors.lastName?.map((msg, i) => (
               <p key={i} className="text-sm text-destructive mt-1">{msg}</p>
             ))}
           </div>
@@ -181,10 +185,10 @@ const SignUpCard: React.FC = () => {
               value={formData.email}
               onBlur={() => handleBlur('email')}
               onChange={(e) => handleChange('email', e.target.value)}
-              aria-invalid={!!errors.email}
+              aria-invalid={!!errors.email && touched.email}
             />
           </div>
-          {errors.email?.map((msg, i) => (
+          {touched.email && errors.email?.map((msg, i) => (
             <p key={i} className="text-sm text-destructive mt-1">{msg}</p>
           ))}
         </div>
@@ -199,7 +203,7 @@ const SignUpCard: React.FC = () => {
               value={formData.password}
               onBlur={() => handleBlur('password')}
               onChange={(e) => handleChange('password', e.target.value)}
-              aria-invalid={!!errors.password}
+              aria-invalid={!!errors.password && touched.password}
             />
             {showPassword ? (
               <IoEyeOffOutline className="icon text-muted-foreground hover:text-foreground" onClick={() => setShowPassword(false)} />
@@ -207,7 +211,7 @@ const SignUpCard: React.FC = () => {
               <IoEyeOutline className="icon text-muted-foreground hover:text-foreground" onClick={() => setShowPassword(true)} />
             )}
           </div>
-          {errors.password?.map((msg, i) => (
+          {touched.password && errors.password?.map((msg, i) => (
             <p key={i} className="text-sm text-destructive mt-1">{msg}</p>
           ))}
         </div>
@@ -222,7 +226,7 @@ const SignUpCard: React.FC = () => {
               value={formData.confPassword}
               onBlur={() => handleBlur('confPassword')}
               onChange={(e) => handleChange('confPassword', e.target.value)}
-              aria-invalid={!!errors.confPassword}
+              aria-invalid={!!errors.confPassword && touched.confPassword}
             />
             {showConfPassword ? (
               <IoEyeOffOutline className="icon text-muted-foreground hover:text-foreground" onClick={() => setShowConfPassword(false)} />
@@ -230,7 +234,7 @@ const SignUpCard: React.FC = () => {
               <IoEyeOutline className="icon text-muted-foreground hover:text-foreground" onClick={() => setShowConfPassword(true)} />
             )}
           </div>
-          {errors.confPassword?.map((msg, i) => (
+          {touched.confPassword && errors.confPassword?.map((msg, i) => (
             <p key={i} className="text-sm text-destructive mt-1">{msg}</p>
           ))}
         </div>
