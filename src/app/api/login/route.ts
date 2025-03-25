@@ -19,6 +19,8 @@ export async function POST(req: Request) {
     const body = await req.json();
     const validation = loginSchema.safeParse(body);
 
+    console.log(body);
+
     if (!validation.success) {
       return NextResponse.json({ error: "Données invalides" }, { status: 400 });
     }
