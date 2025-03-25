@@ -41,7 +41,6 @@
     "exceljs": "^4.4.0",
     "framer-motion": "^12.5.0",
     "handsontable": "^15.0.1",
-    "cookie": "^1.0.2",
     "jsbarcode": "^3.11.6",
     "lodash": "^4.17.21",
     "lucide-react": "^0.475.0",
