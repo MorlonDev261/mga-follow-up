@@ -15,7 +15,7 @@ import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { z } from "zod";
 
 const signupSchema = z.object({
-  firstName: z.string().superRefine((val, ctx) => {
+  firstName: z.string().trim().superRefine((val, ctx) => {
     if (val === "") {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
@@ -45,7 +45,7 @@ const signupSchema = z.object({
       return z.NEVER;
     }
   }),
-  lastName: z.string().superRefine((val, ctx) => {
+  lastName: z.string().trim().superRefine((val, ctx) => {
     if (val === "") {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
@@ -75,7 +75,7 @@ const signupSchema = z.object({
       return z.NEVER;
     }
   }),
-  email: z.string().superRefine((val, ctx) => {
+  email: z.string().trim().superRefine((val, ctx) => {
     if (val === "") {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
@@ -98,7 +98,7 @@ const signupSchema = z.object({
       return z.NEVER;
     }
   }),
-  password: z.string().superRefine((val, ctx) => {
+  password: z.string().trim().superRefine((val, ctx) => {
     if (val === "") {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
@@ -128,7 +128,7 @@ const signupSchema = z.object({
       return z.NEVER;
     }
   }),
-  confPassword: z.string().superRefine((val, ctx) => {
+  confPassword: z.string().trim().superRefine((val, ctx) => {
     if (val === "") {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
@@ -137,10 +137,16 @@ const signupSchema = z.object({
       return z.NEVER;
     }
   })
-}).refine(data => data.password === data.confPassword, {
-  message: "Les mots de passe ne correspondent pas",
-  path: ["confPassword"]
-});
+}).refine((data) => {
+    // Vérifier d'abord si confPassword est vide avant de comparer avec password
+    if (data.confPassword !== "" && data.password !== data.confPassword) {
+      return false;
+    }
+    return true;
+  }, {
+    message: "Les mots de passe ne correspondent pas",
+    path: ["confPassword"],
+  });
 
 type FormErrors = z.inferFlattenedErrors<typeof signupSchema>["fieldErrors"];
 
