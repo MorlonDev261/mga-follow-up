@@ -60,7 +60,8 @@ export async function POST(req: Request) {
     );
 
     // Stocker le token dans un cookie sécurisé
-    cookies().set("token", token, {
+    const cookieStore = await cookies();
+    cookieStore.set("token", token, {
       httpOnly: true,  // Protège contre les attaques XSS
       secure: process.env.NODE_ENV === "production", // HTTPS uniquement en prod
       sameSite: "strict", // Protège contre les attaques CSRF
