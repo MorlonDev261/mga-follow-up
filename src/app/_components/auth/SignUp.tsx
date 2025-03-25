@@ -215,7 +215,7 @@ const SignUpCard: React.FC = () => {
   setFormData((prev) => ({ ...prev, [field]: value }));
 
   // Vérification immédiate du champ modifié
-  const fieldSchema = signupSchema.shape[field];
+  const fieldSchema = signupSchema._def.schema.shape[field];
   if (fieldSchema) {
     const validation = fieldSchema.safeParse(value);
     setErrors((prev) => ({
