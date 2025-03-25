@@ -54,7 +54,7 @@ const LoginCard: React.FC = () => {
       const response = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ contact: email, password }),
         credentials: "include", // Permet d'envoyer les cookies HTTP-only
       });
 
