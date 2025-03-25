@@ -17,8 +17,7 @@ const userSchema = z.object({
   password: z.string()
     .min(8, "Minimum 8 caractères")
     .regex(/[A-Z]/, "Au moins une majuscule")
-    .regex(/[0-9]/, "Au moins un chiffre")
-    .regex(/[!@#$%^&*]/, "Au moins un caractère spécial"),
+    .regex(/[0-9]/, "Au moins un chiffre"),
   firstName: z.string()
     .min(2, "Minimum 2 caractères")
     .max(50, "Maximum 50 caractères")
@@ -138,6 +137,7 @@ export async function POST(req: NextRequest) {
       select: {
         id: true,
         contact: true,
+        password: true,
         firstName: true,
         lastName: true,
         createdAt: true,
