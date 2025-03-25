@@ -90,7 +90,7 @@ export default {
   ],
   callbacks: {
     async signIn({ user, account, profile }) {
-      if (account.provider === 'github' || account.provider === 'google') {
+      if (account && (account.provider === 'github' || account.provider === 'google')) {
         // Vérifier si l'utilisateur existe déjà dans la base de données
         const existingUser = await db.user.findUnique({
           where: { contact: user.email },
