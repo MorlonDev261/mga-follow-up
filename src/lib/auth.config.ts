@@ -91,10 +91,10 @@ export default {
   callbacks: {
     async signIn({ user, account, profile }) {
       if (account && (account.provider === 'github' || account.provider === 'google')) {
-        (!user.email) {
+        if (!user.email) {
           throw new Error("Email is missing from the user data.");
         }
-        
+
         // Vérifier si l'utilisateur existe déjà dans la base de données
         const existingUser = await db.user.findUnique({
           where: { contact: user.email },
@@ -112,23 +112,23 @@ export default {
           });
         }
       }
-      return true;
-    },
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
-        token.token = user.token;
-      }
-      return token;
-    },
-    async session({ session, token }) {
-      if (token) {
-        session.user.id = token.id;
-        session.user.token = token.token;
-      }
-      return session;
-    }
+    return true;
   },
+  async jwt({ token, user }) {
+    if (user) {
+      token.id = user.id;
+      token.token = user.token;
+    }
+    return token;
+  },
+  async session({ session, token }) {
+    if (token) {
+      session.user.id = token.id;
+      session.user.token = token.token;
+    }
+    return session;
+  }
+},
   session: {
     strategy: "jwt",
   },
