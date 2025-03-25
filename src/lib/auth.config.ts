@@ -91,6 +91,10 @@ export default {
   callbacks: {
     async signIn({ user, account, profile }) {
       if (account && (account.provider === 'github' || account.provider === 'google')) {
+        (!user.email) {
+          throw new Error("Email is missing from the user data.");
+        }
+        
         // Vérifier si l'utilisateur existe déjà dans la base de données
         const existingUser = await db.user.findUnique({
           where: { contact: user.email },
