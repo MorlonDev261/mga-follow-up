@@ -137,7 +137,7 @@ const signupSchema = z.object({
       return z.NEVER;
     }
   })
-}).refine(data => data.confPassword !== "" && data.password === data.confPassword, {
+}).refine(data => data.password === data.confPassword, {
   message: "Les mots de passe ne correspondent pas",
   path: ["confPassword"]
 });
@@ -206,19 +206,26 @@ const SignUpCard: React.FC = () => {
   };
 
   const handleChange = (field: keyof typeof formData, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-    
-    if (errors[field]) {
-      const validation = signupSchema.safeParse({
-        ...formData,
-        [field]: value
-      });
-      
-      if (validation.success) {
-        setErrors(prev => ({ ...prev, [field]: undefined }));
-      }
-    }
-  };
+  setFormData((prev) => ({ ...prev, [field]: value }));
+
+  // Vérification immédiate du champ modifié
+  const fieldSchema = signupSchema.shape[field];
+  if (fieldSchema) {
+    const validation = fieldSchema.safeParse(value);
+    setErrors((prev) => ({
+      ...prev,
+      [field]: validation.success ? undefined : validation.error?.flatten().formErrors,
+    }));
+  }
+
+  // Vérification globale si le mot de passe et la confirmation sont modifiés
+  if (field === "password" || field === "confPassword") {
+    setErrors((prev) => ({
+      ...prev,
+      confPassword: formData.password === value || field === "password" ? undefined : ["Les mots de passe ne correspondent pas"],
+    }));
+  }
+};
 
   return (
     <div className="auth-container">
