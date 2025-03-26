@@ -1,4 +1,4 @@
-import type { NextAuthConfig } from "next-auth";
+import type NextAuth from "next-auth";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
@@ -102,4 +102,4 @@ export default {
   },
   secret: process.env.AUTH_SECRET,
   debug: process.env.NODE_ENV === "development"
-} satisfies NextAuthConfig;
+} satisfies NextAuth;
