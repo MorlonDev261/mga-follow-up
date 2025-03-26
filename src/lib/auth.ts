@@ -1,7 +1,6 @@
-import NextAuth from "next-auth"
-import authConfig from "./auth.config"
- 
-export const { handlers, signIn, signOut, auth } = NextAuth({
-  session: { strategy: "jwt" },
-  ...authConfig
-})
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth.config";
+
+export const getAuthSession = async () => {
+  return await getServerSession(authOptions);
+};
