@@ -350,7 +350,7 @@ const SignUpCard: React.FC = () => {
       <p className="mt-6 text-center text-sm text-muted-foreground">
         Déjà un compte ?{" "}
         <Link
-          href="/auth/login"
+          href="/login"
           className="font-medium text-primary hover:underline"
         >
           Connectez-vous ici
