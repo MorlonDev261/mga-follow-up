@@ -21,16 +21,9 @@ export default function Header({ children }: HeaderProps) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
+  const { push } = router;
   
   const { data: session } = useSession();
-
-  const handleNavigation = (path: string) => {
-    if (pathname.startsWith(path)) {
-      router.push(path);
-    } else {
-      router.push(`/rows${pathname}`);
-    }
-  };
 
   return (
     <header className="sticky top-0 z-50 w-full bg-white dark:bg-[#111] p-2 transition-colors border-b border-gray-300 dark:border-none">
@@ -42,7 +35,6 @@ export default function Header({ children }: HeaderProps) {
             <button
               className="rounded-full p-1 cursor-pointer dark:hover:bg-gray-500 transition hover:bg-gray-200"
               onClick={() => router.back()}
-              disabled={!router.canGoBack()} // Disable if no history to go back
             >
               <MdOutlineArrowBackIosNew className="text-xl text-gray-800 dark:text-white" />
             </button>
@@ -70,7 +62,7 @@ export default function Header({ children }: HeaderProps) {
                 ? "bg-white dark:bg-white/40 pointer-events-none"
                 : "hover:bg-white/60 dark:hover:bg-white/20"
             )}
-            onClick={() => handleNavigation("/dashboard")}
+            onClick={() => push(pathname.replace(/^\/rows/, "") || "/")}
           >
             Dashboard
           </button>
@@ -81,7 +73,7 @@ export default function Header({ children }: HeaderProps) {
                 ? "bg-white dark:bg-white/40 pointer-events-none"
                 : "hover:bg-white/60 dark:hover:bg-white/20"
             )}
-            onClick={() => handleNavigation("/rows")}
+            onClick={() => push(pathname.startsWith("/rows") ? pathname : `/rows${pathname}`)}
           >
             Excel
           </button>
@@ -116,11 +108,11 @@ export default function Header({ children }: HeaderProps) {
             {/* Profile */}
             <div className="flex items-center gap-2 cursor-pointer" onClick={() => setOpen(!open)}>
               <Avatar className="h-7 w-7 border border-gray-300 dark:border-white">
-                {session.user.image ? (
+                {session.user.profilePicture ? (
                   <AvatarImage src={session.user.profilePicture} />
                 ) : (
                   <AvatarFallback>
-                    {session.user.firstName?.[0]?.toUpperCase() || 'MGA'}
+                    {session.user.firstName?.[0]?.toUpperCase() || 'U'}
                   </AvatarFallback>
                 )}
               </Avatar>
