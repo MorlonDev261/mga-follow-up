@@ -33,33 +33,36 @@ const LoginCard: React.FC = () => {
   const passwordRef = useRef<HTMLInputElement>(null);
   
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
+  e.preventDefault();
+  setLoading(true);
+  setError(null);
 
-    const validation = loginSchema.safeParse({ email, password });
-    if (!validation.success) {
-      setLoading(false);
-      setErrors(validation.error.flatten().fieldErrors);
-      return;
-    }
-
-    setErrors({});
-
-    const result = await signIn("credentials", {
-      redirect: false,
-      contact: email,
-      password,
-    });
-
-    if (result?.error) {
-      setError(result.error);
-    } else {
-      router.push("/");
-    }
-
+  const validation = loginSchema.safeParse({ email, password });
+  if (!validation.success) {
     setLoading(false);
-  };
+    setErrors({
+      email: validation.error.flatten().fieldErrors.email?.[0], // Prend uniquement la première erreur
+      password: validation.error.flatten().fieldErrors.password?.[0],
+    });
+    return;
+  }
+
+  setErrors({});
+
+  const result = await signIn("credentials", {
+    redirect: false,
+    email, // Corrige aussi ici (avant c'était `contact`, qui ne correspond pas au champ attendu)
+    password,
+  });
+
+  if (result?.error) {
+    setError(result.error);
+  } else {
+    router.push("/");
+  }
+
+  setLoading(false);
+};
 
   return (
     <div className="auth-container">
