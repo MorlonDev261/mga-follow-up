@@ -1,4 +1,5 @@
-import type NextAuth from "next-auth";
+import type { NextAuthOptions, User } from "next-auth";
+import type { JWT } from "next-auth/jwt";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
@@ -14,14 +15,14 @@ const credentialsSchema = z.object({
 
 // Vérification des variables d'environnement
 if (!process.env.AUTH_GITHUB_ID || !process.env.AUTH_GITHUB_SECRET) {
-  throw new Error("Vois ne pouvez pas authentifier via GitHub pour le moment.");
+  throw new Error("Vous ne pouvez pas authentifier via GitHub pour le moment.");
 }
 
 if (!process.env.AUTH_GOOGLE_ID || !process.env.AUTH_GOOGLE_SECRET) {
-  throw new Error("Vois ne pouvez pas authentifier via Google pour le moment.");
+  throw new Error("Vous ne pouvez pas authentifier via Google pour le moment.");
 }
 
-export default {
+export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db),
   session: { strategy: "jwt" },
   pages: { signIn: "/login" },
@@ -33,11 +34,11 @@ export default {
       profile(profile) {
         return {
           id: profile.id.toString(),
-          contact: profile.email ?? '',
-          firstName: profile.name?.split(' ')[0] || 'New',
-          lastName: profile.name?.split(' ').slice(1).join(' ') || 'member',
+          contact: profile.email || "no-email@example.com", // Assurer une valeur string
+          firstName: profile.name?.split(" ")[0] || "New",
+          lastName: profile.name?.split(" ").slice(1).join(" ") || "Member",
           role: "USER"
-        };
+        } as User;
       }
     }),
 
@@ -48,11 +49,11 @@ export default {
       profile(profile) {
         return {
           id: profile.sub,
-          contact: profile.email ?? '',
-          firstName: profile.given_name || 'New',
-          lastName: profile.family_name || 'member',
+          contact: profile.email || "no-email@example.com",
+          firstName: profile.given_name || "New",
+          lastName: profile.family_name || "Member",
           role: "USER"
-        };
+        } as User;
       }
     }),
 
@@ -81,7 +82,7 @@ export default {
             firstName: user.firstName,
             lastName: user.lastName,
             role: user.role
-          };
+          } as User;
         } catch (error) {
           console.error("Auth Error:", error);
           return null;
@@ -101,7 +102,7 @@ export default {
       return token;
     },
     async session({ session, token }) {
-      if (token && session.user) {
+      if (session.user) {
         session.user.id = token.id;
         session.user.contact = token.contact;
         session.user.firstName = token.firstName;
@@ -113,4 +114,4 @@ export default {
   },
   secret: process.env.AUTH_SECRET,
   debug: process.env.NODE_ENV === "development"
-} satisfies NextAuth;
+};
