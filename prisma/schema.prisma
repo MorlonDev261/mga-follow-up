@@ -26,10 +26,6 @@ model User {
   workers     WorkRelation[]      @relation("WorkerEntreprises")
   owners      CustomerRelation[] @relation("OwnerCustomers")
   customers   CustomerRelation[] @relation("CustomerOwners")
-
-  // Champs compatibilité NextAuth
-  name  String? @map("firstName")
-  image String? @map("profilePicture")
 }
 
 model WorkRelation {
