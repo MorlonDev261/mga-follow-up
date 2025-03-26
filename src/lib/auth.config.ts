@@ -1,10 +1,11 @@
+import type { NextAuthConfig } from "next-auth";
+import { PrismaAdapter } from "next-auth/prisma-adapter";
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
-import type { NextAuthConfig } from "next-auth";
+
 import { compare } from "bcryptjs";
 import db from "@/lib/db";
-import jwt from "jsonwebtoken";
 import { z } from "zod";
 
 // Schéma de validation des entrées
@@ -13,10 +14,14 @@ const loginSchema = z.object({
   password: z.string().min(8, "Le mot de passe doit contenir au moins 8 caractères"),
 });
 
-const JWT_SECRET = process.env.JWT_SECRET as string;
-const JWT_EXPIRATION = "7d";
-
 export default {
+  adapter: PrismaAdapter(db),
+  session: {
+    strategy: "jwt",
+  },
+  pages: {
+    signIn: "/login", // Page de connexion personnalisée
+  },
   providers: [
     GitHub({
       clientId: process.env.AUTH_GITHUB_ID,
@@ -33,61 +38,32 @@ export default {
         password: { label: "Mot de passe", type: "password" },
       },
       async authorize(credentials) {
-        try {
-          const validation = loginSchema.safeParse(credentials);
-          if (!validation.success) {
-            throw new Error("Données invalides");
-          }
+        if(!credentials?.contact || !credentials?.password) {
+          return null;
+        }
 
-          const { contact, password } = validation.data;
+        const existingUser = await db.user.findUnique({
+          where: { contact: credentials.contact }
+        });
 
-          // Vérifier si l'utilisateur existe
-          const user = await db.user.findUnique({
-            where: { contact },
-            select: { 
-              id: true, 
-              contact: true,
-              password: true, 
-              firstName: true, 
-              lastName: true 
-            }
-          });
+        if(!existingUser) {
+          return null;
+        }
 
-          if (!user) {
-            throw new Error("Identifiants incorrects");
-          }
+        const passwordMatch = await compare(credentials.password, existingUser.password);
 
-          // Vérifier le mot de passe
-          const passwordMatch = await compare(password, user.password);
-          if (!passwordMatch) {
-            throw new Error("Identifiants incorrects");
-          }
+        if(!passwordMatch) {
+          return null;
+        }
 
-          // Générer un token JWT
-          const token = jwt.sign(
-            { 
-              id: user.id, 
-              contact: user.contact, 
-              name: `${user.firstName} ${user.lastName}` 
-            },
-            JWT_SECRET,
-            { expiresIn: JWT_EXPIRATION }
-          );
-
-          return { 
-            id: user.id.toString(), 
-            name: `${user.firstName} ${user.lastName}`, 
-            email: user.contact,
-            token 
-          };
-
-        } catch (error) {
-          console.error("[NextAuth Credentials]", error);
-          throw new Error("Erreur d'authentification");
+        return {
+          id: `${existingUser.id}`,
+          contact: existingUser.contact,
         }
       }
     })
   ],
+  
   callbacks: {
     async signIn({ user, account, profile }) {
       if (account && (account.provider === 'github' || account.provider === 'google')) {
@@ -114,26 +90,5 @@ export default {
       }
     return true;
   },
-  async jwt({ token, user }) {
-    if (user) {
-      token.id = user.id;
-      token.token = user.token;
-    }
-    return token;
-  },
-  async session({ session, token }) {
-    if (token) {
-      session.user.id = token.id;
-      session.user.token = token.token;
-    }
-    return session;
-  }
-},
-  session: {
-    strategy: "jwt",
-  },
-  secret: JWT_SECRET,
-  pages: {
-    signIn: "/login", // Page de connexion personnalisée
-  }
+ }
 } satisfies NextAuthConfig;
