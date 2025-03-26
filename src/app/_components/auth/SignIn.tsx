@@ -48,7 +48,7 @@ const LoginCard: React.FC = () => {
 
     const result = await signIn("credentials", {
       redirect: false,
-      email,
+      contact: email,
       password,
     });
 
