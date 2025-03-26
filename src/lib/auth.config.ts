@@ -7,7 +7,6 @@ import { compare } from "bcryptjs";
 import { db } from "@/lib/db";
 import { z } from "zod";
 
-// Schéma de validation Zod amélioré
 const credentialsSchema = z.object({
   contact: z.string().email("Format d'email invalide"),
   password: z.string().min(8, "Le mot de passe doit contenir au moins 8 caractères")
@@ -15,84 +14,69 @@ const credentialsSchema = z.object({
 
 export default {
   adapter: PrismaAdapter(db),
-  session: {
-    strategy: "jwt",
-  },
-  pages: {
-    signIn: "/login",
-    error: "/login/error",
-  },
+  session: { strategy: "jwt" },
+  pages: { signIn: "/login" },
   providers: [
     GitHub({
       clientId: process.env.AUTH_GITHUB_ID,
       clientSecret: process.env.AUTH_GITHUB_SECRET,
-      authorization: {
-        params: {
-          scope: "user:email",
-        },
-      },
+      authorization: { params: { scope: "user:email" } },
       profile(profile) {
         return {
           id: profile.id.toString(),
           contact: profile.email,
           firstName: profile.name?.split(' ')[0] || '',
           lastName: profile.name?.split(' ').slice(1).join(' ') || '',
+          role: "USER"
         };
-      },
+      }
     }),
     Google({
       clientId: process.env.AUTH_GOOGLE_ID,
       clientSecret: process.env.AUTH_GOOGLE_SECRET,
-      authorization: {
-        params: {
-          prompt: "consent",
-          access_type: "offline",
-          response_type: "code",
-        },
-      },
+      authorization: { params: { access_type: "offline", prompt: "consent" } },
+      profile(profile) {
+        return {
+          id: profile.sub,
+          contact: profile.email,
+          firstName: profile.given_name || '',
+          lastName: profile.family_name || '',
+          role: "USER"
+        };
+      }
     }),
     Credentials({
       name: "Credentials",
       credentials: {
         contact: { label: "Email", type: "email" },
-        password: { label: "Mot de passe", type: "password" },
+        password: { label: "Mot de passe", type: "password" }
       },
       async authorize(credentials) {
         try {
-          const validatedFields = credentialsSchema.safeParse(credentials);
-          
-          if (!validatedFields.success) {
-            return null;
-          }
-
-          const { contact, password } = validatedFields.data;
+          const validated = credentialsSchema.safeParse(credentials);
+          if (!validated.success) return null;
 
           const user = await db.user.findUnique({
-            where: { contact },
+            where: { contact: validated.data.contact },
+            select: { id: true, password: true, firstName: true, lastName: true, role: true }
           });
 
-          if (!user || !user.password) {
-            return null;
-          }
-
-          const passwordMatch = await compare(password, user.password);
-
-          if (!passwordMatch) {
-            return null;
-          }
+          if (!user?.password) return null;
+          if (!await compare(validated.data.password, user.password)) return null;
 
           return {
             id: user.id,
-            contact: user.contact,
+            contact: validated.data.contact,
             firstName: user.firstName,
             lastName: user.lastName,
+            role: user.role
           };
         } catch (error) {
-          console.error("Erreur d'authentification:", error);
+          console.error("Auth Error:", error);
           return null;
         }
-      },
-    }),
+      }
+    })
   ],
   callbacks: {
     async jwt({ token, user }) {
@@ -101,6 +85,7 @@ export default {
         token.contact = user.contact;
         token.firstName = user.firstName;
         token.lastName = user.lastName;
+        token.role = user.role;
       }
       return token;
     },
@@ -110,17 +95,11 @@ export default {
         session.user.contact = token.contact;
         session.user.firstName = token.firstName;
         session.user.lastName = token.lastName;
+        session.user.role = token.role;
       }
       return session;
-    },
-    async signIn({ account }) {
-      // Restreint l'accès aux comptes email non vérifiés si nécessaire
-      if (account?.provider === "credentials") {
-        return true;
-      }
-      return true;
-    },
+    }
   },
   secret: process.env.AUTH_SECRET,
-  debug: process.env.NODE_ENV === "development",
+  debug: process.env.NODE_ENV === "development"
 } satisfies NextAuthConfig;
