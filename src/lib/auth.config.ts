@@ -12,14 +12,23 @@ const credentialsSchema = z.object({
   password: z.string().min(8, "Le mot de passe doit contenir au moins 8 caractères")
 });
 
+// Vérification des variables d'environnement
+if (!process.env.AUTH_GITHUB_ID || !process.env.AUTH_GITHUB_SECRET) {
+  throw new Error("Vois ne pouvez pas authentifier via GitHub pour le moment.");
+}
+
+if (!process.env.AUTH_GOOGLE_ID || !process.env.AUTH_GOOGLE_SECRET) {
+  throw new Error("Vois ne pouvez pas authentifier via Google pour le moment.");
+}
+
 export default {
   adapter: PrismaAdapter(db),
   session: { strategy: "jwt" },
   pages: { signIn: "/login" },
   providers: [
     GitHub({
-      clientId: process.env.AUTH_GITHUB_ID,
-      clientSecret: process.env.AUTH_GITHUB_SECRET,
+      clientId: process.env.AUTH_GITHUB_ID as string,
+      clientSecret: process.env.AUTH_GITHUB_SECRET as string,
       authorization: { params: { scope: "user:email" } },
       profile(profile) {
         return {
@@ -31,9 +40,10 @@ export default {
         };
       }
     }),
+
     Google({
-      clientId: process.env.AUTH_GOOGLE_ID,
-      clientSecret: process.env.AUTH_GOOGLE_SECRET,
+      clientId: process.env.AUTH_GOOGLE_ID as string,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET as string,
       authorization: { params: { access_type: "offline", prompt: "consent" } },
       profile(profile) {
         return {
@@ -45,6 +55,7 @@ export default {
         };
       }
     }),
+
     Credentials({
       name: "Credentials",
       credentials: {
