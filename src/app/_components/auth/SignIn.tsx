@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useRef } from "react";
+import { signIn } from "next-auth/react";
 import "./CSS/styles.css";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -30,46 +31,34 @@ const LoginCard: React.FC = () => {
 
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
-
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
 
-    // Validation côté client avec `zod`
     const validation = loginSchema.safeParse({ email, password });
     if (!validation.success) {
       setLoading(false);
-      const fieldErrors = validation.error.flatten().fieldErrors;
-      setErrors({
-        email: fieldErrors.email?.[0],
-        password: fieldErrors.password?.[0],
-      });
+      setErrors(validation.error.flatten().fieldErrors);
       return;
     }
-    
+
     setErrors({});
 
-    try {
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ contact: email, password }),
-        credentials: "include", // Permet d'envoyer les cookies HTTP-only
-      });
+    const result = await signIn("credentials", {
+      redirect: false,
+      email,
+      password,
+    });
 
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || "Erreur lors de la connexion");
-      }
-
-      router.push("/"); // Redirection sécurisée
-
-    } catch (error) {
-      setError(error instanceof Error ? error.message : "Une erreur inattendue");
-    } finally {
-      setLoading(false);
+    if (result?.error) {
+      setError(result.error);
+    } else {
+      router.push("/");
     }
+
+    setLoading(false);
   };
 
   return (
@@ -124,7 +113,7 @@ const LoginCard: React.FC = () => {
 
       <div className="link-to-login">
         Vous n&apos;avez pas encore un compte ?{" "}
-        <Link href="/auth/sign-up" className="text-primary">Inscrivez-vous ici</Link>.
+        <Link href="/sign-up" className="text-primary">Inscrivez-vous ici</Link>.
       </div>
     </div>
   );
