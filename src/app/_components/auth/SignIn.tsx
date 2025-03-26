@@ -51,7 +51,7 @@ const LoginCard: React.FC = () => {
 
   const result = await signIn("credentials", {
     redirect: false,
-    email, // Corrige aussi ici (avant c'était `contact`, qui ne correspond pas au champ attendu)
+    contact: email, // Corrige aussi ici (avant c'était `contact`, qui ne correspond pas au champ attendu)
     password,
   });
 
