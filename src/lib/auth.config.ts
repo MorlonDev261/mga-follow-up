@@ -4,7 +4,7 @@ import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
 import { compare } from "bcryptjs";
-import { db } from "@/lib/db";
+import db from "@/lib/db";
 import { z } from "zod";
 
 const credentialsSchema = z.object({
