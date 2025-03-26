@@ -125,7 +125,7 @@ export default function Header({ children }: HeaderProps) {
           <div className="flex items-center gap-4">
             <Theme />
             <Link
-              href="/auth/sign-in"
+              href="/login"
               className="text-white bg-blue-500 px-2 py-1 hover:bg-blue-600"
             >
               Se connecter
