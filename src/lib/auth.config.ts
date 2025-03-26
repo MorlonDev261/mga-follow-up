@@ -1,5 +1,4 @@
 import type { NextAuthOptions, User } from "next-auth";
-import type { JWT } from "next-auth/jwt";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
