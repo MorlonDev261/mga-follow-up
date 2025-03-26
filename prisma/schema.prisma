@@ -19,8 +19,6 @@ model User {
   createdAt     DateTime          @default(now())
   updatedAt     DateTime          @updatedAt
   emailVerified DateTime?
-  accounts      Account[]
-  sessions      Session[]
   role          String            @default("USER")
 
   // Relations
