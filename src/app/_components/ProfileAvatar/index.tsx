@@ -25,9 +25,9 @@ export default function ProfileAvatar({ userId }: ProfileProps) {
 
   useEffect(() => {
     if (session?.user) {
-      setProfileSrc(session.user.image || "");
-      setFullname(session.user.name || "User");
-      setContact(session.user.email || "");
+      setProfileSrc(session.user.profilePicture || "");
+      setFullname(((session.user.firstName || '') + ' ' + (session.user.lastName || '')).trim() || 'New User');
+      setContact(session.user.contact || "- - -");
     }
   }, [session]);
 
