@@ -8,53 +8,64 @@ datasource db {
 }
 
 model User {
-  id           Int              @id @default(autoincrement())
-  contact      String           @unique
-  password     String
-  firstName    String
-  lastName     String
-  profilePicture String?        // Photo de profil
-  coverPicture String?          // Photo de couverture
-  purchases    Purchase[]       // Relation avec les achats
-  createdAt    DateTime         @default(now())
-  updatedAt    DateTime         @updatedAt
+  id            String            @id @default(cuid())
+  contact       String            @unique
+  password      String?           @db.Text
+  firstName     String
+  lastName      String
+  profilePicture String?          @db.VarChar(2048)
+  coverPicture  String?           @db.VarChar(2048)
+  purchases     Purchase[]
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+  emailVerified DateTime?
+  accounts      Account[]
+  sessions      Session[]
+  role          String            @default("USER")
 
   // Relations
-  entreprises WorkRelation[]    @relation("EntrepriseWorkers")
-  workers     WorkRelation[]    @relation("WorkerEntreprises")
+  entreprises WorkRelation[]      @relation("EntrepriseWorkers")
+  workers     WorkRelation[]      @relation("WorkerEntreprises")
+  owners      CustomerRelation[] @relation("OwnerCustomers")
+  customers   CustomerRelation[] @relation("CustomerOwners")
 
-  owners     CustomerRelation[] @relation("OwnerCustomers")
-  customers  CustomerRelation[] @relation("CustomerOwners")
+  // Champs compatibilité NextAuth
+  name  String? @map("firstName")
+  image String? @map("profilePicture")
 }
 
 model WorkRelation {
-  id           Int      @id @default(autoincrement())
-  workerId     Int
-  entrepriseId Int
+  id           String   @id @default(cuid())
   worker       User     @relation("WorkerEntreprises", fields: [workerId], references: [id])
   entreprise   User     @relation("EntrepriseWorkers", fields: [entrepriseId], references: [id])
+  workerId     String
+  entrepriseId String
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
   @@unique([workerId, entrepriseId])
+  @@index([workerId])
+  @@index([entrepriseId])
 }
 
 model CustomerRelation {
-  id         Int      @id @default(autoincrement())
-  customerId Int
-  ownerId    Int
+  id         String   @id @default(cuid())
   customer   User     @relation("CustomerOwners", fields: [customerId], references: [id])
   owner      User     @relation("OwnerCustomers", fields: [ownerId], references: [id])
+  customerId String
+  ownerId    String
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
   @@unique([customerId, ownerId])
+  @@index([customerId])
+  @@index([ownerId])
 }
 
 model Purchase {
-  id          Int      @id @default(autoincrement())
-  userId      Int
+  id          String   @id @default(cuid())
   user        User     @relation(fields: [userId], references: [id])
+  userId      String
   productName String
   amount      Float
   createdAt   DateTime @default(now())
