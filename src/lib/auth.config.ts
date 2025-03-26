@@ -33,9 +33,9 @@ export default {
       profile(profile) {
         return {
           id: profile.id.toString(),
-          contact: profile.email,
-          firstName: profile.name?.split(' ')[0] || '',
-          lastName: profile.name?.split(' ').slice(1).join(' ') || '',
+          contact: profile.email ?? '',
+          firstName: profile.name?.split(' ')[0] || 'New',
+          lastName: profile.name?.split(' ').slice(1).join(' ') || 'member',
           role: "USER"
         };
       }
@@ -48,9 +48,9 @@ export default {
       profile(profile) {
         return {
           id: profile.sub,
-          contact: profile.email,
-          firstName: profile.given_name || '',
-          lastName: profile.family_name || '',
+          contact: profile.email ?? '',
+          firstName: profile.given_name || 'New',
+          lastName: profile.family_name || 'member',
           role: "USER"
         };
       }
