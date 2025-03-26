@@ -63,6 +63,7 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Mot de passe", type: "password" }
       },
       async authorize(credentials) {
+        console.log("Credentials received:", credentials);
         try {
           const validated = credentialsSchema.safeParse(credentials);
           if (!validated.success) return null;
