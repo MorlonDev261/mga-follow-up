@@ -1,5 +1,5 @@
 import type { NextAuthConfig } from "next-auth";
-import { PrismaAdapter } from "next-auth/prisma-adapter";
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
