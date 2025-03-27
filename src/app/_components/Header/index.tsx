@@ -108,7 +108,7 @@ export default function Header({ children }: HeaderProps) {
             {/* Profile */}
             <div className="flex items-center gap-2 cursor-pointer" onClick={() => setOpen(!open)}>
               <Avatar className="h-7 w-7 border border-gray-300 dark:border-white">
-                {session.user.profilePicture ? (
+                {session.user.image ? (
                   <AvatarImage src={session.user.image} />
                 ) : (
                   <AvatarFallback>
