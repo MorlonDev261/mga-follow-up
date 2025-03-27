@@ -109,7 +109,7 @@ export default function Header({ children }: HeaderProps) {
             <div className="flex items-center gap-2 cursor-pointer" onClick={() => setOpen(!open)}>
               <Avatar className="h-7 w-7 border border-gray-300 dark:border-white">
                 {session.user.profilePicture ? (
-                  <AvatarImage src={session.user.profilePicture} />
+                  <AvatarImage src={session.user.image} />
                 ) : (
                   <AvatarFallback>
                     {session.user.firstName?.[0]?.toUpperCase() || 'U'}
