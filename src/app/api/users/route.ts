@@ -7,13 +7,13 @@ import type { NextRequest } from "next/server";
 export const config = {
   api: {
     bodyParser: {
-      sizeLimit: "10mb",
+      sizeLimit: "5mb",
     },
   },
 };
 
 const userSchema = z.object({
-  contact: z.string().email("Format d'email invalide").max(100),
+  email: z.string().email("Format d'email invalide").max(100),
   password: z.string()
     .min(8, "Minimum 8 caractères")
     .regex(/[A-Z]/, "Au moins une majuscule")
@@ -68,7 +68,7 @@ export async function GET(req: NextRequest) {
     const users = await db.user.findMany({
       select: {
         id: true,
-        contact: true,
+        email: true,
         password: true,
         firstName: true,
         lastName: true,
@@ -113,10 +113,10 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { contact, password, ...userData } = validation.data;
+    const { email, password, ...userData } = validation.data;
 
     const existingUser = await db.user.findUnique({
-      where: { contact },
+      where: { email },
       select: { id: true },
     });
 
@@ -131,13 +131,13 @@ export async function POST(req: NextRequest) {
 
     const newUser = await db.user.create({
       data: {
-        contact,
+        email,
         password: hashedPassword,
         ...userData,
       },
       select: {
         id: true,
-        contact: true,
+        email: true,
         firstName: true,
         lastName: true,
         createdAt: true,
