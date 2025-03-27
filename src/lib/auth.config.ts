@@ -27,14 +27,14 @@ export default {
     jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        token.contact = user.contact; // Adapter au schéma de la DB
+        token.email = user.email; // Adapter au schéma de la DB
       }
       return token;
     },
     session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string;
-        session.user.contact = token.contact as string;
+        session.user.email = token.email as string;
       }
       return session;
     },
