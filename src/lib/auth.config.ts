@@ -26,18 +26,18 @@ export default {
   callbacks: {
     async session({ session, token }) {
       if (session.user) {
-        session.user.contact = token.contact;
         session.user.firstName = token.firstName;
         session.user.lastName = token.lastName;
+        session.user.coverPicture = token.coverPicture;
         session.user.role = token.role;
       }
       return session;
     },
     async jwt({ token, user }) {
       if (user) {
-        token.contact = user.email;
         token.firstName = user.firstName;
         token.lastName = user.lastName;
+        token.coverPicture = user.coverPicture
         token.role = user.role;
       }
       return token;
