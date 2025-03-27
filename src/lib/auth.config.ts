@@ -1,8 +1,8 @@
-import GitHub from "next-auth/providers/github";
-import Google from "next-auth/providers/google";
+import GitHub from "@auth/core/providers/github";
+import Google from "@auth/core/providers/google";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import db from "@/lib/db";
-import type { NextAuthConfig } from "next-auth";
+import type { AuthConfig } from "@auth/core";
 
 const getEnv = (key: string) => {
   const value = process.env[key];
@@ -27,18 +27,18 @@ export default {
     jwt({ token, user }) {
       if (user) {
         token.id = user.id;
-        token.email = user.email;
+        token.contact = user.contact; // Adapter au schéma de la DB
       }
       return token;
     },
     session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string;
-        session.user.email = token.email as string;
+        session.user.contact = token.contact as string;
       }
       return session;
     },
   },
   secret: getEnv("AUTH_SECRET"),
   trustHost: true,
-} satisfies NextAuthConfig;
+} satisfies AuthConfig;
