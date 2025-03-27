@@ -18,9 +18,15 @@ export default {
     }),
   ],
   callbacks: {
-    async session({ session, user }) {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id; // Ajoute l'ID à l'objet JWT si l'utilisateur est défini
+      }
+      return token;
+    },
+    async session({ session, token }) {
       if (session.user) {
-        session.user.id = user.id; // Ajoute l'ID de l'utilisateur à la session
+        session.user.id = token.id; // Récupère l'ID depuis le JWT
       }
       return session;
     },
