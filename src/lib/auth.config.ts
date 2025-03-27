@@ -24,21 +24,25 @@ export default {
     }),
   ],
   callbacks: {
-    jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
-        token.email = user.email; // Adapter au schéma de la DB
-      }
-      return token;
-    },
-    session({ session, token }) {
+    async session({ session, token }) {
       if (session.user) {
-        session.user.id = token.id as string;
-        session.user.email = token.email as string;
+        session.user.email = token.contact as string;
+        session.user.firstName = token.firstName as string;
+        session.user.lastName = token.lastName as string;
+        session.user.role = token.role as string;
       }
       return session;
     },
+    async jwt({ token, user }) {
+      if (user) {
+        token.email = user.email;
+        token.firstName = user.firstName;
+        token.lastName = user.lastName;
+        token.role = user.role;
+      }
+    return token;
   },
+},
   secret: getEnv("AUTH_SECRET"),
   trustHost: true,
 } satisfies AuthConfig;
