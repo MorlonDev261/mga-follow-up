@@ -15,6 +15,6 @@ export default async function Page() {
   console.log(result); // Vérifie la réponse ici
 };
   return (
-    <button onClick={handleLogin}>Se connecter</button>;
+    <button onClick={handleLogin}>Se connecter</button>
   );
 }
