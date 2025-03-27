@@ -8,24 +8,52 @@ datasource db {
 }
 
 model User {
-  id            String            @id @default(cuid())
-  contact       String            @unique
-  password      String?           @db.Text
+  id            String   @id @default(cuid())
+  email         String   @unique
+  tel           String?  @unique  // Corrigé : Prisma ne supporte pas Number ici
+  password      String?  @db.Text
   firstName     String
   lastName      String
-  profilePicture String?          @db.VarChar(2048)
-  coverPicture  String?           @db.VarChar(2048)
-  purchases     Purchase[]
-  createdAt     DateTime          @default(now())
-  updatedAt     DateTime          @updatedAt
+  profilePicture String? @db.VarChar(2048)
+  coverPicture  String? @db.VarChar(2048)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
   emailVerified DateTime?
-  role          String            @default("USER")
+  role          String   @default("USER")
 
-  // Relations
+  // Champs requis par NextAuth
+  accounts      Account[]
+  sessions      Session[]
+
+  // Relations personnalisées
   entreprises WorkRelation[]      @relation("EntrepriseWorkers")
   workers     WorkRelation[]      @relation("WorkerEntreprises")
-  owners      CustomerRelation[] @relation("OwnerCustomers")
-  customers   CustomerRelation[] @relation("CustomerOwners")
+  owners      CustomerRelation[]  @relation("OwnerCustomers")
+  customers   CustomerRelation[]  @relation("CustomerOwners")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String @unique
+  access_token      String? 
+  expires_at        Int?
+  refresh_token     String?
+  scope             String?
+  token_type        String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model WorkRelation {
