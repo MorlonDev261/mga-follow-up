@@ -2,7 +2,6 @@ declare module "next-auth" {
   interface User {
     firstName?: string;
     lastName?: string;
-    profilePicture?: string;
     coverPicture?: string;
     role?: string;
   }
@@ -14,7 +13,6 @@ declare module "next-auth" {
   interface JWT {
     firstName?: string;
     lastName?: string;
-    profilePicture?: string;
     coverPicture?: string;
     role?: string;
   }
