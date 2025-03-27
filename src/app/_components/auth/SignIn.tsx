@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useRef } from "react";
-import { signIn } from "next-auth/react";
 import "./CSS/styles.css";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -50,7 +49,7 @@ const LoginCard: React.FC = () => {
 
   setErrors({});
 
-  const result = await signIn("credentials", {
+ /* const result = await signIn("credentials", {
     redirect: false,
     contact: email, // Corrige aussi ici (avant c'était `contact`, qui ne correspond pas au champ attendu)
     password,
@@ -60,7 +59,7 @@ const LoginCard: React.FC = () => {
     setError(result.error);
   } else {
     router.push("/");
-  }
+  } */
 
   setLoading(false);
 };
