@@ -13,13 +13,42 @@ const credentialsSchema = z.object({
 });
 
 // Vérification des variables d'environnement
-if (!process.env.AUTH_GITHUB_ID || !process.env.AUTH_GITHUB_SECRET) {
-  throw new Error("Vous ne pouvez pas authentifier via GitHub pour le moment.");
+const env = {
+  GITHUB: {
+    ID: process.env.AUTH_GITHUB_ID,
+    SECRET: process.env.AUTH_GITHUB_SECRET
+  },
+  GOOGLE: {
+    ID: process.env.AUTH_GOOGLE_ID,
+    SECRET: process.env.AUTH_GOOGLE_SECRET
+  },
+  SECRET: process.env.NEXTAUTH_SECRET
+} as const;
+
+if (!env.GITHUB.ID || !env.GITHUB.SECRET) {
+  throw new Error("Configuration GitHub manquante");
 }
 
-if (!process.env.AUTH_GOOGLE_ID || !process.env.AUTH_GOOGLE_SECRET) {
-  throw new Error("Vous ne pouvez pas authentifier via Google pour le moment.");
+if (!env.GOOGLE.ID || !env.GOOGLE.SECRET) {
+  throw new Error("Configuration Google manquante");
 }
+
+if (!env.SECRET) {
+  throw new Error("NEXTAUTH_SECRET manquant");
+}
+
+const secureCookies = process.env.NODE_ENV === "production" ? {
+  sessionToken: {
+    name: "__Secure-next-auth.session-token",
+    options: {
+      httpOnly: true,
+      sameSite: "lax",
+      path: "/",
+      secure: true,
+      domain: process.env.NEXTAUTH_COOKIE_DOMAIN
+    }
+  }
+} : undefined;
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db),
@@ -27,54 +56,81 @@ export const authOptions: NextAuthOptions = {
   pages: { signIn: "/login" },
   providers: [
     GitHub({
-      clientId: process.env.AUTH_GITHUB_ID as string,
-      clientSecret: process.env.AUTH_GITHUB_SECRET as string,
+      clientId: env.GITHUB.ID,
+      clientSecret: env.GITHUB.SECRET,
       authorization: { params: { scope: "user:email" } },
       profile(profile) {
         return {
           id: profile.id.toString(),
-          contact: profile.email || "no-email@example.com", // Assurer une valeur string
-          firstName: profile.name?.split(" ")[0] || "New",
-          lastName: profile.name?.split(" ").slice(1).join(" ") || "Member",
+          contact: profile.email || `${profile.id}@github.none`,
+          firstName: profile.name?.split(" ")[0] || "Nouveau",
+          lastName: profile.name?.split(" ").slice(1).join(" ") || "Utilisateur",
           role: "USER"
-        } as User;
+        } satisfies User;
       }
     }),
 
     Google({
-      clientId: process.env.AUTH_GOOGLE_ID as string,
-      clientSecret: process.env.AUTH_GOOGLE_SECRET as string,
-      authorization: { params: { access_type: "offline", prompt: "consent" } },
+      clientId: env.GOOGLE.ID,
+      clientSecret: env.GOOGLE.SECRET,
+      authorization: { 
+        params: { 
+          access_type: "offline",
+          prompt: "consent",
+          scope: "openid email profile" 
+        }
+      },
       profile(profile) {
         return {
           id: profile.sub,
-          contact: profile.email || "no-email@example.com",
-          firstName: profile.given_name || "New",
-          lastName: profile.family_name || "Member",
+          contact: profile.email || `${profile.sub}@google.none`,
+          firstName: profile.given_name || "Nouveau",
+          lastName: profile.family_name || "Utilisateur",
           role: "USER"
-        } as User;
+        } satisfies User;
       }
     }),
 
     Credentials({
-      name: "Credentials",
+      name: "Identifiants",
       credentials: {
         contact: { label: "Email", type: "email" },
         password: { label: "Mot de passe", type: "password" }
       },
       async authorize(credentials) {
-        console.log("Credentials received:", credentials);
         try {
           const validated = credentialsSchema.safeParse(credentials);
-          if (!validated.success) return null;
+          if (!validated.success) {
+            console.error("Erreur validation:", validated.error.format());
+            return null;
+          }
 
           const user = await db.user.findUnique({
             where: { contact: validated.data.contact },
-            select: { id: true, password: true, firstName: true, lastName: true, role: true }
+            select: { 
+              id: true, 
+              password: true, 
+              firstName: true, 
+              lastName: true, 
+              role: true 
+            }
           });
 
-          if (!user?.password) return null;
-          if (!await compare(validated.data.password, user.password)) return null;
+          if (!user) {
+            console.log("Utilisateur non trouvé");
+            return null;
+          }
+
+          if (!user.password) {
+            console.log("Compte non activé (pas de mot de passe)");
+            return null;
+          }
+
+          const isValid = await compare(validated.data.password, user.password);
+          if (!isValid) {
+            console.log("Mot de passe incorrect");
+            return null;
+          }
 
           return {
             id: user.id,
@@ -82,9 +138,10 @@ export const authOptions: NextAuthOptions = {
             firstName: user.firstName,
             lastName: user.lastName,
             role: user.role
-          } as User;
+          } satisfies User;
+
         } catch (error) {
-          console.error("Auth Error:", error);
+          console.error("Erreur d'authentification:", error);
           return null;
         }
       }
@@ -112,6 +169,8 @@ export const authOptions: NextAuthOptions = {
       return session;
     }
   },
-  secret: process.env.NEXTAUTH_SECRET,
+  cookies: secureCookies,
+  useSecureCookies: process.env.NODE_ENV === "production",
+  secret: env.NEXTAUTH_SECRET,
   debug: process.env.NODE_ENV === "development"
 };
