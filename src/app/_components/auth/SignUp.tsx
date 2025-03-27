@@ -181,10 +181,7 @@ const SignUpCard: React.FC = () => {
       const response = await fetch("/api/users", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...validation.data,
-          contact: validation.data.email,
-        }),
+        body: JSON.stringify(validation.data),
       });
 
       const data = await response.json();
