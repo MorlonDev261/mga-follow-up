@@ -112,12 +112,12 @@ export default function Header({ children }: HeaderProps) {
                   <AvatarImage src={session.user.image} />
                 ) : (
                   <AvatarFallback>
-                    {session.user.firstName?.[0]?.toUpperCase() || 'U'}
+                    {session.user.name?.[0]?.toUpperCase() || 'MGA'}
                   </AvatarFallback>
                 )}
               </Avatar>
               <span className="hidden md:block text-gray-800 dark:text-white">
-                Hi, {session.user.firstName?.split(' ')[0] || 'User'}
+                Hi, {session.user.name?.split(' ')[0] || 'User'}
               </span>
             </div>
           </div>
