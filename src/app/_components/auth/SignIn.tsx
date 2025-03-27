@@ -13,6 +13,7 @@ import { FaEnvelope, FaLock } from "react-icons/fa";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { z } from "zod";
+import ButtonSocials from "@components/ButtonSocials";
 
 // Schéma de validation
 const loginSchema = z.object({
@@ -114,6 +115,8 @@ const LoginCard: React.FC = () => {
         </Button>
       </form>
 
+      <ButtonSocials />
+      
       <div className="link-to-login">
         Vous n&apos;avez pas encore un compte ?{" "}
         <Link href="/sign-up" className="text-primary">Inscrivez-vous ici</Link>.
