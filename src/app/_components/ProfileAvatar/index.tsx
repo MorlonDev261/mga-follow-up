@@ -25,9 +25,9 @@ export default function ProfileAvatar({ userId }: ProfileProps) {
 
   useEffect(() => {
     if (session?.user) {
-      setProfileSrc(session.user.profilePicture || "");
-      setFullname(((session.user.firstName || '') + ' ' + (session.user.lastName || '')).trim() || 'New User');
-      setContact(session.user.contact || "- - -");
+      setProfileSrc(session.user.image || "");
+      setFullname(session.user.name || 'New User');
+      setContact(session.user.email || "- - -");
     }
   }, [session]);
 
@@ -37,10 +37,10 @@ export default function ProfileAvatar({ userId }: ProfileProps) {
         .then((response) => response.json())
         .then((res) => {
           if (res) {
-            setCoverSrc(res?.pdc || "");
-            setProfileSrc(res?.pdp || "");
+            setCoverSrc(res?.coverPicture || "");
+            setProfileSrc(res?.image || "");
             setFullname(res?.name || "User");
-            setContact(res?.contact || "");
+            setContact(res?.email || "");
           }
         })
         .catch((error) => console.error(error));
