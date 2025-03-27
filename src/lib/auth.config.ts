@@ -23,22 +23,6 @@ export default {
       clientSecret: getEnv("AUTH_GOOGLE_SECRET"),
     }),
   ],
-  callbacks: {
-    async session({ session, token }) {
-      if (session.user) {
-        session.user.coverPicture = token.coverPicture;
-        session.user.role = token.role;
-      }
-      return session;
-    },
-    async jwt({ token, user }) {
-      if (user) {
-        token.coverPicture = user.coverPicture
-        token.role = user.role;
-      }
-      return token;
-    },
-  },
   secret: getEnv("AUTH_SECRET"),
   trustHost: true,
 } satisfies AuthConfig;
