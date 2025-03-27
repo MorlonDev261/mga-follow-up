@@ -8,28 +8,31 @@ datasource db {
 }
 
 model User {
-  id            String   @id @default(cuid())
-  email         String   @unique
-  tel           String?  @unique  // Corrigé : Prisma ne supporte pas Number ici
-  password      String?  @db.Text
-  firstName     String
-  lastName      String
-  profilePicture String? @db.VarChar(2048)
-  coverPicture  String? @db.VarChar(2048)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  emailVerified DateTime?
-  role          String   @default("USER")
+  id             String   @id @default(cuid())
+  email          String   @unique
+  tel            String?  @unique  // ✅ Correction : `tel` doit être String
+  password       String?  @db.Text
+  firstName      String
+  lastName       String
+  profilePicture String?  @db.VarChar(2048)
+  coverPicture   String?  @db.VarChar(2048)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  emailVerified  DateTime?
+  role           String   @default("USER")
 
   // Champs requis par NextAuth
   accounts      Account[]
   sessions      Session[]
 
   // Relations personnalisées
-  entreprises WorkRelation[]      @relation("EntrepriseWorkers")
-  workers     WorkRelation[]      @relation("WorkerEntreprises")
-  owners      CustomerRelation[]  @relation("OwnerCustomers")
-  customers   CustomerRelation[]  @relation("CustomerOwners")
+  entreprises   WorkRelation[]      @relation("EntrepriseWorkers")
+  workers       WorkRelation[]      @relation("WorkerEntreprises")
+  owners        CustomerRelation[]  @relation("OwnerCustomers")
+  customers     CustomerRelation[]  @relation("CustomerOwners")
+  
+  // ✅ Relation avec `Purchase`
+  purchases     Purchase[]
 }
 
 model Account {
@@ -46,6 +49,8 @@ model Account {
   id_token          String?
   session_state     String?
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId]) // ✅ Index pour améliorer les performances
 }
 
 model Session {
@@ -54,6 +59,8 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId]) // ✅ Index pour améliorer les performances
 }
 
 model WorkRelation {
@@ -86,10 +93,12 @@ model CustomerRelation {
 
 model Purchase {
   id          String   @id @default(cuid())
-  user        User     @relation(fields: [userId], references: [id])
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade) // ✅ Ajout de `onDelete: Cascade`
   userId      String
   productName String
   amount      Float
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  @@index([userId]) // ✅ Index pour améliorer les requêtes
 }
