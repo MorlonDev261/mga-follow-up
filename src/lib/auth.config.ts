@@ -26,23 +26,23 @@ export default {
   callbacks: {
     async session({ session, token }) {
       if (session.user) {
-        session.user.email = token.contact as string;
-        session.user.firstName = token.firstName as string;
-        session.user.lastName = token.lastName as string;
-        session.user.role = token.role as string;
+        session.user.contact = token.contact;
+        session.user.firstName = token.firstName;
+        session.user.lastName = token.lastName;
+        session.user.role = token.role;
       }
       return session;
     },
     async jwt({ token, user }) {
       if (user) {
-        token.email = user.email;
+        token.contact = user.email;
         token.firstName = user.firstName;
         token.lastName = user.lastName;
         token.role = user.role;
       }
-    return token;
+      return token;
+    },
   },
-},
   secret: getEnv("AUTH_SECRET"),
   trustHost: true,
 } satisfies AuthConfig;
