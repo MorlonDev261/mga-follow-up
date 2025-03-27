@@ -4,31 +4,41 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import db from "@/lib/db";
 import type { NextAuthConfig } from "next-auth";
 
+const getEnv = (key: string) => {
+  const value = process.env[key];
+  if (!value) throw new Error(`Missing environment variable: ${key}`);
+  return value;
+};
+
 export default {
   adapter: PrismaAdapter(db),
   session: { strategy: "jwt" },
   providers: [
     GitHub({
-      clientId: process.env.AUTH_GITHUB_ID!,
-      clientSecret: process.env.AUTH_GITHUB_SECRET!,
+      clientId: getEnv("AUTH_GITHUB_ID"),
+      clientSecret: getEnv("AUTH_GITHUB_SECRET"),
     }),
     Google({
-      clientId: process.env.AUTH_GOOGLE_ID!,
-      clientSecret: process.env.AUTH_GOOGLE_SECRET!,
+      clientId: getEnv("AUTH_GOOGLE_ID"),
+      clientSecret: getEnv("AUTH_GOOGLE_SECRET"),
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    jwt({ token, user }) {
       if (user) {
-        token.id = user.id; // Ajoute l'ID à l'objet JWT si l'utilisateur est défini
+        token.id = user.id;
+        token.email = user.email;
       }
       return token;
     },
-    async session({ session, token }) {
+    session({ session, token }) {
       if (session.user) {
-        session.user.id = token.id; // Récupère l'ID depuis le JWT
+        session.user.id = token.id as string;
+        session.user.email = token.email as string;
       }
       return session;
     },
   },
+  secret: getEnv("AUTH_SECRET"),
+  trustHost: true,
 } satisfies NextAuthConfig;
