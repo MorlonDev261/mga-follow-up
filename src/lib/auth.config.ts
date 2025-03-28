@@ -1,3 +1,5 @@
+import GitHub from "next-auth/providers/github";
+import Google from "next-auth/providers/google";
 import type { AuthOptions } from "next-auth";
 
 export const authConfig: AuthOptions = {
