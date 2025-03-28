@@ -1,8 +1,9 @@
+// auth.config.ts
 import GitHub from "@auth/core/providers/github";
 import Google from "@auth/core/providers/google";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import db from "@/lib/db";
-import type { AuthConfig } from "@auth/core";
+import type { AuthConfig } from "@auth/core/types";
 
 const getEnv = (key: string) => {
   const value = process.env[key];
@@ -25,4 +26,10 @@ export default {
   ],
   secret: getEnv("AUTH_SECRET"),
   trustHost: true,
+  // Ajoutez la configuration de base pour Next.js
+  basePath: "/api/auth",
+  pages: {
+    signIn: "/login",
+    error: "/auth/error",
+  }
 } satisfies AuthConfig;
