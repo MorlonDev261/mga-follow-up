@@ -3,6 +3,7 @@ import Google from "next-auth/providers/google";
 import type { AuthOptions } from "next-auth";
 
 export const authConfig: AuthOptions = {
+  secret: process.env.NEXTAUTH_SECRET,
   session: { strategy: "jwt" as const }, // Ajout du `as const`
   providers: [
     GitHub({
