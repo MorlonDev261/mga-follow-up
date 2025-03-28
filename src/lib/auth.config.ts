@@ -1,35 +1,16 @@
-// auth.config.ts
-import GitHub from "@auth/core/providers/github";
-import Google from "@auth/core/providers/google";
-import { PrismaAdapter } from "@auth/prisma-adapter";
-import db from "@/lib/db";
-import type { AuthConfig } from "@auth/core/types";
-
-const getEnv = (key: string) => {
-  const value = process.env[key];
-  if (!value) throw new Error(`Missing environment variable: ${key}`);
-  return value;
-};
+import GitHub from "next-auth/providers/github";
+import Google from "next-auth/providers/google";
+import type { NextAuthConfig } from "next-auth";
 
 export default {
-  adapter: PrismaAdapter(db),
-  session: { strategy: "jwt" },
   providers: [
     GitHub({
-      clientId: getEnv("AUTH_GITHUB_ID"),
-      clientSecret: getEnv("AUTH_GITHUB_SECRET"),
+      clientId: process.env.AUTH_GITHUB_ID,
+      clientSecret: process.env.AUTH_GITHUB_SECRET
     }),
     Google({
-      clientId: getEnv("AUTH_GOOGLE_ID"),
-      clientSecret: getEnv("AUTH_GOOGLE_SECRET"),
-    }),
-  ],
-  secret: getEnv("AUTH_SECRET"),
-  trustHost: true,
-  // Ajoutez la configuration de base pour Next.js
-  basePath: "/api/auth",
-  pages: {
-    signIn: "/login",
-    error: "/auth/error",
-  }
-} satisfies AuthConfig;
+      clientId: process.env.AUTH_GOOGLE_ID,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET
+    })
+  ]
+} satisfies NextAuthConfig;
