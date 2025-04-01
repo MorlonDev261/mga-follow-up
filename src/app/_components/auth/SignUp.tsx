@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
+import ButtonSocials from "@components/ButtonSocials";
 import { z } from "zod";
 
 const signupSchema = z.object({
@@ -247,6 +248,14 @@ const SignUpCard: React.FC = () => {
           {loading ? <Spinner size="sm" className="mx-auto" /> : "S'inscrire"}
         </Button>
       </form>
+
+      <div className="flex items-center my-4">
+        <div className="flex-grow border-t border-gray-300"></div>
+        <span className="px-4 text-gray-500 text-sm">OR</span>
+        <div className="flex-grow border-t border-gray-300"></div>
+      </div>
+
+      <ButtonSocials />
 
       <p className="mt-6 text-center text-sm text-muted-foreground">
         Déjà un compte ?{" "}
