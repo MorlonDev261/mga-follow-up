@@ -18,14 +18,6 @@ const userSchema = z.object({
     .min(8, "Minimum 8 caractères")
     .regex(/[A-Z]/, "Au moins une majuscule")
     .regex(/[0-9]/, "Au moins un chiffre"),
-  firstName: z.string()
-    .min(2, "Minimum 2 caractères")
-    .max(50, "Maximum 50 caractères")
-    .regex(/^[a-zA-ZÀ-ÿ -]+$/, "Caractères non autorisés"),
-  lastName: z.string()
-    .min(2, "Minimum 2 caractères")
-    .max(50, "Maximum 50 caractères")
-    .regex(/^[a-zA-ZÀ-ÿ -]+$/, "Caractères non autorisés"),
 });
 
 // Correction : Déplacer l'interface avant son utilisation
@@ -70,8 +62,6 @@ export async function GET(req: NextRequest) {
         id: true,
         email: true,
         password: true,
-        firstName: true,
-        lastName: true,
         createdAt: true,
       },
       orderBy: { createdAt: 'desc' },
