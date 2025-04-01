@@ -128,8 +128,6 @@ export async function POST(req: NextRequest) {
       select: {
         id: true,
         email: true,
-        firstName: true,
-        lastName: true,
         createdAt: true,
       },
     });
