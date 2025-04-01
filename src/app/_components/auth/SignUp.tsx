@@ -15,66 +15,6 @@ import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { z } from "zod";
 
 const signupSchema = z.object({
-  firstName: z.string().trim().superRefine((val, ctx) => {
-    if (val === "") {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Veuillez renseigner ce champ"
-      });
-      return z.NEVER;
-    }
-    if (val.length < 2) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Minimum 2 caractères"
-      });
-      return z.NEVER;
-    }
-    if (val.length > 50) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Maximum 50 caractères"
-      });
-      return z.NEVER;
-    }
-    if (!/^[a-zA-ZÀ-ÿ -]+$/.test(val)) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Caractères non autorisés"
-      });
-      return z.NEVER;
-    }
-  }),
-  lastName: z.string().trim().superRefine((val, ctx) => {
-    if (val === "") {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Veuillez renseigner ce champ"
-      });
-      return z.NEVER;
-    }
-    if (val.length < 2) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Minimum 2 caractères"
-      });
-      return z.NEVER;
-    }
-    if (val.length > 50) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Maximum 50 caractères"
-      });
-      return z.NEVER;
-    }
-    if (!/^[a-zA-ZÀ-ÿ -]+$/.test(val)) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Caractères non autorisés"
-      });
-      return z.NEVER;
-    }
-  }),
   email: z.string().trim().superRefine((val, ctx) => {
     if (val === "") {
       ctx.addIssue({
@@ -152,8 +92,6 @@ type FormErrors = z.inferFlattenedErrors<typeof signupSchema>["fieldErrors"];
 
 const SignUpCard: React.FC = () => {
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
     email: "",
     password: "",
     confPassword: "",
@@ -244,40 +182,6 @@ const SignUpCard: React.FC = () => {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="b">
-          <div className="form-group">
-            <Label htmlFor="firstName">Prénom</Label>
-            <div className={cn("form-input", errors.firstName && "border-destructive")}>
-              <FaUser className="text-muted-foreground icon" />
-              <input
-                id="firstName"
-                value={formData.firstName}
-                onChange={(e) => handleChange('firstName', e.target.value)}
-                aria-invalid={!!errors.firstName}
-              />
-            </div>
-            {errors.firstName?.map((msg, i) => (
-              <p key={i} className="text-sm text-destructive mt-1">{msg}</p>
-            ))}
-          </div>
-
-          <div className="form-group">
-            <Label htmlFor="lastName">Nom</Label>
-            <div className={cn("form-input", errors.lastName && "border-destructive")}>
-              <FaUser className="text-muted-foreground icon" />
-              <input
-                id="lastName"
-                value={formData.lastName}
-                onChange={(e) => handleChange('lastName', e.target.value)}
-                aria-invalid={!!errors.lastName}
-              />
-            </div>
-            {errors.lastName?.map((msg, i) => (
-              <p key={i} className="text-sm text-destructive mt-1">{msg}</p>
-            ))}
-          </div>
-        </div>
-
         <div className="space-y-2 form-group">
           <Label htmlFor="email">Email</Label>
           <div className={cn("form-input", errors.email && "border-destructive")}>
