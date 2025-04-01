@@ -4,7 +4,7 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import { FaGoogle, FaGithub } from "react-icons/fa";
+import { FcGoogle, FaGithub } from "react-icons/fa";
 
 const ButtonSocials: React.FC = () => {
   const [loading, setLoading] = useState({
@@ -25,7 +25,7 @@ const ButtonSocials: React.FC = () => {
   return (
     <div className="flex flex-col gap-2">
       <Button variant="outline" className="flex items-center gap-2" onClick={() => handleAuth("google")}>
-        {loading.google ? <Spinner size="sm" /> : <FaGoogle />}
+        {loading.google ? <Spinner size="sm" /> : <FcGoogle />}
         Continuer avec Google
       </Button>
 
