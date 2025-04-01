@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
-import "./CSS/styles.css";
+import React, { useState, useRef, useTransition } from "react";
 import Link from "next/link";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -11,7 +10,8 @@ import { FaEnvelope, FaLock } from "react-icons/fa";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { z } from "zod";
-import ButtonSocials from "@components/ButtonSocials";
+import ButtonSocials from "@/components/ButtonSocials";
+import { login } from "@/actions/auth"; // Assure-toi que cette fonction existe
 
 // Schéma de validation
 const loginSchema = z.object({
@@ -25,42 +25,32 @@ const LoginCard: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-
+  const [isPending, startTransition] = useTransition();
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
-  
-  const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setLoading(true);
-  setError(null);
 
-  const validation = loginSchema.safeParse({ email, password });
-  if (!validation.success) {
-    setLoading(false);
-    setErrors({
-      email: validation.error.flatten().fieldErrors.email?.[0], // Prend uniquement la première erreur
-      password: validation.error.flatten().fieldErrors.password?.[0],
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+
+    const validation = loginSchema.safeParse({ email, password });
+    if (!validation.success) {
+      setErrors({
+        email: validation.error.flatten().fieldErrors.email?.[0],
+        password: validation.error.flatten().fieldErrors.password?.[0],
+      });
+      return;
+    }
+
+    setErrors({});
+
+    startTransition(async () => {
+      const result = await login({ email, password });
+      if (result?.error) {
+        setError(result.error);
+      }
     });
-    return;
-  }
-
-  setErrors({});
-
- /* const result = await signIn("credentials", {
-    redirect: false,
-    contact: email, // Corrige aussi ici (avant c'était `contact`, qui ne correspond pas au champ attendu)
-    password,
-  });
-
-  if (result?.error) {
-    setError(result.error);
-  } else {
-    router.push("/");
-  } */
-
-  setLoading(false);
-};
+  };
 
   return (
     <div className="auth-container">
@@ -73,7 +63,7 @@ const LoginCard: React.FC = () => {
         </Alert>
       )}
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={onSubmit}>
         <div className="form-group">
           <div className={cn("form-input", { "not-valid": errors.email })}>
             <FaEnvelope className="icon" />
@@ -82,6 +72,7 @@ const LoginCard: React.FC = () => {
               type="email"
               placeholder="Adresse e-mail"
               value={email}
+              disabled={isPending}
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
@@ -96,6 +87,7 @@ const LoginCard: React.FC = () => {
               type={showPassword ? "text" : "password"}
               placeholder="Mot de passe"
               value={password}
+              disabled={isPending}
               onChange={(e) => setPassword(e.target.value)}
             />
             {showPassword ? (
@@ -107,14 +99,14 @@ const LoginCard: React.FC = () => {
           {errors.password && <div className="error">{errors.password}</div>}
         </div>
 
-        <Button type="submit" className="w-full" disabled={loading}>
-          {loading ? <Spinner size="sm" /> : "Se connecter"}
+        <Button type="submit" className="w-full" disabled={isPending}>
+          {isPending ? <Spinner size="sm" /> : "Se connecter"}
         </Button>
       </form>
 
       <div className="flex items-center my-4">
         <div className="flex-grow border-t border-gray-300"></div>
-        <span className="px-4 text-gray-500 text-sm">OR</span>
+        <span className="px-4 text-gray-500 text-sm">OU</span>
         <div className="flex-grow border-t border-gray-300"></div>
       </div>
 
