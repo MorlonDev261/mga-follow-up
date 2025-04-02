@@ -32,7 +32,6 @@ const LoginCard: React.FC = () => {
   const onSubmit = (values: z.infer<typeof LoginSchema>) => {
     setError(null);
 
-    const validation = loginSchema.safeParse({ email, password });
     if (!validation.success) {
       setErrors({
         email: validation.error.flatten().fieldErrors.email?.[0],
@@ -62,7 +61,7 @@ const LoginCard: React.FC = () => {
         </Alert>
       )}
 
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form onSubmit={onSubmit}>
         <div className="form-group">
           <div className={cn("form-input", { "not-valid": errors.email })}>
             <FaEnvelope className="icon" />
