@@ -17,7 +17,7 @@ import { login } from "@/actions/auth/login";
 // Schéma de validation
 const LoginSchema = z.object({
   email: z.string().min(1, "Veuillez remplir ce champ.").email("Veuillez entrer un email valide."),
-  password: z.string().min(6, "Le mot de passe doit contenir au moins 6 caractères."),
+  password: z.string().min(1, "Veuillez remplir ce champ."),
 });
 
 const LoginCard: React.FC = () => {
