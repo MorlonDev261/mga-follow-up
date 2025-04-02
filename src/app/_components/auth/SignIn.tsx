@@ -13,7 +13,7 @@ import { z } from "zod";
 import ButtonSocials from "./ButtonSocials";
 import { login } from "@/actions/auth/login";
 // Schéma de validation
-const loginSchema = z.object({
+const LoginSchema = z.object({
   email: z.string().email("Veuillez entrer une adresse e-mail valide."),
   password: z.string().min(6, "Le mot de passe doit contenir au moins 6 caractères."),
 });
@@ -31,7 +31,7 @@ const LoginCard: React.FC = () => {
   const onSubmit = (values: z.infer<typeof LoginSchema>) => {
     setError(null);
 
-    const validation = loginSchema.safeParse({ email, password });
+    const validation = LoginSchema.safeParse({ email, password });
     if (!validation.success) {
       setErrors({
         email: validation.error.flatten().fieldErrors.email?.[0],
