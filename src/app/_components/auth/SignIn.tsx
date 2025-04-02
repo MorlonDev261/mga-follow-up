@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useTransition } from "react";
 import Link from "next/link";
+import "./CSS/styles.css";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
