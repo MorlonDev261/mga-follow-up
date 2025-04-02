@@ -29,8 +29,7 @@ const LoginCard: React.FC = () => {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
-  const onSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = (values: z.infer<typeof LoginSchema>) => {
     setError(null);
 
     const validation = loginSchema.safeParse({ email, password });
@@ -41,16 +40,16 @@ const LoginCard: React.FC = () => {
       });
       return;
     }
-
-    setErrors({});
-
+    
     startTransition(async () => {
       const result = await login({ email, password });
       if (result?.error) {
         setError(result.error);
       }
     });
-  };
+    
+    console. log(values);
+  }
 
   return (
     <div className="auth-container">
@@ -63,7 +62,7 @@ const LoginCard: React.FC = () => {
         </Alert>
       )}
 
-      <form onSubmit={onSubmit}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="form-group">
           <div className={cn("form-input", { "not-valid": errors.email })}>
             <FaEnvelope className="icon" />
