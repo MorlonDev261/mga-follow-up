@@ -11,8 +11,7 @@ import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { z } from "zod";
 import ButtonSocials from "@/components/ButtonSocials";
-import { login } from "@/actions/auth"; // Assure-toi que cette fonction existe
-
+import { login } from "@/actions/auth/login";
 // Schéma de validation
 const loginSchema = z.object({
   email: z.string().email("Veuillez entrer une adresse e-mail valide."),
