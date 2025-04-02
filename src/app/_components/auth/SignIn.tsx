@@ -61,7 +61,7 @@ const LoginCard: React.FC = () => {
         </Alert>
       )}
 
-      <form onSubmit={onSubmit}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="form-group">
           <div className={cn("form-input", { "not-valid": errors.email })}>
             <FaEnvelope className="icon" />
