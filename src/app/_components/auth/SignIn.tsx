@@ -12,6 +12,7 @@ import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { z } from "zod";
 import ButtonSocials from "./ButtonSocials";
 import { login } from "@/actions/auth/login";
+
 // Schéma de validation
 const LoginSchema = z.object({
   email: z.string().email("Veuillez entrer une adresse e-mail valide."),
@@ -28,7 +29,8 @@ const LoginCard: React.FC = () => {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
-  const onSubmit = (values: z.infer<typeof LoginSchema>) => {
+  const onSubmit = (event: React.FormEvent) => {
+    event.preventDefault(); // Empêcher le rechargement de la page
     setError(null);
 
     const validation = LoginSchema.safeParse({ email, password });
@@ -39,16 +41,16 @@ const LoginCard: React.FC = () => {
       });
       return;
     }
-    
+
     startTransition(async () => {
       const result = await login({ email, password });
       if (result?.error) {
         setError(result.error);
       }
     });
-    
-    console. log(values);
-  }
+
+    console.log({ email, password });
+  };
 
   return (
     <div className="auth-container">
@@ -61,7 +63,7 @@ const LoginCard: React.FC = () => {
         </Alert>
       )}
 
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form onSubmit={onSubmit}>
         <div className="form-group">
           <div className={cn("form-input", { "not-valid": errors.email })}>
             <FaEnvelope className="icon" />
@@ -109,7 +111,7 @@ const LoginCard: React.FC = () => {
       </div>
 
       <ButtonSocials />
-      
+
       <div className="link-to-login">
         Vous n&apos;avez pas encore un compte ?{" "}
         <Link href="/sign-up" className="text-primary">Inscrivez-vous ici</Link>.
