@@ -30,8 +30,24 @@ const LoginCard: React.FC = () => {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
+  // Fonction pour valider un champ en temps réel
+  const validateField = (name: "email" | "password", value: string) => {
+    const validation = LoginSchema.safeParse({ [name]: value });
+    if (!validation.success) {
+      setErrors((prev) => ({
+        ...prev,
+        [name]: validation.error.flatten().fieldErrors[name]?.[0],
+      }));
+    } else {
+      setErrors((prev) => ({
+        ...prev,
+        [name]: undefined,
+      }));
+    }
+  };
+
   const onSubmit = (event: React.FormEvent) => {
-    event.preventDefault(); // Empêcher le rechargement de la page
+    event.preventDefault();
     setError(null);
 
     const validation = LoginSchema.safeParse({ email, password });
@@ -49,8 +65,6 @@ const LoginCard: React.FC = () => {
         setError(result.error);
       }
     });
-
-    console.log({ email, password });
   };
 
   return (
@@ -74,7 +88,10 @@ const LoginCard: React.FC = () => {
               placeholder="Adresse e-mail"
               value={email}
               disabled={isPending}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                validateField("email", e.target.value);
+              }}
             />
           </div>
           {errors.email && <div className="error">{errors.email}</div>}
@@ -89,7 +106,10 @@ const LoginCard: React.FC = () => {
               placeholder="Mot de passe"
               value={password}
               disabled={isPending}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                validateField("password", e.target.value);
+              }}
             />
             {showPassword ? (
               <IoEyeOffOutline className="icon" onClick={() => setShowPassword(false)} />
