@@ -1,4 +1,4 @@
-import { auth } from "@/lib/auth.config";
+import { auth } from "@/lib/auth";
 
 export default async function SessionPage() {
   const session = await auth(); // Récupérer la session
