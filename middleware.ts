@@ -17,30 +17,25 @@ export default auth((req) => {
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
-  // ✅ Autoriser les routes API d'authentification
   if (isApiAuthRoute) {
     return;
   }
 
-  // ✅ Autoriser les routes publiques
-  if (isPublicRoute) {
+  if (isAuthRoute) {
+    if (isLoggedIn) {
+      return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+    }
     return;
   }
 
-  // ✅ Rediriger les utilisateurs connectés depuis les pages de login
-  if (isAuthRoute && isLoggedIn) {
-    return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
-  }
-
-  // ✅ Bloquer l'accès aux pages privées si l'utilisateur n'est pas connecté
-  if (!isLoggedIn) {
+  if (!isLoggedIn && !isPublicRoute) {
     return Response.redirect(new URL("/login", nextUrl));
   }
+
+  return;
 });
 
+// Optionally, don't invoke Middleware on some paths
 export const config = {
-  matcher: [
-    "/((?!_next|.*\\..*).*)", // Exclut _next et les fichiers statiques
-    "/api/:path*", // Protège toutes les routes API
-  ],
+  matcher: ["/((?!.+\\.[\\w]+$|_next).*)", "/", "/(api|trpc)(.*)"],
 };
