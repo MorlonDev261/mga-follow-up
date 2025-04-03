@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import NextAuth from "next-auth";
-/* import authConfig from "@/lib/auth.config"; */
+import authConfig from "@/lib/auth.config";
 import {
   DEFAULT_LOGIN_REDIRECT,
   apiAuthPrefix,
@@ -8,36 +8,52 @@ import {
   publicRoutes,
 } from "./routes";
 
-/* const { auth } = NextAuth(authConfig); */
+const { auth } = NextAuth(authConfig);
 
 export default async function middleware(req: NextRequest) {
   const { nextUrl } = req;
-  // const session = await auth(); // Vérification de session correcte
-  const isLoggedIn = false;
+  let isLoggedIn = false;
 
-  const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
-  const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
-  const isAuthRoute = authRoutes.includes(nextUrl.pathname);
-
-  if (isApiAuthRoute) {
-    return NextResponse.next();
+  try {
+    const session = await auth();
+    isLoggedIn = !!session;
+  } catch (error) {
+    console.error("Erreur d'authentification:", error);
+    return NextResponse.redirect(new URL("/auth-error", nextUrl));
   }
 
+  const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
+  const isAuthRoute = authRoutes.some(route => 
+    nextUrl.pathname.startsWith(route)
+  );
+  const isPublicRoute = publicRoutes.some(route => {
+    if (route === "/") return nextUrl.pathname === "/";
+    return nextUrl.pathname.startsWith(route);
+  });
+
+  if (isApiAuthRoute) return NextResponse.next();
+
   if (isAuthRoute) {
-    if (isLoggedIn) {
-      return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
-    }
-    return NextResponse.next();
+    return isLoggedIn 
+      ? NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl))
+      : NextResponse.next();
   }
 
   if (!isLoggedIn && !isPublicRoute) {
-    return NextResponse.redirect(new URL("/login", nextUrl));
+    const callbackUrl = nextUrl.searchParams.get("callbackUrl");
+    const redirectUrl = new URL("/login", nextUrl);
+    if (callbackUrl) redirectUrl.searchParams.set("callbackUrl", callbackUrl);
+    return NextResponse.redirect(redirectUrl);
   }
 
-  return NextResponse.next();
+  const response = NextResponse.next();
+  if (!isPublicRoute && !isAuthRoute) {
+    response.headers.set("Cache-Control", "no-store, max-age=0");
+  }
+
+  return response;
 }
 
-// Exclure les fichiers statiques et dossiers spéciaux du middleware
 export const config = {
   matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],
 };
