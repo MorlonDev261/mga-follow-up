@@ -9,7 +9,7 @@ import {
 
 const { auth } = NextAuth(authConfig);
 
-export default auth((req) => {
+export default auth(async function middleware(req: NextRequest) {
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
 
