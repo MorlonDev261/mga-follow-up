@@ -1,7 +1,12 @@
-import { auth } from "@/lib/auth"
+import NextAuth from "next-auth"
+import authConfig from "@/lib/auth"
 
-export default auth((reg) => {
-  // req.auth
+const { auth } = NextAuth(authConfig)
+
+export default auth((req) => {
+  const isLoggedIn = !!req.auth;
+  console.log("ROUTE", req.nextUrl.pathname)
+  console.log("IS LOGGEDIN", isLoggedIn)
 })
 
 // Optionally, don't invoke Middleware on some paths
