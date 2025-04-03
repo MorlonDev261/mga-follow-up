@@ -12,7 +12,7 @@ import {
 
 export default async function middleware(req: NextRequest) {
   const { nextUrl } = req;
-  const session = await auth(); // Vérification de session correcte
+  // const session = await auth(); // Vérification de session correcte
   const isLoggedIn = false;
 
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
