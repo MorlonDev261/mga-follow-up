@@ -1,59 +1,134 @@
-import { NextRequest, NextResponse } from "next/server";
-import NextAuth from "next-auth";
-import authConfig from "@/lib/auth.config";
-import {
-  DEFAULT_LOGIN_REDIRECT,
-  apiAuthPrefix,
-  authRoutes,
-  publicRoutes,
-} from "./routes";
+import { NextResponse, type NextRequest } from 'next/server';
+import { Ratelimit } from '@upstash/ratelimit';
+import { kv } from '@vercel/kv';
 
-const { auth } = NextAuth(authConfig);
+const ratelimit = new Ratelimit({
+  redis: kv,
+  limiter: Ratelimit.slidingWindow(100, '60 s'),
+});
 
-export default async function middleware(req: NextRequest) {
-  const { nextUrl } = req;
-  let isLoggedIn = false;
-
+export async function middleware(request: NextRequest) {
   try {
-    const session = await auth();
-    isLoggedIn = !!session;
+    // Handle CORS preflight requests
+    if (request.method === 'OPTIONS') {
+      return handleCors(request);
+    }
+
+    // Apply rate limiting
+    const rateLimitResult = await checkRateLimit(request);
+    if (rateLimitResult) return rateLimitResult;
+
+    // Apply security headers
+    const response = NextResponse.next();
+    setSecurityHeaders(response);
+
+    return response;
   } catch (error) {
-    console.error("Erreur d'authentification:", error);
-    return NextResponse.redirect(new URL("/auth-error", nextUrl));
+    console.error('Middleware error:', error);
+    return new NextResponse('Internal Server Error', { status: 500 });
+  }
+}
+
+function handleCors(request: NextRequest) {
+  const origin = request.headers.get('origin');
+  const response = new NextResponse(null, { status: 204 });
+
+  // Set CORS headers conditionally
+  if (origin && process.env.NODE_ENV === 'production') {
+    response.headers.set('Access-Control-Allow-Origin', origin);
+  } else {
+    response.headers.set('Access-Control-Allow-Origin', '*');
   }
 
-  const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
-  const isAuthRoute = authRoutes.some(route => 
-    nextUrl.pathname.startsWith(route)
+  response.headers.set(
+    'Access-Control-Allow-Methods',
+    'GET, POST, PUT, DELETE, OPTIONS'
   );
-  const isPublicRoute = publicRoutes.some(route => {
-    if (route === "/") return nextUrl.pathname === "/";
-    return nextUrl.pathname.startsWith(route);
-  });
-
-  if (isApiAuthRoute) return NextResponse.next();
-
-  if (isAuthRoute) {
-    return isLoggedIn 
-      ? NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl))
-      : NextResponse.next();
-  }
-
-  if (!isLoggedIn && !isPublicRoute) {
-    const callbackUrl = nextUrl.searchParams.get("callbackUrl");
-    const redirectUrl = new URL("/login", nextUrl);
-    if (callbackUrl) redirectUrl.searchParams.set("callbackUrl", callbackUrl);
-    return NextResponse.redirect(redirectUrl);
-  }
-
-  const response = NextResponse.next();
-  if (!isPublicRoute && !isAuthRoute) {
-    response.headers.set("Cache-Control", "no-store, max-age=0");
-  }
+  response.headers.set(
+    'Access-Control-Allow-Headers',
+    'Content-Type, Authorization, X-Requested-With'
+  );
+  response.headers.set('Access-Control-Max-Age', '86400');
+  response.headers.set('Vary', 'Origin');
 
   return response;
 }
 
+async function checkRateLimit(request: NextRequest) {
+  if (process.env.NODE_ENV === 'development') return null;
+
+  const getClientIp = () => {
+    // Try different headers in order of priority
+    const forwardedFor = request.headers.get('x-forwarded-for');
+    if (forwardedFor) {
+      const ips = forwardedFor.split(',');
+      return ips[0]?.trim() || '127.0.0.1';
+    }
+    
+    return (
+      request.headers.get('x-real-ip') ||
+      request.headers.get('cf-connecting-ip') ||
+      '127.0.0.1' // Fallback for local development
+    );
+  };
+
+  const ip = getClientIp();
+  const { success, limit, reset, remaining } = await ratelimit.limit(ip);
+
+  if (!success) {
+    const retryAfter = Math.floor((reset - Date.now()) / 1000);
+    return new NextResponse('Too Many Requests', {
+      status: 429,
+      headers: {
+        'Retry-After': String(retryAfter),
+        'X-RateLimit-Limit': String(limit),
+        'X-RateLimit-Remaining': String(remaining),
+        'X-RateLimit-Reset': String(reset),
+      },
+    });
+  }
+  return null;
+}
+
+function setSecurityHeaders(response: NextResponse) {
+  const headers = response.headers;
+  
+  // Content Security Policy
+  const csp = [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline'", // Adapt based on needs
+    "style-src 'self' 'unsafe-inline'",
+    "img-src 'self' data: blob:",
+    "font-src 'self'",
+    "connect-src 'self'",
+    "form-action 'self'",
+    "frame-ancestors 'none'",
+    "base-uri 'self'",
+  ].join('; ');
+
+  headers.set('Content-Security-Policy', csp);
+  headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+  headers.set('X-Content-Type-Options', 'nosniff');
+  headers.set('X-Frame-Options', 'DENY');
+  headers.set('X-XSS-Protection', '1; mode=block');
+  headers.set(
+    'Strict-Transport-Security',
+    'max-age=31536000; includeSubDomains; preload'
+  );
+  
+  // Permissions Policy
+  headers.set('Permissions-Policy', [
+    'camera=()',
+    'microphone=()',
+    'geolocation=()',
+    'fullscreen=(self)',
+    'payment=()',
+  ].join(', '));
+}
+
 export const config = {
-  matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],
+  matcher: [
+    '/api/:path*',
+    '/auth/:path*',
+  ],
 };
