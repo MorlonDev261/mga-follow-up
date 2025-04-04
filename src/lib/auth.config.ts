@@ -22,7 +22,11 @@ export default {
       clientSecret: process.env.AUTH_GOOGLE_SECRET ?? "",
     }),
     Credentials({
-        Credentials({
+      name: "credentials",
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Mot de passe", type: "password" },
+      },
       async authorize(credentials) {
         try {
           const validated = loginSchema.parse(credentials);
