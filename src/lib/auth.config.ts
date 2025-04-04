@@ -3,7 +3,7 @@ import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
 import { compare } from "bcryptjs";
 import db from "@/lib/db";
-import type { NextAuthConfig } from "next-auth";
+import type { AuthOptions } from "next-auth";
 import { z } from "zod";
 
 const loginSchema = z.object({
@@ -65,4 +65,4 @@ export default {
       return session;
     },
   },
-} satisfies NextAuthConfig;
+} satisfies AuthOptions;
