@@ -11,15 +11,15 @@ const loginSchema = z.object({
   password: z.string().min(8, "Le mot de passe doit contenir au moins 8 caractères"),
 });
 
-export default { 
-    providers: [
+export default {
+  providers: [
     GitHub({
-      clientId: process.env.AUTH_GITHUB_ID,
-      clientSecret: process.env.AUTH_GITHUB_SECRET,
+      clientId: process.env.AUTH_GITHUB_ID ?? "",
+      clientSecret: process.env.AUTH_GITHUB_SECRET ?? "",
     }),
     Google({
-      clientId: process.env.AUTH_GOOGLE_ID,
-      clientSecret: process.env.AUTH_GOOGLE_SECRET,
+      clientId: process.env.AUTH_GOOGLE_ID ?? "",
+      clientSecret: process.env.AUTH_GOOGLE_SECRET ?? "",
     }),
     Credentials({
       async authorize(credentials) {
@@ -29,12 +29,18 @@ export default {
             where: { email: validated.email },
           });
 
-          if (!user?.password) return null;
-          
+          if (!user || !user.password) {
+            throw new Error("Identifiants invalides");
+          }
+
           const passwordValid = await compare(validated.password, user.password);
-          return passwordValid ? user : null;
-        } catch {
-          return null;
+          if (!passwordValid) {
+            throw new Error("Identifiants invalides");
+          }
+
+          return { id: user.id, email: user.email };
+        } catch (error) {
+          throw new Error(error.message || "Erreur lors de l'authentification");
         }
       },
     }),
@@ -53,4 +59,4 @@ export default {
       return session;
     },
   },
-} satisfies NextAuthConfig
+} satisfies NextAuthConfig;
