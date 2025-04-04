@@ -60,7 +60,7 @@ export default {
     },
     async session({ session, token }) {
       if (token?.id) {
-        session.user.id = token.id;
+        session.user = { ...session.user, id: token.id };
       }
       return session;
     },
