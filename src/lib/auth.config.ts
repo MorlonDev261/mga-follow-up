@@ -22,6 +22,7 @@ export default {
       clientSecret: process.env.AUTH_GOOGLE_SECRET ?? "",
     }),
     Credentials({
+        Credentials({
       async authorize(credentials) {
         try {
           const validated = loginSchema.parse(credentials);
@@ -40,7 +41,8 @@ export default {
 
           return { id: user.id, email: user.email };
         } catch (error) {
-          throw new Error(error.message || "Erreur lors de l'authentification");
+          const message = error instanceof Error ? error.message : "Erreur lors de l'authentification";
+          throw new Error(message);
         }
       },
     }),
