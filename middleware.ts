@@ -7,18 +7,73 @@ const ratelimit = new Ratelimit({
   limiter: Ratelimit.slidingWindow(100, '60 s'),
 });
 
+// Liste des routes publiques
+const publicRoutes = [
+  '/',
+  '/login',
+  '/signup',
+  '/forgot-password',
+  '/api/auth', // Routes d'authentification
+  '/api/public' // Routes API publiques
+];
+
+// Routes qui nécessitent une authentification mais pas de permissions spéciales
+const authRoutes = [
+  '/dashboard',
+  '/profile',
+  '/settings'
+];
+
 export async function middleware(request: NextRequest) {
   try {
-    // Handle CORS preflight requests
+    const { nextUrl } = request;
+    const path = nextUrl.pathname;
+    const cookies = request.cookies;
+    const sessionToken = cookies.get('session-token')?.value;
+
+    // Gérer les pré-requêtes CORS
     if (request.method === 'OPTIONS') {
       return handleCors(request);
     }
 
-    // Apply rate limiting
-    const rateLimitResult = await checkRateLimit(request);
-    if (rateLimitResult) return rateLimitResult;
+    // Appliquer le rate limiting (sauf pour les routes publiques)
+    if (!publicRoutes.some(route => path.startsWith(route))) {
+      const rateLimitResult = await checkRateLimit(request);
+      if (rateLimitResult) return rateLimitResult;
+    }
 
-    // Apply security headers
+    // Vérifier si la route est publique
+    const isPublicRoute = publicRoutes.some(route => 
+      path === route || path.startsWith(`${route}/`)
+    );
+
+    // Vérifier l'authentification
+    let isAuthenticated = false;
+    if (sessionToken) {
+      // Ici vous devriez valider le token avec votre système d'authentification
+      // Ceci est un exemple simplifié
+      isAuthenticated = true;
+    }
+
+    // Rediriger les utilisateurs déjà authentifiés qui essaient d'accéder aux pages de login/signup
+    if (isAuthenticated && (path.startsWith('/login') || path.startsWith('/signup'))) {
+      const response = NextResponse.redirect(new URL('/', request.url));
+      setSecurityHeaders(response);
+      return response;
+    }
+
+    // Gestion des routes protégées
+    if (!isPublicRoute && !isAuthenticated) {
+      // Créer l'URL de login avec le redirect
+      const loginUrl = new URL('/login', request.url);
+      loginUrl.searchParams.set('redirect', encodeURIComponent(path));
+      
+      const response = NextResponse.redirect(loginUrl);
+      setSecurityHeaders(response);
+      return response;
+    }
+
+    // Appliquer les en-têtes de sécurité
     const response = NextResponse.next();
     setSecurityHeaders(response);
 
@@ -58,7 +113,6 @@ async function checkRateLimit(request: NextRequest) {
   if (process.env.NODE_ENV === 'development') return null;
 
   const getClientIp = () => {
-    // Try different headers in order of priority
     const forwardedFor = request.headers.get('x-forwarded-for');
     if (forwardedFor) {
       const ips = forwardedFor.split(',');
@@ -68,7 +122,7 @@ async function checkRateLimit(request: NextRequest) {
     return (
       request.headers.get('x-real-ip') ||
       request.headers.get('cf-connecting-ip') ||
-      '127.0.0.1' // Fallback for local development
+      '127.0.0.1'
     );
   };
 
@@ -93,10 +147,9 @@ async function checkRateLimit(request: NextRequest) {
 function setSecurityHeaders(response: NextResponse) {
   const headers = response.headers;
   
-  // Content Security Policy
   const csp = [
     "default-src 'self'",
-    "script-src 'self' 'unsafe-inline'", // Adapt based on needs
+    "script-src 'self' 'unsafe-inline'",
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: blob:",
     "font-src 'self'",
@@ -116,7 +169,6 @@ function setSecurityHeaders(response: NextResponse) {
     'max-age=31536000; includeSubDomains; preload'
   );
   
-  // Permissions Policy
   headers.set('Permissions-Policy', [
     'camera=()',
     'microphone=()',
@@ -128,7 +180,7 @@ function setSecurityHeaders(response: NextResponse) {
 
 export const config = {
   matcher: [
-    '/api/:path*',
-    '/auth/:path*',
+    // Protéger toutes les routes sauf les statiques et publiques
+    '/((?!_next/static|_next/image|favicon.ico|login|signup|api/public|api/auth).*)',
   ],
 };
