@@ -19,7 +19,7 @@ const publicRoutes = [
 
 // Routes qui nécessitent une authentification mais pas de permissions spéciales
 const authRoutes = [
-  '/dashboard',
+  '/pending',
   '/profile',
   '/settings'
 ];
