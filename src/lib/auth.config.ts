@@ -3,8 +3,9 @@ import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
 import { compare } from "bcryptjs";
 import db from "@/lib/db";
-import type { NextAuthConfig } from "next-auth"
+import type { NextAuthConfig } from "next-auth";
 import { z } from "zod";
+import { timingSafeEqual } from "crypto";
 
 const loginSchema = z.object({
   email: z.string().email("Format d'email invalide"),
@@ -14,55 +15,55 @@ const loginSchema = z.object({
 export default {
   providers: [
     GitHub({
-      clientId: process.env.AUTH_GITHUB_ID ?? "",
-      clientSecret: process.env.AUTH_GITHUB_SECRET ?? "",
+  clientId: process.env.AUTH_GITHUB_ID as string,
+  clientSecret: process.env.AUTH_GITHUB_SECRET as string,
     }),
     Google({
-      clientId: process.env.AUTH_GOOGLE_ID ?? "",
-      clientSecret: process.env.AUTH_GOOGLE_SECRET ?? "",
+  clientId: process.env.AUTH_GOOGLE_ID as string,
+  clientSecret: process.env.AUTH_GOOGLE_SECRET as string,
     }),
     Credentials({
-      name: "credentials",
-      credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Mot de passe", type: "password" },
-      },
-      async authorize(credentials) {
-        try {
-          const validated = loginSchema.parse(credentials);
-          const user = await db.user.findUnique({
-            where: { email: validated.email },
-          });
+  name: "credentials",
+  credentials: {
+    email: { label: "Email", type: "email" },
+    password: { label: "Mot de passe", type: "password" },
+  },
+  async authorize(credentials) {
+    try {
+      const validated = loginSchema.safeParse(credentials);
+      if (!validated.success) return null;
 
-          if (!user || !user.password) {
-            throw new Error("Identifiants invalides");
-          }
+      const user = await db.user.findUnique({
+        where: { email: validated.data.email },
+      });
 
-          const passwordValid = await compare(validated.password, user.password);
-          if (!passwordValid) {
-            throw new Error("Identifiants invalides");
-          }
+      if (!user?.password) return null;
 
-          return { id: user.id, email: user.email };
-        } catch (error) {
-          const message = error instanceof Error ? error.message : "Erreur lors de l'authentification";
-          throw new Error(message);
-        }
-      },
+      // Protection contre les attaques de timing
+      const isValidPassword = await compare(validated.data.password, user.password);
+      if (!isValidPassword) return null;
+
+      return { id: user.id, email: user.email };
+    } catch (error) {
+      console.error("Authentication error:", error);
+      return null;
+    }
+  },
     }),
   ],
   callbacks: {
     async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
-      }
+      if (user) token.id = user.id;
       return token;
     },
     async session({ session, token }) {
-      if (token?.id) {
-        session.user = { ...session.user, id: token.id };
+      if (token?.id && session.user) {
+        session.user.id = token.id as string;
       }
       return session;
     },
+  },
+  pages: {
+    signIn: "/login",
   },
 } satisfies NextAuthConfig;
