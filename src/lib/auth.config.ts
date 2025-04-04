@@ -7,7 +7,7 @@ import type { NextAuthConfig } from "next-auth";
 import { z } from "zod";
 
 const loginSchema = z.object({
-  contact: z.string().email("Format d'email invalide"),
+  email: z.string().email("Format d'email invalide"),
   password: z.string().min(8, "Le mot de passe doit contenir au moins 8 caractères"),
 });
 
@@ -26,7 +26,7 @@ export default {
         try {
           const validated = loginSchema.parse(credentials);
           const user = await db.user.findUnique({
-            where: { contact: validated.contact },
+            where: { email: validated.email },
           });
 
           if (!user?.password) return null;
