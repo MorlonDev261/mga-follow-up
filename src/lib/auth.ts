@@ -1,7 +1,9 @@
-import NextAuth from "next-auth"
-import authConfig from "./auth.config"
+import NextAuth from "next-auth";
+import authConfig from "./auth.config";
 
-export const { auth, handlers, signIn, signOut } = NextAuth({
-  session: { strategy: "jwt" },
-  ...authConfig,
-})
+export const {
+  handlers: { GET, POST },
+  auth,
+  signIn,
+  signOut,
+} = NextAuth(authConfig);
