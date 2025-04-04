@@ -3,7 +3,7 @@ import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
 import { compare } from "bcryptjs";
 import db from "@/lib/db";
-import type { NextAuthConfig } from "next-auth";
+import type { AuthConfig } from "next-auth"; // Updated import
 import { z } from "zod";
 
 const loginSchema = z.object({
@@ -14,40 +14,42 @@ const loginSchema = z.object({
 export default {
   providers: [
     GitHub({
-  clientId: process.env.AUTH_GITHUB_ID as string,
-  clientSecret: process.env.AUTH_GITHUB_SECRET as string,
+      clientId: process.env.AUTH_GITHUB_ID as string,
+      clientSecret: process.env.AUTH_GITHUB_SECRET as string,
     }),
     Google({
-  clientId: process.env.AUTH_GOOGLE_ID as string,
-  clientSecret: process.env.AUTH_GOOGLE_SECRET as string,
+      clientId: process.env.AUTH_GOOGLE_ID as string,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET as string,
     }),
     Credentials({
-  name: "credentials",
-  credentials: {
-    email: { label: "Email", type: "email" },
-    password: { label: "Mot de passe", type: "password" },
-  },
-  async authorize(credentials) {
-    try {
-      const validated = loginSchema.safeParse(credentials);
-      if (!validated.success) return null;
+      name: "credentials",
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Mot de passe", type: "password" },
+      },
+      async authorize(credentials) {
+        try {
+          const validated = loginSchema.safeParse(credentials);
+          if (!validated.success) return null;
 
-      const user = await db.user.findUnique({
-        where: { email: validated.data.email },
-      });
+          const user = await db.user.findUnique({
+            where: { email: validated.data.email },
+          });
 
-      if (!user?.password) return null;
+          if (!user?.password) return null;
 
-      // Protection contre les attaques de timing
-      const isValidPassword = await compare(validated.data.password, user.password);
-      if (!isValidPassword) return null;
+          const isValidPassword = await compare(
+            validated.data.password,
+            user.password
+          );
+          if (!isValidPassword) return null;
 
-      return { id: user.id, email: user.email };
-    } catch (error) {
-      console.error("Authentication error:", error);
-      return null;
-    }
-  },
+          return { id: user.id, email: user.email };
+        } catch (error) {
+          console.error("Authentication error:", error);
+          return null;
+        }
+      },
     }),
   ],
   callbacks: {
@@ -62,7 +64,4 @@ export default {
       return session;
     },
   },
-  pages: {
-    signIn: "/login",
-  },
-} satisfies NextAuthConfig;
+} satisfies AuthConfig;
