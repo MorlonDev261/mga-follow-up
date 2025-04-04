@@ -5,7 +5,6 @@ import { compare } from "bcryptjs";
 import db from "@/lib/db";
 import type { NextAuthConfig } from "next-auth";
 import { z } from "zod";
-import { timingSafeEqual } from "crypto";
 
 const loginSchema = z.object({
   email: z.string().email("Format d'email invalide"),
