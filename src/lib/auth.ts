@@ -1,4 +1,4 @@
-import NextAuth from "next-auth";
+import NextAuth from "next-auth/config"; // ✅ c’est ici la bonne source
 import authConfig from "./auth.config";
 
 export const {
