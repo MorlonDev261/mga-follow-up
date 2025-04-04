@@ -1,6 +1,6 @@
 import GitHub from "next-auth/providers/github"
-import type { NextAuthConfig } from "next-auth"
- 
-export default { 
-  providers: [GitHub] 
-} satisfies NextAuthConfig
+import type { AuthOptions } from "next-auth"
+
+export default {
+  providers: [GitHub],
+} satisfies AuthOptions
