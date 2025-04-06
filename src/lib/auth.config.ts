@@ -18,9 +18,12 @@ export const authConfig = {
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials: Partial<Record<"email" | "password", string>> | undefined, _req: Request) {
-        // Validation avec Zod
         try {
-          // Si les credentials ne correspondent pas au schéma, une erreur sera lancée
+          if (!credentials) {
+            throw new Error('Credentials are required')
+          }
+
+          // Validation avec Zod
           const validatedCredentials = credentialsSchema.parse(credentials)
 
           const user = await prisma.user.findUnique({
