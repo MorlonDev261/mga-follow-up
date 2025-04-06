@@ -31,9 +31,7 @@ export const authConfig = {
         return {
           id: user.id,
           email: user.email,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          phone: user.phone,
+          name: user.name,
         }
       },
     }),
@@ -49,7 +47,7 @@ export const authConfig = {
       if (user) {
         token.id = user.id
         token.email = user.email
-        token.name = `${user.firstName} ${user.lastName}`
+        token.name = user.name
       }
       return token
     },
