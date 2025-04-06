@@ -1,6 +1,6 @@
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
-import prisma from "@/lib/prisma"; // Assurez-vous d'importer correctement votre instance Prisma
+import prisma from "@/lib/db"; // Assurez-vous d'importer correctement votre instance Prisma
 
 export const authConfig = {
   providers: [
