@@ -37,7 +37,7 @@ export const authOptions = {
     strategy: 'jwt', // Using JWT for session management
   },
   pages: {
-    signIn: '/auth/signin', // Customize your sign-in page if necessary
+    signIn: '/auth/login', // Customize your sign-in page if necessary
   },
   callbacks: {
     async jwt({ token, user }) {
