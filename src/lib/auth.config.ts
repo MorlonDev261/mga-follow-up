@@ -2,11 +2,12 @@ import { z } from 'zod'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import bcrypt from 'bcryptjs'
 import prisma from '@/lib/db'
+import { NextApiRequest } from 'next'
 
 // Schéma de validation avec Zod
 const credentialsSchema = z.object({
-  email: z.string().email('Invalid email format'), // Valide que c'est un email valide
-  password: z.string().min(6, 'Password must be at least 6 characters long'), // Valide le mot de passe
+  email: z.string().email('Invalid email format'),
+  password: z.string().min(6, 'Password must be at least 6 characters long'),
 })
 
 export const authConfig = {
@@ -17,7 +18,7 @@ export const authConfig = {
         email: { label: 'Email', type: 'email' },
         password: { label: 'Password', type: 'password' },
       },
-      async authorize( credentials: Partial<Record<"email" | "password", unknown>> | undefined, _req: Request ): Promise<{ id: string; email: string; name: string; } | null> {
+      async authorize(credentials: Partial<Record<"email" | "password", unknown>> | undefined, _req: NextApiRequest): Promise<{ id: string; email: string; name: string; } | null> {
         try {
           if (!credentials) {
             throw new Error('Credentials are required')
@@ -35,10 +36,10 @@ export const authConfig = {
           }
 
           if (typeof validatedCredentials.password !== 'string') {
-            throw new Error('Password is required');
+            throw new Error('Password is required')
           }
 
-          const isPasswordValid = await bcrypt.compare(validatedCredentials.password || "", user.password)
+          const isPasswordValid = await bcrypt.compare(validatedCredentials.password, user.password)
           if (!isPasswordValid) {
             throw new Error('Invalid email or password.')
           }
@@ -50,7 +51,8 @@ export const authConfig = {
           }
         } catch (error) {
           if (error instanceof z.ZodError) {
-            throw new Error('Invalid credentials data') // Erreur de validation Zod
+            // Vous pourriez vouloir logger les erreurs de validation ici
+            throw new Error('Invalid credentials data')
           }
           throw error
         }
@@ -81,5 +83,5 @@ export const authConfig = {
       return session
     },
   },
-  secret: process.env.JWT_SECRET || 'your_secret_key',
+  secret: process.env.JWT_SECRET,
 }
