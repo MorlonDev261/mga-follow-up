@@ -10,7 +10,7 @@ export const authConfig = {
         email: { label: 'Email', type: 'email' },
         password: { label: 'Password', type: 'password' },
       },
-      async authorize(credentials: Record<"email" | "password", string> | undefined) {
+      async authorize(credentials: Partial<Record<"email" | "password", unknown>>, _req: Request) {
         if (!credentials?.email || !credentials?.password) {
           throw new Error('Email and password are required.')
         }
