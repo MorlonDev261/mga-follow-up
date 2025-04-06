@@ -17,7 +17,7 @@ export const authConfig = {
         email: { label: 'Email', type: 'email' },
         password: { label: 'Password', type: 'password' },
       },
-      async authorize(credentials: Partial<Record<"email" | "password", string>> | undefined, _req: Request) {
+      async authorize(credentials: Partial<Record<"email" | "password", unknown>>, request: Request) => Awaitable<User | null> {
         try {
           if (!credentials) {
             throw new Error('Credentials are required')
