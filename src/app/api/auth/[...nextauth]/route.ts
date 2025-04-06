@@ -44,9 +44,7 @@ export const authOptions = {
       if (user) {
         token.id = user.id
         token.email = user.email
-        token.firstName = user.firstName
-        token.lastName = user.lastName
-        token.phone = user.phone
+        token.user.name = token.name
       }
       return token
     },
@@ -54,9 +52,7 @@ export const authOptions = {
       if (token) {
         session.user.id = token.id
         session.user.email = token.email
-        session.user.firstName = token.firstName
-        session.user.lastName = token.lastName
-        session.user.phone = token.phone
+        session.user.name = token.name
       }
       return session
     },
