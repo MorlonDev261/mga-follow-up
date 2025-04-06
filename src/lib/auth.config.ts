@@ -34,6 +34,10 @@ export const authConfig = {
             throw new Error('Invalid email or password.')
           }
 
+          if (typeof validatedCredentials.password !== 'string') {
+            throw new Error('Password is required');
+          }
+
           const isPasswordValid = await bcrypt.compare(validatedCredentials.password, user.password)
           if (!isPasswordValid) {
             throw new Error('Invalid email or password.')
