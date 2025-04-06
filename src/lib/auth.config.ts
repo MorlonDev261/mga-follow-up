@@ -17,7 +17,7 @@ export const authConfig = {
         email: { label: 'Email', type: 'email' },
         password: { label: 'Password', type: 'password' },
       },
-      async authorize(credentials: Record<"email" | "password", string> | undefined) {
+      async authorize(credentials: Record<"email" | "password", string> | undefined, _req: Request) {
         // Validation avec Zod
         try {
           // Si les credentials ne correspondent pas au schéma, une erreur sera lancée
