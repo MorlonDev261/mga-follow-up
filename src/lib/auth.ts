@@ -1,4 +1,5 @@
 import NextAuth from 'next-auth'
+import { User, Account } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import GoogleProvider from 'next-auth/providers/google'
 import GitHubProvider from 'next-auth/providers/github'
@@ -59,7 +60,7 @@ export const authOptions = {
     signIn: '/auth/signin',
   },
   callbacks: {
-    async signIn({ user, account }) {
+    async signIn({ user, account }: { user: User; account: Account }) {
       // Handle OAuth user creation/updating
       if (account?.provider !== 'credentials') {
         const existingUser = await db.user.findUnique({
