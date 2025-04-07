@@ -100,4 +100,4 @@ export const authOptions = {
   secret: process.env.JWT_SECRET || 'your_secret_key',
 }
 
-export const handler = NextAuth(authOptions)
+export const { handlers, signIn, signOut, auth } = NextAuth(authOptions)
