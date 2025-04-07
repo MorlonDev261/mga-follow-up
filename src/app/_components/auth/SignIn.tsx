@@ -23,6 +23,7 @@ const LoginSchema = z.object({
 });
 
 const LoginCard: React.FC = () => {
+  const router = useRouter()
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
