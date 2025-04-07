@@ -1,13 +1,22 @@
+// src/types/auth.d.ts
 
+import 'next-auth'
+import 'next-auth/jwt'
 
-declare module "next-auth" {
+declare module 'next-auth' {
   interface Session {
     user: {
-      id: string;
-      email: string;
-    };
+      id: string
+      email: string
+      name?: string | null
+    }
   }
+}
+
+declare module 'next-auth/jwt' {
   interface JWT {
-    id: string;
+    id: string
+    email: string
+    name?: string | null
   }
 }
