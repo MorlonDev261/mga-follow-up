@@ -59,7 +59,7 @@ export const authOptions = {
     signIn: '/auth/signin',
   },
   callbacks: {
-    async signIn({ user, account }) {
+    async signIn({ user, account }: Parameters<SignInCallback>[0]) {
       // Handle OAuth user creation/updating
       if (account?.provider !== 'credentials') {
         const existingUser = await db.user.findUnique({
