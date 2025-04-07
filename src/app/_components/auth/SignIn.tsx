@@ -2,6 +2,8 @@
 
 import React, { useState, useRef, useTransition } from "react";
 import Link from "next/link";
+import { signIn } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 import "./CSS/styles.css";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -60,9 +62,16 @@ const LoginCard: React.FC = () => {
     }
 
     startTransition(async () => {
-      const result = await login({ email, password });
-      if (result?.error) {
-        setError(result.error);
+      const res = await signIn('credentials', {
+        redirect: false,
+        email,
+        password,
+      })
+
+      if (res?.error) {
+        setError(res.error)
+      } else {
+        router.push('/')
       }
     });
   };
