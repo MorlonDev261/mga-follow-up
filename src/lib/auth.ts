@@ -55,7 +55,7 @@ export const authOptions: NextAuthConfig = {
     strategy: 'jwt',
   },
   pages: {
-    signIn: '/auth/signin',
+    signIn: '/login',
   },
   callbacks: {
     async signIn({ user, account }) {
@@ -69,6 +69,7 @@ export const authOptions: NextAuthConfig = {
             data: {
               email: user.email as string,
               name: user.name,
+              image: user.image
             },
           })
         }
