@@ -1,4 +1,4 @@
-import NextAuth from 'next-auth'
+aimport NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import bcrypt from 'bcryptjs'
 import prisma from '@/lib/db'
@@ -36,7 +36,7 @@ export const authOptions = {
         return {
           id: user.id,
           email: user.email,
-          name = user.name
+          name: user.name
         }
       },
     }),
