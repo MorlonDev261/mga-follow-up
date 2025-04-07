@@ -1,5 +1,6 @@
 import NextAuth from 'next-auth'
 import { User, Account } from 'next-auth'
+import { JWT } from 'next-auth/jwt'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import GoogleProvider from 'next-auth/providers/google'
 import GitHubProvider from 'next-auth/providers/github'
@@ -79,7 +80,7 @@ export const authOptions = {
       }
       return true
     },
-    async jwt({ token, user }) {
+    async jwt({ token, user }: { token: JWT; user?: User }) {
       if (user) {
         token.id = user.id
         token.email = user.email
