@@ -92,6 +92,7 @@ export const authOptions = {
         session.user.id = token.id
         session.user.email = token.email
         session.user.name = token.name
+        session.user.image = token.image
       }
       return session
     },
