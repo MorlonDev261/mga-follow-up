@@ -1,5 +1,5 @@
 import NextAuth from 'next-auth'
-import { User, Account } from 'next-auth'
+import { User, Account, Session } from 'next-auth'
 import { JWT } from 'next-auth/jwt'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import GoogleProvider from 'next-auth/providers/google'
@@ -89,7 +89,7 @@ export const authOptions = {
       }
       return token
     },
-    async session({ session, token }) {
+    async session({ session, token }: { session: Session; token: JWT }) {
       if (token) {
         session.user.id = token.id
         session.user.email = token.email
