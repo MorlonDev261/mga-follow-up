@@ -84,9 +84,9 @@ export const authOptions = {
       if (user) {
         if (!user.id) throw new Error("Missing User Access ID")
         token.id = user.id
-        token.email = user.email
-        token.name = user.name
-        token.image = user.image
+        token.email = user.email ?? ""
+        token.name = user.name ?? ""
+        token.image = user.image ?? ""
       }
       return token
     },
