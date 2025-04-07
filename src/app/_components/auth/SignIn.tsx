@@ -14,7 +14,6 @@ import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 import { z } from "zod";
 import ButtonSocials from "./ButtonSocials";
-import { login } from "@/actions/auth/login";
 
 // Schéma de validation
 const LoginSchema = z.object({
