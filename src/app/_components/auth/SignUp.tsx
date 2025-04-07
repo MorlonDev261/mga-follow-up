@@ -193,6 +193,7 @@ const SignUpCard: React.FC = () => {
               value={formData.email}
               onChange={(e) => handleChange('email', e.target.value)}
               aria-invalid={!!errors.email}
+              disabled={loading}
             />
           </div>
           {errors.email?.map((msg, i) => (
@@ -210,6 +211,7 @@ const SignUpCard: React.FC = () => {
               value={formData.password}
               onChange={(e) => handleChange('password', e.target.value)}
               aria-invalid={!!errors.password}
+              disabled={loading}
             />
             {showPassword ? (
               <IoEyeOffOutline className="icon text-muted-foreground hover:text-foreground" onClick={() => setShowPassword(false)} />
@@ -232,6 +234,7 @@ const SignUpCard: React.FC = () => {
               value={formData.confPassword}
               onChange={(e) => handleChange('confPassword', e.target.value)}
               aria-invalid={!!errors.confPassword}
+              disabled={loading}
             />
             {showConfPassword ? (
               <IoEyeOffOutline className="icon text-muted-foreground hover:text-foreground" onClick={() => setShowConfPassword(false)} />
@@ -255,7 +258,7 @@ const SignUpCard: React.FC = () => {
         <div className="flex-grow border-t border-gray-300"></div>
       </div>
 
-      <ButtonSocials />
+      <ButtonSocials isPending={loading} />
 
       <p className="mt-6 text-center text-sm text-muted-foreground">
         Déjà un compte ?{" "}
