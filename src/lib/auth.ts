@@ -1,4 +1,6 @@
 import NextAuth from 'next-auth'
+import type { User } from "next-auth";
+import type { Account } from "next-auth";
 import CredentialsProvider from 'next-auth/providers/credentials'
 import GoogleProvider from 'next-auth/providers/google'
 import GitHubProvider from 'next-auth/providers/github'
