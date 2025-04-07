@@ -1,5 +1,3 @@
-// src/types/auth.d.ts
-
 import 'next-auth'
 import 'next-auth/jwt'
 
@@ -21,7 +19,7 @@ declare module "next-auth" {
   }
 
   interface JWT {
-    id: string
+    id?: string
     email: string
     name?: string
     image?: string
