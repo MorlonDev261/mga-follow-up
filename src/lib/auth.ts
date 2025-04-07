@@ -1,7 +1,7 @@
 import NextAuth from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import bcrypt from 'bcryptjs'
-import prisma from '@/lib/db' // Ensure you have prisma set up
+import prisma from '@/lib/db'
 
 export const authOptions = {
   providers: [
@@ -11,7 +11,7 @@ export const authOptions = {
         email: { label: 'Email', type: 'email' },
         password: { label: 'Password', type: 'password' },
       },
-      async authorize(credentials) {
+      async authorize(credentials: { email?: string; password?: string }) {
         if (!credentials?.email || !credentials?.password) {
           throw new Error('Email and password are required.')
         }
@@ -29,15 +29,19 @@ export const authOptions = {
           throw new Error('Invalid email or password.')
         }
 
-        return { id: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName, phone: user.phone }
+        return { 
+          id: user.id, 
+          email: user.email, 
+          name: user.name,
+        }
       },
     }),
   ],
   session: {
-    strategy: 'jwt', // Using JWT for session management
+    strategy: 'jwt',
   },
   pages: {
-    signIn: '/auth/signin', // Customize your sign-in page if necessary
+    signIn: '/auth/signin',
   },
   callbacks: {
     async jwt({ token, user }) {
@@ -57,7 +61,7 @@ export const authOptions = {
       return session
     },
   },
-  secret: process.env.JWT_SECRET || 'your_secret_key', // Optional, specify a JWT secret
+  secret: process.env.JWT_SECRET || 'your_secret_key',
 }
 
 export const handler = NextAuth(authOptions)
