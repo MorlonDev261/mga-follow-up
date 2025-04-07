@@ -82,7 +82,8 @@ export const authOptions = {
     },
     async jwt({ token, user }: { token: JWT; user?: User }) {
       if (user) {
-        token.id = user.id
+        if (!token.id) throw new Error("Missing token.id")
+        session.user.id = token.id
         token.email = user.email
         token.name = user.name
         token.image = user.image
