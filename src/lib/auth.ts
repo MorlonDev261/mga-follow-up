@@ -1,5 +1,4 @@
 import NextAuth from 'next-auth'
-import type { SignInCallback } from "next-auth";
 import CredentialsProvider from 'next-auth/providers/credentials'
 import GoogleProvider from 'next-auth/providers/google'
 import GitHubProvider from 'next-auth/providers/github'
@@ -60,7 +59,7 @@ export const authOptions = {
     signIn: '/auth/signin',
   },
   callbacks: {
-    async signIn({ user, account }: Parameters<SignInCallback>[0]) {
+    async signIn({ user, account }: { user: User; account: Account | null; }) {
       // Handle OAuth user creation/updating
       if (account?.provider !== 'credentials') {
         const existingUser = await db.user.findUnique({
