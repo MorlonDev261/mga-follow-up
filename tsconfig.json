@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "types": ["next", "next-auth"],
+    "types": ["next"],
     "typeRoots": ["./src/types", "./node_modules/@types"],
     "target": "ES2022",
     "lib": ["dom", "dom.iterable", "esnext"],
