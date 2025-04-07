@@ -141,7 +141,7 @@ const LoginCard: React.FC = () => {
         <div className="flex-grow border-t border-gray-300"></div>
       </div>
 
-      <ButtonSocials />
+      <ButtonSocials isPending={isPending} />
 
       <div className="link-to-login">
         Vous n&apos;avez pas encore un compte ?{" "}
