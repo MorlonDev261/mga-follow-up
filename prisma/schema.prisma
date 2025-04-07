@@ -10,8 +10,9 @@ datasource db {
 model User {
   id             String   @id @default(cuid())
   email          String   @unique
-  tel            String?  @unique  // ✅ Correction : `tel` doit être String
+  tel            String?  @unique
   password       String?  @db.Text
+  name           String  @db.VarChar(2048)
   image          String?  @db.VarChar(2048)
   coverPicture   String?  @db.VarChar(2048)
   createdAt      DateTime @default(now())
