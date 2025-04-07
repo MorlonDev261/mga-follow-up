@@ -83,7 +83,7 @@ export const authOptions = {
     async jwt({ token, user }: { token: JWT; user?: User }) {
       if (user) {
         if (!user.id) throw new Error("Missing User Access ID")
-        token.user.id = user.id
+        token.id = user.id
         token.email = user.email
         token.name = user.name
         token.image = user.image
