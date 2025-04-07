@@ -7,13 +7,15 @@ import { Spinner } from "@/components/ui/spinner";
 import { FcGoogle } from "react-icons/fc";
 import { FaGithub } from "react-icons/fa";
 
-const ButtonSocials: React.FC = () => {
+const ButtonSocials: React.FC = ({ isPending }: { isPending: boolean }) => {
   const [loading, setLoading] = useState({
     google: false,
     github: false,
   });
 
   const handleAuth = async (provider: "google" | "github") => {
+    if (isPending) return;
+    
     setLoading((prev) => ({ ...prev, [provider]: true }));
 
     try {
