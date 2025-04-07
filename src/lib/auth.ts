@@ -1,13 +1,13 @@
-import NextAuth from 'next-auth'
-import { User, Account, Session } from 'next-auth'
-import { JWT } from 'next-auth/jwt'
+import NextAuth, { type NextAuthConfig } from 'next-auth'
+import type { User, Session } from 'next-auth'
+import type { JWT } from 'next-auth/jwt'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import GoogleProvider from 'next-auth/providers/google'
 import GitHubProvider from 'next-auth/providers/github'
 import bcrypt from 'bcryptjs'
 import db from '@/lib/db'
 
-export const authOptions = {
+export const authOptions: NextAuthConfig = {
   providers: [
     CredentialsProvider({
       name: 'Credentials',
@@ -24,7 +24,6 @@ export const authOptions = {
           where: { email: credentials.email as string },
         })
 
-        // If user doesn't exist or doesn't have a password (OAuth user)
         if (!user || !user.password) {
           throw new Error('Invalid email or password.')
         }
@@ -46,12 +45,12 @@ export const authOptions = {
       },
     }),
     GoogleProvider({
-      clientId: process.env.AUTH_GOOGLE_ID as string,
-      clientSecret: process.env.AUTH_GOOGLE_SECRET as string,
+      clientId: process.env.AUTH_GOOGLE_ID!,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET!,
     }),
     GitHubProvider({
-      clientId: process.env.AUTH_GITHUB_ID as string,
-      clientSecret: process.env.AUTH_GITHUB_SECRET as string,
+      clientId: process.env.AUTH_GITHUB_ID!,
+      clientSecret: process.env.AUTH_GITHUB_SECRET!,
     }),
   ],
   session: {
@@ -61,15 +60,13 @@ export const authOptions = {
     signIn: '/auth/signin',
   },
   callbacks: {
-    async signIn({ user, account }: { user: User; account: Account }) {
-      // Handle OAuth user creation/updating
+    async signIn({ user, account }) {
       if (account?.provider !== 'credentials') {
         const existingUser = await db.user.findUnique({
           where: { email: user.email as string },
         })
 
         if (!existingUser) {
-          // Create new user for OAuth
           await db.user.create({
             data: {
               email: user.email as string,
@@ -80,20 +77,18 @@ export const authOptions = {
       }
       return true
     },
-    async jwt({ token, user }: { token: JWT; user?: User }) {
+    async jwt({ token, user }) {
       if (user) {
-        if (!user.id) throw new Error("Missing User Access ID")
-        token.id = user.id
+        token.id = (user as any).id
         token.email = user.email ?? ""
         token.name = user.name ?? ""
         token.image = user.image ?? ""
       }
       return token
     },
-    async session({ session, token }: { session: Session; token: JWT }) {
+    async session({ session, token }) {
       if (token) {
-        if (!token.id) throw new Error("Missing user id or email")
-        session.user.id = token.id
+        (session.user as any).id = token.id
         session.user.email = token.email ?? ""
         session.user.name = token.name ?? ""
         session.user.image = token.image ?? ""
