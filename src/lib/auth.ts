@@ -94,7 +94,7 @@ export const authOptions = {
       if (token) {
         if (!user.id || !user.email) throw new Error("Missing user id or email")
         token.id = user.id
-        token.email = user.email
+        token.email = user.email ?? ""
         token.name = user.name ?? ""
         token.image = user.image ?? ""
       }
