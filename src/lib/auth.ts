@@ -92,11 +92,11 @@ export const authOptions = {
     },
     async session({ session, token }: { session: Session; token: JWT }) {
       if (token) {
-        if (!user.id || !user.email) throw new Error("Missing user id or email")
-        token.id = user.id
-        token.email = user.email ?? ""
-        token.name = user.name ?? ""
-        token.image = user.image ?? ""
+        if (!token.id || !token.email) throw new Error("Missing user id or email")
+        session.id = token.id
+        session.email = token.email ?? ""
+        session.name = token.name ?? ""
+        session.image = token.image ?? ""
       }
       return session
     },
