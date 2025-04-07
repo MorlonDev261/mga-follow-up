@@ -4,7 +4,7 @@ import type { NextRequest } from "next/server"
 
 // Préfixes à ignorer
 const apiAuthPrefix = "/api/auth"
-const publicRoutes = ["/", "/login", "/register"]
+const publicRoutes = ["/login", "/register"]
 const authRoutes = ["/login", "/register"]
 
 export async function middleware(request: NextRequest) {
