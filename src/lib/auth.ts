@@ -1,6 +1,4 @@
 import NextAuth, { type NextAuthConfig } from 'next-auth'
-import type { User, Session } from 'next-auth'
-import type { JWT } from 'next-auth/jwt'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import GoogleProvider from 'next-auth/providers/google'
 import GitHubProvider from 'next-auth/providers/github'
