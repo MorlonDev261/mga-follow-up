@@ -1,40 +1,12 @@
-import { auth } from "@/lib/auth"
-import { NextResponse } from "next/server"
-import type { NextRequest } from "next/server"
+// middleware.ts
+import { NextResponse } from "next/server";
+import { getToken } from "next-auth/jwt";
 
-// Préfixes à ignorer
-const apiAuthPrefix = "/api/auth"
-const publicRoutes = ["/login", "/register"]
-const authRoutes = ["/login", "/register"]
+export async function middleware(req: any) {
+  const token = await getToken({ req });
+  const isAuthenticated = !!token;
 
-export async function middleware(request: NextRequest) {
-  const { nextUrl } = request
-  const { pathname } = nextUrl
-
-  // Bypass pour les routes NextAuth
-  if (pathname.startsWith(apiAuthPrefix)) {
-    return NextResponse.next()
+  if (req.nextUrl.pathname.startsWith("/") && !isAuthenticated) {
+    return NextResponse.redirect(new URL("/login", req.url));
   }
-
-  // Si la route est publique, ne rien faire
-  if (publicRoutes.includes(pathname)) {
-    return NextResponse.next()
-  }
-
-  // Vérifie si l'utilisateur est connecté
-  const session = await auth()
-
-  // Si utilisateur NON connecté
-  if (!session) {
-    // S'il essaie d'accéder à une page protégée → redirect vers login
-    return NextResponse.redirect(new URL("/login", request.url))
-  }
-
-  // Si l'utilisateur connecté essaie d'aller sur /login ou /register → redirect vers /
-  if (session && authRoutes.includes(pathname)) {
-    return NextResponse.redirect(new URL("/", request.url))
-  }
-
-  // Sinon, on le laisse passer
-  return NextResponse.next()
 }
