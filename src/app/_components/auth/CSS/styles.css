@@ -34,6 +34,8 @@ couleur general :
 }
 
 .auth-container .form-group .icon {
+  @apply dark:text-white;
+ 
   color: #1260de;
   width: 45px;
   text-align: center;
