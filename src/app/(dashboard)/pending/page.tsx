@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import useProtectPage from '@/hooks/protect-page'
+import useProtectPage from '@/hooks/protect-server'
 import PendingContent from "./PendingContent";
 
 export default function Page() {
