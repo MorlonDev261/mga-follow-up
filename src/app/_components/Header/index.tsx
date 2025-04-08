@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, ReactNode } from "react";
+import { useState, ReactNode,  Suspense } from "react";
 import { useSession } from "next-auth/react";
 import UserAvatar from "@components/Avatar/UserAvatar";
 import Theme from "@components/Theme";
@@ -107,7 +107,9 @@ export default function Header({ children }: HeaderProps) {
 
             {/* Profile */}
             <div className="flex items-center gap-2 cursor-pointer" onClick={() => setOpen(!open)}>
-              <UserAvatar />
+              <Suspense>
+                <UserAvatar />
+              </Suspense>
             </div>
           </div>
         ) : (
