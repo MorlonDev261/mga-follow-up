@@ -3,7 +3,7 @@ import useProtectPage from '@/hooks/protect-server-page'
 import PendingContent from "./PendingContent";
 
 export default function Page() {
-  await useProtectPage()
+  useProtectPage()
   return (
     <Suspense>
       <PendingContent />
