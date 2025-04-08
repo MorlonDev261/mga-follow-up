@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import SessionProvider from "@/components/SessionProvider";
+import { auth } from "@/lib/auth"
 import Image from "next/image";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -59,9 +60,10 @@ export function generateMetadata(): Metadata {
   };
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const session = await auth();
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -77,7 +79,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <SessionProvider>
+          <SessionProvider session={session}>
             <div className="min-h-screen">{children}</div>
             <div className="fixed bottom-10 right-5 z-50 w-16 h-16 rounded-full p-2 bg-green-500 dark:bg-orange-500">
               <Image src="/assistant.png" width={48} height={48} alt="Assistant MGA Follow UP" />
