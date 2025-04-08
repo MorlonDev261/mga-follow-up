@@ -4,7 +4,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 
-export default function useProtectPage(redirectTo = '/login') {
+export default function ProtectPage(redirectTo = '/login') {
   const { status } = useSession()
   const router = useRouter()
 
