@@ -1,4 +1,4 @@
-import { getServerSession } from 'next-auth';
+import getServerSession from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
