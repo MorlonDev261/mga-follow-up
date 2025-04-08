@@ -3,7 +3,7 @@ import { authOptions } from '@/lib/auth';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 export default async function UserAvatar() {
-  const { session } = await getServerSession(authOptions);
+  const session = await getServerSession(authOptions);
 
   if (!session?.user) return null;
 
