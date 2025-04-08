@@ -129,7 +129,7 @@ const LoginCard: React.FC = () => {
           {errors.password && <div className="error">{errors.password}</div>}
         </div>
 
-        <Button type="submit" className="w-full" disabled={isPending}>
+        <Button type="submit" className="w-full text-white bg-green-600 dark:bg-orange-600" disabled={isPending}>
           {isPending ? <Spinner size="sm" /> : "Se connecter"}
         </Button>
       </form>
