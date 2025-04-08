@@ -247,7 +247,7 @@ const SignUpCard: React.FC = () => {
           ))}
         </div>
 
-        <Button type="submit" className="w-full" disabled={loading}>
+        <Button type="submit" className="w-full text-white bg-green-600 dark:bg-orange-600" disabled={loading}>
           {loading ? <Spinner size="sm" className="mx-auto" /> : "S'inscrire"}
         </Button>
       </form>
