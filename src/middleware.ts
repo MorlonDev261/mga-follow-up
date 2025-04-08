@@ -9,6 +9,11 @@ const apiAuthPrefix = "/api/auth";
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // Autoriser l'accès aux fichiers dans le dossier public
+  if (pathname.startsWith("/_next") || pathname.startsWith("/favicon.ico")) {
+    return NextResponse.next();
+  }
+
   // Vérifier si la route est publique ou commence par /api/auth
   const isPublicRoute = publicRoutes.includes(pathname);
   const isApiAuthRoute = pathname.startsWith(apiAuthPrefix);
