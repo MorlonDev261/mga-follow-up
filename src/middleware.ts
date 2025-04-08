@@ -1,12 +1,18 @@
 // middleware.ts
-import { auth } from "@/lib/auth";
+import { getToken } from "next-auth/jwt";
 import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
-export async function middleware() {
-  const session = await auth();
-  if (!session) return NextResponse.redirect("/login");
+export async function middleware(request: NextRequest) {
+  const token = await getToken({ req: request });
+
+  if (!token) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+
+  return NextResponse.next();
 }
 
-export const config = { 
-  matcher: ["/api/:path*"] 
+export const config = {
+  matcher: ["/api/:path*"], // ou ajoute d'autres routes que tu veux protéger
 };
