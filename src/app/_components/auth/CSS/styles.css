@@ -13,6 +13,8 @@ couleur general :
 }
 
 .auth-container h2 {
+  @apply dark:text-orange-600;
+ 
   text-align: center;
   margin-bottom: 20px;
   color: #1260de;
