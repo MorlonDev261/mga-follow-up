@@ -2,7 +2,7 @@
 
 import { useState, ReactNode } from "react";
 import { useSession } from "next-auth/react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import UserAvatar from "@components/Avatar/UserAvatar";
 import Theme from "@components/Theme";
 import Sidebar from "@components/Sidebar";
 import { usePathname, useRouter } from "next/navigation";
@@ -107,18 +107,7 @@ export default function Header({ children }: HeaderProps) {
 
             {/* Profile */}
             <div className="flex items-center gap-2 cursor-pointer" onClick={() => setOpen(!open)}>
-              <Avatar className="h-7 w-7 border border-gray-300 dark:border-white">
-                {session.user.image ? (
-                  <AvatarImage src={session.user.image} />
-                ) : (
-                  <AvatarFallback>
-                    {session.user.name?.[0]?.toUpperCase() || 'MGA'}
-                  </AvatarFallback>
-                )}
-              </Avatar>
-              <span className="hidden md:block text-gray-800 dark:text-white">
-                Hi, {session.user.name?.split(' ')[0] || 'User'}
-              </span>
+              <UserAvatar />
             </div>
           </div>
         ) : (
