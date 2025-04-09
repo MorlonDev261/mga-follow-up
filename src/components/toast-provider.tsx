@@ -9,7 +9,7 @@ import {
   ToastProvider,
   ToastTitle,
   ToastViewport,
-} from "@/components/toast"
+} from "@/components/ui/toast"
 import { v4 as uuid } from "uuid"
 
 type ToastMessage = {
