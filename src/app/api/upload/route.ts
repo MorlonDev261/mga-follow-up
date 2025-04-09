@@ -11,13 +11,18 @@ export async function POST(req: Request) {
   interface CloudinaryResponse {
     secure_url: string;
     public_id: string;
-    // Ajoutez d'autres propriétés si nécessaire
   }
 
   const uploadRes = await new Promise<CloudinaryResponse>((resolve, reject) => {
     cloudinary.uploader.upload_stream({ folder: "avatars" }, (error, result) => {
-      if (error) reject(error);
-      else resolve(result);
+      if (error || !result) {
+        return reject(error || new Error("Upload failed with no result"));
+      }
+
+      resolve({
+        secure_url: result.secure_url,
+        public_id: result.public_id,
+      });
     }).end(buffer);
   });
 
