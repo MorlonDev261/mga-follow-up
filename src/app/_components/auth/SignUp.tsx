@@ -14,7 +14,7 @@ import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 import ButtonSocials from "./ButtonSocials";
 import { z } from "zod";
-import { useToast } from "@/hooks/use-toast"
+import { Toast } from "@/hooks/use-toast"
 
 const signupSchema = z.object({
   email: z.string().trim().superRefine((val, ctx) => {
@@ -140,7 +140,7 @@ const SignUpCard: React.FC = () => {
         throw new Error(data.message || "Erreur lors de l'inscription");
       }
 
-      toast({
+      Toast({
         description: "Inscription réussie.",
       })
       router.push("/login");
