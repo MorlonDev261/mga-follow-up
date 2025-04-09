@@ -4,7 +4,7 @@ import db from '@/lib/db';
 // GET USER
 export async function GET(
   _req: Request,
-  { params }: { params: { userId: string } }
+  context: { params: { userId: string }
 ) {
   try {
     const { userId } = params;
