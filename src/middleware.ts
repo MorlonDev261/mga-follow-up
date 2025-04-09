@@ -22,7 +22,9 @@ export default async function middleware(req: NextRequest) {
     try {
       // Vérifie le token JWT
       const payload = await verifyToken(token);  // Assure-toi que `verifyToken` est une fonction pour valider le token JWT
-      // Si tu as besoin de stocker des informations liées à l'utilisateur après la vérification, tu peux les ajouter ici
+      
+      req.headers.set("x-user-id", payload.userId);
+      
       return NextResponse.next();  // Continue si le token est valide
     } catch (error) {
       console.error("[API Auth Error]", error);
