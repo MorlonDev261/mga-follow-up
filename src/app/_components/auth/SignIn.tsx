@@ -144,7 +144,7 @@ const LoginCard: React.FC = () => {
 
       <div className="link-to-login">
         Vous n&apos;avez pas encore un compte ?{" "}
-        <Link href="/sign-up" className="text-primary">Inscrivez-vous ici</Link>.
+        <Link href="/register" className="text-primary">Inscrivez-vous ici</Link>.
       </div>
     </div>
   );
