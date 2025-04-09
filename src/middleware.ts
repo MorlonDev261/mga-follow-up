@@ -13,7 +13,7 @@ export default async function middleware(req: NextRequest) {
   const isAuthRoute = authRoutes.includes(nextUrl.pathname); // Routes d'authentification (login, etc.)
 
   // Si c'est une route API avec un préfixe auth, vérifie le token
-  if (!isApiAuthRoute && !isPublicRoute) {
+  if (!isApiAuthRoute && !isPublicRoute && !isAuthRoute) {
     const token = req.headers.get("Authorization")?.replace("Bearer ", "");
     if (!token) {
       return NextResponse.json({ message: "Authentification requise", errorCode: "MISSING_TOKEN" }, { status: 401 });
