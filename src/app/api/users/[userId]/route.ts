@@ -1,10 +1,7 @@
 import { NextResponse } from 'next/server';
 import db from '@/lib/db';
 
-export async function GET(
-  request: Request,
-  { params }: { params: { userId: string } }
-) {
+export async function GET({ params }: { params: Promise<{ userId: string }) {
   try {
     const { userId } = params;
 
