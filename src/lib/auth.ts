@@ -1,7 +1,6 @@
 import NextAuth, { type NextAuthConfig } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import GoogleProvider from 'next-auth/providers/google'
-import GitHubProvider from 'next-auth/providers/github'
 import bcrypt from 'bcryptjs'
 import db from '@/lib/db'
 
