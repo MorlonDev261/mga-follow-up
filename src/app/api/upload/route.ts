@@ -8,7 +8,13 @@ export async function POST(req: Request) {
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
 
-  const uploadRes = await new Promise((resolve, reject) => {
+  interface CloudinaryResponse {
+    secure_url: string;
+    public_id: string;
+    // Ajoutez d'autres propriétés si nécessaire
+  }
+
+  const uploadRes = await new Promise<CloudinaryResponse>((resolve, reject) => {
     cloudinary.uploader.upload_stream({ folder: "avatars" }, (error, result) => {
       if (error) reject(error);
       else resolve(result);
