@@ -104,7 +104,7 @@ const SignUpCard: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const { toast } = useToast()
+  const { showToast } = useToast()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -141,7 +141,7 @@ const SignUpCard: React.FC = () => {
         throw new Error(data.message || "Erreur lors de l'inscription");
       }
 
-      toast({
+      showToast({
         description: "Inscription réussie.",
       })
       router.push("/login");
