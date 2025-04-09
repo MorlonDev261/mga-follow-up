@@ -8,17 +8,15 @@ import { Input } from "@/components/ui/input";
 import { MdOutlineReportGmailerrorred } from "react-icons/md";
 import { FaCircleCheck, FaImage, FaPen, FaUser, FaCamera } from "react-icons/fa6";
 import { updateUser } from "@/actions/users";
-import { toast } from "react-toastify";
+import { toast } from "react-toastify";  // Importer toast
 
 interface ProfileProps {
   userId?: string;
 }
 
 export default function ProfileAvatar({ userId }: ProfileProps) {
-  const { data: session, update: updateSession } = useSession();
+  const { data: session } = useSession();
   const authorization = session?.user && !userId;
-  
-  // États
   const [coverSrc, setCoverSrc] = useState("");
   const [profileSrc, setProfileSrc] = useState("");
   const [coverError, setCoverError] = useState(false);
@@ -27,14 +25,6 @@ export default function ProfileAvatar({ userId }: ProfileProps) {
   const [contact, setContact] = useState("");
   const [isEditing, setIsEditing] = useState(false);
 
-  // Références pour suivre les changements
-  const prevCoverSrc = useRef(coverSrc);
-  const prevProfileSrc = useRef(profileSrc);
-  const prevFullname = useRef(fullname);
-  const coverInputRef = useRef<HTMLInputElement>(null);
-  const profileInputRef = useRef<HTMLInputElement>(null);
-
-  // Initialisation des données
   useEffect(() => {
     if (session?.user) {
       setProfileSrc(session.user.image || "");
@@ -43,7 +33,6 @@ export default function ProfileAvatar({ userId }: ProfileProps) {
     }
   }, [session]);
 
-  // Chargement des données utilisateur
   useEffect(() => {
     if (userId) {
       fetch(`/api/users/${userId}`)
@@ -63,61 +52,22 @@ export default function ProfileAvatar({ userId }: ProfileProps) {
     }
   }, [userId]);
 
-  // Mise à jour des données utilisateur
-  useEffect(() => {
-    const updateUserData = async () => {
-      try {
-        await updateUser({
-          coverPicture: coverSrc,
-          image: profileSrc,
-          name: fullname,
-        });
-        
-        // Mettre à jour la session
-        await updateSession({
-          ...session,
-          user: {
-            ...session?.user,
-            image: profileSrc,
-            name: fullname,
-            coverPicture: coverSrc,
-          },
-        });
+  const coverInputRef = useRef<HTMLInputElement>(null);
+  const profileInputRef = useRef<HTMLInputElement>(null);
 
-        toast.success("Utilisateur mis à jour !");
-      } catch (error) {
-        console.error("Erreur de mise à jour", error);
-        toast.error("Erreur lors de la mise à jour de l'utilisateur.");
-      }
-    };
-
-    if (authorization && (
-      prevCoverSrc.current !== coverSrc ||
-      prevProfileSrc.current !== profileSrc ||
-      prevFullname.current !== fullname
-    )) {
-      updateUserData();
-      // Mettre à jour les références
-      prevCoverSrc.current = coverSrc;
-      prevProfileSrc.current = profileSrc;
-      prevFullname.current = fullname;
-    }
-  }, [coverSrc, profileSrc, fullname, authorization]);
-
-  // Gestion des changements
   const handleFullnameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFullname(e.target.value);
   };
 
   const saveFullname = () => {
     setIsEditing(false);
-    if (prevFullname.current !== fullname) {
-      toast.success("Nom mis à jour !");
-    }
+    toast.success("Nom mis à jour !");
   };
 
-  // Upload des images
-  const handleImageUpload = async (file: File, isCover: boolean) => {
+  const handleCoverChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
     const formData = new FormData();
     formData.append("file", file);
 
@@ -127,25 +77,55 @@ export default function ProfileAvatar({ userId }: ProfileProps) {
         body: formData,
       });
       const data = await res.json();
-      
-      if (res.ok) {
-        if (isCover) {
-          setCoverSrc(data.url);
-          setCoverError(false);
-          coverInputRef.current!.value = "";
-        } else {
-          setProfileSrc(data.url);
-          setProfileError(false);
-          profileInputRef.current!.value = "";
-        }
-        toast.success(`Image ${isCover ? "de couverture" : "de profil"} mise à jour !`);
-      }
+      setCoverSrc(data.url);
+      toast.success("Image de couverture mise à jour !");
     } catch (error) {
-      console.error(`Erreur lors de l'upload ${isCover ? "cover" : "profil"}`, error);
-      toast.error(`Erreur lors de la mise à jour de l'image ${isCover ? "de couverture" : "de profil"}.`);
+      console.error("Erreur lors de l’upload de la cover", error);
+      toast.error("Erreur lors de la mise à jour de l'image de couverture.");
     }
   };
-  
+
+  const handleProfileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+      setProfileSrc(data.url);
+      toast.success("Image de profil mise à jour !");
+    } catch (error) {
+      console.error("Erreur lors de l’upload du profil", error);
+      toast.error("Erreur lors de la mise à jour de l'image de profil.");
+    }
+  };
+
+  useEffect(() => {
+    async function handleUpdate() {
+      try {
+        await updateUser({
+          coverPicture: coverSrc,
+          image: profileSrc,
+          name: fullname,
+        });
+        toast.success("Utilisateur mis à jour !");
+      } catch (error) {
+        console.error("Erreur de mise à jour", error);
+        toast.error("Erreur lors de la mise à jour de l'utilisateur.");
+      }
+    }
+
+    if (authorization) {
+      handleUpdate();
+    }
+  }, [coverSrc, profileSrc, fullname, authorization]);
+
   return (
     <div className="flex flex-col items-center space-y-2 mt-4">
       <div className="relative w-full max-w-lg">
