@@ -124,8 +124,154 @@ export default function ProfileAvatar({ userId }: ProfileProps) {
     if (authorization) {
       handleUpdate();
     }
+"use client";
+
+import Image from "next/image";
+import { useSession } from "next-auth/react";
+import { useState, useRef, useEffect } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Input } from "@/components/ui/input";
+import { MdOutlineReportGmailerrorred } from "react-icons/md";
+import { FaCircleCheck, FaImage, FaPen, FaUser, FaCamera } from "react-icons/fa6";
+import { updateUser } from "@/actions/users";
+import { toast } from "react-toastify";
+
+interface ProfileProps {
+  userId?: string;
+}
+
+export default function ProfileAvatar({ userId }: ProfileProps) {
+  const { data: session, update: updateSession } = useSession();
+  const authorization = session?.user && !userId;
+  
+  // États
+  const [coverSrc, setCoverSrc] = useState("");
+  const [profileSrc, setProfileSrc] = useState("");
+  const [coverError, setCoverError] = useState(false);
+  const [profileError, setProfileError] = useState(false);
+  const [fullname, setFullname] = useState("User");
+  const [contact, setContact] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
+
+  // Références pour suivre les changements
+  const prevCoverSrc = useRef(coverSrc);
+  const prevProfileSrc = useRef(profileSrc);
+  const prevFullname = useRef(fullname);
+  const coverInputRef = useRef<HTMLInputElement>(null);
+  const profileInputRef = useRef<HTMLInputElement>(null);
+
+  // Initialisation des données
+  useEffect(() => {
+    if (session?.user) {
+      setProfileSrc(session.user.image || "");
+      setFullname(session.user.name || "New User");
+      setContact(session.user.email || "- - -");
+    }
+  }, [session]);
+
+  // Chargement des données utilisateur
+  useEffect(() => {
+    if (userId) {
+      fetch(`/api/users/${userId}`)
+        .then((response) => response.json())
+        .then((res) => {
+          if (res) {
+            setCoverSrc(res?.coverPicture || "");
+            setProfileSrc(res?.image || "");
+            setFullname(res?.name || "User");
+            setContact(res?.email || "");
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+          toast.error("Erreur lors de la récupération des données utilisateur.");
+        });
+    }
+  }, [userId]);
+
+  // Mise à jour des données utilisateur
+  useEffect(() => {
+    const updateUserData = async () => {
+      try {
+        await updateUser({
+          coverPicture: coverSrc,
+          image: profileSrc,
+          name: fullname,
+        });
+        
+        // Mettre à jour la session
+        await updateSession({
+          ...session,
+          user: {
+            ...session?.user,
+            image: profileSrc,
+            name: fullname,
+            coverPicture: coverSrc,
+          },
+        });
+
+        toast.success("Utilisateur mis à jour !");
+      } catch (error) {
+        console.error("Erreur de mise à jour", error);
+        toast.error("Erreur lors de la mise à jour de l'utilisateur.");
+      }
+    };
+
+    if (authorization && (
+      prevCoverSrc.current !== coverSrc ||
+      prevProfileSrc.current !== profileSrc ||
+      prevFullname.current !== fullname
+    )) {
+      updateUserData();
+      // Mettre à jour les références
+      prevCoverSrc.current = coverSrc;
+      prevProfileSrc.current = profileSrc;
+      prevFullname.current = fullname;
+    }
   }, [coverSrc, profileSrc, fullname, authorization]);
 
+  // Gestion des changements
+  const handleFullnameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFullname(e.target.value);
+  };
+
+  const saveFullname = () => {
+    setIsEditing(false);
+    if (prevFullname.current !== fullname) {
+      toast.success("Nom mis à jour !");
+    }
+  };
+
+  // Upload des images
+  const handleImageUpload = async (file: File, isCover: boolean) => {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+      
+      if (res.ok) {
+        if (isCover) {
+          setCoverSrc(data.url);
+          setCoverError(false);
+          coverInputRef.current!.value = "";
+        } else {
+          setProfileSrc(data.url);
+          setProfileError(false);
+          profileInputRef.current!.value = "";
+        }
+        toast.success(`Image ${isCover ? "de couverture" : "de profil"} mise à jour !`);
+      }
+    } catch (error) {
+      console.error(`Erreur lors de l'upload ${isCover ? "cover" : "profil"}`, error);
+      toast.error(`Erreur lors de la mise à jour de l'image ${isCover ? "de couverture" : "de profil"}.`);
+    }
+  };
+  
   return (
     <div className="flex flex-col items-center space-y-2 mt-4">
       <div className="relative w-full max-w-lg">
