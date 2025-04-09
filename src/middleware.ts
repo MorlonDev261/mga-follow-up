@@ -1,9 +1,9 @@
-import { getToken } from "next-auth/jwt";
+import { auth } from "@/lib/auth"; // Importer la fonction auth
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 // Définir les routes publiques (y compris la page d'accueil et les routes API d'authentification)
-const publicRoutes = ["/login", "/register", "/about"];
+const publicRoutes = ["/", "/login", "/register", "/about"];
 const apiAuthPrefix = "/api/auth";
 
 export async function middleware(request: NextRequest) {
@@ -23,15 +23,15 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Vérifier la présence du token JWT
-  const token = await getToken({ req: request });
+  // Vérifier la session
+  const session = await auth(); // Utiliser la fonction auth() pour récupérer la session
 
-  // Si aucun token n'est trouvé, rediriger vers la page de login
-  if (!token) {
+  // Si aucun session n'est trouvée, rediriger vers la page de login
+  if (!session) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
-  // Si un token est trouvé, continuer la requête
+  // Si une session est trouvée, continuer la requête
   return NextResponse.next();
 }
 
