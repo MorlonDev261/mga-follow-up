@@ -11,7 +11,7 @@ const HomePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 flex flex-col justify-center py-8 px-4">
+    <div className="min-h-screen flex flex-col justify-center py-8 px-4">
       {/* Header */}
       <header className="text-center mb-16">
         <h1 className="text-5xl font-extrabold text-green-600">
