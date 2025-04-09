@@ -1,17 +1,16 @@
 import { NextResponse } from 'next/server';
 import db from '@/lib/db';
 
+type Params = {
+  params: {
+    userId: string;
+  };
+};
+
 // GET USER
-export async function GET(
-  _req: Request,
-  { params }: { params: { userId: string } }
-) {
+export async function GET(_req: Request, { params }: Params) {
   try {
     const { userId } = params;
-
-    if (!userId) {
-      return NextResponse.json({ error: 'ID utilisateur manquant' }, { status: 400 });
-    }
 
     const user = await db.user.findUnique({
       where: { id: userId },
@@ -26,11 +25,10 @@ export async function GET(
       },
     });
 
-    if (!user) {
-      return NextResponse.json({ error: 'Utilisateur non trouvé' }, { status: 404 });
-    }
-
-    return NextResponse.json(user);
+    return user 
+      ? NextResponse.json(user)
+      : NextResponse.json({ error: 'Utilisateur non trouvé' }, { status: 404 });
+      
   } catch (error) {
     console.error('[GET USER]', error);
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
@@ -38,29 +36,18 @@ export async function GET(
 }
 
 // UPDATE USER
-export async function PUT(
-  req: Request,
-  { params }: { params: { userId: string } }
-) {
+export async function PUT(req: Request, { params }: Params) {
   try {
     const { userId } = params;
-    const body = await req.json();
-    const { name, image, coverPicture } = body;
+    const { name, image, coverPicture } = await req.json();
 
-    if (!userId) {
-      return NextResponse.json({ error: 'ID utilisateur manquant' }, { status: 400 });
-    }
-
-    const user = await db.user.update({
+    const updatedUser = await db.user.update({
       where: { id: userId },
-      data: {
-        name,
-        image,
-        coverPicture,
-      },
+      data: { name, image, coverPicture },
     });
 
-    return NextResponse.json(user);
+    return NextResponse.json(updatedUser);
+    
   } catch (error) {
     console.error('[PUT USER]', error);
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
