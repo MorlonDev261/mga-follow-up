@@ -4,10 +4,10 @@ import db from '@/lib/db';
 // GET USER
 export async function GET(
   _req: Request,
-  context: { params: { userId: string }
+  context: { params: { userId: string } }
 ) {
   try {
-    const { userId } = params;
+    const { userId } = context.params;
 
     if (!userId) {
       return NextResponse.json({ error: 'ID utilisateur manquant' }, { status: 400 });
