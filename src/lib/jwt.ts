@@ -2,9 +2,9 @@ import jwt from "jsonwebtoken";
 
 export type JwtPayload = {
   id: string
-    email: string
-    name?: string
-    image?: string
+  email: string
+  name?: string
+  image?: string
 };
 
 const secret = process.env.JWT_SECRET!;
