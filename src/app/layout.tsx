@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import SessionProvider from "@/components/SessionProvider";
+import { ToastManager } from "@/components/toast-provider"
 import { auth } from "@/lib/auth"
 import Image from "next/image";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -80,11 +81,13 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <SessionProvider session={session}>
-            <div className="min-h-screen">{children}</div>
-            <div className="fixed bottom-10 right-5 z-50 w-16 h-16 rounded-full p-2 bg-green-500 dark:bg-orange-500">
-              <Image src="/assistant.png" width={48} height={48} alt="Assistant MGA Follow UP" />
-            </div>
-            <PWA />
+            <ToastManager>
+              <div className="min-h-screen">{children}</div>
+              <div className="fixed bottom-10 right-5 z-50 w-16 h-16 rounded-full p-2 bg-green-500 dark:bg-orange-500">
+                <Image src="/assistant.png" width={48} height={48} alt="Assistant MGA Follow UP" />
+              </div>
+              <PWA />
+            </ToastManager>
           </SessionProvider>
         </ThemeProvider>
       </body>
