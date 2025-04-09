@@ -5,7 +5,7 @@ import { auth } from "@/lib/auth";
 export default async function WelcomePage() {
   const session = await auth();
 
-  if (session.user) {
+  if (session?.user) {
     return <Dashboard />;
   } else {
     return <HomePage />;
