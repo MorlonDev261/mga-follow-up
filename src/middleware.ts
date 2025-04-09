@@ -23,7 +23,7 @@ export default async function middleware(req: NextRequest) {
       // Vérifie le token JWT
       const payload = await verifyToken(token);  // Assure-toi que `verifyToken` est une fonction pour valider le token JWT
       
-      req.headers.set("x-user-id", payload.userId);
+      req.headers.set("x-user-id", payload.id);
       
       return NextResponse.next();  // Continue si le token est valide
     } catch (error) {
