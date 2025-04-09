@@ -14,6 +14,7 @@ import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { AiOutlineExclamationCircle } from "react-icons/ai";
 import ButtonSocials from "./ButtonSocials";
 import { z } from "zod";
+import { useToast } from "@/hooks/use-toast"
 
 const signupSchema = z.object({
   email: z.string().trim().superRefine((val, ctx) => {
@@ -117,7 +118,7 @@ const SignUpCard: React.FC = () => {
     }
 
     try {
-      const response = await fetch("/api/users", {
+      const response = await fetch("/api/auth/user", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(validation.data),
@@ -139,7 +140,10 @@ const SignUpCard: React.FC = () => {
         throw new Error(data.message || "Erreur lors de l'inscription");
       }
 
-      router.push("/auth/login?signup=success");
+      toast({
+        description: "Inscription réussie.",
+      })
+      router.push("/login");
     } catch (error) {
       setError(error instanceof Error ? error.message : "Erreur inattendue");
     } finally {
