@@ -40,10 +40,10 @@ export async function GET(
 // UPDATE USER
 export async function PUT(
   req: Request,
-  { params }: { params: { userId: string } }
+  context: { params: { userId: string } }
 ) {
   try {
-    const { userId } = params;
+    const { userId } = context.params;
     const body = await req.json();
     const { name, image, coverPicture } = body;
 
