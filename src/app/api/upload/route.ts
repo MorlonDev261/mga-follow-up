@@ -15,5 +15,8 @@ export async function POST(req: Request) {
     }).end(buffer);
   });
 
-  return NextResponse.json(uploadRes);
+  return NextResponse.json({
+    url: uploadRes.secure_url,
+    public_id: uploadRes.public_id,
+  });
 }
