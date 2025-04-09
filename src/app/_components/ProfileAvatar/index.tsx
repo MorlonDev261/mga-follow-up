@@ -8,52 +8,64 @@ import { Input } from "@/components/ui/input";
 import { MdOutlineReportGmailerrorred } from "react-icons/md";
 import { FaCircleCheck, FaImage, FaPen, FaUser, FaCamera } from "react-icons/fa6";
 import { updateUser } from "@/actions/users";
-import { toast } from "react-toastify";  // Importer toast
 
 interface ProfileProps {
   userId?: string;
 }
 
+interface UserData {
+  coverPicture?: string;
+  image?: string;
+  name?: string;
+  email?: string;
+  createdAt?: string;
+}
+
 export default function ProfileAvatar({ userId }: ProfileProps) {
   const { data: session } = useSession();
-  const authorization = session?.user && !userId;
+  const [userData, setUserData] = useState<UserData>({});
+  const [isLoading, setIsLoading] = useState(true);
+  const [fetchError, setFetchError] = useState("");
+  
+  const resolvedUserId = userId || session?.user?.id;
+  const authorization = resolvedUserId === session?.user?.id;
+
+  // États pour les images
   const [coverSrc, setCoverSrc] = useState("");
   const [profileSrc, setProfileSrc] = useState("");
   const [coverError, setCoverError] = useState(false);
   const [profileError, setProfileError] = useState(false);
+  
+  // États éditables
   const [fullname, setFullname] = useState("User");
-  const [contact, setContact] = useState("");
+  const [contact, setContact] = useState("- - -");
   const [isEditing, setIsEditing] = useState(false);
-
-  useEffect(() => {
-    if (session?.user) {
-      setProfileSrc(session.user.image || "");
-      setFullname(session.user.name || "New User");
-      setContact(session.user.email || "- - -");
-    }
-  }, [session]);
-
-  useEffect(() => {
-    if (userId) {
-      fetch(`/api/users/${userId}`)
-        .then((response) => response.json())
-        .then((res) => {
-          if (res) {
-            setCoverSrc(res?.coverPicture || "");
-            setProfileSrc(res?.image || "");
-            setFullname(res?.name || "User");
-            setContact(res?.email || "");
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-          toast.error("Erreur lors de la récupération des données utilisateur.");
-        });
-    }
-  }, [userId]);
 
   const coverInputRef = useRef<HTMLInputElement>(null);
   const profileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (resolvedUserId) {
+      setIsLoading(true);
+      fetch(`/api/users/${resolvedUserId}`)
+        .then((response) => {
+          if (!response.ok) throw new Error("Échec du chargement");
+          return response.json();
+        })
+        .then((res: UserData) => {
+          setUserData(res);
+          setCoverSrc(res.coverPicture || "");
+          setProfileSrc(res.image || "");
+          setFullname(res.name || "User");
+          setContact(res.email || "- - -");
+        })
+        .catch((error) => {
+          setFetchError("Erreur de chargement du profil");
+          console.error(error);
+        })
+        .finally(() => setIsLoading(false));
+    }
+  }, [resolvedUserId]);
 
   const handleFullnameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFullname(e.target.value);
@@ -61,11 +73,12 @@ export default function ProfileAvatar({ userId }: ProfileProps) {
 
   const saveFullname = () => {
     setIsEditing(false);
-    toast.success("Nom mis à jour !");
   };
 
-  const handleCoverChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+  const handleImageUpload = async (
+    file: File | undefined, 
+    setState: (url: string) => void
+  ) => {
     if (!file) return;
 
     const formData = new FormData();
@@ -77,54 +90,40 @@ export default function ProfileAvatar({ userId }: ProfileProps) {
         body: formData,
       });
       const data = await res.json();
-      setCoverSrc(data.url);
-      toast.success("Image de couverture mise à jour !");
+      setState(data.url);
     } catch (error) {
-      console.error("Erreur lors de l’upload de la cover", error);
-      toast.error("Erreur lors de la mise à jour de l'image de couverture.");
+      console.error("Erreur lors de l'upload", error);
     }
   };
 
-  const handleProfileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const handleCoverChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    handleImageUpload(e.target.files?.[0], setCoverSrc);
+  };
 
-    const formData = new FormData();
-    formData.append("file", file);
-
-    try {
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
-      const data = await res.json();
-      setProfileSrc(data.url);
-      toast.success("Image de profil mise à jour !");
-    } catch (error) {
-      console.error("Erreur lors de l’upload du profil", error);
-      toast.error("Erreur lors de la mise à jour de l'image de profil.");
-    }
+  const handleProfileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    handleImageUpload(e.target.files?.[0], setProfileSrc);
   };
 
   useEffect(() => {
-    async function handleUpdate() {
+    const handleUpdate = async () => {
       try {
         await updateUser({
           coverPicture: coverSrc,
           image: profileSrc,
           name: fullname,
         });
-        toast.success("Utilisateur mis à jour !");
       } catch (error) {
         console.error("Erreur de mise à jour", error);
-        toast.error("Erreur lors de la mise à jour de l'utilisateur.");
       }
-    }
+    };
 
     if (authorization) {
       handleUpdate();
     }
   }, [coverSrc, profileSrc, fullname, authorization]);
+
+  if (isLoading) return <div className="text-center p-4">Chargement...</div>;
+  if (fetchError) return <div className="text-center p-4 text-red-500">{fetchError}</div>;
 
   return (
     <div className="flex flex-col items-center space-y-2 mt-4">
@@ -146,12 +145,12 @@ export default function ProfileAvatar({ userId }: ProfileProps) {
           )}
 
           {authorization && (
-            <span
-              className="absolute bottom-2 right-2 flex items-center justify-center p-1 bg-white rounded-full shadow cursor-pointer"
+            <button
+              className="absolute bottom-2 right-2 flex items-center justify-center p-1 bg-white rounded-full shadow cursor-pointer hover:bg-gray-100"
               onClick={() => coverInputRef.current?.click()}
             >
               <FaCamera className="text-sm text-gray-900" />
-            </span>
+            </button>
           )}
           <input
             type="file"
@@ -180,12 +179,12 @@ export default function ProfileAvatar({ userId }: ProfileProps) {
           </Avatar>
 
           {authorization && (
-            <span
-              className="absolute bottom-1 right-0 flex items-center justify-center p-1 bg-white rounded-full shadow cursor-pointer"
+            <button
+              className="absolute bottom-1 right-0 flex items-center justify-center p-1 bg-white rounded-full shadow cursor-pointer hover:bg-gray-100"
               onClick={() => profileInputRef.current?.click()}
             >
               <FaCamera className="text-sm text-gray-900" />
-            </span>
+            </button>
           )}
           <input
             type="file"
@@ -221,7 +220,11 @@ export default function ProfileAvatar({ userId }: ProfileProps) {
       <p className="flex items-center gap-1 text-sm text-gray-500">
         {contact} <MdOutlineReportGmailerrorred /> <FaCircleCheck />
       </p>
-      <p className="flex gap-1 text-sm text-gray-500">Inscrit le 12/01/2023</p>
+      {userData.createdAt && (
+        <p className="flex gap-1 text-sm text-gray-500">
+          Inscrit le {new Date(userData.createdAt).toLocaleDateString()}
+        </p>
+      )}
     </div>
   );
 }
