@@ -39,6 +39,8 @@ export default function ProfileAvatar({ userId }: ProfileProps) {
   // États éditables
   const [fullname, setFullname] = useState("User");
   const [contact, setContact] = useState("- - -");
+  const [emailVerified, setEmailVerified] = useState("- - -");
+  const [createdAt, setCreatedAt] = useState("- - -");
   const [isEditing, setIsEditing] = useState(false);
 
   const coverInputRef = useRef<HTMLInputElement>(null);
@@ -58,6 +60,8 @@ export default function ProfileAvatar({ userId }: ProfileProps) {
           setProfileSrc(res.image || "");
           setFullname(res.name || "User");
           setContact(res.email || "- - -");
+          setEmailVerified(res.emailVerified || "");
+          setCreatedAt(res.createdAt || "Non définie");
         })
         .catch((error) => {
           setFetchError("Erreur de chargement du profil");
@@ -218,11 +222,11 @@ export default function ProfileAvatar({ userId }: ProfileProps) {
       </div>
 
       <p className="flex items-center gap-1 text-sm text-gray-500">
-        {contact} <MdOutlineReportGmailerrorred /> <FaCircleCheck />
+        {contact} { emailVerified ? <FaCircleCheck className="text-green-800" /> : <MdOutlineReportGmailerrorred /> }
       </p>
       {userData.createdAt && (
         <p className="flex gap-1 text-sm text-gray-500">
-          Inscrit le {new Date(userData.createdAt).toLocaleDateString()}
+          Inscrit le {new Date(createdAt).toLocaleDateString()}
         </p>
       )}
     </div>
