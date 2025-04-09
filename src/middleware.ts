@@ -1,41 +1,40 @@
-import { auth } from "@/lib/auth"; // Importer la fonction auth
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/lib/auth";
+import {
+  DEFAULT_LOGIN_REDIRECT,
+  apiAuthPrefix,
+  authRoutes,
+  publicRoutes,
+} from "./routes";
 
-// Définir les routes publiques (y compris la page d'accueil et les routes API d'authentification)
-const publicRoutes = ["/", "/login", "/register", "/about"];
-const apiAuthPrefix = "/api/auth";
+export default async function middleware(req: NextRequest) {
+  const { nextUrl } = req;
+  const session = await auth(); // Vérification de session correcte
+  const isLoggedIn = !!session;
 
-export async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+  const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
+  const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
+  const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
-  // Autoriser l'accès aux fichiers dans le dossier public
-  if (pathname.startsWith("/_next") || pathname.startsWith("/favicon.ico")) {
+  if (isApiAuthRoute) {
     return NextResponse.next();
   }
 
-  // Vérifier si la route est publique ou commence par /api/auth
-  const isPublicRoute = publicRoutes.includes(pathname);
-  const isApiAuthRoute = pathname.startsWith(apiAuthPrefix);
-
-  // Si la route est publique ou est une route API d'authentification, laisser passer la requête
-  if (isPublicRoute || isApiAuthRoute) {
+  if (isAuthRoute) {
+    if (isLoggedIn) {
+      return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+    }
     return NextResponse.next();
   }
 
-  // Vérifier la session
-  const session = await auth(); // Utiliser la fonction auth() pour récupérer la session
-
-  // Si aucun session n'est trouvée, rediriger vers la page de login
-  if (!session) {
-    return NextResponse.redirect(new URL("/login", request.url));
+  if (!isLoggedIn && !isPublicRoute) {
+    return NextResponse.redirect(new URL("/login", nextUrl));
   }
 
-  // Si une session est trouvée, continuer la requête
   return NextResponse.next();
 }
 
+// Exclure les fichiers statiques et dossiers spéciaux du middleware
 export const config = {
-  // Exclure certains chemins (comme les fichiers statiques, les images, le favicon)
-  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"], // Couvre toutes les routes sauf les assets
+  matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],
 };
