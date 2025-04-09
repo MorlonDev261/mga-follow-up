@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 // Définir les routes publiques (y compris la page d'accueil et les routes API d'authentification)
-const publicRoutes = ["/", "/login", "/register", "/about"];
+const publicRoutes = ["/login", "/register", "/about"];
 const apiAuthPrefix = "/api/auth";
 
 export async function middleware(request: NextRequest) {
