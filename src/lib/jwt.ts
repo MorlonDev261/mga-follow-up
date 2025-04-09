@@ -1,9 +1,14 @@
 import jwt from "jsonwebtoken";
 
-export function verifyJwt(token: string) {
-  try {
-    return jwt.verify(token, process.env.JWT_SECRET!);
-  } catch {
-    return null;
-  }
+const secret = process.env.JWT_SECRET; // Secret de ton token, à récupérer dans .env
+
+export async function verifyToken(token: string) {
+  return new Promise((resolve, reject) => {
+    jwt.verify(token, secret, (err, decoded) => {
+      if (err) {
+        return reject(new Error("Token invalide ou expiré"));
+      }
+      resolve(decoded);
+    });
+  });
 }
