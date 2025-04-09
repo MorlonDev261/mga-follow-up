@@ -1,69 +1,54 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@/lib/auth";
-import {
-  DEFAULT_LOGIN_REDIRECT,
-  apiAuthPrefix,
-  authRoutes,
-  publicRoutes,
-} from "./routes";
-import { verifyJwt } from "@/lib/jwt";
+import { auth } from "@/lib/auth";  // Pour la vérification de la session
+import { verifyToken } from "@/lib/jwt"; // Pour la vérification du token JWT
+import { apiAuthPrefix, publicRoutes, authRoutes, DEFAULT_LOGIN_REDIRECT } from "./routes";
 
 export default async function middleware(req: NextRequest) {
   const { nextUrl } = req;
-  const pathname = nextUrl.pathname;
+  const session = await auth(); // Vérification de la session via NextAuth
+  const isLoggedIn = !!session; // Si la session est présente
 
-  const isApiAuthRoute = pathname.startsWith(apiAuthPrefix);
-  const isPrivateApiRoute = pathname.startsWith("/api") && !isApiAuthRoute;
-  const isPublicRoute = publicRoutes.includes(pathname);
-  const isAuthRoute = authRoutes.includes(pathname);
+  const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix); // Routes API nécessitant un token
+  const isPublicRoute = publicRoutes.includes(nextUrl.pathname); // Routes publiques sans authentification
+  const isAuthRoute = authRoutes.includes(nextUrl.pathname); // Routes d'authentification (login, etc.)
 
-  // Autoriser les routes d'authentification API
-  if (isApiAuthRoute) return NextResponse.next();
-
-  // Protection des API privées avec Bearer token
-  if (isPrivateApiRoute) {
-    const authHeader = req.headers.get("authorization");
-    const token = authHeader?.replace("Bearer ", "");
-
+  // Si c'est une route API avec un préfixe auth, vérifie le token
+  if (isApiAuthRoute) {
+    const token = req.headers.get("Authorization")?.replace("Bearer ", "");
     if (!token) {
-      return new NextResponse(
-        JSON.stringify({ message: "Token manquant", errorCode: "MISSING_TOKEN" }),
-        {
-          status: 401,
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      return NextResponse.json({ message: "Authentification requise", errorCode: "MISSING_TOKEN" }, { status: 401 });
     }
 
-    const payload = verifyJwt(token);
-    if (!payload) {
-      return new NextResponse(
-        JSON.stringify({ message: "Token invalide", errorCode: "INVALID_TOKEN" }),
-        {
-          status: 401,
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+    try {
+      // Vérifie le token JWT
+      const payload = await verifyToken(token);  // Assure-toi que `verifyToken` est une fonction pour valider le token JWT
+      // Si tu as besoin de stocker des informations liées à l'utilisateur après la vérification, tu peux les ajouter ici
+      return NextResponse.next();  // Continue si le token est valide
+    } catch (error) {
+      console.error("[API Auth Error]", error);
+      return NextResponse.json({ message: "Token invalide", errorCode: "INVALID_TOKEN" }, { status: 401 });
     }
-
-    return NextResponse.next();
   }
 
-  // Auth pour les routes de type page
-  const session = await auth();
-  const isLoggedIn = !!session;
-
-  if (isAuthRoute && isLoggedIn) {
-    return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+  // Si la route est d'authentification (login, etc.)
+  if (isAuthRoute) {
+    if (isLoggedIn) {
+      // Si l'utilisateur est déjà connecté, redirige vers la page principale
+      return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+    }
+    return NextResponse.next(); // Sinon, continue normalement
   }
 
+  // Si la route n'est pas publique et que l'utilisateur n'est pas connecté, redirige vers la page de login
   if (!isLoggedIn && !isPublicRoute) {
     return NextResponse.redirect(new URL("/login", nextUrl));
   }
 
+  // Si l'utilisateur est connecté, continue normalement
   return NextResponse.next();
 }
 
+// Exclure certains fichiers comme les images ou les assets de ce middleware
 export const config = {
-  matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],
+  matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"], // Exclut les fichiers statiques et les dossiers spéciaux
 };
