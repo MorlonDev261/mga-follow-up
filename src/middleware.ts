@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";  // Pour la vérification de la session
-import { verifyToken } from "@/lib/jwt"; // Pour la vérification du token JWT
+// import { verifyToken } from "@/lib/jwt"; // Pour la vérification du token JWT
 import { apiAuthPrefix, publicRoutes, authRoutes, DEFAULT_LOGIN_REDIRECT } from "./routes";
 
 export default async function middleware(req: NextRequest) {
@@ -13,7 +13,7 @@ export default async function middleware(req: NextRequest) {
   const isAuthRoute = authRoutes.includes(nextUrl.pathname); // Routes d'authentification (login, etc.)
 
   // Si c'est une route API avec un préfixe auth, vérifie le token
-  if (!isApiAuthRoute && !isPublicRoute && !isAuthRoute) {
+  /** if (!isApiAuthRoute && !isPublicRoute && !isAuthRoute) {
     const token = req.headers.get("Authorization")?.replace("Bearer ", "");
     if (!token) {
       return NextResponse.json({ message: "Authentification requise", errorCode: "MISSING_TOKEN" }, { status: 401 });
@@ -30,7 +30,7 @@ export default async function middleware(req: NextRequest) {
       console.error("[API Auth Error]", error);
       return NextResponse.json({ message: "Token invalide", errorCode: "INVALID_TOKEN" }, { status: 401 });
     }
-  }
+  } **/
 
   // Si la route est d'authentification (login, etc.)
   if (isAuthRoute) {
