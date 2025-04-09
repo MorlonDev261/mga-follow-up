@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import SessionProvider from "@/components/SessionProvider";
 import { ToastManager } from "@/components/toast-provider"
 import { auth } from "@/lib/auth"
@@ -88,6 +90,7 @@ export default async function RootLayout({
               </div>
               <PWA />
             </ToastManager>
+            <ToastContainer />
           </SessionProvider>
         </ThemeProvider>
       </body>
