@@ -4,10 +4,10 @@ import db from '@/lib/db';
 // GET USER
 export async function GET(
   _req: Request,
-  context: { params: { userId: string } }
+  { params }: { params: { userId: string } }
 ) {
   try {
-    const { userId } = context.params;
+    const { userId } = params;
 
     if (!userId) {
       return NextResponse.json({ error: 'ID utilisateur manquant' }, { status: 400 });
@@ -40,10 +40,10 @@ export async function GET(
 // UPDATE USER
 export async function PUT(
   req: Request,
-  context: { params: { userId: string } }
+  { params }: { params: { userId: string } }
 ) {
   try {
-    const { userId } = context.params;
+    const { userId } = params;
     const body = await req.json();
     const { name, image, coverPicture } = body;
 
