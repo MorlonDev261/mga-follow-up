@@ -12,7 +12,7 @@ import ShortcutList from "@components/ShortcutList";
 import Statistique from "@components/Statistique";
 import MainTable from "@components/Table/MainTable";
 
-export default function Dashboard() {
+export default function Home() {
   return (
     <>
       <div className="p-2">
