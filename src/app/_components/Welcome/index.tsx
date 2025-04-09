@@ -70,11 +70,11 @@ const HomePage = () => {
           </div>
           <div className="bg-green-600 text-white p-8 rounded-xl shadow-md">
             <h3 className="text-2xl font-bold mb-4">Sécurisé et Fiable</h3>
-            <p>Vos données sont protégées par des normes de sécurité élevées, garantissant la confidentialité et l'intégrité.</p>
+            <p>Vos données sont protégées par des normes de sécurité élevées, garantissant la confidentialité et l&apos;intégrité.</p>
           </div>
           <div className="bg-orange-600 text-white p-8 rounded-xl shadow-md">
             <h3 className="text-2xl font-bold mb-4">Interface Intuitive</h3>
-            <p>Une interface utilisateur conviviale et facile à utiliser pour toute l'équipe, peu importe leur niveau technique.</p>
+            <p>Une interface utilisateur conviviale et facile à utiliser pour toute l&apos;équipe, peu importe leur niveau technique.</p>
           </div>
         </div>
       </section>
@@ -82,7 +82,7 @@ const HomePage = () => {
       {/* Section: Call to Action */}
       <section className="text-center">
         <p className="text-xl text-gray-700 mb-6">
-          Prêt à transformer la gestion de votre entreprise avec MGA Follow UP ? Rejoignez-nous dès aujourd'hui !
+          Prêt à transformer la gestion de votre entreprise avec MGA Follow UP ? Rejoignez-nous dès aujourd&apos;hui !
         </p>
         <button
           onClick={handleGetStarted}
@@ -97,7 +97,7 @@ const HomePage = () => {
         <p>&copy; 2025 MGA Follow UP. Tous droits réservés.</p>
         <p className="mt-2">
           <a href="/privacy" className="text-green-600 hover:text-green-800">Politique de confidentialité</a> |{' '}
-          <a href="/terms" className="text-green-600 hover:text-green-800">Conditions d'utilisation</a>
+          <a href="/terms" className="text-green-600 hover:text-green-800">Conditions d&apos;utilisation</a>
         </p>
       </footer>
     </div>
