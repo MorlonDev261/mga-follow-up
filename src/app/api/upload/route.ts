@@ -5,14 +5,21 @@ export async function POST(req: Request) {
   const data = await req.formData();
   const file = data.get("file") as File;
 
+  if (!file) {
+    return NextResponse.json({ error: "Aucun fichier reçu." }, { status: 400 });
+  }
+
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
 
-  const uploadRes = await new Promise((resolve, reject) => {
-    cloudinary.uploader.upload_stream({ folder: "avatars" }, (error, result) => {
-      if (error) reject(error);
-      else resolve(result);
-    }).end(buffer);
+  const uploadRes = await new Promise<cloudinary.UploadApiResponse>((resolve, reject) => {
+    cloudinary.uploader.upload_stream(
+      { folder: "avatars" },
+      (error, result) => {
+        if (error || !result) reject(error);
+        else resolve(result);
+      }
+    ).end(buffer);
   });
 
   return NextResponse.json({
