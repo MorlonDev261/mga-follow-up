@@ -8,7 +8,9 @@ type Params = {
 };
 
 // GET USER
-export async function GET(_req: Request, { params }: Params) {
+export async function GET({ params }: {
+params: Promise<{ userId: string }>;
+}) {
   try {
     const { userId } = params;
 
