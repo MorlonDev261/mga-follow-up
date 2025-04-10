@@ -228,7 +228,7 @@ export default function ProfileAvatar({ userId }: ProfileProps) {
       </p>
       {userData.createdAt && (
         <p className="flex gap-1 text-sm text-gray-500">
-          Inscrit le {new Date(createdAt).toLocaleDateString()}
+          Inscrit le {moment(createdAt).format("DD MMMM YYYY")}
         </p>
       )}
     </div>
