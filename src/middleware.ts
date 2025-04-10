@@ -17,7 +17,7 @@ export default async function middleware(req: NextRequest) {
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
-  if (!isLoggedIn && !isApiAuthRoute && !isPublicRoute && !isAuthRoute) {
+  if (!isLoggedIn && !isApiAuthRoute && !isAuthRoute) {
     const token = req.headers.get("Authorization")?.replace("Bearer ", "");
     if (!token) {
       return NextResponse.json({ message: "Authentification requise", errorCode: "MISSING_TOKEN" }, { status: 401 });
