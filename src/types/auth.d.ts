@@ -9,7 +9,7 @@ declare module 'next-auth' {
       name?: string
       image?: string
       coverPicture?: string
-      emailVerified?: Date | null
+      emailVerified?: string | null
       createdAt?: string
     }
   }
