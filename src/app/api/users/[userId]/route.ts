@@ -1,18 +1,14 @@
 import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 import db from '@/lib/db';
 
-type Params = {
-  params: {
-    id: string;
-  };
-};
-
 // GET USER
-export async function GET({ params }: Params) {
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { userId: string } }
+) {
   try {
-    const allParams = await params;
-    const userId = allParams?.id;
-
+    const userId = params.userId;
 
     const user = await db.user.findUnique({
       where: { id: userId },
@@ -27,10 +23,9 @@ export async function GET({ params }: Params) {
       },
     });
 
-    return user 
+    return user
       ? NextResponse.json(user)
       : NextResponse.json({ error: 'Utilisateur non trouvé' }, { status: 404 });
-      
   } catch (error) {
     console.error('[GET USER]', error);
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
@@ -38,10 +33,12 @@ export async function GET({ params }: Params) {
 }
 
 // UPDATE USER
-export async function PUT({ params }: Params) {
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: { userId: string } }
+) {
   try {
-    const allParams = await params;
-    const userId = allParams?.id;
+    const userId = params.userId;
     const { name, image, coverPicture } = await req.json();
 
     const updatedUser = await db.user.update({
@@ -50,7 +47,6 @@ export async function PUT({ params }: Params) {
     });
 
     return NextResponse.json(updatedUser);
-    
   } catch (error) {
     console.error('[PUT USER]', error);
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
