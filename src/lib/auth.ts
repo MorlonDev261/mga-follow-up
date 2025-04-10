@@ -73,19 +73,27 @@ export const authOptions: NextAuthConfig = {
     },
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id ?? ""
+        token.id = user.id
         token.email = user.email ?? ""
         token.name = user.name ?? ""
+        token.role = user.role
+        token.coverPicture = user.coverPicture ?? ""
         token.image = user.image ?? ""
+        token.emailVerified: user.emailVerified ?? ""
+        token.createdAt: user.createdAt
       }
       return token
     },
     async session({ session, token }) {
       if (token) {
-        session.user.id = token.id
-        session.user.email = token.email ?? ""
-        session.user.name = token.name ?? ""
-        session.user.image = token.image ?? ""
+        session.id = token.id
+        session.email = token.email ?? ""
+        session.name = token.name ?? ""
+        session.role = token.role
+        session.coverPicture = token.coverPicture ?? ""
+        session.image = token.image ?? ""
+        session.emailVerified: token.emailVerified ?? ""
+        session.createdAt: token.createdAt
       }
       return session
     },
