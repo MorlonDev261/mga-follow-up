@@ -80,7 +80,7 @@ export const authOptions: NextAuthConfig = {
           role: user.role,
           image: user.image ?? "",
           coverPicture: user.coverPicture ?? "",
-          emailVerified: user.emailVerified ?? "",
+          emailVerified: user.emailVerified ? (user.emailVerified instanceof Date ? user.emailVerified.toISOString() : user.emailVerified) : "",
           createdAt: user.createdAt,
         }
       }
