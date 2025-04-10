@@ -75,12 +75,12 @@ export const authOptions: NextAuthConfig = {
       if (user) {
         token.user = {
           id: user.id,
-          name: user.name,
+          name: user.name ?? "",
           email: user.email,
           role: user.role,
-          image: user.image,
-          coverPicture: user.coverPicture,
-          emailVerified: user.emailVerified,
+          image: user.image ?? "",
+          coverPicture: user.coverPicture ?? "",
+          emailVerified: user.emailVerified ?? "",
           createdAt: user.createdAt,
         }
       }
