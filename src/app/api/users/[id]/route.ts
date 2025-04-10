@@ -3,7 +3,7 @@ import db from '@/lib/db';
 
 type Params = {
   params: {
-    userId: string;
+    id: string;
   };
 };
 
