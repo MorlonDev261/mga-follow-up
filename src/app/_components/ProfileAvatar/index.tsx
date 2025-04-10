@@ -18,6 +18,7 @@ interface UserData {
   image?: string;
   name?: string;
   email?: string;
+  emailVerified?: Date;
   createdAt?: string;
 }
 
