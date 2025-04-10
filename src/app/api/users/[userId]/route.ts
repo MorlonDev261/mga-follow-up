@@ -1,15 +1,13 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import db from '@/lib/db';
 
-// GET USER
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { userId: string } }
-) {
-  try {
-    const userId = params.userId;
+// GET user by ID
+export async function GET(req: NextRequest) {
+  const url = new URL(req.nextUrl);
+  const segments = url.pathname.split('/');
+  const userId = segments[segments.length - 1];
 
+  try {
     const user = await db.user.findUnique({
       where: { id: userId },
       select: {
@@ -32,14 +30,15 @@ export async function GET(
   }
 }
 
-// UPDATE USER
-export async function PUT(
-  req: NextRequest,
-  { params }: { params: { userId: string } }
-) {
+// PUT update user by ID
+export async function PUT(req: NextRequest) {
+  const url = new URL(req.nextUrl);
+  const segments = url.pathname.split('/');
+  const userId = segments[segments.length - 1];
+
   try {
-    const userId = params.userId;
-    const { name, image, coverPicture } = await req.json();
+    const body = await req.json();
+    const { name, image, coverPicture } = body;
 
     const updatedUser = await db.user.update({
       where: { id: userId },
@@ -48,7 +47,7 @@ export async function PUT(
 
     return NextResponse.json(updatedUser);
   } catch (error) {
-    console.error('[PUT USER]', error);
+    console.error('[UPDATE USER]', error);
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
   }
 }
