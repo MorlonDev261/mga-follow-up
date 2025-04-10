@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import SessionProvider from "@/components/SessionProvider";
@@ -89,6 +90,7 @@ export default async function RootLayout({
                 <Image src="/assistant.png" width={48} height={48} alt="Assistant MGA Follow UP" />
               </div>
               <PWA />
+              <SpeedInsights/>
             </ToastManager>
             <ToastContainer />
           </SessionProvider>
