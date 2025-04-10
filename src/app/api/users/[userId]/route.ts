@@ -1,14 +1,14 @@
 import { NextResponse } from 'next/server';
 import db from '@/lib/db';
 
-/*type Params = {
+type Params = {
   params: {
     userId: string;
   };
-};*/
+};
 
 // GET USER
-export async function GET({ params }) {
+export async function GET({ params }: Params) {
   try {
     const allParams = await params;
     const userId = allParams?.id;
@@ -38,7 +38,7 @@ export async function GET({ params }) {
 }
 
 // UPDATE USER
-export async function PUT({ params }) {
+export async function PUT({ params }: Params) {
   try {
     const allParams = await params;
     const userId = allParams?.id;
