@@ -88,10 +88,10 @@ export const authOptions: NextAuthConfig = {
         session.user.id = token.id
         session.user.email = token.email ?? ""
         session.user.name = token.name ?? ""
-        session.coverPicture = token.coverPicture ?? ""
-        session.image = token.image ?? ""
-        session.emailVerified = token.emailVerified ?? ""
-        session.createdAt = token.createdAt ?? ""
+        session.user.coverPicture = token.coverPicture ?? ""
+        session.user.image = token.image ?? ""
+        session.user.emailVerified = token.emailVerified ?? ""
+        session.user.createdAt = token.createdAt ?? ""
       }
       return session
     },
