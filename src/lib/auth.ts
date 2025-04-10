@@ -73,16 +73,7 @@ export const authOptions: NextAuthConfig = {
     },
     async jwt({ token, user }) {
       if (user) {
-        token.user = {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          role: user.role,
-          image: user.image,
-          coverPicture: user.coverPicture,
-          emailVerified: user.emailVerified,
-          createdAt: user.createdAt,
-        }
+        token.user = user
       }
       return token
     },
