@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { MdOutlineReportGmailerrorred } from "react-icons/md";
 import { FaCircleCheck, FaImage, FaPen, FaUser, FaCamera } from "react-icons/fa6";
+import moment from "moment"
 import { updateUser } from "@/actions/users";
 
 interface ProfileProps {
@@ -18,7 +19,7 @@ interface UserData {
   image?: string;
   name?: string;
   email?: string;
-  emailVerified?: Date;
+  emailVerified?: Date | null;
   createdAt?: string;
 }
 
@@ -40,7 +41,7 @@ export default function ProfileAvatar({ userId }: ProfileProps) {
   // États éditables
   const [fullname, setFullname] = useState("User");
   const [contact, setContact] = useState("- - -");
-  const [emailVerified, setEmailVerified] = useState("- - -");
+  const [emailVerified, setEmailVerified] = useState("");
   const [createdAt, setCreatedAt] = useState("- - -");
   const [isEditing, setIsEditing] = useState(false);
 
@@ -61,7 +62,7 @@ export default function ProfileAvatar({ userId }: ProfileProps) {
           setProfileSrc(res.image || "");
           setFullname(res.name || "User");
           setContact(res.email || "- - -");
-          setEmailVerified(res.emailVerified || "");
+          setEmailVerified(res.emailVerified ? moment(res.emailVerified).format("YYYY-MM-DD") : "");
           setCreatedAt(res.createdAt || "Non définie");
         })
         .catch((error) => {
