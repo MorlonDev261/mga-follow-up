@@ -9,7 +9,7 @@ declare module 'next-auth' {
       name?: string
       image?: string
       coverPicture?: string
-      emailVerified?: string
+      emailVerified?: string | Date
       createdAt?: string
     }
   }
@@ -20,7 +20,7 @@ declare module 'next-auth' {
     name?: string
     image?: string
     coverPicture?: string
-    emailVerified?: string
+    emailVerified?: string | Date
     createdAt?: string
   }
 }
@@ -32,7 +32,7 @@ declare module 'next-auth/jwt' {
     name?: string
     image?: string
     coverPicture?: string
-    emailVerified?: string
+    emailVerified?: string | Date
     createdAt?: string
   }
 }
