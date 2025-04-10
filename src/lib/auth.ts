@@ -91,7 +91,7 @@ export const authOptions: NextAuthConfig = {
         session.user.name = token.name ?? ""
         session.user.coverPicture = token.coverPicture ?? ""
         session.user.image = token.image ?? ""
-        session.user.emailVerified = token.emailVerified ? moment(token.emailVerified).format('YYYY-MM-DD') : null;
+        session.user.emailVerified = token.emailVerified ?? ""
         session.user.createdAt = token.createdAt ?? ""
       }
       return session
