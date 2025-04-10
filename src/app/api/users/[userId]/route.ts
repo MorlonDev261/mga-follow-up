@@ -1,18 +1,18 @@
 import { NextResponse } from 'next/server';
 import db from '@/lib/db';
 
-type Params = {
+/*type Params = {
   params: {
     userId: string;
   };
-};
+};*/
 
 // GET USER
-export async function GET({ params }: {
-params: Promise<{ userId: string }>;
-}) {
+export async function GET({ params }) {
   try {
-    const { userId } = params;
+    const allParams = await params;
+    const userId = allParams?.id;
+
 
     const user = await db.user.findUnique({
       where: { id: userId },
@@ -38,9 +38,10 @@ params: Promise<{ userId: string }>;
 }
 
 // UPDATE USER
-export async function PUT(req: Request, { params }: Params) {
+export async function PUT({ params }) {
   try {
-    const { userId } = params;
+    const allParams = await params;
+    const userId = allParams?.id;
     const { name, image, coverPicture } = await req.json();
 
     const updatedUser = await db.user.update({
