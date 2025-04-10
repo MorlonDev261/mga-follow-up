@@ -51,7 +51,7 @@ export default function ProfileAvatar({ userId }: ProfileProps) {
   useEffect(() => {
     if (resolvedUserId) {
       setIsLoading(true);
-      fetch(`/api/users/${resolvedUserId}`)
+      fetch("/api/users/cm97k94ce0000js04k0kwp12q")
         .then((response) => {
           if (!response.ok) throw new Error("Échec du chargement");
           return response.json();
