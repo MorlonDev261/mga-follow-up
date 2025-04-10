@@ -3,6 +3,7 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 import GoogleProvider from 'next-auth/providers/google'
 import bcrypt from 'bcryptjs'
 import db from '@/lib/db'
+import moment from 'moment'
 
 export const authOptions: NextAuthConfig = {
   providers: [
@@ -90,7 +91,7 @@ export const authOptions: NextAuthConfig = {
         session.user.name = token.name ?? ""
         session.user.coverPicture = token.coverPicture ?? ""
         session.user.image = token.image ?? ""
-        session.user.emailVerified = token.emailVerified ?? ""
+        session.user.emailVerified = token.emailVerified ? moment(token.emailVerified).format('YYYY-MM-DD') : null;
         session.user.createdAt = token.createdAt ?? ""
       }
       return session
