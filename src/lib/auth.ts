@@ -79,7 +79,7 @@ export const authOptions: NextAuthConfig = {
         token.name = user.name ?? ""
         token.coverPicture = user.coverPicture ?? ""
         token.image = user.image ?? ""
-        token.emailVerified = user.emailVerified ?? ""
+        token.emailVerified = user.emailVerified ?? null
         token.createdAt = user.createdAt ?? ""
       }
       return token
