@@ -2,20 +2,22 @@ import { NextResponse } from 'next/server';
 import db from '@/lib/db';
 import { z } from 'zod';
 
-type Params = {
-  params: { userId: string };
-};
-
-// Schéma de validation avec Zod
+// Schema de validation pour PUT
 const updateUserSchema = z.object({
-  name: z.string().min(1).optional(),
+  name: z.string().optional(),
   image: z.string().url().optional(),
   coverPicture: z.string().url().optional(),
 });
 
-// GET user by ID
-export async function GET(_: Request, { params }: Params) {
-  const { userId } = params;
+// Fonction utilitaire pour extraire l’ID
+function extractUserId(url: URL): string | null {
+  const parts = url.pathname.split('/');
+  return parts[parts.length - 1] || null;
+}
+
+export async function GET(req: Request) {
+  const userId = extractUserId(new URL(req.url));
+  if (!userId) return NextResponse.json({ error: 'ID invalide' }, { status: 400 });
 
   try {
     const user = await db.user.findUnique({
@@ -31,10 +33,7 @@ export async function GET(_: Request, { params }: Params) {
       },
     });
 
-    if (!user) {
-      return NextResponse.json({ error: 'Utilisateur non trouvé' }, { status: 404 });
-    }
-
+    if (!user) return NextResponse.json({ error: 'Utilisateur non trouvé' }, { status: 404 });
     return NextResponse.json(user);
   } catch (error) {
     console.error('[GET USER]', error);
@@ -42,14 +41,13 @@ export async function GET(_: Request, { params }: Params) {
   }
 }
 
-// PUT update user by ID
-export async function PUT(req: Request, { params }: Params) {
-  const { userId } = params;
+export async function PUT(req: Request) {
+  const userId = extractUserId(new URL(req.url));
+  if (!userId) return NextResponse.json({ error: 'ID invalide' }, { status: 400 });
 
   try {
     const body = await req.json();
     const parsed = updateUserSchema.safeParse(body);
-
     if (!parsed.success) {
       return NextResponse.json({ error: 'Données invalides', issues: parsed.error.flatten() }, { status: 400 });
     }
@@ -66,18 +64,15 @@ export async function PUT(req: Request, { params }: Params) {
   }
 }
 
-// DELETE user by ID
-export async function DELETE(_: Request, { params }: Params) {
-  const { userId } = params;
+export async function DELETE(req: Request) {
+  const userId = extractUserId(new URL(req.url));
+  if (!userId) return NextResponse.json({ error: 'ID invalide' }, { status: 400 });
 
   try {
-    await db.user.delete({
-      where: { id: userId },
-    });
-
+    await db.user.delete({ where: { id: userId } });
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('[DELETE USER]', error);
-    return NextResponse.json({ error: 'Erreur lors de la suppression' }, { status: 500 });
+    return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
   }
 }
