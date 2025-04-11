@@ -1,16 +1,20 @@
 import type { Metadata } from "next";
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "@/lib/react-query";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 import SessionProvider from "@/components/SessionProvider";
-import { ToastManager } from "@/components/toast-provider"
-import { auth } from "@/lib/auth"
+import { ToastManager } from "@/components/toast-provider";
+import { auth } from "@/lib/auth";
 import Image from "next/image";
 import { ThemeProvider } from "@/components/theme-provider";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
 import ThemeScript from "@/components/ThemeScript";
 import PWA from "@/components/PWA";
+
+import { Geist, Geist_Mono } from "next/font/google";
+import "./globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,50 +28,49 @@ const geistMono = Geist_Mono({
   display: "swap",
 });
 
-export function generateMetadata(): Metadata {
-  return {
-    title: "MGA Follow UP | Simplify Your Finances",
-    description: "Manage your moulaa easily 😎. Track your payments, customers, and more.",
-    keywords: ["finance", "tracking", "payments", "MGA Follow UP"],
-    authors: [{ name: "AZTEK DWC LLC", url: "https://yourwebsite.com" }],
-    creator: "AZTEK DWC LLC",
-    manifest: "/manifest.json",
-    icons: {
-      icon: "/logo/icon-512x512.png",
-      shortcut: "/logo/icon-192x192.png",
-      apple: "/logo/icon-180x180.png",
-    },
-    themeColor: "#000000",
-    openGraph: {
-      title: "MGA Follow UP",
-      description: "Manage your finances easily with MGA Follow UP.",
-      url: "https://yourwebsite.com",
-      siteName: "MGA Follow UP",
-      type: "website",
-      images: [
-        {
-          url: "https://yourwebsite.com/og-image.jpg",
-          width: 1200,
-          height: 630,
-          alt: "MGA Follow UP Dashboard",
-          type: "image/jpeg",
-        },
-      ],
-    },
-    twitter: {
-      card: "summary_large_image",
-      site: "@your_twitter_handle",
-      creator: "@your_twitter_handle",
-      images: ["https://yourwebsite.com/twitter-image.jpg"],
-    },
-    robots: "index, follow",
-  };
-}
+export const metadata: Metadata = {
+  title: "MGA Follow UP | Simplify Your Finances",
+  description: "Manage your moulaa easily 😎. Track your payments, customers, and more.",
+  keywords: ["finance", "tracking", "payments", "MGA Follow UP"],
+  authors: [{ name: "AZTEK DWC LLC", url: "https://yourwebsite.com" }],
+  creator: "AZTEK DWC LLC",
+  manifest: "/manifest.json",
+  icons: {
+    icon: "/logo/icon-512x512.png",
+    shortcut: "/logo/icon-192x192.png",
+    apple: "/logo/icon-180x180.png",
+  },
+  themeColor: "#000000",
+  openGraph: {
+    title: "MGA Follow UP",
+    description: "Manage your finances easily with MGA Follow UP.",
+    url: "https://yourwebsite.com",
+    siteName: "MGA Follow UP",
+    type: "website",
+    images: [
+      {
+        url: "https://yourwebsite.com/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "MGA Follow UP Dashboard",
+        type: "image/jpeg",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "@your_twitter_handle",
+    creator: "@your_twitter_handle",
+    images: ["https://yourwebsite.com/twitter-image.jpg"],
+  },
+  robots: "index, follow",
+};
 
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const session = await auth();
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -77,24 +80,34 @@ export default async function RootLayout({
         <ThemeScript />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <SessionProvider session={session}>
-            <ToastManager>
-              <div className="min-h-screen">{children}</div>
-              <div className="fixed bottom-10 right-5 z-50 w-16 h-16 rounded-full p-2 bg-green-500 dark:bg-orange-500">
-                <Image src="/assistant.png" width={48} height={48} alt="Assistant MGA Follow UP" />
-              </div>
-              <PWA />
-              <SpeedInsights/>
-            </ToastManager>
-            <ToastContainer />
-          </SessionProvider>
-        </ThemeProvider>
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+            <SessionProvider session={session}>
+              <ToastManager>
+                <main className="min-h-screen">{children}</main>
+
+                {/* Assistant flottant */}
+                <div
+                  className="fixed bottom-10 right-5 z-50 w-16 h-16 rounded-full p-2 bg-green-500 dark:bg-orange-500"
+                  role="button"
+                  tabIndex={0}
+                >
+                  <Image
+                    src="/assistant.png"
+                    width={48}
+                    height={48}
+                    alt="Assistant MGA Follow UP"
+                    priority
+                  />
+                </div>
+
+                <PWA />
+                <SpeedInsights />
+              </ToastManager>
+              <ToastContainer />
+            </SessionProvider>
+          </ThemeProvider>
+        </QueryClientProvider>
       </body>
     </html>
   );
