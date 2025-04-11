@@ -32,7 +32,7 @@ declare module 'next-auth/jwt' {
     name?: string
     image?: string
     coverPicture?: string
-    emailVerified?: string
+    emailVerified?: string | Date
     createdAt?: string
   }
 }
