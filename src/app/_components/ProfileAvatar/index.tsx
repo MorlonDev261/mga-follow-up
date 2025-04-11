@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useSession } from "next-auth/react";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { MdOutlineReportGmailerrorred } from "react-icons/md";
@@ -25,12 +25,12 @@ interface UserData {
 
 export default function ProfileAvatar({ userId }: ProfileProps) {
   const { data: session } = useSession();
+  const resolvedUserId = useMemo(() => userId || session?.user?.id, [userId, session?.user?.id]);
+  const authorization = useMemo(() => resolvedUserId === session?.user?.id, [resolvedUserId, session?.user?.id]);
+
   const [userData, setUserData] = useState<UserData>({});
   const [isLoading, setIsLoading] = useState(true);
   const [fetchError, setFetchError] = useState("");
-
-  const resolvedUserId = userId || session?.user?.id;
-  const authorization = resolvedUserId === session?.user?.id;
 
   const [coverSrc, setCoverSrc] = useState("");
   const [profileSrc, setProfileSrc] = useState("");
@@ -46,20 +46,16 @@ export default function ProfileAvatar({ userId }: ProfileProps) {
   const coverInputRef = useRef<HTMLInputElement>(null);
   const profileInputRef = useRef<HTMLInputElement>(null);
 
-  const prevDataRef = useRef({ coverSrc: "", profileSrc: "", fullname: "" });
-
   useEffect(() => {
     if (!resolvedUserId) return;
 
-    const controller = new AbortController();
-    setIsLoading(true);
+    const fetchUser = async () => {
+      setIsLoading(true);
+      try {
+        const response = await fetch(`/api/users/${resolvedUserId}`);
+        if (!response.ok) throw new Error("Échec du chargement");
 
-    fetch(`/api/users/${resolvedUserId}`, { signal: controller.signal })
-      .then((res) => {
-        if (!res.ok) throw new Error("Échec du chargement");
-        return res.json();
-      })
-      .then((res: UserData) => {
+        const res: UserData = await response.json();
         setUserData(res);
         setCoverSrc(res.coverPicture || "");
         setProfileSrc(res.image || "");
@@ -67,84 +63,58 @@ export default function ProfileAvatar({ userId }: ProfileProps) {
         setContact(res.email || "- - -");
         setEmailVerified(res.emailVerified ? moment(res.emailVerified).format("YYYY-MM-DD") : "");
         setCreatedAt(res.createdAt || "Non définie");
+      } catch (error) {
+        setFetchError("Erreur de chargement du profil");
+        console.error(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-        prevDataRef.current = {
-          coverSrc: res.coverPicture || "",
-          profileSrc: res.image || "",
-          fullname: res.name || "User",
-        };
-      })
-      .catch((err) => {
-        if (err.name !== "AbortError") {
-          setFetchError("Erreur de chargement du profil");
-          console.error(err);
-        }
-      })
-      .finally(() => setIsLoading(false));
-
-    return () => controller.abort();
+    fetchUser();
   }, [resolvedUserId]);
 
   const handleFullnameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFullname(e.target.value);
   };
 
-  const saveFullname = () => {
+  const saveFullname = async () => {
     setIsEditing(false);
-  };
-
-  const handleImageUpload = async (file: File | undefined, setState: (url: string) => void) => {
-    if (!file) return;
-
-    const formData = new FormData();
-    formData.append("file", file);
-
-    try {
-      const res = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
-      const data = await res.json();
-      setState(data.url);
-    } catch (error) {
-      console.error("Erreur lors de l'upload", error);
+    if (fullname !== userData.name) {
+      await updateUser({ name: fullname });
     }
   };
 
-  const handleCoverChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    handleImageUpload(e.target.files?.[0], setCoverSrc);
-  };
+  const handleImageUpload = useCallback(
+    async (file: File | undefined, setState: (url: string) => void, key: keyof UserData) => {
+      if (!file) return;
 
-  const handleProfileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    handleImageUpload(e.target.files?.[0], setProfileSrc);
-  };
+      const formData = new FormData();
+      formData.append("file", file);
 
-  useEffect(() => {
-    if (!authorization) return;
-
-    const hasChanged =
-      coverSrc !== prevDataRef.current.coverSrc ||
-      profileSrc !== prevDataRef.current.profileSrc ||
-      fullname !== prevDataRef.current.fullname;
-
-    if (!hasChanged) return;
-
-    const update = async () => {
       try {
-        await updateUser({
-          coverPicture: coverSrc,
-          image: profileSrc,
-          name: fullname,
+        const res = await fetch("/api/upload", {
+          method: "POST",
+          body: formData,
         });
+        const data = await res.json();
+        setState(data.url);
 
-        prevDataRef.current = { coverSrc, profileSrc, fullname };
+        if (authorization) {
+          await updateUser({ [key]: data.url });
+        }
       } catch (error) {
-        console.error("Erreur de mise à jour", error);
+        console.error("Erreur lors de l'upload", error);
       }
-    };
+    },
+    [authorization]
+  );
 
-    update();
-  }, [coverSrc, profileSrc, fullname, authorization]);
+  const handleCoverChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    handleImageUpload(e.target.files?.[0], setCoverSrc, "coverPicture");
+
+  const handleProfileChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    handleImageUpload(e.target.files?.[0], setProfileSrc, "image");
 
   if (isLoading) return <div className="text-center p-4">Chargement...</div>;
   if (fetchError) return <div className="text-center p-4 text-red-500">{fetchError}</div>;
