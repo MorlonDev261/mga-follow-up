@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { queryClient } from "@/lib/react-query";
+import { ReactQueryProvider } from "@/components/react-query";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -80,7 +79,7 @@ export default async function RootLayout({
         <ThemeScript />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <QueryClientProvider client={queryClient}>
+        <ReactQueryProvider>
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
             <SessionProvider session={session}>
               <ToastManager>
@@ -107,7 +106,7 @@ export default async function RootLayout({
               <ToastContainer />
             </SessionProvider>
           </ThemeProvider>
-        </QueryClientProvider>
+        </ReactQueryProvider>
       </body>
     </html>
   );
