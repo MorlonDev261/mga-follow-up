@@ -112,11 +112,12 @@ const SignUpCard: React.FC = () => {
   const encoded = searchParams.get('callbackUrl');
 
   let callbackUrl = '/';
+  let isSafeCallbackUrl = false;
   if (encoded) {
     try {
       const decoded = decodeURIComponent(atob(encoded));
       if (decoded.startsWith('/')) {
-        const isSafeCallbackUrl = true;
+        isSafeCallbackUrl = true;
         callbackUrl = decoded;
       }
     } catch (e) {
