@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState, useRef, useTransition } from "react";
+import "./CSS/styles.css";
 import Link from "next/link";
 import { signIn } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
-import "./CSS/styles.css";
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
@@ -31,6 +31,9 @@ const LoginCard: React.FC = () => {
   const [isPending, startTransition] = useTransition();
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
+  
+  const searchParams = useSearchParams()
+  const callbackUrl = searchParams.get('callbackUrl') || '/'
 
   // Fonction pour valider un champ en temps réel
   const validateField = (name: "email" | "password", value: string) => {
@@ -66,12 +69,12 @@ const LoginCard: React.FC = () => {
         redirect: false,
         email,
         password,
-      })
+      });
 
       if (res?.error) {
-        setError(res.error)
+        setError(res.error);
       } else {
-        router.push('/')
+        router.push(callbackUrl);
       }
     });
   };
@@ -144,7 +147,7 @@ const LoginCard: React.FC = () => {
 
       <div className="link-to-login">
         Vous n&apos;avez pas encore un compte ?{" "}
-        <Link href="/register" className="text-primary">Inscrivez-vous ici</Link>.
+        <Link href={`/register?callbackUrl=${encodeURIComponent(callbackUrl)}`} className="text-primary">Inscrivez-vous ici</Link>.
       </div>
     </div>
   );
