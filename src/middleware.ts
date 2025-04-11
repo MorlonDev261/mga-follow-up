@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { verifyToken } from "@/lib/jwt";
+import { Buffer } from "buffer";
 import {
   DEFAULT_LOGIN_REDIRECT,
   API,
@@ -50,8 +51,12 @@ export default async function middleware(req: NextRequest) {
   }
 
   if (!isLoggedIn && !isPublicRoute) {
+    const originalPath = nextUrl.pathname + nextUrl.search;
+    const encodedCallbackUrl = Buffer.from(originalPath).toString("base64");
+
     const loginUrl = new URL("/login", req.url);
-    loginUrl.searchParams.set("callbackUrl", nextUrl.pathname + nextUrl.search);
+    loginUrl.searchParams.set("callbackUrl", encodedCallbackUrl);
+
     return NextResponse.redirect(loginUrl);
   }
 
