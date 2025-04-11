@@ -9,14 +9,11 @@ const updateUserSchema = z.object({
   coverPicture: z.string().url().optional(),
 });
 
-// Fonction utilitaire pour extraire l’ID
-function extractUserId(url: URL): string | null {
-  const parts = url.pathname.split('/');
-  return parts[parts.length - 1] || null;
-}
-
 export async function GET(req: Request) {
-  const userId = extractUserId(new URL(req.nextUrl));
+  const url = new URL(req.nextUrl);
+  const segments = url.pathname.split('/');
+  const userId = segments[segments.length - 1];
+
   if (!userId) return NextResponse.json({ error: 'ID invalide' }, { status: 400 });
 
   try {
@@ -42,7 +39,10 @@ export async function GET(req: Request) {
 }
 
 export async function PUT(req: Request) {
-  const userId = extractUserId(new URL(req.nextUrl));
+  const url = new URL(req.nextUrl);
+  const segments = url.pathname.split('/');
+  const userId = segments[segments.length - 1];
+
   if (!userId) return NextResponse.json({ error: 'ID invalide' }, { status: 400 });
 
   try {
@@ -65,7 +65,10 @@ export async function PUT(req: Request) {
 }
 
 export async function DELETE(req: Request) {
-  const userId = extractUserId(new URL(req.nextUrl));
+  const url = new URL(req.nextUrl);
+  const segments = url.pathname.split('/');
+  const userId = segments[segments.length - 1];
+
   if (!userId) return NextResponse.json({ error: 'ID invalide' }, { status: 400 });
 
   try {
