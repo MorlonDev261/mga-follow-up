@@ -30,13 +30,13 @@ export default function ProfileAvatar({ userId }: ProfileProps) {
 
   const queryClient = useQueryClient();
 
-  const { data, isLoading, error } = useQuery<User>({
+  const { data, isLoading, error } = useQuery<User, Error>({
     queryKey: ['user', resolvedUserId],
-    queryFn: () =>
-      fetch(`/api/users/${resolvedUserId}`).then((res) => {
-        if (!res.ok) throw new Error("Erreur de chargement");
-        return res.json();
-      }),
+    queryFn: async () => {
+      const res = await fetch(`/api/users/${resolvedUserId}`);
+      if (!res.ok) throw new Error("Erreur de chargement");
+      return res.json();
+    },
     enabled: !!resolvedUserId,
     staleTime: 1000 * 60 * 5,
   });
