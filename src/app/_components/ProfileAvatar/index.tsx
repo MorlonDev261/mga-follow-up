@@ -2,76 +2,61 @@
 
 import Image from "next/image";
 import { useSession } from "next-auth/react";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useMemo } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { MdOutlineReportGmailerrorred } from "react-icons/md";
 import { FaCircleCheck, FaImage, FaPen, FaUser, FaCamera } from "react-icons/fa6";
-import moment from "moment"
+import moment from "moment";
 import { updateUser } from "@/actions/users";
 
 interface ProfileProps {
   userId?: string;
 }
 
-interface UserData {
-  coverPicture?: string;
-  image?: string;
-  name?: string;
-  email?: string;
-  emailVerified?: Date | null;
-  createdAt?: string;
-}
-
 export default function ProfileAvatar({ userId }: ProfileProps) {
   const { data: session } = useSession();
-  const [userData, setUserData] = useState<UserData>({});
-  const [isLoading, setIsLoading] = useState(true);
-  const [fetchError, setFetchError] = useState("");
-  
   const resolvedUserId = userId || session?.user?.id;
   const authorization = resolvedUserId === session?.user?.id;
 
-  // États pour les images
+  const queryClient = useQueryClient();
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['user', resolvedUserId],
+    queryFn: () =>
+      fetch(`/api/users/${resolvedUserId}`).then((res) => {
+        if (!res.ok) throw new Error("Erreur de chargement");
+        return res.json();
+      }),
+    enabled: !!resolvedUserId,
+    staleTime: 1000 * 60 * 5,
+  });
+
+  const mutation = useMutation({
+    mutationFn: updateUser,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['user', resolvedUserId] });
+    },
+  });
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [fullname, setFullname] = useState("");
   const [coverSrc, setCoverSrc] = useState("");
   const [profileSrc, setProfileSrc] = useState("");
   const [coverError, setCoverError] = useState(false);
   const [profileError, setProfileError] = useState(false);
-  
-  // États éditables
-  const [fullname, setFullname] = useState("User");
-  const [contact, setContact] = useState("- - -");
-  const [emailVerified, setEmailVerified] = useState("");
-  const [createdAt, setCreatedAt] = useState("- - -");
-  const [isEditing, setIsEditing] = useState(false);
 
   const coverInputRef = useRef<HTMLInputElement>(null);
   const profileInputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    if (resolvedUserId) {
-      setIsLoading(true);
-      fetch("/api/users/cm97k94ce0000js04k0kwp12q")
-        .then((response) => {
-          if (!response.ok) throw new Error("Échec du chargement");
-          return response.json();
-        })
-        .then((res: UserData) => {
-          setUserData(res);
-          setCoverSrc(res.coverPicture || "");
-          setProfileSrc(res.image || "");
-          setFullname(res.name || "User");
-          setContact(res.email || "- - -");
-          setEmailVerified(res.emailVerified ? moment(res.emailVerified).format("YYYY-MM-DD") : "");
-          setCreatedAt(res.createdAt || "Non définie");
-        })
-        .catch((error) => {
-          setFetchError("Erreur de chargement du profil");
-          console.error(error);
-        })
-        .finally(() => setIsLoading(false));
-    }
-  }, [resolvedUserId]);
+  const createdAt = useMemo(() => {
+    return data?.createdAt ? moment(data.createdAt).format("DD MMMM YYYY") : "- - -";
+  }, [data?.createdAt]);
+
+  const emailVerified = useMemo(() => {
+    return data?.emailVerified ? moment(data.emailVerified).format("YYYY-MM-DD") : "";
+  }, [data?.emailVerified]);
 
   const handleFullnameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFullname(e.target.value);
@@ -79,14 +64,15 @@ export default function ProfileAvatar({ userId }: ProfileProps) {
 
   const saveFullname = () => {
     setIsEditing(false);
+    mutation.mutate({ name: fullname });
   };
 
   const handleImageUpload = async (
-    file: File | undefined, 
-    setState: (url: string) => void
+    file: File | undefined,
+    setState: (url: string) => void,
+    field: "coverPicture" | "image"
   ) => {
     if (!file) return;
-
     const formData = new FormData();
     formData.append("file", file);
 
@@ -97,50 +83,34 @@ export default function ProfileAvatar({ userId }: ProfileProps) {
       });
       const data = await res.json();
       setState(data.url);
+      mutation.mutate({ [field]: data.url });
     } catch (error) {
       console.error("Erreur lors de l'upload", error);
     }
   };
 
   const handleCoverChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    handleImageUpload(e.target.files?.[0], setCoverSrc);
+    handleImageUpload(e.target.files?.[0], setCoverSrc, "coverPicture");
   };
 
   const handleProfileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    handleImageUpload(e.target.files?.[0], setProfileSrc);
+    handleImageUpload(e.target.files?.[0], setProfileSrc, "image");
   };
 
-  useEffect(() => {
-    const handleUpdate = async () => {
-      try {
-        await updateUser({
-          coverPicture: coverSrc,
-          image: profileSrc,
-          name: fullname,
-        });
-      } catch (error) {
-        console.error("Erreur de mise à jour", error);
-      }
-    };
-
-    if (authorization) {
-      handleUpdate();
-    }
-  }, [coverSrc, profileSrc, fullname, authorization]);
-
   if (isLoading) return <div className="text-center p-4">Chargement...</div>;
-  if (fetchError) return <div className="text-center p-4 text-red-500">{fetchError}</div>;
+  if (error) return <div className="text-center p-4 text-red-500">Erreur de chargement</div>;
 
   return (
     <div className="flex flex-col items-center space-y-2 mt-4">
       <div className="relative w-full max-w-lg">
         {/* Cover Picture */}
         <div className="relative h-32 w-full rounded-t-lg bg-gray-300">
-          {coverSrc && !coverError ? (
+          {data?.coverPicture && !coverError ? (
             <Image
-              src={coverSrc}
+              src={data.coverPicture}
               alt="Cover"
               fill
+              priority
               className="object-cover rounded-t-lg"
               onError={() => setCoverError(true)}
             />
@@ -170,9 +140,9 @@ export default function ProfileAvatar({ userId }: ProfileProps) {
         {/* Avatar */}
         <div className="relative w-24 h-24 mx-auto -mt-12 border-4 border-white rounded-full">
           <Avatar className="w-full h-full">
-            {profileSrc && !profileError ? (
+            {data?.image && !profileError ? (
               <AvatarImage
-                src={profileSrc}
+                src={data.image}
                 alt="Profile"
                 onError={() => setProfileError(true)}
                 className="object-cover"
@@ -213,22 +183,31 @@ export default function ProfileAvatar({ userId }: ProfileProps) {
             className="w-40 text-center"
           />
         ) : (
-          <h2 className="text-lg font-semibold">{fullname}</h2>
+          <h2 className="text-lg font-semibold">{data?.name || "User"}</h2>
         )}
         {authorization && (
           <FaPen
             className="cursor-pointer text-gray-500 hover:text-gray-700"
-            onClick={() => setIsEditing(true)}
+            onClick={() => {
+              setFullname(data?.name || "");
+              setIsEditing(true);
+            }}
           />
         )}
       </div>
 
       <p className="flex items-center gap-1 text-sm text-gray-500">
-        {contact} { emailVerified ? <FaCircleCheck className="text-green-800" /> : <MdOutlineReportGmailerrorred /> }
+        {data?.email || "- - -"}
+        {emailVerified ? (
+          <FaCircleCheck className="text-green-800" />
+        ) : (
+          <MdOutlineReportGmailerrorred />
+        )}
       </p>
-      {userData.createdAt && (
+
+      {data?.createdAt && (
         <p className="flex gap-1 text-sm text-gray-500">
-          Inscrit le {moment(createdAt).format("DD MMMM YYYY")}
+          Inscrit le {createdAt}
         </p>
       )}
     </div>
