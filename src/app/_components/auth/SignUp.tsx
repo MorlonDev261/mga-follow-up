@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useSession } from "next-auth/react";
 import "./CSS/styles.css";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -106,8 +107,29 @@ const SignUpCard: React.FC = () => {
   const router = useRouter();
   const { showToast } = useToast()
 
-  const searchParams = useSearchParams()
-  const encoded = searchParams.get('callbackUrl')
+  const { data: session, status } = useSession();
+  const searchParams = useSearchParams();
+  const encoded = searchParams.get('callbackUrl');
+
+  let callbackUrl = '/';
+  if (encoded) {
+    try {
+      const decoded = decodeURIComponent(atob(encoded));
+      if (decoded.startsWith('/')) {
+        const isSafeCallbackUrl = true;
+        callbackUrl = decoded;
+      }
+    } catch (e) {
+      // fail silently or log si besoin
+      console.warn('Invalid base64 callbackUrl', e);
+    }
+  }
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.push(callbackUrl);
+    }
+  }, [status, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -147,7 +169,7 @@ const SignUpCard: React.FC = () => {
       showToast({
         description: "Inscription réussie.",
       })
-      router.push(encoded ? `/login?callbackUrl=${encoded}` : "/login");
+      router.push(isSafeCallbackUrl ? `/login?callbackUrl=${encoded}` : "/login");
     } catch (error) {
       setError(error instanceof Error ? error.message : "Erreur inattendue");
     } finally {
@@ -271,7 +293,7 @@ const SignUpCard: React.FC = () => {
       <p className="mt-6 text-center text-sm text-muted-foreground">
         Déjà un compte ?{" "}
         <Link
-          href={`/login${encoded ? `?callbackUrl=${encoded}` : ''}`}
+          href={`/login${isSafeCallbackUrl ? `?callbackUrl=${encoded}` : ''}`}
           className="font-medium text-primary hover:underline"
         >
           Connectez-vous ici
