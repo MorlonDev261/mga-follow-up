@@ -149,7 +149,7 @@ const LoginCard: React.FC = () => {
 
       <div className="link-to-login">
         Vous n&apos;avez pas encore un compte ?{" "}
-        <Link href={`/register?callbackUrl=${encoded}`} className="text-primary">Inscrivez-vous ici</Link>.
+        <Link href={`/register${encoded ? `?callbackUrl=${encoded}` : ''}`} className="text-primary">Inscrivez-vous ici</Link>.
       </div>
     </div>
   );
