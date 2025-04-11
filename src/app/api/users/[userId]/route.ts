@@ -16,7 +16,7 @@ function extractUserId(url: URL): string | null {
 }
 
 export async function GET(req: Request) {
-  const userId = extractUserId(new URL(req.url));
+  const userId = extractUserId(new URL(req.nextUrl));
   if (!userId) return NextResponse.json({ error: 'ID invalide' }, { status: 400 });
 
   try {
@@ -42,7 +42,7 @@ export async function GET(req: Request) {
 }
 
 export async function PUT(req: Request) {
-  const userId = extractUserId(new URL(req.url));
+  const userId = extractUserId(new URL(req.nextUrl));
   if (!userId) return NextResponse.json({ error: 'ID invalide' }, { status: 400 });
 
   try {
@@ -65,7 +65,7 @@ export async function PUT(req: Request) {
 }
 
 export async function DELETE(req: Request) {
-  const userId = extractUserId(new URL(req.url));
+  const userId = extractUserId(new URL(req.nextUrl));
   if (!userId) return NextResponse.json({ error: 'ID invalide' }, { status: 400 });
 
   try {
