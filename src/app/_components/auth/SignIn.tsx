@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useRef, useTransition } from "react";
+import React, { useState, useRef, useEffect, useTransition } from "react";
+import { useSession } from "next-auth/react";
 import "./CSS/styles.css";
 import Link from "next/link";
 import { Buffer } from 'buffer'
@@ -36,6 +37,13 @@ const LoginCard: React.FC = () => {
   const searchParams = useSearchParams()
   const encoded = searchParams.get('callbackUrl')
   const callbackUrl = encoded ? decodeURIComponent(atob(encoded)) : '/'
+  const { data: session, status } = useSession();
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.push(callbackUrl);
+    }
+  }, [status, router]);
 
   // Fonction pour valider un champ en temps réel
   const validateField = (name: "email" | "password", value: string) => {
