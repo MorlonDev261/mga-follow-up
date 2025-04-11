@@ -3,6 +3,7 @@
 import React, { useState, useRef, useTransition } from "react";
 import "./CSS/styles.css";
 import Link from "next/link";
+import { Buffer } from 'buffer'
 import { signIn } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -31,9 +32,10 @@ const LoginCard: React.FC = () => {
   const [isPending, startTransition] = useTransition();
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
-  
+
   const searchParams = useSearchParams()
-  const callbackUrl = searchParams.get('callbackUrl') || '/'
+  const encoded = searchParams.get('callbackUrl')
+  const callbackUrl = encoded ? decodeURIComponent(atob(encoded)) : '/'
 
   // Fonction pour valider un champ en temps réel
   const validateField = (name: "email" | "password", value: string) => {
@@ -147,7 +149,7 @@ const LoginCard: React.FC = () => {
 
       <div className="link-to-login">
         Vous n&apos;avez pas encore un compte ?{" "}
-        <Link href={`/register?callbackUrl=${encodeURIComponent(callbackUrl)}`} className="text-primary">Inscrivez-vous ici</Link>.
+        <Link href={`/register?callbackUrl=${encoded}`} className="text-primary">Inscrivez-vous ici</Link>.
       </div>
     </div>
   );
