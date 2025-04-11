@@ -10,9 +10,17 @@ import { MdOutlineReportGmailerrorred } from "react-icons/md";
 import { FaCircleCheck, FaImage, FaPen, FaUser, FaCamera } from "react-icons/fa6";
 import moment from "moment";
 import { updateUser } from "@/actions/users";
+import type { User } from "@prisma/client";
 
 interface ProfileProps {
   userId?: string;
+}
+
+interface UpdateUserPayload {
+  userId: string;
+  name?: string;
+  image?: string;
+  coverPicture?: string;
 }
 
 export default function ProfileAvatar({ userId }: ProfileProps) {
@@ -22,7 +30,7 @@ export default function ProfileAvatar({ userId }: ProfileProps) {
 
   const queryClient = useQueryClient();
 
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading, error } = useQuery<User>({
     queryKey: ['user', resolvedUserId],
     queryFn: () =>
       fetch(`/api/users/${resolvedUserId}`).then((res) => {
@@ -34,7 +42,7 @@ export default function ProfileAvatar({ userId }: ProfileProps) {
   });
 
   const mutation = useMutation({
-    mutationFn: updateUser,
+    mutationFn: (payload: UpdateUserPayload) => updateUser(payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['user', resolvedUserId] });
     },
@@ -42,8 +50,6 @@ export default function ProfileAvatar({ userId }: ProfileProps) {
 
   const [isEditing, setIsEditing] = useState(false);
   const [fullname, setFullname] = useState("");
-  const [coverSrc, setCoverSrc] = useState("");
-  const [profileSrc, setProfileSrc] = useState("");
   const [coverError, setCoverError] = useState(false);
   const [profileError, setProfileError] = useState(false);
 
@@ -64,15 +70,17 @@ export default function ProfileAvatar({ userId }: ProfileProps) {
 
   const saveFullname = () => {
     setIsEditing(false);
-    mutation.mutate({ name: fullname });
+    if (fullname.trim() && fullname.trim() !== data?.name) {
+      mutation.mutate({ userId: resolvedUserId!, name: fullname.trim() });
+    }
   };
 
   const handleImageUpload = async (
     file: File | undefined,
-    setState: (url: string) => void,
     field: "coverPicture" | "image"
   ) => {
     if (!file) return;
+
     const formData = new FormData();
     formData.append("file", file);
 
@@ -81,20 +89,21 @@ export default function ProfileAvatar({ userId }: ProfileProps) {
         method: "POST",
         body: formData,
       });
-      const data = await res.json();
-      setState(data.url);
-      mutation.mutate({ [field]: data.url });
+      const result = await res.json();
+      if (result.url) {
+        mutation.mutate({ userId: resolvedUserId!, [field]: result.url });
+      }
     } catch (error) {
       console.error("Erreur lors de l'upload", error);
     }
   };
 
   const handleCoverChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    handleImageUpload(e.target.files?.[0], setCoverSrc, "coverPicture");
+    handleImageUpload(e.target.files?.[0], "coverPicture");
   };
 
   const handleProfileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    handleImageUpload(e.target.files?.[0], setProfileSrc, "image");
+    handleImageUpload(e.target.files?.[0], "image");
   };
 
   if (isLoading) return <div className="text-center p-4">Chargement...</div>;
@@ -149,7 +158,7 @@ export default function ProfileAvatar({ userId }: ProfileProps) {
               />
             ) : (
               <AvatarFallback className="flex items-center justify-center bg-gray-200 text-gray-600">
-                <FaUser className="text-5xl" />
+                {data?.name?.charAt(0).toUpperCase() || <FaUser className="text-5xl" />}
               </AvatarFallback>
             )}
           </Avatar>
@@ -183,7 +192,7 @@ export default function ProfileAvatar({ userId }: ProfileProps) {
             className="w-40 text-center"
           />
         ) : (
-          <h2 className="text-lg font-semibold">{data?.name || "User"}</h2>
+          <h2 className="text-lg font-semibold">{data?.name || "Utilisateur"}</h2>
         )}
         {authorization && (
           <FaPen
@@ -205,10 +214,8 @@ export default function ProfileAvatar({ userId }: ProfileProps) {
         )}
       </p>
 
-      {data?.createdAt && (
-        <p className="flex gap-1 text-sm text-gray-500">
-          Inscrit le {createdAt}
-        </p>
+      {createdAt && (
+        <p className="flex gap-1 text-sm text-gray-500">Inscrit le {createdAt}</p>
       )}
     </div>
   );
