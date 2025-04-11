@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import "./CSS/styles.css";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -106,6 +106,9 @@ const SignUpCard: React.FC = () => {
   const router = useRouter();
   const { showToast } = useToast()
 
+  const searchParams = useSearchParams()
+  const encoded = searchParams.get('callbackUrl')
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -144,7 +147,7 @@ const SignUpCard: React.FC = () => {
       showToast({
         description: "Inscription réussie.",
       })
-      router.push("/login");
+      router.push(encoded ? `/login?callbackUrl=${encoded}` : "/login");
     } catch (error) {
       setError(error instanceof Error ? error.message : "Erreur inattendue");
     } finally {
@@ -268,7 +271,7 @@ const SignUpCard: React.FC = () => {
       <p className="mt-6 text-center text-sm text-muted-foreground">
         Déjà un compte ?{" "}
         <Link
-          href="/login"
+          href={`/login${encoded ? `?callbackUrl=${encoded}` : ''}`}
           className="font-medium text-primary hover:underline"
         >
           Connectez-vous ici
