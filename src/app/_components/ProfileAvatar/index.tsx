@@ -2,67 +2,74 @@
 
 import Image from "next/image";
 import { useSession } from "next-auth/react";
-import { useState, useRef, useMemo } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState, useRef, useEffect } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
 import { MdOutlineReportGmailerrorred } from "react-icons/md";
 import { FaCircleCheck, FaImage, FaPen, FaUser, FaCamera } from "react-icons/fa6";
-import moment from "moment";
 import { updateUser } from "@/actions/users";
-import type { User } from "@prisma/client";
 
 interface ProfileProps {
   userId?: string;
 }
 
-interface UpdateUserPayload {
-  userId: string;
-  name?: string;
-  image?: string;
+interface UserData {
   coverPicture?: string;
+  image?: string;
+  name?: string;
+  email?: string;
+  createdAt?: string;
 }
 
 export default function ProfileAvatar({ userId }: ProfileProps) {
   const { data: session } = useSession();
+  const [userData, setUserData] = useState<UserData>({});
+  const [isLoading, setIsLoading] = useState(true);
+  const [fetchError, setFetchError] = useState("");
+  
   const resolvedUserId = userId || session?.user?.id;
   const authorization = resolvedUserId === session?.user?.id;
 
-  const queryClient = useQueryClient();
-
-  const { data, isLoading, error } = useQuery<User, Error>({
-    queryKey: ['user', resolvedUserId],
-    queryFn: async () => {
-      const res = await fetch(`/api/users/${resolvedUserId}`);
-      if (!res.ok) throw new Error("Erreur de chargement");
-      return res.json();
-    },
-    enabled: !!resolvedUserId,
-    staleTime: 1000 * 60 * 5,
-  });
-
-  const mutation = useMutation({
-    mutationFn: (payload: UpdateUserPayload) => updateUser(payload),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['user', resolvedUserId] });
-    },
-  });
-
-  const [isEditing, setIsEditing] = useState(false);
-  const [fullname, setFullname] = useState("");
+  // États pour les images
+  const [coverSrc, setCoverSrc] = useState("");
+  const [profileSrc, setProfileSrc] = useState("");
   const [coverError, setCoverError] = useState(false);
   const [profileError, setProfileError] = useState(false);
+  
+  // États éditables
+  const [fullname, setFullname] = useState("User");
+  const [contact, setContact] = useState("- - -");
+  const [emailVerified, setEmailVerified] = useState("- - -");
+  const [createdAt, setCreatedAt] = useState("- - -");
+  const [isEditing, setIsEditing] = useState(false);
 
   const coverInputRef = useRef<HTMLInputElement>(null);
   const profileInputRef = useRef<HTMLInputElement>(null);
 
-  const createdAt = useMemo(() => {
-    return data?.createdAt ? moment(data.createdAt).format("DD MMMM YYYY") : "- - -";
-  }, [data?.createdAt]);
-
-  const emailVerified = useMemo(() => {
-    return data?.emailVerified ? moment(data.emailVerified).format("YYYY-MM-DD") : "";
-  }, [data?.emailVerified]);
+  useEffect(() => {
+    if (resolvedUserId) {
+      setIsLoading(true);
+      fetch(`/api/users/${resolvedUserId}`)
+        .then((response) => {
+          if (!response.ok) throw new Error("Échec du chargement");
+          return response.json();
+        })
+        .then((res: UserData) => {
+          setUserData(res);
+          setCoverSrc(res.coverPicture || "");
+          setProfileSrc(res.image || "");
+          setFullname(res.name || "User");
+          setContact(res.email || "- - -");
+          setEmailVerified(res.emailVerified || "");
+          setCreatedAt(res.createdAt || "Non définie");
+        })
+        .catch((error) => {
+          setFetchError("Erreur de chargement du profil");
+          console.error(error);
+        })
+        .finally(() => setIsLoading(false));
+    }
+  }, [resolvedUserId]);
 
   const handleFullnameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFullname(e.target.value);
@@ -70,14 +77,11 @@ export default function ProfileAvatar({ userId }: ProfileProps) {
 
   const saveFullname = () => {
     setIsEditing(false);
-    if (fullname.trim() && fullname.trim() !== data?.name) {
-      mutation.mutate({ userId: resolvedUserId!, name: fullname.trim() });
-    }
   };
 
   const handleImageUpload = async (
-    file: File | undefined,
-    field: "coverPicture" | "image"
+    file: File | undefined, 
+    setState: (url: string) => void
   ) => {
     if (!file) return;
 
@@ -89,37 +93,52 @@ export default function ProfileAvatar({ userId }: ProfileProps) {
         method: "POST",
         body: formData,
       });
-      const result = await res.json();
-      if (result.url) {
-        mutation.mutate({ userId: resolvedUserId!, [field]: result.url });
-      }
+      const data = await res.json();
+      setState(data.url);
     } catch (error) {
       console.error("Erreur lors de l'upload", error);
     }
   };
 
   const handleCoverChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    handleImageUpload(e.target.files?.[0], "coverPicture");
+    handleImageUpload(e.target.files?.[0], setCoverSrc);
   };
 
   const handleProfileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    handleImageUpload(e.target.files?.[0], "image");
+    handleImageUpload(e.target.files?.[0], setProfileSrc);
   };
 
+  useEffect(() => {
+    const handleUpdate = async () => {
+      try {
+        await updateUser({
+          coverPicture: coverSrc,
+          image: profileSrc,
+          name: fullname,
+        });
+      } catch (error) {
+        console.error("Erreur de mise à jour", error);
+      }
+    };
+
+    if (authorization) {
+      handleUpdate();
+    }
+  }, [coverSrc, profileSrc, fullname, authorization]);
+
   if (isLoading) return <div className="text-center p-4">Chargement...</div>;
-  if (error) return <div className="text-center p-4 text-red-500">Erreur de chargement</div>;
+  if (fetchError) return <div className="text-center p-4 text-red-500">{fetchError}</div>;
 
   return (
     <div className="flex flex-col items-center space-y-2 mt-4">
       <div className="relative w-full max-w-lg">
         {/* Cover Picture */}
         <div className="relative h-32 w-full rounded-t-lg bg-gray-300">
-          {data?.coverPicture && !coverError ? (
+          {coverSrc && !coverError ? (
             <Image
-              src={data.coverPicture}
+              src={coverSrc}
               alt="Cover"
               fill
-              priority
               className="object-cover rounded-t-lg"
               onError={() => setCoverError(true)}
             />
@@ -149,16 +168,16 @@ export default function ProfileAvatar({ userId }: ProfileProps) {
         {/* Avatar */}
         <div className="relative w-24 h-24 mx-auto -mt-12 border-4 border-white rounded-full">
           <Avatar className="w-full h-full">
-            {data?.image && !profileError ? (
+            {profileSrc && !profileError ? (
               <AvatarImage
-                src={data.image}
+                src={profileSrc}
                 alt="Profile"
                 onError={() => setProfileError(true)}
                 className="object-cover"
               />
             ) : (
               <AvatarFallback className="flex items-center justify-center bg-gray-200 text-gray-600">
-                {data?.name?.charAt(0).toUpperCase() || <FaUser className="text-5xl" />}
+                <FaUser className="text-5xl" />
               </AvatarFallback>
             )}
           </Avatar>
@@ -192,30 +211,23 @@ export default function ProfileAvatar({ userId }: ProfileProps) {
             className="w-40 text-center"
           />
         ) : (
-          <h2 className="text-lg font-semibold">{data?.name || "Utilisateur"}</h2>
+          <h2 className="text-lg font-semibold">{fullname}</h2>
         )}
         {authorization && (
           <FaPen
             className="cursor-pointer text-gray-500 hover:text-gray-700"
-            onClick={() => {
-              setFullname(data?.name || "");
-              setIsEditing(true);
-            }}
+            onClick={() => setIsEditing(true)}
           />
         )}
       </div>
 
       <p className="flex items-center gap-1 text-sm text-gray-500">
-        {data?.email || "- - -"}
-        {emailVerified ? (
-          <FaCircleCheck className="text-green-800" />
-        ) : (
-          <MdOutlineReportGmailerrorred />
-        )}
+        {contact} { emailVerified ? <FaCircleCheck className="text-green-800" /> : <MdOutlineReportGmailerrorred /> }
       </p>
-
-      {createdAt && (
-        <p className="flex gap-1 text-sm text-gray-500">Inscrit le {createdAt}</p>
+      {userData.createdAt && (
+        <p className="flex gap-1 text-sm text-gray-500">
+          Inscrit le {new Date(createdAt).toLocaleDateString()}
+        </p>
       )}
     </div>
   );
