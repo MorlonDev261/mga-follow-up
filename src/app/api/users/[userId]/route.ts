@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import db from '@/lib/db';
 import { z } from 'zod';
 
@@ -9,7 +9,7 @@ const updateUserSchema = z.object({
   coverPicture: z.string().url().optional(),
 });
 
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
   const url = new URL(req.nextUrl);
   const segments = url.pathname.split('/');
   const userId = segments[segments.length - 1];
@@ -38,7 +38,7 @@ export async function GET(req: Request) {
   }
 }
 
-export async function PUT(req: Request) {
+export async function PUT(req: NextRequest) {
   const url = new URL(req.nextUrl);
   const segments = url.pathname.split('/');
   const userId = segments[segments.length - 1];
@@ -64,7 +64,7 @@ export async function PUT(req: Request) {
   }
 }
 
-export async function DELETE(req: Request) {
+export async function DELETE(req: NextRequest) {
   const url = new URL(req.nextUrl);
   const segments = url.pathname.split('/');
   const userId = segments[segments.length - 1];
