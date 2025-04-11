@@ -18,6 +18,13 @@ export const authRoutes = [
 ];
 
 /**
+* The API not authentication routes 
+* Routes that start with this prefix are used for API communication fronted purposes
+* @type {string}
+*/
+export const allAPI = "/api";
+
+/**
 * The prefix for API authentication routes 
 * Routes that start with this prefix are used for API authentication purposes
 * @type {string}
