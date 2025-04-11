@@ -33,12 +33,24 @@ const LoginCard: React.FC = () => {
   const [isPending, startTransition] = useTransition();
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
-
-  const searchParams = useSearchParams()
-  const encoded = searchParams.get('callbackUrl')
-  const callbackUrl = encoded ? decodeURIComponent(atob(encoded)) : '/'
-  const safeCallback = callbackUrl.startsWith('/') ? callbackUrl : '/';
+  
   const { data: session, status } = useSession();
+  const searchParams = useSearchParams();
+  const encoded = searchParams.get('callbackUrl');
+
+  let callbackUrl = '/';
+  if (encoded) {
+    try {
+      const decoded = decodeURIComponent(atob(encoded));
+      if (decoded.startsWith('/')) {
+        const isSafeCallbackUrl = true;
+        callbackUrl = decoded;
+      }
+    } catch (e) {
+      // fail silently or log si besoin
+      console.warn('Invalid base64 callbackUrl', e);
+    }
+  }
 
   useEffect(() => {
     if (status === "authenticated") {
@@ -85,7 +97,7 @@ const LoginCard: React.FC = () => {
       if (res?.error) {
         setError(res.error);
       } else {
-        router.push(safeCallback);
+        router.push(callbackUrl);
       }
     });
   };
@@ -158,7 +170,7 @@ const LoginCard: React.FC = () => {
 
       <div className="link-to-login">
         Vous n&apos;avez pas encore un compte ?{" "}
-        <Link href={`/register${encoded ? `?callbackUrl=${safeCallback}` : ''}`} className="text-primary">Inscrivez-vous ici</Link>.
+        <Link href={`/register${isSafeCallbackUrl ? `?callbackUrl=${encoded}` : ''}`} className="text-primary">Inscrivez-vous ici</Link>.
       </div>
     </div>
   );
