@@ -1,17 +1,25 @@
-interface UpdateUserPayload {
-  userId: string;
+import db from "@/lib/db";
+import { auth } from "@/lib/auth";
+
+type UpdateUserInput = {
   name?: string;
+  tel?: string;
   image?: string;
   coverPicture?: string;
-}
+};
 
-export async function updateUser(payload: UpdateUserPayload) {
-  const res = await fetch(`/api/users/${payload.userId}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
+export async function updateUser(data: UpdateUserInput) {
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  if (!userId) {
+    throw new Error("Non authentifié");
+  }
+
+  const updatedUser = await db.user.update({
+    where: { id: userId },
+    data,
   });
 
-  if (!res.ok) throw new Error("Échec de la mise à jour");
-  return res.json();
+  return updatedUser;
 }
