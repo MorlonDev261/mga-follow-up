@@ -22,7 +22,7 @@ export const authRoutes = [
 * Routes that start with this prefix are used for API communication fronted purposes
 * @type {string}
 */
-export const allAPI = "/api";
+export const API = "/api";
 
 /**
 * The prefix for API authentication routes 
