@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { verifyToken } from "@/lib/jwt";
 import {
   DEFAULT_LOGIN_REDIRECT,
+  API,
   apiAuthPrefix,
   authRoutes,
   publicRoutes,
@@ -13,11 +14,12 @@ export default async function middleware(req: NextRequest) {
   const session = await auth(); // Vérification de session correcte
   const isLoggedIn = !!session;
 
+  const isAPI = nextUrl.pathname.startsWith(API);
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
-  if (!isLoggedIn && !isApiAuthRoute && !isAuthRoute) {
+  if (!isLoggedIn && isAPI && !isApiAuthRoute) {
     const token = req.headers.get("Authorization")?.replace("Bearer ", "");
     if (!token) {
       return NextResponse.json({ message: "Authentification requise", errorCode: "MISSING_TOKEN" }, { status: 401 });
