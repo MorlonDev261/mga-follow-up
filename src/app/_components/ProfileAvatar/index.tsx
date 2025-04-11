@@ -53,7 +53,8 @@ export default function ProfileAvatar({ userId }: ProfileProps) {
       setIsLoading(true);
       try {
         const response = await fetch(`/api/users/${resolvedUserId}`);
-        
+        if (!response.ok) throw new Error("Échec du chargement");
+
         const res: UserData = await response.json();
         setUserData(res);
         setCoverSrc(res.coverPicture || "");
