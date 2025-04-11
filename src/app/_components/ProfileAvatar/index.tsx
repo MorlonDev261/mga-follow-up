@@ -82,10 +82,8 @@ export default function ProfileAvatar({ userId }: ProfileProps) {
         });
 
       } catch (error) {
-        if (error.name !== 'AbortError') {
           setFetchError("Erreur de chargement du profil");
           console.error(error);
-        }
       } finally {
         setIsLoading(false);
       }
