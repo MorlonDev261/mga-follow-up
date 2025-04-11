@@ -28,6 +28,7 @@
     "@radix-ui/react-tooltip": "^1.1.8",
     "@shadcn/ui": "^0.0.4",
     "@tanstack/react-table": "^8.21.2",
+    "@tanstack/react-query": "^5.72.2",
     "@zxing/browser": "^0.1.5",
     "axios": "^1.8.3",
     "bcryptjs": "^3.0.2",
