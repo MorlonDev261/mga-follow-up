@@ -67,9 +67,9 @@ const HomePage = () => {
             },
             // Ajouter d'autres entreprises ici...
           ].map((company, index) => (
-            <div key={index} className="flex items-center justify-between bg-white rounded-xl shadow-md p-6 border border-gray-200">
+            <div key={index} className="flex items-center justify-between rounded-xl shadow-md p-2 border border-gray-200">
               {/* Logo à gauche */}
-              <div className="ml-4 w-24 h-24 flex-shrink-0">
+              <div className="mr-2 w-24 h-24 rounded-md flex-shrink-0">
                 <Image
                   src={company.logo}
                   alt={`Logo de ${company.name}`}
