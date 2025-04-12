@@ -68,7 +68,7 @@ const HomePage = () => {
     ].map((company, index) => (
       <div
         key={index}
-        className="w-full md:w-[48%] lg:w-[32%] flex h-40 items-center justify-between rounded-xl shadow-md border border-gray-200 overflow-hidden p-2"
+        className="w-full max-w-[98%] flex h-40 items-center justify-between rounded-xl shadow-md border border-gray-200 overflow-hidden p-2"
       >
         {/* Logo à gauche */}
         <div className="mr-2 w-24 h-full rounded-md flex items-center justify-center">
