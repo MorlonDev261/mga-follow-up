@@ -46,10 +46,10 @@ const HomePage = () => {
       </section>
 
       {/* Section: Entreprises inscrites */}
-      <section className="my-20 px-2">
+      <section className="my-10 px-2">
   <h2 className="text-3xl font-semibold text-center text-green-600 mb-10">Entreprises inscrites</h2>
 
-  <div className="flex gap-4 overflow-x-auto">
+  <div className="flex gap-4 overflow-auto">
     {[
       {
         name: "TechMada Solutions",
@@ -68,7 +68,7 @@ const HomePage = () => {
     ].map((company, index) => (
       <div
         key={index}
-        className="w-[200px] flex h-40 items-center justify-between rounded-xl shadow-md border border-gray-200 overflow-hidden"
+        className="w-[500px] flex h-40 items-center justify-between rounded-xl shadow-md border border-gray-200 overflow-hidden"
       >
         {/* Logo à gauche */}
         <div className="mr-2 w-24 h-full rounded-md flex items-center justify-center">
