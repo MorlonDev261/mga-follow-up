@@ -62,7 +62,7 @@ export default function Entreprises() {
                 alt={`Logo de ${company.name}`}
                 width={96}
                 height={96}
-                className="object-contain w-full h-full"
+                className="object-cover w-full h-full"
               />
             </div>
 
@@ -72,7 +72,7 @@ export default function Entreprises() {
               </h3>
               <p className="text-sm text-gray-600 mt-1 truncate">NIF : {company.nif}</p>
               <p className="text-sm text-gray-600 truncate">STAT : {company.stat}</p>
-              <p className="mt-2 text-gray-700 text-sm line-clamp-3">
+              <p className="mt-2 text-gray-700 text-sm line-clamp-2">
                 {company.description}
               </p>
             </div>
