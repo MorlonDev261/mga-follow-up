@@ -48,7 +48,7 @@ const HomePage = () => {
       {/* Section: Entreprises inscrites */}
       <section className="my-20 px-2">
         <h2 className="text-3xl font-semibold text-center text-green-600 mb-10">Entreprises inscrites</h2>
-        <div className="grid gap-8 md:grid-cols-2">
+        <div className="flex gap-2">
           {/* Exemple d'une entreprise */}
           {[
             {
@@ -68,24 +68,33 @@ const HomePage = () => {
             // Ajouter d'autres entreprises ici...
           ].map((company, index) => (
             <div key={index} className="flex items-center justify-between rounded-xl shadow-md border border-gray-200">
-              {/* Logo à gauche */}
-              <div className="mr-2 w-24 h-full rounded-md">
-                <Image
-                  src={company.logo}
-                  alt={`Logo de ${company.name}`}
-                  width={96}
-                  height={96}
-                  className="object-contain w-full h-full"
-                />
-              </div>
-              {/* Infos à droite */}
-              <div className="max-w-[70%] p-1">
-                <h3 className="text-md font-bold text-gray-800 dark:text-white">{company.name}</h3>
-                <p className="text-sm text-gray-600 mt-1">NIF : {company.nif}</p>
-                <p className="text-sm text-gray-600">STAT : {company.stat}</p>
-                <p className="mt-4 text-gray-700 text-sm">{company.description}</p>
-              </div>
-            </div>
+              <div
+                key={index}
+                className="flex h-40 items-center justify-between rounded-xl shadow-md border border-gray-200 overflow-hidden"
+              >
+                {/* Logo à gauche */}
+                <div className="mr-2 w-24 h-full rounded-md flex items-center justify-center">
+                  <Image
+                    src={company.logo}
+                    alt={`Logo de ${company.name}`}
+                    width={96}
+                    height={96}
+                    className="object-contain w-full h-full"
+                   />
+                 </div>
+
+                {/* Infos à droite */}
+                <div className="max-w-[70%] p-1 overflow-hidden">
+                  <h3 className="text-md font-bold text-gray-800 dark:text-white truncate">
+                    {company.name}
+                  </h3>
+                  <p className="text-sm text-gray-600 mt-1 truncate">NIF : {company.nif}</p>
+                  <p className="text-sm text-gray-600 truncate">STAT : {company.stat}</p>
+                  <p className="mt-2 text-gray-700 text-sm line-clamp-3">
+                    {company.description}
+                  </p>
+                </div>
+             </div>
           ))}
         </div>
       </section>
