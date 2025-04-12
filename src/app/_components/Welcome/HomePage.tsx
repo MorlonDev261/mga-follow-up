@@ -47,57 +47,51 @@ const HomePage = () => {
 
       {/* Section: Entreprises inscrites */}
       <section className="my-20 px-2">
-        <h2 className="text-3xl font-semibold text-center text-green-600 mb-10">Entreprises inscrites</h2>
-        <div className="flex gap-2">
-          {/* Exemple d'une entreprise */}
-          {[
-            {
-              name: "TechMada Solutions",
-              nif: "123456789",
-              stat: "987654321",
-              description: "Entreprise spécialisée dans le développement web et les solutions mobiles à Madagascar.",
-              logo: "/aztek.jpg"
-            },
-            {
-              name: "AgroMada SARL",
-              nif: "321654987",
-              stat: "456789123",
-              description: "Producteur et exportateur de produits agricoles certifiés bio.",
-              logo: "/shopcell.jpg"
-            },
-            // Ajouter d'autres entreprises ici...
-          ].map((company, index) => (
-            <div key={index} className="flex items-center justify-between rounded-xl shadow-md border border-gray-200">
-              <div
-                key={index}
-                className="flex h-40 items-center justify-between rounded-xl shadow-md border border-gray-200 overflow-hidden"
-              >
-                {/* Logo à gauche */}
-                <div className="mr-2 w-24 h-full rounded-md flex items-center justify-center">
-                  <Image
-                    src={company.logo}
-                    alt={`Logo de ${company.name}`}
-                    width={96}
-                    height={96}
-                    className="object-contain w-full h-full"
-                   />
-                 </div>
+  <h2 className="text-3xl font-semibold text-center text-green-600 mb-10">Entreprises inscrites</h2>
 
-                {/* Infos à droite */}
-                <div className="max-w-[70%] p-1 overflow-hidden">
-                  <h3 className="text-md font-bold text-gray-800 dark:text-white truncate">
-                    {company.name}
-                  </h3>
-                  <p className="text-sm text-gray-600 mt-1 truncate">NIF : {company.nif}</p>
-                  <p className="text-sm text-gray-600 truncate">STAT : {company.stat}</p>
-                  <p className="mt-2 text-gray-700 text-sm line-clamp-3">
-                    {company.description}
-                  </p>
-                </div>
-             </div>
-          ))}
+  <div className="flex gap-4 flex-wrap justify-center">
+    {[
+      {
+        name: "TechMada Solutions",
+        nif: "123456789",
+        stat: "987654321",
+        description: "Entreprise spécialisée dans le développement web et les solutions mobiles à Madagascar.",
+        logo: "/aztek.jpg"
+      },
+      {
+        name: "AgroMada SARL",
+        nif: "321654987",
+        stat: "456789123",
+        description: "Producteur et exportateur de produits agricoles certifiés bio.",
+        logo: "/shopcell.jpg"
+      },
+    ].map((company, index) => (
+      <div
+        key={index}
+        className="w-full md:w-[48%] lg:w-[32%] flex h-40 items-center justify-between rounded-xl shadow-md border border-gray-200 overflow-hidden p-2"
+      >
+        {/* Logo à gauche */}
+        <div className="mr-2 w-24 h-full rounded-md flex items-center justify-center">
+          <Image
+            src={company.logo}
+            alt={`Logo de ${company.name}`}
+            width={96}
+            height={96}
+            className="object-contain w-full h-full"
+          />
         </div>
-      </section>
+
+        {/* Infos à droite */}
+        <div className="max-w-[70%] p-1 overflow-hidden">
+          <h3 className="text-md font-bold text-gray-800 dark:text-white truncate">{company.name}</h3>
+          <p className="text-sm text-gray-600 mt-1 truncate">NIF : {company.nif}</p>
+          <p className="text-sm text-gray-600 truncate">STAT : {company.stat}</p>
+          <p className="mt-2 text-gray-700 text-sm line-clamp-3">{company.description}</p>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
 
       {/* Section: Fonctionnalités */}
       <section className="text-center mb-16">
