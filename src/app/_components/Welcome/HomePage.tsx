@@ -79,6 +79,51 @@ const HomePage = () => {
         </div>
       </section>
 
+      {/* Section: Entreprises inscrites */}
+      <section className="my-20 px-4">
+        <h2 className="text-3xl font-semibold text-center text-green-600 mb-10">Entreprises inscrites</h2>
+        <div className="grid gap-8 md:grid-cols-2">
+          {/* Exemple d'une entreprise */}
+          {[
+            {
+              name: "TechMada Solutions",
+              nif: "123456789",
+              stat: "987654321",
+              description: "Entreprise spécialisée dans le développement web et les solutions mobiles à Madagascar.",
+              logo: "/logo/techmada.png"
+            },
+            {
+              name: "AgroMada SARL",
+              nif: "321654987",
+              stat: "456789123",
+              description: "Producteur et exportateur de produits agricoles certifiés bio.",
+              logo: "/logo/agromada.png"
+            },
+            // Ajouter d'autres entreprises ici...
+          ].map((company, index) => (
+            <div key={index} className="flex items-center justify-between bg-white rounded-xl shadow-md p-6 border border-gray-200">
+              {/* Infos à gauche */}
+              <div className="max-w-[70%]">
+                <h3 className="text-xl font-bold text-gray-800">{company.name}</h3>
+                <p className="text-sm text-gray-600 mt-1">NIF : {company.nif}</p>
+                <p className="text-sm text-gray-600">STAT : {company.stat}</p>
+                <p className="mt-4 text-gray-700 text-sm">{company.description}</p>
+              </div>
+              {/* Logo à droite */}
+              <div className="ml-4 w-24 h-24 flex-shrink-0">
+                <Image
+                  src={company.logo}
+                  alt={`Logo de ${company.name}`}
+                  width={96}
+                  height={96}
+                  className="object-contain w-full h-full"
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* Section: Call to Action */}
       <section className="text-center">
         <p className="text-xl text-gray-700 mb-6">
