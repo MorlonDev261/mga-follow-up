@@ -46,7 +46,7 @@ const HomePage = () => {
       </section>
 
       {/* Section: Entreprises inscrites */}
-      <section className="my-10 px-2">
+      <section className="mb-10">
   <h2 className="text-3xl font-semibold text-center text-green-600 mb-10">
     Entreprises inscrites
   </h2>
