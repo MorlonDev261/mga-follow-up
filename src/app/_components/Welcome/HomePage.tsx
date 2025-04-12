@@ -51,7 +51,7 @@ const HomePage = () => {
     Entreprises inscrites
   </h2>
 
-  <div className="flex gap-4 overflow-x-auto px-2 scroll-smooth snap-x snap-mandatory">
+  <div className="flex overflow-x-auto md:grid md:grid-cols-2 lg:grid-cols-3 gap-4 px-2 md:overflow-visible scroll-smooth snap-x md:snap-none snap-mandatory">
     {[
       {
         name: "TechMada Solutions",
@@ -67,10 +67,11 @@ const HomePage = () => {
         description: "Producteur et exportateur de produits agricoles certifiés bio.",
         logo: "/shopcell.jpg"
       },
+      // Ajoute autant que tu veux ici...
     ].map((company, index) => (
       <div
         key={index}
-        className="w-[500px] flex-shrink-0 snap-start flex h-40 items-center justify-between rounded-xl shadow-md border border-gray-200 overflow-hidden"
+        className="flex-shrink-0 snap-start md:snap-none flex h-40 items-center justify-between rounded-xl shadow-md border border-gray-200 overflow-hidden w-[90vw] sm:w-[80vw] md:w-full max-w-md"
       >
         {/* Logo à gauche */}
         <div className="mr-2 w-24 h-full rounded-md flex items-center justify-center">
