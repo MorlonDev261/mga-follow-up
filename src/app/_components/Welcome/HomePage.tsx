@@ -69,18 +69,18 @@ const HomePage = () => {
           ].map((company, index) => (
             <div key={index} className="flex items-center justify-between rounded-xl shadow-md p-2 border border-gray-200">
               {/* Logo à gauche */}
-              <div className="mr-2 w-24 h-24 rounded-md flex-shrink-0">
+              <div className="mr-2 w-24 h-full rounded-md flex-shrink-0">
                 <Image
                   src={company.logo}
                   alt={`Logo de ${company.name}`}
                   width={96}
                   height={96}
-                  className="object-contain w-full h-full"
+                  className="object-cover w-full h-full"
                 />
               </div>
               {/* Infos à droite */}
               <div className="max-w-[70%]">
-                <h3 className="text-xl font-bold text-gray-800">{company.name}</h3>
+                <h3 className="text-md font-bold text-gray-800 dark:text-white">{company.name}</h3>
                 <p className="text-sm text-gray-600 mt-1">NIF : {company.nif}</p>
                 <p className="text-sm text-gray-600">STAT : {company.stat}</p>
                 <p className="mt-4 text-gray-700 text-sm">{company.description}</p>
