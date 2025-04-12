@@ -47,9 +47,11 @@ const HomePage = () => {
 
       {/* Section: Entreprises inscrites */}
       <section className="my-10 px-2">
-  <h2 className="text-3xl font-semibold text-center text-green-600 mb-10">Entreprises inscrites</h2>
+  <h2 className="text-3xl font-semibold text-center text-green-600 mb-10">
+    Entreprises inscrites
+  </h2>
 
-  <div className="flex w-full gap-4 overflow-auto">
+  <div className="flex gap-4 overflow-x-auto px-2 scroll-smooth snap-x snap-mandatory">
     {[
       {
         name: "TechMada Solutions",
@@ -68,7 +70,7 @@ const HomePage = () => {
     ].map((company, index) => (
       <div
         key={index}
-        className="w-[500px] flex h-40 items-center justify-between rounded-xl shadow-md border border-gray-200 overflow-hidden"
+        className="w-[500px] flex-shrink-0 snap-start flex h-40 items-center justify-between rounded-xl shadow-md border border-gray-200 overflow-hidden"
       >
         {/* Logo à gauche */}
         <div className="mr-2 w-24 h-full rounded-md flex items-center justify-center">
@@ -83,10 +85,14 @@ const HomePage = () => {
 
         {/* Infos à droite */}
         <div className="max-w-[70%] p-1 overflow-hidden">
-          <h3 className="text-md font-bold text-gray-800 dark:text-white truncate">{company.name}</h3>
+          <h3 className="text-md font-bold text-gray-800 dark:text-white truncate">
+            {company.name}
+          </h3>
           <p className="text-sm text-gray-600 mt-1 truncate">NIF : {company.nif}</p>
           <p className="text-sm text-gray-600 truncate">STAT : {company.stat}</p>
-          <p className="mt-2 text-gray-700 text-sm line-clamp-3">{company.description}</p>
+          <p className="mt-2 text-gray-700 text-sm line-clamp-3">
+            {company.description}
+          </p>
         </div>
       </div>
     ))}
