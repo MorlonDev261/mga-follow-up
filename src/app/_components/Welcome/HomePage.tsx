@@ -49,7 +49,7 @@ const HomePage = () => {
       <section className="my-20 px-2">
   <h2 className="text-3xl font-semibold text-center text-green-600 mb-10">Entreprises inscrites</h2>
 
-  <div className="flex gap-4 flex-wrap justify-center">
+  <div className="flex gap-4 overflow-x-auto">
     {[
       {
         name: "TechMada Solutions",
