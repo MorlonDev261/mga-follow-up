@@ -1,7 +1,7 @@
 "use client";
 
 import Image from 'next/image';
-// import Company from "@components/Company/list";
+import Company from "@components/Company/list";
 import { useRouter } from 'next/navigation';
 
 const HomePage = () => {
@@ -47,7 +47,7 @@ const HomePage = () => {
       </section>
 
       {/* Section: Entreprises inscrites */}
-      
+      <Company />
       
       {/* Section: Fonctionnalités */}
       <section className="text-center mb-16">
