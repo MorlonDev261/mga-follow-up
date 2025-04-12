@@ -46,7 +46,7 @@ const HomePage = () => {
       </section>
 
       {/* Section: Entreprises inscrites */}
-      <section className="my-20 px-4">
+      <section className="my-20 px-2">
         <h2 className="text-3xl font-semibold text-center text-green-600 mb-10">Entreprises inscrites</h2>
         <div className="grid gap-8 md:grid-cols-2">
           {/* Exemple d'une entreprise */}
@@ -67,19 +67,19 @@ const HomePage = () => {
             },
             // Ajouter d'autres entreprises ici...
           ].map((company, index) => (
-            <div key={index} className="flex items-center justify-between rounded-xl shadow-md p-2 border border-gray-200">
+            <div key={index} className="flex items-center justify-between rounded-xl shadow-md border border-gray-200">
               {/* Logo à gauche */}
-              <div className="mr-2 w-24 h-full rounded-md flex-shrink-0">
+              <div className="mr-2 w-24 h-full rounded-md">
                 <Image
                   src={company.logo}
                   alt={`Logo de ${company.name}`}
                   width={96}
                   height={96}
-                  className="object-cover w-full h-full"
+                  className="object-contain w-full h-full"
                 />
               </div>
               {/* Infos à droite */}
-              <div className="max-w-[70%]">
+              <div className="max-w-[70%] p-1">
                 <h3 className="text-md font-bold text-gray-800 dark:text-white">{company.name}</h3>
                 <p className="text-sm text-gray-600 mt-1">NIF : {company.nif}</p>
                 <p className="text-sm text-gray-600">STAT : {company.stat}</p>
