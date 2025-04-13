@@ -69,7 +69,7 @@ export default function Entreprises() {
             </div>
 
             <div className="max-w-[70%] p-1 overflow-hidden">
-              <h3 className="flex items-center gap-[4px] text-md font-bold text-gray-800 dark:text-white">
+              <h3 className="flex items-center gap-[2px] text-md font-bold text-gray-800 dark:text-white">
                 <span className="line-clamp-1 break-all overflow-hidden text-ellipsis">
                   {company.name}
                 </span>
