@@ -58,7 +58,7 @@ export default function Entreprises() {
             key={index}
             className="flex-shrink-0 snap-start md:snap-none flex h-36 items-center justify-between rounded-xl shadow-md border border-gray-200 overflow-hidden w-[80vw] sm:w-[80vw] md:w-full max-w-md"
           >
-            <div className="mr-2 w-24 h-full rounded-md flex items-center justify-center">
+            <div className="w-24 h-full rounded-md flex items-center justify-center">
               <Image
                 src={company.logo}
                 alt={`Logo de ${company.name}`}
