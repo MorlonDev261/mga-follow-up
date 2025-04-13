@@ -69,11 +69,11 @@ export default function Entreprises() {
             </div>
 
             <div className="max-w-[70%] p-1 overflow-hidden">
-              <h3 className="flex items-center gap-2 text-md font-bold text-gray-800 dark:text-white truncate">
+              <h3 className="flex items-center gap-[2px] text-md font-bold text-gray-800 dark:text-white truncate">
                 <p className="line-clamp-1">
                   {company.name}
                 </p>
-                  {company.status === "trust" ? <Image className="h-[13px] w-[13px]" src="/badges/badge-1.png" alt="" /> : company.status === "verified" ? <Image className="h-[13px] w-[13px]" src="/badges/badge-2.png" alt="" /> : ""}
+                  {company.status === "trust" ? <Image className="h-[14px] w-[14px]" src="/badges/badge-1.png" alt="" /> : company.status === "verified" ? <Image className="h-[13px] w-[13px]" src="/badges/badge-2.png" alt="" /> : ""}
               </h3>
               <p className="text-sm text-gray-600 mt-1 truncate">NIF : {company.nif}</p>
               <p className="text-sm text-gray-600 truncate">STAT : {company.stat}</p>
