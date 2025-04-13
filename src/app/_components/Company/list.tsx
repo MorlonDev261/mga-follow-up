@@ -73,9 +73,7 @@ export default function Entreprises() {
                 <p className="line-clamp-1">
                   {company.name}
                 </p>
-                <span>
-                  {company.status === "trust" ? <Image className="h-4 w-4" src="/badges/badge-1.png" alt="" /> : company.status === "verified" ? <Image className="h-4 w-4" src="/badges/badge-2.png" alt="" /> : ""}
-                </span>
+                  {company.status === "trust" ? <Image className="h-[13px] w-[13px]" src="/badges/badge-1.png" alt="" /> : company.status === "verified" ? <Image className="h-[13px] w-[13px]" src="/badges/badge-2.png" alt="" /> : ""}
               </h3>
               <p className="text-sm text-gray-600 mt-1 truncate">NIF : {company.nif}</p>
               <p className="text-sm text-gray-600 truncate">STAT : {company.stat}</p>
