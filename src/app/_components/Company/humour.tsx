@@ -4,29 +4,34 @@ import Image from 'next/image'
 
 export default function BeforeAfter() {
   return (
-    <div className="flex gap-4 items-center">
-      <div className="w-1/2 h-64 md:h-96 rounded-xl overflow-hidden">
+    <div className="flex flex-col md:flex-row gap-4 items-center">
+      
+      {/* Avant */}
+      <div className="w-full md:w-1/2 h-64 md:h-96 rounded-xl overflow-hidden relative shadow-md">
         <Image
-          src="assets/humour-before.png"
+          src="/assets/humour-before.png"
           alt="Avant - Mal géré son entreprise"
           fill
-          className="object-contain w-full h-full"
+          className="object-cover"
         />
-        <div className="w-full text-center p-2 text-sm md:text-base">
-          Avant : Gestion difficile, stressée
+        <div className="absolute bottom-0 w-full bg-red-700 bg-opacity-80 text-white text-center p-2 text-sm md:text-base font-medium tracking-wide">
+          Avant : <span className="italic line-through">Gestion difficile, stressée</span>
         </div>
       </div>
-      <div className="w-1/2 h-64 md:h-96 rounded-xl overflow-hidden">
+
+      {/* Après */}
+      <div className="w-full md:w-1/2 h-64 md:h-96 rounded-xl overflow-hidden relative shadow-md">
         <Image
-          src="assets/humour-after.png"
+          src="/assets/humour-after.png"
           alt="Après - Grâce à MGA Follow UP"
           fill
-          className="object-contain w-full h-full"
+          className="object-cover"
         />
-        <div className="w-full text-center p-2 text-sm md:text-base">
-          Après : Grâce à MGA Follow UP, tout roule !
+        <div className="absolute bottom-0 w-full bg-orange-600 bg-opacity-80 text-white text-center p-2 text-sm md:text-base font-semibold tracking-wide">
+          Après : <span className="italic">Grâce à <strong>MGA Follow UP</strong>, tout roule !</span>
         </div>
       </div>
+
     </div>
   )
 }
