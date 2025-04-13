@@ -69,8 +69,8 @@ export default function Entreprises() {
             </div>
 
             <div className="max-w-[70%] p-1 overflow-hidden">
-              <h3 className="flex items-start gap-[4px] text-md font-bold text-gray-800 dark:text-white">
-                <span className="line-clamp-2 max-w-[90%] overflow-hidden text-ellipsis">
+              <h3 className="flex items-center gap-[4px] text-md font-bold text-gray-800 dark:text-white">
+                <span className="line-clamp-2">
                   {company.name}
                 </span>
                 {company.status === "trust" ? (
