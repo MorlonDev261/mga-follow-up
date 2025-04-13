@@ -1,6 +1,7 @@
 "use client";
 
 import Image from 'next/image';
+import Humour from "@components/Company/humour";
 import Company from "@components/Company/list";
 import { useRouter } from 'next/navigation';
 
@@ -45,6 +46,9 @@ const HomePage = () => {
           />
         </div>
       </section>
+
+      {/* Section: Entreprises before and after using MGA FollowUP */}
+      <Humour />
 
       {/* Section: Entreprises inscrites */}
       <Company />
