@@ -70,7 +70,7 @@ export default function Entreprises() {
 
             <div className="max-w-[70%] p-1 overflow-hidden">
               <h3 className="flex items-center gap-2 text-md font-bold text-gray-800 dark:text-white truncate">
-                <p className="mt-2 text-gray-700 text-sm line-clamp-1">
+                <p className="line-clamp-1">
                   {company.name}
                 </p>
                 <span>
