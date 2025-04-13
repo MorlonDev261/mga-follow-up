@@ -6,10 +6,10 @@ import clsx from "clsx"
 
 const companies = [
   {
-    name: "TechMada Solutions",
+    name: "AZTEK DWC LLC Madagascar",
     nif: "123456789",
     stat: "987654321",
-    status: "verified",
+    status: "trust",
     description: "Entreprise spécialisée dans le développement web et les solutions mobiles à Madagascar.",
     logo: "/aztek.jpg"
   },
@@ -17,7 +17,7 @@ const companies = [
     name: "AgroMada SARL",
     nif: "321654987",
     stat: "456789123",
-    status: "trust",
+    status: "verified",
     description: "Producteur et exportateur de produits agricoles certifiés bio.",
     logo: "/shopcell.jpg"
   },
@@ -69,8 +69,8 @@ export default function Entreprises() {
             </div>
 
             <div className="max-w-[70%] p-1 overflow-hidden">
-              <h3 className="flex gap-2 text-md font-bold text-gray-800 dark:text-white truncate">
-                {company.name} {company.status === "verified" ? <Image className="h-4 w-4" src="/badges/badge-1.png" alt="" /> : company.status === "trust" ? <Image className="h-4 w-4" src="/badges/badge-2.png" alt="" /> : ""}
+              <h3 className="flex items-center gap-2 text-md font-bold text-gray-800 dark:text-white truncate">
+                {company.name} {company.status === "trust" ? <Image className="h-4 w-4" src="/badges/badge-1.png" alt="" /> : company.status === "verified" ? <Image className="h-4 w-4" src="/badges/badge-2.png" alt="" /> : ""}
               </h3>
               <p className="text-sm text-gray-600 mt-1 truncate">NIF : {company.nif}</p>
               <p className="text-sm text-gray-600 truncate">STAT : {company.stat}</p>
