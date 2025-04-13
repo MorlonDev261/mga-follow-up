@@ -5,7 +5,7 @@ import Image from 'next/image'
 export default function BeforeAfter() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
-      <div className="relative w-full h-64 md:h-96 rounded-xl overflow-hidden shadow-md">
+      <div className="relative w-1/2 h-64 md:h-96 rounded-xl overflow-hidden shadow-md">
         <Image
           src="assets/humour-before-dark.png"
           alt="Avant - Mal géré son entreprise"
@@ -16,7 +16,7 @@ export default function BeforeAfter() {
           Avant : Gestion difficile, stressée
         </div>
       </div>
-      <div className="relative w-full h-64 md:h-96 rounded-xl overflow-hidden shadow-md">
+      <div className="relative w-1/2 h-64 md:h-96 rounded-xl overflow-hidden shadow-md">
         <Image
           src="assets/humour-after-dark.png"
           alt="Après - Grâce à MGA Follow UP"
