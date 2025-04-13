@@ -7,7 +7,7 @@ export default function BeforeAfter() {
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
       <div className="relative w-1/2 h-64 md:h-96 rounded-xl overflow-hidden shadow-md">
         <Image
-          src="assets/humour-before-dark.png"
+          src="assets/humour-before.png"
           alt="Avant - Mal géré son entreprise"
           fill
           className="object-cover"
@@ -18,7 +18,7 @@ export default function BeforeAfter() {
       </div>
       <div className="relative w-1/2 h-64 md:h-96 rounded-xl overflow-hidden shadow-md">
         <Image
-          src="assets/humour-after-dark.png"
+          src="assets/humour-after.png"
           alt="Après - Grâce à MGA Follow UP"
           fill
           className="object-cover"
