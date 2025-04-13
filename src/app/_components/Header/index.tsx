@@ -128,7 +128,7 @@ export default function Header({ children }: HeaderProps) {
             <Theme />
             <Link
               href="/login"
-              className="text-white bg-blue-500 px-2 py-1 hover:bg-blue-600"
+              className="text-white bg-blue-500 px-2 py-1 hover:bg-blue-600 rounded-md"
             >
               Se connecter
             </Link>
