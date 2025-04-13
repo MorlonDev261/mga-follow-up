@@ -12,18 +12,18 @@ export default function BeforeAfter() {
           fill
           className="object-contain"
         />
-        <div className="w-full bg-black bg-opacity-60 text-white text-center p-2 text-sm md:text-base">
+        <div className="w-full text-center p-2 text-sm md:text-base">
           Avant : Gestion difficile, stressée
         </div>
       </div>
-      <div className="relative w-1/2 h-64 md:h-96 rounded-xl overflow-hidden shadow-md">
+      <div className="relative w-1/2 h-64 md:h-96 rounded-xl overflow-hidden">
         <Image
           src="assets/humour-after.png"
           alt="Après - Grâce à MGA Follow UP"
           fill
           className="object-contain"
         />
-        <div className="w-full bg-green-600 bg-opacity-80 text-white text-center p-2 text-sm md:text-base">
+        <div className="w-full text-center p-2 text-sm md:text-base">
           Après : Grâce à MGA Follow UP, tout roule !
         </div>
       </div>
