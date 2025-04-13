@@ -70,7 +70,12 @@ export default function Entreprises() {
 
             <div className="max-w-[70%] p-1 overflow-hidden">
               <h3 className="flex items-center gap-2 text-md font-bold text-gray-800 dark:text-white truncate">
-                {company.name} {company.status === "trust" ? <Image className="h-4 w-4" src="/badges/badge-1.png" alt="" /> : company.status === "verified" ? <Image className="h-4 w-4" src="/badges/badge-2.png" alt="" /> : ""}
+                <p className="mt-2 text-gray-700 text-sm line-clamp-1">
+                  {company.name}
+                </p>
+                <span>
+                  {company.status === "trust" ? <Image className="h-4 w-4" src="/badges/badge-1.png" alt="" /> : company.status === "verified" ? <Image className="h-4 w-4" src="/badges/badge-2.png" alt="" /> : ""}
+                </span>
               </h3>
               <p className="text-sm text-gray-600 mt-1 truncate">NIF : {company.nif}</p>
               <p className="text-sm text-gray-600 truncate">STAT : {company.stat}</p>
