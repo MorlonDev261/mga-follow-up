@@ -56,7 +56,7 @@ export default function Entreprises() {
         {companies.map((company, index) => (
           <div
             key={index}
-            className="flex-shrink-0 snap-start md:snap-none flex h-36 items-center justify-between rounded-xl shadow-md border border-gray-200 overflow-hidden w-[90vw] sm:w-[80vw] md:w-full max-w-md"
+            className="flex-shrink-0 snap-start md:snap-none flex h-36 items-center justify-between rounded-xl shadow-md border border-gray-200 overflow-hidden w-[80vw] sm:w-[80vw] md:w-full max-w-md"
           >
             <div className="mr-2 w-24 h-full rounded-md flex items-center justify-center">
               <Image
@@ -69,8 +69,8 @@ export default function Entreprises() {
             </div>
 
             <div className="max-w-[70%] p-1 overflow-hidden">
-              <h3 className="text-md font-bold text-gray-800 dark:text-white truncate">
-                {company.name} {company.status === "verified" ? <Image className="h-2 w-2" src="/badges/badge-1.png" alt="" /> : company.status === "trust" ? <Image className="h-2 w-2" src="/badges/badge-2.png" alt="" /> : ""}
+              <h3 className="flex gap-2 text-md font-bold text-gray-800 dark:text-white truncate">
+                {company.name} {company.status === "verified" ? <Image className="h-4 w-4" src="/badges/badge-1.png" alt="" /> : company.status === "trust" ? <Image className="h-4 w-4" src="/badges/badge-2.png" alt="" /> : ""}
               </h3>
               <p className="text-sm text-gray-600 mt-1 truncate">NIF : {company.nif}</p>
               <p className="text-sm text-gray-600 truncate">STAT : {company.stat}</p>
