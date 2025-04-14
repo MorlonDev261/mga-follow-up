@@ -14,7 +14,7 @@ export default function BeforeAfter() {
           fill
           className="object-contain"
         />
-        <div className="absolute bottom-0 w-full bg-red-700 bg-opacity-80 text-white text-center p-2 text-sm md:text-base font-medium tracking-wide">
+        <div className="absolute bottom-0 w-full bg-orange-600 bg-opacity-80 text-white text-center p-2 text-sm md:text-base font-medium tracking-wide">
           Avant : <span className="italic line-through">Gestion difficile, stressée</span>
         </div>
       </div>
@@ -27,7 +27,7 @@ export default function BeforeAfter() {
           fill
           className="object-contain"
         />
-        <div className="absolute bottom-0 w-full bg-green-600 bg-opacity-80 text-white text-center p-2 text-sm md:text-base font-semibold tracking-wide">
+        <div className="absolute bottom-0 w-full bg-green-400 bg-opacity-80 text-white text-center p-2 text-sm md:text-base font-semibold tracking-wide">
           Après : <span className="italic">Grâce à <strong>MGA Follow UP</strong>, tout roule !</span>
         </div>
       </div>
