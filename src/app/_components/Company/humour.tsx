@@ -4,7 +4,7 @@ import Image from 'next/image'
 
 export default function BeforeAfter() {
   return (
-    <div className="flex flex-col md:flex-row gap-4 items-center">
+    <div className="flex gap-4 items-center">
       
       {/* Avant */}
       <div className="w-1/2 h-64 md:h-96 rounded-xl overflow-hidden relative shadow-md">
