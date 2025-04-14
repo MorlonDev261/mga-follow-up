@@ -7,7 +7,7 @@ export default function BeforeAfter() {
     <div className="flex flex-col md:flex-row gap-4 items-center">
       
       {/* Avant */}
-      <div className="w-full md:w-1/2 h-64 md:h-96 rounded-xl overflow-hidden relative shadow-md">
+      <div className="w-1/2 h-64 md:h-96 rounded-xl overflow-hidden relative shadow-md">
         <Image
           src="/assets/humour-before.png"
           alt="Avant - Mal géré son entreprise"
@@ -20,7 +20,7 @@ export default function BeforeAfter() {
       </div>
 
       {/* Après */}
-      <div className="w-full md:w-1/2 h-64 md:h-96 rounded-xl overflow-hidden relative shadow-md">
+      <div className="w-1/2 h-64 md:h-96 rounded-xl overflow-hidden relative shadow-md">
         <Image
           src="/assets/humour-after.png"
           alt="Après - Grâce à MGA Follow UP"
