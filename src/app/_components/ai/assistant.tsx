@@ -40,26 +40,28 @@ export default function ChatDegany() {
     }
   };
 
-  const startListening = () => {
-    const SpeechRecognition: typeof window.SpeechRecognition =
-      typeof window !== 'undefined'
-      // @typescript-eslint/no-explicit-any
-        ? (window.SpeechRecognition || (window as any).webkitSpeechRecognition)
-        : undefined;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+const startListening = () => {
+  const SR = typeof window !== 'undefined'
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ? (window.SpeechRecognition || (window as any).webkitSpeechRecognition)
+    : null;
 
-    if (!SpeechRecognition) return alert("Micro non supporté");
+  if (!SR) return alert("Micro non supporté");
 
-    const recognition = new SpeechRecognition();
-    recognition.lang = 'fr-FR';
-    recognition.onresult = (event: SpeechRecognitionEvent) => {
-      const transcript = event.results[0][0].transcript;
-      setInput(transcript);
-    };
-    recognition.onend = () => setListening(false);
-    recognition.start();
-    setListening(true);
+  const recognition: SpeechRecognition = new SR();
+  recognition.lang = 'fr-FR';
+
+  recognition.onresult = (event: SpeechRecognitionEvent) => {
+    const transcript = event.results[0][0].transcript;
+    setInput(transcript);
   };
 
+  recognition.onend = () => setListening(false);
+  recognition.start();
+  setListening(true);
+};
+  
   return (
     <div className="max-w-2xl mx-auto p-4 space-y-4 bg-white shadow-lg rounded-xl border border-gray-200">
       <h2 className="text-xl font-bold text-center text-blue-700">Degany – Assistant MGA</h2>
