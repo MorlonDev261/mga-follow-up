@@ -58,7 +58,7 @@ export default function ChatDegany() {
 
       <div className="flex gap-2 items-center">
         <button
-          className={`p-2 rounded bg-gray-200 hover:bg-gray-300 ${listening ? 'animate-pulse' : ''}`}
+          className="p-2 rounded bg-gray-200 hover:bg-gray-300"
           title="Activer le micro"
         >
           <BsMicFill className="text-blue-600" size={20} />
