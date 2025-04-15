@@ -7,9 +7,7 @@ export default function ChatDegany() {
   const [messages, setMessages] = useState<{ from: 'user' | 'degany'; text: string }[]>([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
-  const [listening, setListening] = useState(false);
-  const synthRef = useRef(typeof window !== 'undefined' ? window.speechSynthesis : null);
-
+  
   const sendMessage = async () => {
     if (!input.trim()) return;
     const userMessage = input;
@@ -29,40 +27,12 @@ export default function ChatDegany() {
       const answer = data.answer || "Je ne suis pas autorisé à répondre à cela.";
 
       setMessages(prev => [...prev.slice(0, -1), { from: 'degany', text: answer }]);
-
-      const utter = new SpeechSynthesisUtterance(answer);
-      utter.lang = 'fr-FR';
-      synthRef.current?.speak(utter);
     } catch (error) {
       setMessages(prev => [...prev.slice(0, -1), { from: 'degany', text: "Erreur de connexion." }]);
     } finally {
       setLoading(false);
     }
   };
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const startListening = () => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const SpeechRecognition = typeof window !== 'undefined'
-    // @ts-expect-error: SpeechRecognition is not typed in all environments
-    ? (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
-    : null;
-
-  if (!SpeechRecognition) return alert("Micro non supporté");
-
-  const recognition = new SpeechRecognition();
-  recognition.lang = 'fr-FR';
-
-  recognition.onresult = (event: SpeechRecognitionEvent) => {
-    const transcript = event.results[0][0].transcript;
-    setInput(transcript);
-  };
-
-  recognition.onend = () => setListening(false);
-  recognition.start();
-  setListening(true);
-};
-
   
   return (
     <div className="max-w-2xl mx-auto p-4 space-y-4 bg-white shadow-lg rounded-xl border border-gray-200">
@@ -88,7 +58,6 @@ const startListening = () => {
 
       <div className="flex gap-2 items-center">
         <button
-          onClick={startListening}
           className={`p-2 rounded bg-gray-200 hover:bg-gray-300 ${listening ? 'animate-pulse' : ''}`}
           title="Activer le micro"
         >
