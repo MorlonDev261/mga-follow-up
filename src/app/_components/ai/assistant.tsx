@@ -1,4 +1,4 @@
- 'use client';
+'use client';
 import { useState, useRef } from 'react';
 import { FaRobot, FaUserCircle } from 'react-icons/fa';
 import { BsMicFill } from 'react-icons/bs';
@@ -6,6 +6,18 @@ import { BsMicFill } from 'react-icons/bs';
 type Message = {
   from: 'user' | 'degany';
   text: string;
+};
+
+// Type compatible avec navigateur (webkit + standard)
+type SpeechRecognitionConstructor = new () => SpeechRecognition;
+
+const getSpeechRecognition = (): SpeechRecognitionConstructor | null => {
+  if (typeof window === 'undefined') return null;
+  return (
+    (window as any).SpeechRecognition ||
+    (window as any).webkitSpeechRecognition ||
+    null
+  );
 };
 
 export default function ChatDegany() {
@@ -23,11 +35,7 @@ export default function ChatDegany() {
     setInput('');
     setLoading(true);
 
-    setMessages((prev) => [
-      ...prev,
-      { from: 'user', text: userMessage },
-      { from: 'degany', text: '...' },
-    ]);
+    setMessages(prev => [...prev, { from: 'user', text: userMessage }, { from: 'degany', text: '...' }]);
 
     try {
       const res = await fetch('/api/ai/assistant', {
@@ -39,38 +47,23 @@ export default function ChatDegany() {
       const data: { answer?: string } = await res.json();
       const answer = data.answer || 'Je ne suis pas autorisé à répondre à cela.';
 
-      setMessages((prev) => [
-        ...prev.slice(0, -1),
-        { from: 'degany', text: answer },
-      ]);
+      setMessages(prev => [...prev.slice(0, -1), { from: 'degany', text: answer }]);
 
       const utter = new SpeechSynthesisUtterance(answer);
       utter.lang = 'fr-FR';
       synthRef.current?.speak(utter);
-    } catch (error) {
-      setMessages((prev) => [
-        ...prev.slice(0, -1),
-        { from: 'degany', text: 'Erreur de connexion.' },
-      ]);
+    } catch {
+      setMessages(prev => [...prev.slice(0, -1), { from: 'degany', text: 'Erreur de connexion.' }]);
     } finally {
       setLoading(false);
     }
   };
 
   const startListening = () => {
-    const SpeechRecognition =
-      typeof window !== 'undefined'
-        ? (window as typeof window & {
-            webkitSpeechRecognition?: typeof SpeechRecognition;
-          }).SpeechRecognition || window.webkitSpeechRecognition
-        : undefined;
+    const SRConstructor = getSpeechRecognition();
+    if (!SRConstructor) return alert('Micro non supporté');
 
-    if (!SpeechRecognition) {
-      alert('Micro non supporté');
-      return;
-    }
-
-    const recognition = new SpeechRecognition();
+    const recognition = new SRConstructor();
     recognition.lang = 'fr-FR';
 
     recognition.onresult = (event: SpeechRecognitionEvent) => {
@@ -91,14 +84,9 @@ export default function ChatDegany() {
 
       <div className="h-[400px] overflow-y-auto space-y-2 bg-gray-50 p-4 rounded">
         {messages.map((m, i) => (
-          <div
-            key={i}
-            className={`flex ${m.from === 'user' ? 'justify-end' : 'justify-start'}`}
-          >
+          <div key={i} className={`flex ${m.from === 'user' ? 'justify-end' : 'justify-start'}`}>
             <div className="flex items-end gap-2 max-w-[80%]">
-              {m.from === 'degany' && (
-                <FaRobot size={28} className="text-blue-600" />
-              )}
+              {m.from === 'degany' && <FaRobot size={28} className="text-blue-600" />}
               <div
                 className={`p-3 text-sm rounded-xl shadow ${
                   m.from === 'user'
@@ -108,9 +96,7 @@ export default function ChatDegany() {
               >
                 {m.text}
               </div>
-              {m.from === 'user' && (
-                <FaUserCircle size={28} className="text-gray-500" />
-              )}
+              {m.from === 'user' && <FaUserCircle size={28} className="text-gray-500" />}
             </div>
           </div>
         ))}
@@ -119,9 +105,7 @@ export default function ChatDegany() {
       <div className="flex gap-2 items-center">
         <button
           onClick={startListening}
-          className={`p-2 rounded bg-gray-200 hover:bg-gray-300 ${
-            listening ? 'animate-pulse' : ''
-          }`}
+          className={`p-2 rounded bg-gray-200 hover:bg-gray-300 ${listening ? 'animate-pulse' : ''}`}
           title="Activer le micro"
         >
           <BsMicFill className="text-blue-600" size={20} />
