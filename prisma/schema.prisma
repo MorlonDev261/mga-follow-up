@@ -90,6 +90,13 @@ model CustomerRelation {
   @@index([ownerId])
 }
 
+model AssistantContext {
+  id        Int    @id @default(autoincrement())
+  question  String
+  answer    String
+  createdAt DateTime @default(now())
+}
+
 model Purchase {
   id          String   @id @default(cuid())
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade) // ✅ Ajout de `onDelete: Cascade`
