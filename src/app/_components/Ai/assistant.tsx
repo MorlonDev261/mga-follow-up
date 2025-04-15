@@ -114,9 +114,13 @@ export default function Chat() {
 
       {/* Chat Window */}
       <motion.div
-        className={`fixed sm:bottom-24 sm:right-6 w-full sm:w-96 h-full sm:max-h-[600px] bg-gray-50 rounded-xl shadow-2xl overflow-hidden flex flex-col transition-all duration-300 transform ${
-          isChatOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0 pointer-events-none'
-        } z-40`}
+        className={cn(
+          "fixed inset-0 sm:inset-auto sm:bottom-24 sm:right-6", // plein écran mobile, positionné en bas à droite en desktop
+          "w-full sm:w-96", // pleine largeur mobile, 384px sur desktop
+          "h-full sm:max-h-[600px]", // pleine hauteur mobile, max hauteur sur desktop
+          "bg-gray-50 rounded-none sm:rounded-xl", // pas d’arrondi sur mobile, arrondi desktop
+          "shadow-2xl overflow-hidden flex flex-col z-40"
+        )}
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: isChatOpen ? 1 : 0, scale: isChatOpen ? 1 : 0.95 }}
         exit={{ opacity: 0, scale: 0.95 }}
