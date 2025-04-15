@@ -6,7 +6,7 @@ export default function AdminPage() {
   const [answer, setAnswer] = useState('');
 
   const save = async () => {
-    await fetch('/api/ai/context', {
+    await fetch('/api/ai/trainning', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ question, answer })
