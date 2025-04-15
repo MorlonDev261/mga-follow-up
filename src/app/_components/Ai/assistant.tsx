@@ -29,9 +29,8 @@ export default function VirtualAssistant() {
   const [isLoading, setIsLoading] = useState(false);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const dragRef = useRef<HTMLDivElement>(null);
 
+  // Effet pour scroll vers le bas quand un nouveau message arrive
   useEffect(() => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -50,6 +49,7 @@ export default function VirtualAssistant() {
   const handleSendMessage = async () => {
     if (!inputMessage.trim()) return;
     
+    // Ajouter le message de l'utilisateur
     const userMessage: Message = {
       id: Date.now().toString(),
       type: 'user',
@@ -62,6 +62,7 @@ export default function VirtualAssistant() {
     setIsLoading(true);
     
     try {
+      // Appel API vers l'endpoint d'IA
       const response = await fetch('/api/ai/assistant', {
         method: 'POST',
         headers: {
@@ -75,11 +76,11 @@ export default function VirtualAssistant() {
           }))
         }),
       });
-
+      
       if (!response.ok) {
         throw new Error('La connexion avec l\'assistant a échoué');
       }
-
+      
       const data = await response.json();
       
       const assistantMessage: Message = {
@@ -92,7 +93,8 @@ export default function VirtualAssistant() {
       setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
       console.error('Erreur lors de la communication avec l\'assistant:', error);
-
+      
+      // Message d'erreur pour l'utilisateur
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         type: 'assistant',
@@ -113,28 +115,8 @@ export default function VirtualAssistant() {
     }
   };
 
-  const handleMouseDown = (e: React.MouseEvent) => {
-    const offsetX = e.clientX - position.x;
-    const offsetY = e.clientY - position.y;
-
-    const onMouseMove = (moveEvent: MouseEvent) => {
-      setPosition({
-        x: moveEvent.clientX - offsetX,
-        y: moveEvent.clientY - offsetY,
-      });
-    };
-
-    const onMouseUp = () => {
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
-    };
-
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
-  };
-
   return (
-    <div className="fixed z-50" style={{ left: `${position.x}px`, top: `${position.y}px` }} ref={dragRef}>
+    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
       {/* Bouton d'ouverture */}
       {!isOpen && (
         <button
@@ -150,10 +132,7 @@ export default function VirtualAssistant() {
       {isOpen && (
         <div className="bg-white rounded-lg shadow-xl flex flex-col w-80 md:w-96 border border-gray-200 transition-all duration-300">
           {/* En-tête */}
-          <div
-            className="bg-blue-600 text-white p-3 rounded-t-lg flex justify-between items-center cursor-pointer"
-            onMouseDown={handleMouseDown}
-          >
+          <div className="bg-blue-600 text-white p-3 rounded-t-lg flex justify-between items-center">
             <div className="flex items-center space-x-2">
               <FaRobot size={18} />
               <h3 className="font-medium">Assistant Virtuel</h3>
@@ -263,6 +242,51 @@ export default function VirtualAssistant() {
           )}
         </div>
       )}
+
+      {/* Styles pour l'animation de l'indicateur de frappe */}
+      <style jsx>{`
+        .typing-indicator {
+          display: flex;
+          align-items: center;
+        }
+        
+        .typing-indicator span {
+          height: 8px;
+          width: 8px;
+          margin: 0 2px;
+          background-color: #606060;
+          border-radius: 50%;
+          display: inline-block;
+          animation: typing 1.5s infinite ease-in-out;
+        }
+        
+        .typing-indicator span:nth-child(1) {
+          animation-delay: 0s;
+        }
+        
+        .typing-indicator span:nth-child(2) {
+          animation-delay: 0.2s;
+        }
+        
+        .typing-indicator span:nth-child(3) {
+          animation-delay: 0.4s;
+        }
+        
+        @keyframes typing {
+          0% {
+            transform: translateY(0px);
+            background-color: #9e9e9e;
+          }
+          28% {
+            transform: translateY(-5px);
+            background-color: #606060;
+          }
+          44% {
+            transform: translateY(0px);
+            background-color: #9e9e9e;
+          }
+        }
+      `}</style>
     </div>
   );
 }
