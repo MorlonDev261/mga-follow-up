@@ -3,19 +3,49 @@ import { useState, useRef } from 'react';
 import { FaRobot, FaUserCircle } from 'react-icons/fa';
 import { BsMicFill } from 'react-icons/bs';
 
+declare global {
+  interface Window {
+    SpeechRecognition: typeof SpeechRecognition;
+    webkitSpeechRecognition: typeof SpeechRecognition;
+  }
+
+  interface SpeechRecognition extends EventTarget {
+    lang: string;
+    start(): void;
+    stop(): void;
+    abort(): void;
+    onstart: ((this: SpeechRecognition, ev: Event) => any) | null;
+    onend: ((this: SpeechRecognition, ev: Event) => any) | null;
+    onresult: ((this: SpeechRecognition, ev: SpeechRecognitionEvent) => any) | null;
+    onaudioend: ((this: SpeechRecognition, ev: Event) => any) | null;
+    onaudiostart: ((this: SpeechRecognition, ev: Event) => any) | null;
+  }
+
+  interface SpeechRecognitionEvent extends Event {
+    readonly resultIndex: number;
+    readonly results: SpeechRecognitionResultList;
+  }
+
+  interface SpeechRecognitionResultList {
+    [index: number]: SpeechRecognitionResult;
+    length: number;
+  }
+
+  interface SpeechRecognitionResult {
+    readonly isFinal: boolean;
+    [index: number]: SpeechRecognitionAlternative;
+    length: number;
+  }
+
+  interface SpeechRecognitionAlternative {
+    readonly transcript: string;
+    readonly confidence: number;
+  }
+}
+
 type Message = {
   from: 'user' | 'degany';
   text: string;
-};
-
-// Type compatible avec navigateur (webkit + standard)
-type SpeechRecognitionConstructor = new () => SpeechRecognition;
-
-const getSpeechRecognition = (): SpeechRecognitionConstructor | null => {
-  if (typeof window === 'undefined') return null;
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition || null;
 };
 
 export default function ChatDegany() {
@@ -58,10 +88,13 @@ export default function ChatDegany() {
   };
 
   const startListening = () => {
-    const SRConstructor = getSpeechRecognition();
-    if (!SRConstructor) return alert('Micro non supporté');
+    const SR = typeof window !== 'undefined'
+      ? window.SpeechRecognition || window.webkitSpeechRecognition
+      : null;
 
-    const recognition = new SRConstructor();
+    if (!SR) return alert('Micro non supporté');
+
+    const recognition = new SR();
     recognition.lang = 'fr-FR';
 
     recognition.onresult = (event: SpeechRecognitionEvent) => {
