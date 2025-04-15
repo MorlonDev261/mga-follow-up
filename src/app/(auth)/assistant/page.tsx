@@ -1,5 +1,5 @@
 import React from "react";
-import Assistant from "@components/ai/assistant";
+import Assistant from "@components/Ai/assistant";
 
 const Assiss: React.FC = () => {
 
