@@ -114,11 +114,13 @@ export default function Chat() {
 
       {/* Chat Window */}
       <motion.div
-        className={`fixed bottom-24 right-6 w-96 h-4/5 max-h-[600px] bg-gray-50 rounded-xl shadow-2xl overflow-hidden flex flex-col transition-all duration-300 transform z-40`}
-        initial={{ scale: 0.95, opacity: 0 }}
-        animate={{ scale: isChatOpen ? 1 : 0.95, opacity: isChatOpen ? 1 : 0 }}
+        className={`fixed bottom-24 right-6 w-96 h-4/5 max-h-[600px] bg-gray-50 rounded-xl shadow-2xl overflow-hidden flex flex-col transition-all duration-300 transform ${
+          isChatOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0 pointer-events-none'
+        } z-40`}
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: isChatOpen ? 1 : 0, scale: isChatOpen ? 1 : 0.95 }}
+        exit={{ opacity: 0, scale: 0.95 }}
         transition={{ duration: 0.3 }}
-        style={{ maxWidth: '100%', width: '100%', height: isChatOpen ? '80%' : 'auto' }}
       >
         {/* Header */}
         <div className="bg-white border-b border-gray-200 shadow-sm py-4 px-6">
