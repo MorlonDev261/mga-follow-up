@@ -42,14 +42,15 @@ export default function ChatDegany() {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const startListening = () => {
-  const SR = typeof window !== 'undefined'
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ? (window.SpeechRecognition || (window as any).webkitSpeechRecognition)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const SpeechRecognition = typeof window !== 'undefined'
+    // @ts-expect-error: SpeechRecognition is not typed in all environments
+    ? (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
     : null;
 
-  if (!SR) return alert("Micro non supporté");
+  if (!SpeechRecognition) return alert("Micro non supporté");
 
-  const recognition: SpeechRecognition = new SR();
+  const recognition = new SpeechRecognition();
   recognition.lang = 'fr-FR';
 
   recognition.onresult = (event: SpeechRecognitionEvent) => {
@@ -61,6 +62,7 @@ const startListening = () => {
   recognition.start();
   setListening(true);
 };
+
   
   return (
     <div className="max-w-2xl mx-auto p-4 space-y-4 bg-white shadow-lg rounded-xl border border-gray-200">
