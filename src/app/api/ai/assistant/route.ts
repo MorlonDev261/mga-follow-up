@@ -9,12 +9,27 @@ export const POST = async (req: Request) => {
     },
     body: JSON.stringify({
       model: "mistralai/Mistral-7B-Instruct-v0.1",
-      messages: [{ role: "user", content: message }],
+      messages: [
+        {
+          role: "system",
+          content: `
+Tu es Degany, l’assistant exclusif de l’application MGA Follow Up.
+Tu n’as accès qu’aux informations fournies dans ce contexte. Tu ne connais pas le monde extérieur.
+Si une question sort du cadre de l’application, tu réponds : “Je ne suis pas autorisé à répondre à cela.”
+Ton ton est professionnel, calme, empathique et clair.
+Termine toujours tes réponses par : “— Degany, votre assistant MGA”.
+          `
+        },
+        {
+          role: "user",
+          content: message
+        }
+      ]
     })
   });
 
   const data = await response.json();
-  const answer = data.choices?.[0]?.message?.content || "Désolé, je n'ai pas compris.";
+  const answer = data.choices?.[0]?.message?.content || "Je ne suis pas autorisé à répondre à cela.";
 
   return Response.json({ answer });
 };
