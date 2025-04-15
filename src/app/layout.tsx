@@ -86,13 +86,7 @@ export default async function RootLayout({
                 <main className="min-h-screen">{children}</main>
 
                 {/* Assistant flottant */}
-                <div
-                  className="fixed bottom-10 right-5 z-50 w-16 h-16 rounded-full p-2 bg-green-500 dark:bg-orange-500"
-                  role="button"
-                  tabIndex={0}
-                >
-                  <VirtualAssistant />
-                </div>
+                <VirtualAssistant />
 
                 <PWA />
                 <SpeedInsights />
