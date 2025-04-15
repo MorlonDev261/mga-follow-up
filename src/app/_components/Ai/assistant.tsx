@@ -114,7 +114,7 @@ export default function Chat() {
 
       {/* Chat Window */}
       <motion.div
-        className={`fixed bottom-24 right-6 w-96 h-4/5 max-h-[600px] bg-gray-50 rounded-xl shadow-2xl overflow-hidden flex flex-col transition-all duration-300 transform ${
+        className={`fixed sm:bottom-24 sm:right-6 w-full sm:w-96 h-full sm:max-h-[600px] bg-gray-50 rounded-xl shadow-2xl overflow-hidden flex flex-col transition-all duration-300 transform ${
           isChatOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0 pointer-events-none'
         } z-40`}
         initial={{ opacity: 0, scale: 0.95 }}
