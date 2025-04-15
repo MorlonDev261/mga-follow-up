@@ -47,66 +47,66 @@ export default function VirtualAssistant() {
   };
 
   const handleSendMessage = async () => {
-    if (!inputMessage.trim()) return;
-    
-    // Ajouter le message de l'utilisateur
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      type: 'user',
-      content: inputMessage,
+  if (!inputMessage.trim()) return;
+
+  const userMessage: Message = {
+    id: Date.now().toString(),
+    type: 'user',
+    content: inputMessage,
+    timestamp: new Date(),
+  };
+
+  setMessages(prev => [...prev, userMessage]);
+  setInputMessage('');
+  setIsLoading(true);
+
+  try {
+    const response = await fetch('/api/ai/assistant', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ 
+        message: inputMessage,
+        history: messages.map(msg => ({
+          role: msg.type === 'user' ? 'user' : 'assistant',
+          content: msg.content
+        }))
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('La connexion avec l\'assistant a échoué');
+    }
+
+    const data = await response.json();
+    console.log('Réponse de l\'assistant:', data);  // Pour inspecter la réponse de l'API
+
+    const assistantMessage: Message = {
+      id: (Date.now() + 1).toString(),
+      type: 'assistant',
+      content: data.response,  // Assurez-vous que cette donnée existe
       timestamp: new Date(),
     };
-    
-    setMessages(prev => [...prev, userMessage]);
-    setInputMessage('');
-    setIsLoading(true);
-    
-    try {
-      // Appel API vers l'endpoint d'IA
-      const response = await fetch('/api/ai/assistant', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ 
-          message: inputMessage,
-          history: messages.map(msg => ({
-            role: msg.type === 'user' ? 'user' : 'assistant',
-            content: msg.content
-          }))
-        }),
-      });
-      
-      if (!response.ok) {
-        throw new Error('La connexion avec l\'assistant a échoué');
-      }
-      
-      const data = await response.json();
-      
-      const assistantMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        type: 'assistant',
-        content: data.response,
-        timestamp: new Date(),
-      };
-      
-      setMessages(prev => [...prev, assistantMessage]);
-    } catch (error) {
-      console.error('Erreur lors de la communication avec l\'assistant:', error);
-      
-      // Message d'erreur pour l'utilisateur
-      const errorMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        type: 'assistant',
-        content: 'Désolé, j\'ai rencontré un problème. Pourriez-vous réessayer?',
-        timestamp: new Date(),
-      };
-      
-      setMessages(prev => [...prev, errorMessage]);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+
+    setMessages(prev => [...prev, assistantMessage]);
+
+  } catch (error) {
+    console.error('Erreur lors de la communication avec l\'assistant:', error);
+
+    const errorMessage: Message = {
+      id: (Date.now() + 1).toString(),
+      type: 'assistant',
+      content: 'Désolé, j\'ai rencontré un problème. Pourriez-vous réessayer?',
+      timestamp: new Date(),
+    };
+
+    setMessages(prev => [...prev, errorMessage]);
+  } finally {
+    setIsLoading(false);
+  }
+};
+  
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
