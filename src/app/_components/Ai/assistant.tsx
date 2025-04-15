@@ -103,7 +103,7 @@ export default function Chat() {
       {/* Floating Chat Button */}
       <button
         onClick={toggleChat}
-        className="fixed bottom-6 right-6 bg-green-600 hover:bg-green-700 text-white p-4 rounded-full shadow-lg z-50 transition-all duration-300 transform hover:scale-110"
+        className="fixed bottom-6 right-6 bg-green-600 hover:bg-green-700 text-white p-4 rounded-full shadow-lg z-[90] transition-all duration-300 transform hover:scale-110"
         aria-label="Ouvrir le chat"
       >
         {isChatOpen ? (
@@ -120,7 +120,7 @@ export default function Chat() {
           "w-full sm:w-96", // pleine largeur mobile, 384px sur desktop
           "h-full sm:max-h-[600px]", // pleine hauteur mobile, max hauteur sur desktop
           "bg-gray-50 rounded-none sm:rounded-xl", // pas d’arrondi sur mobile, arrondi desktop
-          "shadow-2xl overflow-hidden flex flex-col z-40"
+          "shadow-2xl overflow-hidden flex flex-col z-[100]"
         )}
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: isChatOpen ? 1 : 0, scale: isChatOpen ? 1 : 0.95 }}
