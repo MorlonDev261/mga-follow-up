@@ -1,5 +1,5 @@
 import React from "react";
-import Assistant from "@Components/assistant";
+import Assistant from "@adminComponents/assistant";
 
 const Page: React.FC = () => {
 
