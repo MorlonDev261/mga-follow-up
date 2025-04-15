@@ -110,9 +110,9 @@ export default function Chat() {
             <div className="bg-blue-100 p-4 rounded-full">
               <RiRobot2Line size={48} className="text-blue-600" />
             </div>
-            <h2 className="text-xl font-medium text-gray-700">Comment puis-je vous aider aujourd'hui ?</h2>
+            <h2 className="text-xl font-medium text-gray-700">Comment puis-je vous aider aujourd&apos;hui ?</h2>
             <p className="max-w-md text-sm">
-              Posez-moi n'importe quelle question et je ferai de mon mieux pour vous répondre.
+              Posez-moi n&apos;importe quelle question et je ferai de mon mieux pour vous répondre.
             </p>
           </div>
         ) : (
