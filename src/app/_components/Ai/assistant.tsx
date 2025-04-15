@@ -125,8 +125,8 @@ export default function Chat() {
                 <RiRobot2Line size={24} />
               </div>
               <div>
-                <h1 className="text-xl font-semibold text-gray-800">Assistant IA</h1>
-                <p className="text-xs text-gray-500">Propulsé par Together.ai</p>
+                <h1 className="text-xl font-semibold text-gray-800">Assistant Degany</h1>
+                <p className="text-xs text-gray-500">Assistant de MGA Follow UP</p>
               </div>
             </div>
             <div className="flex items-center space-x-2">
@@ -168,7 +168,7 @@ export default function Chat() {
                   <div className="max-w-3/4">
                     <div className="flex items-center justify-end space-x-2">
                       <span className="text-xs text-gray-400">{m.timestamp}</span>
-                      <span className="font-medium text-gray-800">Vous</span>
+                      <span className="font-medium text-gray-800">Zah</span>
                     </div>
                     <div className="mt-1 text-white bg-orange-600 p-3 rounded-lg rounded-tr-none">
                       {m.user}
@@ -188,7 +188,7 @@ export default function Chat() {
                   </div>
                   <div className="flex-1 max-w-3/4">
                     <div className="flex items-center space-x-2">
-                      <span className="font-medium text-gray-800">Assistant</span>
+                      <span className="font-medium text-gray-800">Degany</span>
                       <span className="text-xs text-gray-400">{m.timestamp}</span>
                     </div>
                     <div className="mt-1 text-gray-700 bg-white border border-gray-200 p-3 rounded-lg rounded-tl-none shadow-sm">
