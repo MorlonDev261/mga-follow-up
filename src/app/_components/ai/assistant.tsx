@@ -1,4 +1,5 @@
-// components/VirtualAssistant.tsx
+"use client";
+
 import { useState, useEffect, useRef } from 'react';
 import { FaRobot, FaPaperPlane, FaTimes, FaWindowMinimize, FaWindowMaximize, FaMicrophone } from 'react-icons/fa';
 import { BiMessageDetail } from 'react-icons/bi';
