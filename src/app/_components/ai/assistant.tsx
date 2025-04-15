@@ -1,7 +1,6 @@
 'use client';
-import { useState, useRef } from 'react';
-import { HiMiniRobot } from 'react-icons/hi2';
-import { FaUserCircle } from 'react-icons/fa';
+import { useRef, useState } from 'react';
+import { FaRobot, FaUserCircle } from 'react-icons/fa';
 import { BsMicFill } from 'react-icons/bs';
 
 export default function ChatDegany() {
@@ -9,7 +8,7 @@ export default function ChatDegany() {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [listening, setListening] = useState(false);
-  const synthRef = useRef(window.speechSynthesis);
+  const synthRef = useRef(typeof window !== 'undefined' ? window.speechSynthesis : null);
 
   const sendMessage = async () => {
     if (!input.trim()) return;
@@ -28,12 +27,13 @@ export default function ChatDegany() {
 
       const data = await res.json();
       const answer = data.answer || "Je ne suis pas autorisé à répondre à cela.";
+
       setMessages(prev => [...prev.slice(0, -1), { from: 'degany', text: answer }]);
 
       const utter = new SpeechSynthesisUtterance(answer);
       utter.lang = 'fr-FR';
       synthRef.current?.speak(utter);
-    } catch (err) {
+    } catch (error) {
       setMessages(prev => [...prev.slice(0, -1), { from: 'degany', text: "Erreur de connexion." }]);
     } finally {
       setLoading(false);
@@ -41,12 +41,16 @@ export default function ChatDegany() {
   };
 
   const startListening = () => {
-    const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
+    const SpeechRecognition: typeof window.SpeechRecognition =
+      typeof window !== 'undefined'
+        ? (window.SpeechRecognition || (window as any).webkitSpeechRecognition)
+        : undefined;
+
     if (!SpeechRecognition) return alert("Micro non supporté");
 
     const recognition = new SpeechRecognition();
     recognition.lang = 'fr-FR';
-    recognition.onresult = (event: any) => {
+    recognition.onresult = (event: SpeechRecognitionEvent) => {
       const transcript = event.results[0][0].transcript;
       setInput(transcript);
     };
@@ -63,7 +67,7 @@ export default function ChatDegany() {
         {messages.map((m, i) => (
           <div key={i} className={`flex ${m.from === 'user' ? 'justify-end' : 'justify-start'}`}>
             <div className="flex items-end gap-2 max-w-[80%]">
-              {m.from === 'degany' && <HiMiniRobot size={28} className="text-blue-600" />}
+              {m.from === 'degany' && <FaRobot size={28} className="text-blue-600" />}
               <div className={`p-3 text-sm rounded-xl shadow ${
                 m.from === 'user'
                   ? 'bg-blue-600 text-white rounded-br-none'
