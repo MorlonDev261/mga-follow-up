@@ -1,8 +1,11 @@
 'use client';
+
 import { useState, useRef, useEffect } from 'react';
 import { IoSend, IoRefresh, IoClose, IoChatbubbleEllipses } from 'react-icons/io5';
 import { FiUser, FiMessageSquare } from 'react-icons/fi';
 import { RiRobot2Line } from 'react-icons/ri';
+import { motion } from 'framer-motion';
+import RippleButton from '@/components/RippleButton';
 
 interface Message {
   user: string;
@@ -99,23 +102,23 @@ export default function Chat() {
   return (
     <>
       {/* Floating Chat Button */}
-      <button
+      <RippleButton
         onClick={toggleChat}
-        className="fixed bottom-6 right-6 bg-green-600 hover:bg-green-700 text-white p-4 rounded-full shadow-lg z-50 transition-all duration-300 transform hover:scale-110"
-        aria-label="Ouvrir le chat"
+        className="fixed bottom-4 right-4 z-50 p-4 rounded-full bg-green-600 text-white shadow-lg sm:hover:scale-105 sm:transition sm:duration-300 sm:ease-in-out"
       >
         {isChatOpen ? (
           <IoClose size={24} />
         ) : (
           <IoChatbubbleEllipses size={24} />
         )}
-      </button>
+      </RippleButton>
 
       {/* Chat Window */}
-      <div 
-        className={`fixed bottom-24 right-6 w-96 h-4/5 max-h-[600px] bg-gray-50 rounded-xl shadow-2xl overflow-hidden flex flex-col transition-all duration-300 transform ${
-          isChatOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0 pointer-events-none'
-        } z-40`}
+      <motion.div 
+        className={`fixed bottom-24 right-4 sm:right-6 w-full sm:w-96 h-4/5 max-h-[600px] bg-gray-50 rounded-xl shadow-2xl overflow-hidden flex flex-col z-40`}
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: isChatOpen ? 1 : 0, scale: isChatOpen ? 1 : 0.95 }}
+        transition={{ duration: 0.3 }}
       >
         {/* Header */}
         <div className="bg-white border-b border-gray-200 shadow-sm py-4 px-6">
@@ -162,8 +165,15 @@ export default function Chat() {
             </div>
           ) : (
             messages.map((m, i) => (
-              <div key={i} className="space-y-4">
-                {/* User Message - Now on the right side */}
+              <motion.div 
+                key={i}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.3 }}
+                className="space-y-4"
+              >
+                {/* User Message */}
                 <div className="flex justify-end">
                   <div className="max-w-3/4">
                     <div className="flex items-center justify-end space-x-2">
@@ -181,7 +191,7 @@ export default function Chat() {
                   </div>
                 </div>
 
-                {/* Bot Message - Still on the left */}
+                {/* Bot Message */}
                 <div className="flex items-start space-x-3">
                   <div className="bg-green-600 p-2 rounded-full">
                     <RiRobot2Line size={18} className="text-white" />
@@ -203,7 +213,7 @@ export default function Chat() {
                     </div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))
           )}
           <div ref={messagesEndRef} />
@@ -239,7 +249,7 @@ export default function Chat() {
             </button>
           </div>
         </div>
-      </div>
+      </motion.div>
     </>
   );
 }
