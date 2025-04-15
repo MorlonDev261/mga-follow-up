@@ -80,12 +80,12 @@ export default function VirtualAssistant() {
     }
 
     const data = await response.json();
-    console.log('Réponse de l\'assistant:', data);  // Pour inspecter la réponse de l'API
+    console.log('Réponse de l\'assistant:', data);  // Vérifiez ici la réponse de l'API
 
     const assistantMessage: Message = {
       id: (Date.now() + 1).toString(),
       type: 'assistant',
-      content: data.response,  // Assurez-vous que cette donnée existe
+      content: data.response,  // Vérifiez que cette donnée existe et est valide
       timestamp: new Date(),
     };
 
