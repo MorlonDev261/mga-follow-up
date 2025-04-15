@@ -4,6 +4,10 @@ export const POST = async (req: Request) => {
   const { message } = await req.json();
   const context = await getSimilarContext(message);
 
+  if (!process.env.TOGETHER_API_KEY) {
+    return new Response("Clé API manquante", { status: 500 });
+  }
+
   const response = await fetch("https://api.together.xyz/v1/chat/completions", {
     method: "POST",
     headers: {
@@ -15,7 +19,14 @@ export const POST = async (req: Request) => {
       messages: [
         {
           role: "system",
-          content: `Tu es Degany, assistant de l'app MGA Follow Up. Tu réponds uniquement selon ce contexte :\n${context}\n\nSi ce n’est pas pertinent, dis : “Je ne suis pas autorisé à répondre à cela.” Termine toujours par “— Degany, votre assistant MGA”.`
+          content: `Tu es Degany, l'assistant officiel de l'application MGA Follow Up.
+Tu réponds uniquement selon ce contexte :
+
+${context}
+
+Si ce n’est pas pertinent, tu dis : “Je suis développé par MGA Follow UP pour vous assister uniquement dans le cadre de l’application. Alors, que puis-je faire pour vous à propos de MGA Follow UP ?”
+
+Termine toujours ta réponse par : “— Degany, votre assistant MGA”`
         },
         { role: "user", content: message }
       ]
@@ -23,6 +34,6 @@ export const POST = async (req: Request) => {
   });
 
   const data = await response.json();
-  const answer = data.choices?.[0]?.message?.content || "Je ne suis pas autorisé à répondre à cela.";
+  const answer = data?.choices?.[0]?.message?.content?.trim() || "Je ne suis pas autorisé à répondre à cela.";
   return Response.json({ answer });
 };
