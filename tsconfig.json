@@ -23,7 +23,7 @@
     "paths": {
       "@/*": ["./src/*"],
       "@components/*": ["./src/app/_components/*"],
-      "@Components/*": ["./src/app/_Components/*"],
+      "@adminComponents/*": ["./src/app/(admin)/_Components/*"],
       "@icons": ["./src/app/_icons"]
     }
   },
