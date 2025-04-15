@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import SessionProvider from "@/components/SessionProvider";
 import { ToastManager } from "@/components/toast-provider";
 import { auth } from "@/lib/auth";
-import Image from "next/image";
+import VirtualAssistant from "@components/Ai/assistant";
 import { ThemeProvider } from "@/components/theme-provider";
 import ThemeScript from "@/components/ThemeScript";
 import PWA from "@/components/PWA";
@@ -91,13 +91,7 @@ export default async function RootLayout({
                   role="button"
                   tabIndex={0}
                 >
-                  <Image
-                    src="/assistant.png"
-                    width={48}
-                    height={48}
-                    alt="Assistant MGA Follow UP"
-                    priority
-                  />
+                  <VirtualAssistant />
                 </div>
 
                 <PWA />
