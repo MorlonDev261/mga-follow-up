@@ -4,7 +4,7 @@ import { IoSend, IoRefresh, IoClose, IoChatbubbleEllipses } from 'react-icons/io
 import { FiUser, FiMessageSquare } from 'react-icons/fi';
 import { RiRobot2Line } from 'react-icons/ri';
 import { motion } from 'framer-motion';
-import { cn } from "@/utils/cn";
+import { cn } from "@/lib/utils";
 
 interface Message {
   user: string;
