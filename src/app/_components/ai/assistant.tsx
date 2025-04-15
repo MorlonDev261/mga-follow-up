@@ -1,5 +1,5 @@
 'use client';
-import { useRef, useState } from 'react';
+import { useState, useRef } from 'react';
 import { FaRobot, FaUserCircle } from 'react-icons/fa';
 import { BsMicFill } from 'react-icons/bs';
 
@@ -25,7 +25,7 @@ export default function ChatDegany() {
         body: JSON.stringify({ message: userMessage })
       });
 
-      const data = await res.json();
+      const data: { answer: string } = await res.json();
       const answer = data.answer || "Je ne suis pas autorisé à répondre à cela.";
 
       setMessages(prev => [...prev.slice(0, -1), { from: 'degany', text: answer }]);
@@ -33,7 +33,7 @@ export default function ChatDegany() {
       const utter = new SpeechSynthesisUtterance(answer);
       utter.lang = 'fr-FR';
       synthRef.current?.speak(utter);
-    } catch (error) {
+    } catch {
       setMessages(prev => [...prev.slice(0, -1), { from: 'degany', text: "Erreur de connexion." }]);
     } finally {
       setLoading(false);
@@ -41,19 +41,21 @@ export default function ChatDegany() {
   };
 
   const startListening = () => {
-    const SpeechRecognition: typeof window.SpeechRecognition =
+    const SpeechRecognition =
       typeof window !== 'undefined'
-        ? (window.SpeechRecognition || (window as any).webkitSpeechRecognition)
+        ? (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
         : undefined;
 
     if (!SpeechRecognition) return alert("Micro non supporté");
 
-    const recognition = new SpeechRecognition();
+    const recognition: SpeechRecognition = new SpeechRecognition();
     recognition.lang = 'fr-FR';
+
     recognition.onresult = (event: SpeechRecognitionEvent) => {
       const transcript = event.results[0][0].transcript;
       setInput(transcript);
     };
+
     recognition.onend = () => setListening(false);
     recognition.start();
     setListening(true);
