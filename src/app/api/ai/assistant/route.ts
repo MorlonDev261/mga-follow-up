@@ -1,12 +1,12 @@
-import { getSimilarContext } from '@/utils/vectorizer';
+import db from '@/lib/db';
 
 export const POST = async (req: Request) => {
   const { message } = await req.json();
-  const context = await getSimilarContext(message);
+  const all = await db.assistantContext.findMany();
 
-  if (!process.env.TOGETHER_API_KEY) {
-    return new Response("Clé API manquante", { status: 500 });
-  }
+  const context = all
+    .map(item => `Q: ${item.question}\nR: ${item.answer}`)
+    .join("\n\n");
 
   const response = await fetch("https://api.together.xyz/v1/chat/completions", {
     method: "POST",
@@ -19,14 +19,7 @@ export const POST = async (req: Request) => {
       messages: [
         {
           role: "system",
-          content: `Tu es Degany, l'assistant officiel de l'application MGA Follow Up.
-Tu réponds uniquement selon ce contexte :
-
-${context}
-
-Si ce n’est pas pertinent, tu dis : “Je suis développé par MGA Follow UP pour vous assister uniquement dans le cadre de l’application. Alors, que puis-je faire pour vous à propos de MGA Follow UP ?”
-
-Termine toujours ta réponse par : “— Degany, votre assistant MGA”`
+          content: `Tu es Degany, assistant de l’application MGA Follow UP. Voici les connaissances que tu peux utiliser :\n${context}\n\nTu réponds uniquement selon cela. Termine chaque réponse par “— Degany, votre assistant MGA”.`
         },
         { role: "user", content: message }
       ]
@@ -34,6 +27,6 @@ Termine toujours ta réponse par : “— Degany, votre assistant MGA”`
   });
 
   const data = await response.json();
-  const answer = data?.choices?.[0]?.message?.content?.trim() || "Je ne suis pas autorisé à répondre à cela.";
+  const answer = data.choices?.[0]?.message?.content || "Je suis développé par MGA Follow UP pour vous assister seulement,  alors que puis-je faire pour à propos de l’app MGA Follow UP ?";
   return Response.json({ answer });
 };
