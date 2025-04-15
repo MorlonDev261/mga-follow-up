@@ -30,34 +30,38 @@ export default function Chat() {
 
   const sendMessage = async () => {
     if (!input.trim()) return;
-    
+
     const userMessage = input;
     setInput('');
     setIsLoading(true);
-    
-    // Add user message immediately
-    setMessages(prev => [...prev, { 
-      user: userMessage, 
-      bot: '', 
-      timestamp: getFormattedTime() 
-    }]);
+
+    // Ajout immédiat du message de l'utilisateur
+    setMessages(prev => [
+      ...prev,
+      {
+        user: userMessage,
+        bot: '',
+        timestamp: getFormattedTime(),
+      },
+    ]);
 
     try {
       const res = await fetch('/api/ai/assistant', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userMessage })
+        body: JSON.stringify({ message: userMessage }),
       });
-      
+
       const data = await res.json();
-      
-      // Update with bot response
+
+      // Mise à jour du dernier message avec la réponse du bot
       setMessages(prev => {
         const newMessages = [...prev];
         newMessages[newMessages.length - 1].bot = data.answer;
         return newMessages;
       });
     } catch (error) {
+      // Si une erreur survient, afficher un message d'erreur
       setMessages(prev => {
         const newMessages = [...prev];
         newMessages[newMessages.length - 1].bot = "Désolé, je n'ai pas pu traiter votre demande. Veuillez réessayer.";
@@ -93,7 +97,7 @@ export default function Chat() {
               <p className="text-xs text-gray-500">Propulsé par Together.ai</p>
             </div>
           </div>
-          <button 
+          <button
             onClick={resetConversation}
             className="text-gray-400 hover:text-gray-600 transition-colors p-2 rounded-full hover:bg-gray-100"
             title="Réinitialiser la conversation"
