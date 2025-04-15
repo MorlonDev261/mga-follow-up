@@ -5,7 +5,7 @@ import { IoSend, IoRefresh, IoClose, IoChatbubbleEllipses } from 'react-icons/io
 import { FiUser, FiMessageSquare } from 'react-icons/fi';
 import { RiRobot2Line } from 'react-icons/ri';
 import { motion } from 'framer-motion';
-import RippleButton from '@/components/RippleButton';
+import RippleButton from '@/components/ui/RippleButton';
 
 interface Message {
   user: string;
