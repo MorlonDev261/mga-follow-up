@@ -9,17 +9,29 @@ export const POST = async (req: Request) => {
       return Response.json({ answer: "Veuillez saisir un message." }, { status: 400 });
     }
 
-    // Détection de la langue
-    const lang = franc(message);
-    const supportedLangs = ['mlg', 'fra', 'eng'];
+    // Étape 1 : Détection de la langue via franc
+    let lang = franc(message);
 
+    // Étape 2 : Fallback si franc échoue (renvoie 'und') ou détecte une langue non supportée
+    if (lang === 'und') {
+      if (/[\u00E0\u00E1\u00E2\u00E7\u00E8\u00E9\u00EA\u00EB\u00EF\u00F4\u00FB]/.test(message)) {
+        lang = 'fra'; // caractères accentués typiques du français
+      } else if (/^[a-zA-Z\s.,!?'"-]+$/.test(message)) {
+        lang = 'eng'; // uniquement des lettres non accentuées
+      } else {
+        lang = 'fra'; // fallback par défaut si ambigu
+      }
+    }
+
+    // Étape 3 : Vérification que la langue est bien supportée
+    const supportedLangs = ['mlg', 'fra', 'eng'];
     if (!supportedLangs.includes(lang)) {
       return Response.json({
         answer: "Langue non prise en charge. Veuillez écrire votre message en français, malgache ou anglais."
       }, { status: 400 });
     }
 
-    // Récupération du contexte depuis la base
+    // Étape 4 : Récupération du contexte depuis la base
     const all = await db.assistantContext.findMany();
 
     if (all.length === 0) {
@@ -30,7 +42,7 @@ export const POST = async (req: Request) => {
       .map(item => `Q: ${item.question}\nR: ${item.answer}`)
       .join("\n\n");
 
-    // Définition du prompt selon la langue détectée
+    // Étape 5 : Construction du prompt selon la langue
     const systemPrompt =
       lang === 'mlg'
         ? `
@@ -95,7 +107,7 @@ export const POST = async (req: Request) => {
           - Reste strict, clair et professionnel.
         `;
 
-    // Requête vers l'API externe
+    // Étape 6 : Requête vers l’API Together
     const response = await fetch("https://api.together.xyz/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -116,7 +128,7 @@ export const POST = async (req: Request) => {
     }
 
     const data = await response.json();
-    const answer = data.choices?.[0]?.message?.content?.trim() || 
+    const answer = data.choices?.[0]?.message?.content?.trim() ||
       "Je suis développé par Morlon uniquement pour assister sur l'application MGA Follow UP.";
 
     return Response.json({ answer });
