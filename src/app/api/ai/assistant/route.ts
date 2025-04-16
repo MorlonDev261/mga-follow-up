@@ -11,7 +11,7 @@ export const POST = async (req: Request) => {
 
     // Charger CLD3
     const cld3 = await cldFactory.loadModule();
-    const result = cld3.findLanguage(message);
+    const result = cld3.detect(message);
     const lang = result.language;
 
     const supportedLangs = ['fr', 'en', 'mg']; // Français, Anglais, Malgache
