@@ -9,19 +9,20 @@ export const POST = async (req: Request) => {
       return Response.json({ answer: "Veuillez saisir un message." }, { status: 400 });
     }
 
-    // Initialiser cld3-asm avec loadModule()
-    const cldFactory = await loadModule();
+    let cldFactory;
+    try {
+      cldFactory = await loadModule();
+    } catch (error) {
+      return Response.json({ answer: "Erreur lors du chargement de la bibliothèque de détection de langue." }, { status: 500 });
+    }
 
-    // Créer l'instance de LanguageIdentifier
     const languageIdentifier = cldFactory.create();
+    const result = languageIdentifier.findLanguage(message);
+    console.log('Résultat de findLanguage:', result);
 
-    // Trouver la langue
-    const result = languageIdentifier.findLanguage(message);  // Utiliser findLanguage() sur l'instance
-    
-    console.log('Résultat de findLanguage:', result);  // Affiche le résultat complet pour déboguer
     const lang = result.language;
 
-    const supportedLangs = ['fr', 'en', 'mg']; // Français, Anglais, Malgache
+    const supportedLangs = ['fr', 'en', 'mg'];
 
     if (!supportedLangs.includes(lang)) {
       return Response.json({
@@ -30,13 +31,12 @@ export const POST = async (req: Request) => {
     }
 
     const all = await db.assistantContext.findMany();
-    if (all.length === 0) {
+    if (!all || all.length === 0) {
       return Response.json({ answer: "Aucun contexte trouvé. Veuillez ajouter des questions et réponses." }, { status: 500 });
     }
 
     const context = all.map(item => `Q: ${item.question}\nR: ${item.answer}`).join("\n\n");
 
-    // Prompt dynamique selon la langue détectée
     let systemPrompt = "";
 
     if (lang === "fr") {
@@ -109,8 +109,8 @@ TORO-MARIKA:
     }
 
     const data = await response.json();
-    const answer = data.choices?.[0]?.message?.content || "Je suis développé par MGA Follow UP pour vous assister uniquement.";
-
+    const answer = data?.choices?.[0]?.message?.content || "Je suis développé par MGA Follow UP pour vous assister uniquement.";
+    console.log("Réponse de l'API Together:", answer);
     return Response.json({ answer });
 
   } catch (error) {
