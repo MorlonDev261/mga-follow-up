@@ -1,5 +1,5 @@
 import db from '@/lib/db';
-import * as cld3 from 'cld3-asm';  // Importation correcte de cld3-asm
+import { loadModule } from 'cld3-asm';
 
 export const POST = async (req: Request) => {
   try {
@@ -9,8 +9,14 @@ export const POST = async (req: Request) => {
       return Response.json({ answer: "Veuillez saisir un message." }, { status: 400 });
     }
 
-    // Charger CLD3
-    const result = cld3.findLanguage(message);  // Utiliser findLanguage() ici
+    // Initialiser cld3-asm avec loadModule()
+    const cldFactory = await loadModule();
+
+    // Créer l'instance de LanguageIdentifier
+    const languageIdentifier = cldFactory.create();
+
+    // Trouver la langue
+    const result = languageIdentifier.findLanguage(message);  // Utiliser findLanguage() sur l'instance
     const lang = result.language;
 
     const supportedLangs = ['fr', 'en', 'mg']; // Français, Anglais, Malgache
