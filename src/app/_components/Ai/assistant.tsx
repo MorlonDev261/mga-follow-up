@@ -103,7 +103,7 @@ export default function Chat() {
       {/* Floating Chat Button */}
       <button
         onClick={toggleChat}
-        className="fixed bottom-6 right-6 bg-green-600 hover:bg-green-700 text-white p-4 rounded-full shadow-lg z-[1000] transition-all duration-300 transform hover:scale-110"
+        className={cn(isChatOpen ? "hidden sm:flex" : "", "fixed bottom-6 right-6 bg-green-600 hover:bg-green-700 text-white p-4 rounded-full shadow-lg z-[1000] transition-all duration-300 transform hover:scale-110")}
         aria-label="Ouvrir le chat"
       >
         {isChatOpen ? (
