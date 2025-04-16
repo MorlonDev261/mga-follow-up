@@ -1,21 +1,5 @@
 import db from '@/lib/db';
-import { detect } from 'langdetect'; // Remplacez cela par votre bibliothèque de détection de langue préférée
-import { LanguageServiceClient } from '@google-cloud/language'; // Optionnel si vous utilisez Google Cloud pour la détection
-
-const client = new LanguageServiceClient();
-
-// Cache en mémoire pour les langues détectées
-const languageCache = new Map();
-
-const getLanguage = (message: string): string => {
-  if (languageCache.has(message)) {
-    return languageCache.get(message) as string;
-  }
-
-  const lang = detect(message); // Utilisez votre bibliothèque de détection de langue ici
-  languageCache.set(message, lang);
-  return lang;
-};
+import { franc } from 'franc';
 
 export const POST = async (req: Request) => {
   try {
@@ -26,7 +10,7 @@ export const POST = async (req: Request) => {
     }
 
     // Détection de la langue
-    const lang = getLanguage(message);
+    const lang = franc(message);
     const supportedLangs = ['mlg', 'fra', 'eng'];
 
     if (!supportedLangs.includes(lang)) {
@@ -35,19 +19,18 @@ export const POST = async (req: Request) => {
       }, { status: 400 });
     }
 
-    // Récupération du contexte depuis la base de données
+    // Récupération du contexte depuis la base
     const all = await db.assistantContext.findMany();
+
     if (all.length === 0) {
       return Response.json({ answer: "Aucun contexte trouvé. Veuillez ajouter des questions et réponses." }, { status: 500 });
     }
 
-    // Filtrage du contexte en fonction de la langue détectée
     const context = all
-      .filter(item => item.language === lang) // Optionnel si vous avez un champ de langue dans votre base
       .map(item => `Q: ${item.question}\nR: ${item.answer}`)
       .join("\n\n");
 
-    // Définition du prompt en fonction de la langue détectée
+    // Définition du prompt selon la langue détectée
     const systemPrompt =
       lang === 'mlg'
         ? `
@@ -112,7 +95,7 @@ export const POST = async (req: Request) => {
           - Reste strict, clair et professionnel.
         `;
 
-    // Requête vers l'API externe pour générer la réponse
+    // Requête vers l'API externe
     const response = await fetch("https://api.together.xyz/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -129,7 +112,7 @@ export const POST = async (req: Request) => {
     });
 
     if (!response.ok) {
-      throw new Error(`Erreur API externe : ${response.status} - ${response.statusText}`);
+      throw new Error(`La connexion avec l'API a échoué avec le statut: ${response.status}`);
     }
 
     const data = await response.json();
