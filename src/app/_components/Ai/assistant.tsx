@@ -122,7 +122,7 @@ export default function Chat() {
           "bg-gray-50 rounded-none sm:rounded-xl", // pas d’arrondi sur mobile, arrondi desktop
           "shadow-2xl overflow-hidden flex flex-col z-[999]"
         )}
-        initial={{ opacity: 0, scale: 0.95 }}
+        initial={{ opacity: 0, scale: 0.95, width: '100%', height: '100%' }}
         animate={{ opacity: isChatOpen ? 1 : 0, scale: isChatOpen ? 1 : 0.95 }}
         exit={{ opacity: 0, scale: 0.95 }}
         transition={{ duration: 0.3 }}
