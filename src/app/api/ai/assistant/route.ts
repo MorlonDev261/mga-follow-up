@@ -1,91 +1,147 @@
 import db from '@/lib/db';
-import { detect } from 'langdetect';
-import translate from '@vitalets/google-translate-api';
+import { detect } from 'langdetect'; // Remplacez cela par votre bibliothèque de détection de langue préférée
+import { LanguageServiceClient } from '@google-cloud/language'; // Optionnel si vous utilisez Google Cloud pour la détection
+
+const client = new LanguageServiceClient();
+
+// Cache en mémoire pour les langues détectées
+const languageCache = new Map();
+
+const getLanguage = (message: string): string => {
+  if (languageCache.has(message)) {
+    return languageCache.get(message) as string;
+  }
+
+  const lang = detect(message); // Utilisez votre bibliothèque de détection de langue ici
+  languageCache.set(message, lang);
+  return lang;
+};
 
 export const POST = async (req: Request) => {
   try {
     const { message } = await req.json();
 
-    if (!message.trim()) {
+    if (!message?.trim()) {
       return Response.json({ answer: "Veuillez saisir un message." }, { status: 400 });
     }
 
-    const detectedLang = detect(message);
-    const supportedLanguages = ['fr', 'en', 'mg'];
+    // Détection de la langue
+    const lang = getLanguage(message);
+    const supportedLangs = ['mlg', 'fra', 'eng'];
 
-    if (!supportedLanguages.includes(detectedLang)) {
+    if (!supportedLangs.includes(lang)) {
       return Response.json({
         answer: "Langue non prise en charge. Veuillez écrire votre message en français, malgache ou anglais."
       }, { status: 400 });
     }
 
-    // Traduire en français si ce n'est pas déjà
-    const inputMessage = detectedLang === 'fr'
-      ? message
-      : (await translate(message, { to: 'fr' })).text;
-
+    // Récupération du contexte depuis la base de données
     const all = await db.assistantContext.findMany();
-
     if (all.length === 0) {
-      return Response.json({
-        answer: "Aucun contexte trouvé. Veuillez ajouter des questions et réponses."
-      }, { status: 500 });
+      return Response.json({ answer: "Aucun contexte trouvé. Veuillez ajouter des questions et réponses." }, { status: 500 });
     }
 
-    const context = all.map(item => `Q: ${item.question}\nR: ${item.answer}`).join("\n\n");
+    // Filtrage du contexte en fonction de la langue détectée
+    const context = all
+      .filter(item => item.language === lang) // Optionnel si vous avez un champ de langue dans votre base
+      .map(item => `Q: ${item.question}\nR: ${item.answer}`)
+      .join("\n\n");
 
+    // Définition du prompt en fonction de la langue détectée
+    const systemPrompt =
+      lang === 'mlg'
+        ? `
+          Ianao dia Degany, mpanampy virtoaly matihanina ao amin'ny fampiharana MGA Follow UP, novolavolain’i Morlon.
+
+          Asa ataonao: manampy ireo mpampiasa amin'ny alalan'ny **vaovao eto ambany ihany**. Tsy azonao ampiasaina mihitsy ny fahalalanao manokana na fanampim-baovao avy any ivelany.
+
+          ---
+
+          VAOVAO AFAKA ILAINA:
+          ${context}
+
+          ---
+
+          TOROMARIKA:
+          - Raha mitovy amin'ny fanontaniana ao anaty tahiry ilay fanontaniana, dia valio araka izany.
+          - Raha tsy misy mifanaraka, dia valio toy izao fotsiny:
+            "Miala tsiny aho, tsy manana izany vaovao izany satria natao manokana hanampy amin'ny MGA Follow UP ihany aho."
+
+          - Aza manome rohy, hevitra manokana, na zavatra avy amin’ny Internet mihitsy.
+          - Miezaha ho mazava, fohy ary matihanina hatrany.
+        `
+        : lang === 'eng'
+        ? `
+          You are Degany, a professional virtual assistant for the MGA Follow UP application, developed by Morlon.
+
+          Your role is to help users **only** with the information below. You must never go outside this scope, nor use your own knowledge.
+
+          ---
+
+          OFFICIAL KNOWLEDGE:
+          ${context}
+
+          ---
+
+          STRICT RULES:
+          - If the question matches one or more answers in the base, use them to reply.
+          - If the question does not match, respond exactly:
+            "Sorry, I don’t have this information because I was developed by Morlon solely to assist with the MGA Follow UP app."
+
+          - Never give external links, personal opinions, or general knowledge.
+          - Always stay clear, professional, and focused.
+        `
+        : `
+          Tu es Degany, un assistant virtuel professionnel de l’application MGA Follow UP, développé par Morlon.
+
+          Ton rôle est d’aider les utilisateurs uniquement avec les informations ci-dessous. Tu ne dois jamais sortir de ce cadre, ni utiliser tes propres connaissances.
+
+          ---
+
+          CONNAISSANCES AUTORISÉES :
+          ${context}
+
+          ---
+
+          INSTRUCTIONS STRICTES :
+          - Si une question correspond à une ou plusieurs réponses de la base, utilise-les pour formuler ta réponse.
+          - Si une question ne correspond à rien, tu dois répondre exactement :
+            “Je suis désolé, je n’ai pas cette information car je suis développé par Morlon uniquement pour vous assister sur l'application MGA Follow UP.”
+
+          - Ne propose jamais de lien, d'avis personnel ni d'information venant d'Internet.
+          - Reste strict, clair et professionnel.
+        `;
+
+    // Requête vers l'API externe pour générer la réponse
     const response = await fetch("https://api.together.xyz/v1/chat/completions", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${process.env.TOGETHER_API_KEY}`,
-        "Content-Type": "application/json",
+        "Authorization": `Bearer ${process.env.TOGETHER_API_KEY}`,
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
         model: "mistralai/Mistral-7B-Instruct-v0.1",
         messages: [
-          {
-            role: "system",
-            content: `
-Tu es Degany, un assistant virtuel professionnel de l’application MGA Follow UP, développé par Morlon. 
-Ton rôle est d’aider les utilisateurs uniquement avec les informations suivantes :
-
----
-
-CONNAISSANCES AUTORISÉES :
-${context}
-
----
-
-INSTRUCTIONS STRICTES :
-- Si une question correspond à une ou plusieurs réponses de la base, utilise-les pour formuler ta réponse.
-- Si une question ne correspond à rien dans la base, réponds :
-“Je suis désolé, je n’ai pas cette information car je suis développé par Morlon uniquement pour vous assister sur l'application MGA Follow UP.”
-- Ne propose jamais de solution extérieure, lien ou connaissance générale.
-- Sois strict, clair et fidèle aux données ci-dessus.
-`
-          },
-          { role: "user", content: inputMessage }
+          { role: "system", content: systemPrompt },
+          { role: "user", content: message }
         ]
       })
     });
 
     if (!response.ok) {
-      throw new Error(`La connexion avec l'API a échoué : ${response.status}`);
+      throw new Error(`Erreur API externe : ${response.status} - ${response.statusText}`);
     }
 
     const data = await response.json();
-    let answer = data.choices?.[0]?.message?.content || "Je suis développé par MGA Follow UP pour vous assister seulement.";
-
-    // Traduire la réponse dans la langue détectée
-    if (detectedLang !== 'fr') {
-      const translated = await translate(answer, { to: detectedLang });
-      answer = translated.text;
-    }
+    const answer = data.choices?.[0]?.message?.content?.trim() || 
+      "Je suis développé par Morlon uniquement pour assister sur l'application MGA Follow UP.";
 
     return Response.json({ answer });
 
   } catch (error) {
-    console.error('Erreur:', error);
-    return Response.json({ answer: "Une erreur est survenue. Veuillez réessayer plus tard." }, { status: 500 });
+    console.error('Erreur IA:', error);
+    return Response.json({
+      answer: "Une erreur est survenue. Veuillez réessayer plus tard."
+    }, { status: 500 });
   }
 };
