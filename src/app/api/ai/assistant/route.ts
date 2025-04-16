@@ -1,5 +1,5 @@
 import db from '@/lib/db';
-import cldFactory from 'cld3-asm';
+import * as cld3 from 'cld3-asm';  // Importation correcte de cld3-asm
 
 export const POST = async (req: Request) => {
   try {
@@ -10,8 +10,7 @@ export const POST = async (req: Request) => {
     }
 
     // Charger CLD3
-    const cld3 = await cldFactory.loadModule();
-    const result = cld3.detect(message);
+    const result = cld3.detect(message);  // Utiliser cld3.detect() directement
     const lang = result.language;
 
     const supportedLangs = ['fr', 'en', 'mg']; // Français, Anglais, Malgache
