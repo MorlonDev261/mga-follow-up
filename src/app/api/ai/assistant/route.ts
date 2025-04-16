@@ -19,7 +19,7 @@ export const POST = async (req: Request) => {
     }
 
     const context = all
-      .map(item => `Q: ${item.question}\nR: ${item.answer}`)
+      .map(item => `Q: ${item.question}\n${item.answer}`)
       .join("\n\n");
 
     // Faire la requête à l'API externe
