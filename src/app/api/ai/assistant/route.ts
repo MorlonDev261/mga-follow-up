@@ -10,7 +10,7 @@ export const POST = async (req: Request) => {
     }
 
     // Charger CLD3
-    const result = cld3.detect(message);  // Utiliser cld3.detect() directement
+    const result = cld3.findLanguage(message);  // Utiliser findLanguage() ici
     const lang = result.language;
 
     const supportedLangs = ['fr', 'en', 'mg']; // Français, Anglais, Malgache
