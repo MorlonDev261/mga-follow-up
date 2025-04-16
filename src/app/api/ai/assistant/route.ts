@@ -17,6 +17,8 @@ export const POST = async (req: Request) => {
 
     // Trouver la langue
     const result = languageIdentifier.findLanguage(message);  // Utiliser findLanguage() sur l'instance
+    
+    console.log('Résultat de findLanguage:', result);  // Affiche le résultat complet pour déboguer
     const lang = result.language;
 
     const supportedLangs = ['fr', 'en', 'mg']; // Français, Anglais, Malgache
