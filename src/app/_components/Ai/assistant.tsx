@@ -3,8 +3,6 @@ import { useState, useRef, useEffect } from 'react';
 import { IoSend, IoRefresh, IoClose, IoChatbubbleEllipses } from 'react-icons/io5';
 import { FiUser, FiMessageSquare } from 'react-icons/fi';
 import { RiRobot2Line } from 'react-icons/ri';
-import { motion } from 'framer-motion';
-import { cn } from "@/lib/utils";
 
 interface Message {
   user: string;
@@ -103,7 +101,7 @@ export default function Chat() {
       {/* Floating Chat Button */}
       <button
         onClick={toggleChat}
-        className={cn(isChatOpen ? "hidden sm:flex" : "", "fixed bottom-6 right-6 bg-green-600 hover:bg-green-700 text-white p-4 rounded-full shadow-lg z-[1000] transition-all duration-300 transform hover:scale-110")}
+        className="fixed bottom-6 right-6 bg-green-600 hover:bg-green-700 text-white p-4 rounded-full shadow-lg z-50 transition-all duration-300 transform hover:scale-110"
         aria-label="Ouvrir le chat"
       >
         {isChatOpen ? (
@@ -114,18 +112,10 @@ export default function Chat() {
       </button>
 
       {/* Chat Window */}
-      <motion.div
-        className={cn(
-          "fixed inset-0 sm:inset-auto sm:bottom-24 sm:right-6", // plein écran mobile, positionné en bas à droite en desktop
-          "w-full sm:w-96", // pleine largeur mobile, 384px sur desktop
-          "h-full sm:max-h-[600px]", // pleine hauteur mobile, max hauteur sur desktop
-          "bg-gray-50 rounded-none sm:rounded-xl", // pas d’arrondi sur mobile, arrondi desktop
-          "shadow-2xl overflow-hidden flex flex-col z-[999]"
-        )}
-        initial={{ opacity: 0, scale: 0.95, width: '100%', height: '100%' }}
-        animate={{ opacity: isChatOpen ? 1 : 0, scale: isChatOpen ? 1 : 0.95, width: isChatOpen ? '100%' : '0%', height: isChatOpen ? '100%' : '0%', }}
-        exit={{ opacity: 0, scale: 0.95 }}
-        transition={{ duration: 0.3 }}
+      <div 
+        className={`fixed bottom-24 right-6 w-96 h-4/5 max-h-[600px] bg-gray-50 rounded-xl shadow-2xl overflow-hidden flex flex-col transition-all duration-300 transform ${
+          isChatOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0 pointer-events-none'
+        } z-40`}
       >
         {/* Header */}
         <div className="bg-white border-b border-gray-200 shadow-sm py-4 px-6">
@@ -249,7 +239,7 @@ export default function Chat() {
             </button>
           </div>
         </div>
-      </motion.div>
+      </div>
     </>
   );
 }
