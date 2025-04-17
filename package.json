@@ -42,6 +42,7 @@
     "dexie": "^4.0.11",
     "exceljs": "^4.4.0",
     "cld3-asm": "^4.0.0",
+    "franc-min": "^6.2.0",
     "framer-motion": "^12.5.0",
     "handsontable": "^15.0.1",
     "jsbarcode": "^3.11.6",
