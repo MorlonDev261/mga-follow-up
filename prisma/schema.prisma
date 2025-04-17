@@ -21,10 +21,10 @@ model User {
   role           String   @default("USER")
 
   // Champs requis par NextAuth
-  accounts      Account[]
-  sessions      Session[]
+  accounts       Account[]
+  sessions       Session[]
 
-  // Chat with members or AI
+  // Chat avec les membres ou l'IA
   conversationHistories ConversationHistory[]
 
   // Relations personnalisées
@@ -73,15 +73,15 @@ model ConversationHistory {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // user User? @relation(fields: [userId], references: [id])
+  user      User?    @relation(fields: [userId], references: [id])  // Relation avec User
 }
 
 model WorkRelation {
   id           String   @id @default(cuid())
-  worker       User     @relation("WorkerEntreprises", fields: [workerId], references: [id])
-  entreprise   User     @relation("EntrepriseWorkers", fields: [entrepriseId], references: [id])
   workerId     String
   entrepriseId String
+  worker       User     @relation("WorkerEntreprises", fields: [workerId], references: [id])
+  entreprise   User     @relation("EntrepriseWorkers", fields: [entrepriseId], references: [id])
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
@@ -92,10 +92,10 @@ model WorkRelation {
 
 model CustomerRelation {
   id         String   @id @default(cuid())
-  customer   User     @relation("CustomerOwners", fields: [customerId], references: [id])
-  owner      User     @relation("OwnerCustomers", fields: [ownerId], references: [id])
   customerId String
   ownerId    String
+  customer   User     @relation("CustomerOwners", fields: [customerId], references: [id])
+  owner      User     @relation("OwnerCustomers", fields: [ownerId], references: [id])
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
@@ -113,12 +113,12 @@ model AssistantContext {
 
 model Purchase {
   id          String   @id @default(cuid())
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade) // ✅ Ajout de `onDelete: Cascade`
   userId      String
   productName String
   amount      Float
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade) // ✅ Ajout de `onDelete: Cascade`
   @@index([userId]) // ✅ Index pour améliorer les requêtes
 }
