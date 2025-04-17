@@ -1,4 +1,4 @@
-// components/LanguageDetector.tsx
+"use client";
 
 import { useState } from 'react';
 import { franc } from 'franc-min';
