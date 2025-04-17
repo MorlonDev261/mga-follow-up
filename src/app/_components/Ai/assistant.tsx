@@ -101,7 +101,7 @@ export default function Chat() {
       {/* Floating Chat Button */}
       <button
         onClick={toggleChat}
-        className="fixed bottom-6 right-6 bg-green-600 hover:bg-green-700 text-white p-4 rounded-full shadow-lg z-50 transition-all duration-300 transform hover:scale-110"
+        className="fixed bottom-6 right-6 bg-green-600 hover:bg-green-700 text-white p-4 rounded-full shadow-lg z-[1000] transition-all duration-300 transform hover:scale-110"
         aria-label="Ouvrir le chat"
       >
         {isChatOpen ? (
@@ -115,7 +115,7 @@ export default function Chat() {
       <div 
         className={`fixed bottom-22 sm:bottom-24 mx-2 sm:right-6 w-90 h-4/5 max-h-[600px] max-w-md bg-gray-50 rounded-xl shadow-2xl overflow-hidden flex flex-col transition-all duration-300 transform ${
           isChatOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0 pointer-events-none'
-        } z-50`}
+        } z-[999]`}
       >
         {/* Header */}
         <div className="bg-white border-b border-gray-200 shadow-sm py-4 px-6">
