@@ -1,4 +1,5 @@
 'use client';
+
 import { useState, useRef, useEffect } from 'react';
 import { IoSend, IoRefresh, IoClose, IoChatbubbleEllipses } from 'react-icons/io5';
 import { FiUser, FiMessageSquare } from 'react-icons/fi';
@@ -63,12 +64,20 @@ export default function Chat() {
 
       const data = await res.json();
 
-      // Mise à jour du dernier message avec la réponse du bot
-      setMessages(prev => {
-        const newMessages = [...prev];
-        newMessages[newMessages.length - 1].bot = data.answer;
-        return newMessages;
-      });
+      if (data && data.answer) {
+        // Mise à jour du dernier message avec la réponse du bot
+        setMessages(prev => {
+          const newMessages = [...prev];
+          newMessages[newMessages.length - 1].bot = data.answer;
+          return newMessages;
+        });
+      } else {
+        setMessages(prev => {
+          const newMessages = [...prev];
+          newMessages[newMessages.length - 1].bot = "Désolé, je n'ai pas pu traiter votre demande. Veuillez réessayer.";
+          return newMessages;
+        });
+      }
     } catch (error) {
       // Si une erreur survient, afficher un message d'erreur
       setMessages(prev => {
