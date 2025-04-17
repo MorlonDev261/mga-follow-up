@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';  // Importer la bibliothèque UUID
 import db from '@/lib/db';
 import * as cookie from 'cookie';
 
-export const POST = async (req: Request, res: Response) => {
+export const POST = async (req: Request) => {
   try {
     // Récupérer la session NextAuth de l'utilisateur
     const session = await getSession({ req });
