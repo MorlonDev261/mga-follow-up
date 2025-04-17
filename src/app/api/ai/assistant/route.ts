@@ -1,12 +1,13 @@
 import { getSession } from 'next-auth/react';  // Importer la fonction getSession
 import { v4 as uuidv4 } from 'uuid';  // Importer la bibliothèque UUID
 import db from '@/lib/db';
-import * as cookie from 'cookie';
+import * as cookie from 'cookie';  // Assurez-vous que vous utilisez l'import correct
+import { NextApiRequest, NextApiResponse } from 'next';  // Importer les types NextApiRequest et NextApiResponse
 
-export const POST = async (req: Request) => {
+export const POST = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     // Récupérer la session NextAuth de l'utilisateur
-    const session = await getSession();
+    const session = await getSession({ req });  // Passez `req` pour récupérer la session
 
     // Si l'utilisateur est authentifié, utiliser son `userId`
     let userId = session?.user?.id;
@@ -15,7 +16,11 @@ export const POST = async (req: Request) => {
     if (!userId) {
       userId = uuidv4();  // Générer un identifiant unique
       // Ajouter le cookie avec l'ID utilisateur
-      res.setHeader('Set-Cookie', cookie.serialize('userId', userId, { path: '/', httpOnly: true, maxAge: 60 * 60 * 24 * 365 })); // 1 an
+      res.setHeader('Set-Cookie', cookie.serialize('userId', userId, { 
+        path: '/', 
+        httpOnly: true, 
+        maxAge: 60 * 60 * 24 * 365 // 1 an
+      }));
       console.log(`Utilisateur non authentifié, ID généré: ${userId}`);
     }
 
@@ -24,7 +29,7 @@ export const POST = async (req: Request) => {
 
     // Vérifier si le message est vide
     if (!message.trim()) {
-      return Response.json({ answer: "Veuillez saisir un message." }, { status: 400 });
+      return res.status(400).json({ answer: "Veuillez saisir un message." });
     }
 
     // Récupérer l'historique de la conversation pour cet utilisateur
@@ -44,7 +49,7 @@ export const POST = async (req: Request) => {
     // Récupérer le contexte de la base de données
     const all = await db.assistantContext.findMany();
     if (all.length === 0) {
-      return Response.json({ answer: "Aucun contexte trouvé. Veuillez ajouter des questions et réponses." }, { status: 500 });
+      return res.status(500).json({ answer: "Aucun contexte trouvé. Veuillez ajouter des questions et réponses." });
     }
 
     const context = all.map(item => `Q: ${item.question}\nR: ${item.answer}`).join("\n\n");
@@ -102,12 +107,12 @@ export const POST = async (req: Request) => {
       }
     });
 
-    return Response.json({ answer });
+    return res.status(200).json({ answer });
 
   } catch (error) {
     console.error('Erreur:', error);
 
     // Retourner une réponse d'erreur en cas d'exception
-    return Response.json({ answer: `Une erreur est survenue. Détails : ${error.message}` }, { status: 500 });
+    return res.status(500).json({ answer: `Une erreur est survenue. Détails : ${error.message}` });
   }
 };
