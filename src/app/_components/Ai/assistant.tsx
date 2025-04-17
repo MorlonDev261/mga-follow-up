@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from 'react';
 import { IoSend, IoRefresh, IoClose, IoChatbubbleEllipses } from 'react-icons/io5';
 import { FiUser, FiMessageSquare } from 'react-icons/fi';
 import { RiRobot2Line } from 'react-icons/ri';
+import { cn } from "@/lib/utils";
 
 interface Message {
   user: string;
