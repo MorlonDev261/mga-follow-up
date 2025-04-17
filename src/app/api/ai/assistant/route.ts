@@ -1,13 +1,13 @@
-import { getSession } from 'next-auth/react';  // Importer la fonction getSession
-import { v4 as uuidv4 } from 'uuid';  // Importer la bibliothèque UUID
+import { auth } from '@/lib/auth';
+import { v4 as uuidv4 } from 'uuid';
 import db from '@/lib/db';
-import * as cookie from 'cookie';  // Assurez-vous que vous utilisez l'import correct
-import { NextRequest, NextResponse } from 'next/server';  // Utilisez NextRequest et NextResponse
+import * as cookie from 'cookie';
+import { NextRequest, NextResponse } from 'next/server';
 
 export const POST = async (req: NextRequest) => {
   try {
     // Récupérer la session NextAuth de l'utilisateur
-    const session = await getSession({ req });
+    const session = await auth();
 
     // Si l'utilisateur est authentifié, utiliser son `userId`
     let userId = session?.user?.id;
