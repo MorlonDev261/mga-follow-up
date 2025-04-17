@@ -6,7 +6,7 @@ import * as cookie from 'cookie';
 export const POST = async (req: Request) => {
   try {
     // Récupérer la session NextAuth de l'utilisateur
-    const session = await getSession({ req });
+    const session = await getSession();
 
     // Si l'utilisateur est authentifié, utiliser son `userId`
     let userId = session?.user?.id;
