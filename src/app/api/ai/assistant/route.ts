@@ -2,12 +2,12 @@ import { getSession } from 'next-auth/react';  // Importer la fonction getSessio
 import { v4 as uuidv4 } from 'uuid';  // Importer la bibliothèque UUID
 import db from '@/lib/db';
 import * as cookie from 'cookie';  // Assurez-vous que vous utilisez l'import correct
-import { NextApiRequest, NextApiResponse } from 'next';  // Importer les types NextApiRequest et NextApiResponse
+import { NextRequest, NextResponse } from 'next/server';  // Utilisez NextRequest et NextResponse
 
-export const POST = async (req: NextApiRequest, res: NextApiResponse) => {
+export const POST = async (req: NextRequest) => {
   try {
     // Récupérer la session NextAuth de l'utilisateur
-    const session = await getSession({ req });  // Passez `req` pour récupérer la session
+    const session = await getSession({ req });
 
     // Si l'utilisateur est authentifié, utiliser son `userId`
     let userId = session?.user?.id;
@@ -16,11 +16,8 @@ export const POST = async (req: NextApiRequest, res: NextApiResponse) => {
     if (!userId) {
       userId = uuidv4();  // Générer un identifiant unique
       // Ajouter le cookie avec l'ID utilisateur
-      res.setHeader('Set-Cookie', cookie.serialize('userId', userId, { 
-        path: '/', 
-        httpOnly: true, 
-        maxAge: 60 * 60 * 24 * 365 // 1 an
-      }));
+      const response = NextResponse.next();  // Utiliser NextResponse pour créer la réponse
+      response.cookies.set('userId', userId, { path: '/', httpOnly: true, maxAge: 60 * 60 * 24 * 365 }); // 1 an
       console.log(`Utilisateur non authentifié, ID généré: ${userId}`);
     }
 
@@ -29,7 +26,7 @@ export const POST = async (req: NextApiRequest, res: NextApiResponse) => {
 
     // Vérifier si le message est vide
     if (!message.trim()) {
-      return res.status(400).json({ answer: "Veuillez saisir un message." });
+      return NextResponse.json({ answer: "Veuillez saisir un message." }, { status: 400 });
     }
 
     // Récupérer l'historique de la conversation pour cet utilisateur
@@ -49,7 +46,7 @@ export const POST = async (req: NextApiRequest, res: NextApiResponse) => {
     // Récupérer le contexte de la base de données
     const all = await db.assistantContext.findMany();
     if (all.length === 0) {
-      return res.status(500).json({ answer: "Aucun contexte trouvé. Veuillez ajouter des questions et réponses." });
+      return NextResponse.json({ answer: "Aucun contexte trouvé. Veuillez ajouter des questions et réponses." }, { status: 500 });
     }
 
     const context = all.map(item => `Q: ${item.question}\nR: ${item.answer}`).join("\n\n");
@@ -107,12 +104,12 @@ export const POST = async (req: NextApiRequest, res: NextApiResponse) => {
       }
     });
 
-    return res.status(200).json({ answer });
+    return NextResponse.json({ answer });
 
   } catch (error) {
     console.error('Erreur:', error);
 
     // Retourner une réponse d'erreur en cas d'exception
-    return res.status(500).json({ answer: `Une erreur est survenue. Détails : ${error.message}` });
+    return NextResponse.json({ answer: `Une erreur est survenue. Détails : ${error.message}` }, { status: 500 });
   }
 };
