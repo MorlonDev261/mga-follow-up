@@ -1,7 +1,7 @@
 // components/LanguageDetector.tsx
 
 import { useState } from 'react';
-import franc from 'franc-min';
+import { franc } from 'franc-min';
 
 interface LanguageDetectorProps {
   text: string;
