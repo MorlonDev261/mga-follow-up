@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import franc from 'franc-min';
+import { franc } from 'franc-min';
 
 interface LanguageDetectorProps {
   text: string;
