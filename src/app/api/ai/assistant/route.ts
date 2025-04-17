@@ -3,8 +3,9 @@ import db from '@/lib/db';
 export const POST = async (req: Request) => {
   try {
     // Récupérer le message de la requête et l'ID utilisateur (ou une session temporaire pour un utilisateur non connecté)
-    const { message, userId } = await req.json();  // userId peut être null si non connecté
-    
+    const { message, userId } = await req.json();
+    console.log('Message reçu:', message, 'User ID:', userId);  // Log pour vérifier les données reçues
+
     // Vérifier si le message est vide
     if (!message.trim()) {
       return Response.json({ answer: "Veuillez saisir un message." }, { status: 400 });
@@ -78,15 +79,15 @@ export const POST = async (req: Request) => {
     });
 
     console.log('Response status:', response.status);  // Afficher le statut de la réponse de l'API
-    
+
     if (!response.ok) {
-      const errorData = await response.json();  // Récupérer le corps de la réponse d'erreur
-      console.error('API Error:', errorData);
+      const errorData = await response.json();
+      console.error('Erreur de l\'API externe:', errorData);  // Log d'erreur pour l'API externe
       throw new Error(`La connexion avec l'API a échoué avec le statut: ${response.status}. Détails: ${errorData?.message || 'Pas de détails disponibles'}`);
     }
 
     const data = await response.json();
-    
+
     // Vérifier la structure de la réponse avant de l'utiliser
     if (!data || !data.choices || !data.choices[0]?.message?.content) {
       throw new Error('Réponse invalide de l\'API.');
