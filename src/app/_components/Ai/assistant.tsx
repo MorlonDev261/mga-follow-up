@@ -1,254 +1,115 @@
-'use client';
+import db from '@/lib/db';
 
-import { useState, useRef, useEffect } from 'react';
-import { IoSend, IoRefresh, IoClose, IoChatbubbleEllipses } from 'react-icons/io5';
-import { FiUser, FiMessageSquare } from 'react-icons/fi';
-import { RiRobot2Line } from 'react-icons/ri';
+export const POST = async (req: Request) => {
+  try {
+    // Récupérer le message de la requête et l'ID utilisateur (ou une session temporaire pour un utilisateur non connecté)
+    const { message, userId } = await req.json();
+    console.log('Message reçu:', message, 'User ID:', userId);  // Log pour vérifier les données reçues
 
-interface Message {
-  user: string;
-  bot: string;
-  timestamp: string;
-}
-
-export default function Chat() {
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [input, setInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [isChatOpen, setIsChatOpen] = useState(false);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-
-  useEffect(() => {
-    if (isChatOpen && inputRef.current) {
-      inputRef.current.focus();
+    // Vérifier si le message est vide
+    if (!message.trim()) {
+      return Response.json({ answer: "Veuillez saisir un message." }, { status: 400 });
     }
-  }, [isChatOpen]);
 
-  const getFormattedTime = () => {
-    const now = new Date();
-    return `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
-  };
+    // Récupérer l'historique de la conversation pour cet utilisateur
+    const conversationHistory = await db.conversationHistory.findMany({
+      where: { userId },  // Utiliser l'ID de l'utilisateur pour filtrer l'historique
+      orderBy: { createdAt: 'asc' },  // Assurez-vous que les messages sont récupérés dans l'ordre
+    });
 
-  const sendMessage = async () => {
-    if (!input.trim()) return;
+    // Créer un tableau de messages avec les précédentes interactions (si présentes)
+    const messages = conversationHistory.map(item => ({
+      role: item.role,  // 'system', 'user', ou 'assistant'
+      content: item.content,
+    }));
 
-    const userMessage = input;
-    setInput('');
-    setIsLoading(true);
+    // Ajouter le message actuel de l'utilisateur
+    messages.push({ role: 'user', content: message });
 
-    // Ajout immédiat du message de l'utilisateur
-    setMessages(prev => [
-      ...prev,
-      {
-        user: userMessage,
-        bot: '',
-        timestamp: getFormattedTime(),
+    // Récupérer le contexte de la base de données
+    const all = await db.assistantContext.findMany();
+
+    // Vérifier si le contexte est vide
+    if (all.length === 0) {
+      return Response.json({ answer: "Aucun contexte trouvé. Veuillez ajouter des questions et réponses." }, { status: 500 });
+    }
+
+    const context = all
+      .map(item => `Q: ${item.question}\nR: ${item.answer}`)
+      .join("\n\n");
+
+    // Faire la requête à l'API externe avec l'historique de la conversation
+    const response = await fetch("https://api.together.xyz/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${process.env.TOGETHER_API_KEY}`,
+        "Content-Type": "application/json"
       },
-    ]);
+      body: JSON.stringify({
+        model: "mistralai/Mistral-7B-Instruct-v0.1",
+        messages: [
+          {
+            role: "system",
+            content: `
+              Tu es Degany, un assistant virtuel professionnel de l’application MGA Follow UP, développé par Morlon. 
 
-    try {
-      const res = await fetch('/api/ai/assistant', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userMessage }),
-      });
+              Ton rôle est d’aider les utilisateurs en te basant uniquement sur les informations qui suivent. Ces informations constituent ta base de connaissances officielle. Tu ne dois jamais t'en écarter, ni utiliser de connaissances externes.
 
-      const data = await res.json();
+              ---
 
-      if (data && data.answer) {
-        // Mise à jour du dernier message avec la réponse du bot
-        setMessages(prev => {
-          const newMessages = [...prev];
-          newMessages[newMessages.length - 1].bot = data.answer;
-          return newMessages;
-        });
-      } else {
-        setMessages(prev => {
-          const newMessages = [...prev];
-          newMessages[newMessages.length - 1].bot = "Désolé, je n'ai pas pu traiter votre demande. Veuillez réessayer.";
-          return newMessages;
-        });
+              CONNAISSANCES AUTORISÉES :
+              ${context}
+
+              ---
+
+              INSTRUCTIONS STRICTES :
+              - Si une question correspond à une ou plusieurs réponses dans la base de connaissances, utilise-les pour formuler ta réponse de manière claire et amicale.
+              - Si une question ne correspond à rien dans la base de connaissances, réponds de manière courtoise, mais amicale, avec une phrase du type :
+              “Je suis désolé, je n’ai pas cette information à l’heure actuelle, car je suis conçu pour vous aider uniquement sur l'application MGA Follow UP. N'hésitez pas à me poser d'autres questions, je suis là pour vous !”
+
+              - Ne propose jamais de solution extérieure, de lien, ni d’informations provenant de connaissances générales ou d'Internet.
+              - Ne donne jamais d’avis personnel. Reste professionnel mais accessible.
+
+              Sois flexible dans tes réponses, adopte un ton naturel et engageant, et veille à toujours rester fidèle aux données fournies ci-dessus.
+            `
+          },
+          ...messages  // Ajouter l'historique des messages à la requête
+        ]
+      })
+    });
+
+    console.log('Response status:', response.status);  // Afficher le statut de la réponse de l'API
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('Erreur de l\'API externe:', errorData);  // Log d'erreur pour l'API externe
+      throw new Error(`La connexion avec l'API a échoué avec le statut: ${response.status}. Détails: ${errorData?.message || 'Pas de détails disponibles'}`);
+    }
+
+    const data = await response.json();
+
+    // Vérifier la structure de la réponse avant de l'utiliser
+    if (!data || !data.choices || !data.choices[0]?.message?.content) {
+      throw new Error('Réponse invalide de l\'API.');
+    }
+
+    const answer = data.choices[0].message.content || "Je suis développé par MGA Follow UP pour vous assister uniquement. Alors, que puis-je faire pour vous concernant l’app MGA Follow UP ?";
+
+    // Enregistrer la réponse de l'assistant dans l'historique de la conversation
+    await db.conversationHistory.create({
+      data: {
+        userId,  // Associe l'historique à l'utilisateur
+        role: 'assistant',
+        content: answer,
       }
-    } catch (error) {
-      // Si une erreur survient, afficher un message d'erreur
-      setMessages(prev => {
-        const newMessages = [...prev];
-        newMessages[newMessages.length - 1].bot = "Désolé, je n'ai pas pu traiter votre demande. Veuillez réessayer.";
-        return newMessages;
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    });
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      sendMessage();
-    }
-  };
+    return Response.json({ answer });
 
-  const resetConversation = () => {
-    setMessages([]);
-  };
+  } catch (error) {
+    console.error('Erreur:', error);
 
-  const toggleChat = () => {
-    setIsChatOpen(prev => !prev);
-  };
-
-  return (
-    <>
-      {/* Floating Chat Button */}
-      <button
-        onClick={toggleChat}
-        className="fixed bottom-6 right-6 bg-green-600 hover:bg-green-700 text-white p-4 rounded-full shadow-lg z-50 transition-all duration-300 transform hover:scale-110"
-        aria-label="Ouvrir le chat"
-      >
-        {isChatOpen ? (
-          <IoClose size={24} />
-        ) : (
-          <IoChatbubbleEllipses size={24} />
-        )}
-      </button>
-
-      {/* Chat Window */}
-      <div 
-        className={`fixed bottom-20 sm:bottom-24 mx-2 sm:right-6 w-90 h-4/5 max-h-[600px] max-w-md bg-gray-50 rounded-xl shadow-2xl overflow-hidden flex flex-col transition-all duration-300 transform ${
-          isChatOpen ? 'scale-100 opacity-100' : 'scale-95 opacity-0 pointer-events-none'
-        } z-40`}
-      >
-        {/* Header */}
-        <div className="bg-white border-b border-gray-200 shadow-sm py-4 px-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="bg-green-600 text-white p-2 rounded-lg">
-                <RiRobot2Line size={24} />
-              </div>
-              <div>
-                <h1 className="text-xl font-semibold text-gray-800">Assistant Degany</h1>
-                <p className="text-xs text-gray-500">Assistant de MGA Follow UP</p>
-              </div>
-            </div>
-            <div className="flex items-center space-x-2">
-              <button
-                onClick={resetConversation}
-                className="text-gray-400 hover:text-gray-600 transition-colors p-2 rounded-full hover:bg-gray-100"
-                title="Réinitialiser la conversation"
-              >
-                <IoRefresh size={20} />
-              </button>
-              <button
-                onClick={toggleChat}
-                className="text-gray-400 hover:text-gray-600 transition-colors p-2 rounded-full hover:bg-gray-100"
-                title="Fermer le chat"
-              >
-                <IoClose size={20} />
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Chat Area */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4">
-          {messages.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-full text-center text-gray-500 space-y-4">
-              <div className="bg-green-100 p-4 rounded-full">
-                <RiRobot2Line size={48} className="text-green-600" />
-              </div>
-              <h2 className="text-xl font-medium text-gray-700">Comment puis-je vous aider aujourd&apos;hui ?</h2>
-              <p className="max-w-md text-sm">
-                Posez-moi n&apos;importe quelle question et je ferai de mon mieux pour vous répondre.
-              </p>
-            </div>
-          ) : (
-            messages.map((m, i) => (
-              <div key={i} className="space-y-4">
-                {/* User Message - Now on the right side */}
-                <div className="flex justify-end">
-                  <div className="max-w-3/4">
-                    <div className="flex items-center justify-end space-x-2">
-                      <span className="text-xs text-gray-400">{m.timestamp}</span>
-                      <span className="font-medium text-gray-800">Zah</span>
-                    </div>
-                    <div className="mt-1 text-white bg-orange-600 p-3 rounded-lg rounded-tr-none">
-                      {m.user}
-                    </div>
-                  </div>
-                  <div className="ml-3 mt-auto">
-                    <div className="bg-orange-100 p-2 rounded-full">
-                      <FiUser size={18} className="text-orange-600" />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Bot Message - Still on the left */}
-                <div className="flex items-start space-x-3">
-                  <div className="bg-green-600 p-2 rounded-full">
-                    <RiRobot2Line size={18} className="text-white" />
-                  </div>
-                  <div className="flex-1 max-w-3/4">
-                    <div className="flex items-center space-x-2">
-                      <span className="font-medium text-gray-800">Degany</span>
-                      <span className="text-xs text-gray-400">{m.timestamp}</span>
-                    </div>
-                    <div className="mt-1 text-gray-700 bg-white border border-gray-200 p-3 rounded-lg rounded-tl-none shadow-sm">
-                      {m.bot || (
-                        <div className="flex items-center space-x-2">
-                          <div className="w-2 h-2 bg-green-600 rounded-full animate-pulse"></div>
-                          <div className="w-2 h-2 bg-green-600 rounded-full animate-pulse delay-150"></div>
-                          <div className="w-2 h-2 bg-green-600 rounded-full animate-pulse delay-300"></div>
-                          <span className="text-sm text-gray-500">En train de réfléchir...</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))
-          )}
-          <div ref={messagesEndRef} />
-        </div>
-
-        {/* Input Area */}
-        <div className="bg-white border-t border-gray-200 p-4">
-          <div className="flex items-center space-x-2">
-            <div className="flex-1 relative">
-              <input
-                ref={inputRef}
-                className="w-full border border-gray-300 rounded-lg pl-4 pr-10 py-3 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                value={input}
-                onChange={e => setInput(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder="Posez votre question ici..."
-                disabled={isLoading}
-              />
-              <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                <FiMessageSquare size={18} />
-              </div>
-            </div>
-            <button
-              className={`p-3 rounded-lg flex items-center justify-center ${
-                input.trim() && !isLoading 
-                  ? 'bg-green-600 text-white hover:bg-green-700' 
-                  : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-              } transition-colors`}
-              onClick={sendMessage}
-              disabled={!input.trim() || isLoading}
-            >
-              <IoSend size={18} />
-            </button>
-          </div>
-        </div>
-      </div>
-    </>
-  );
-}
+    // Retourner une réponse d'erreur en cas d'exception
+    return Response.json({ answer: "Une erreur est survenue. Veuillez réessayer plus tard." }, { status: 500 });
+  }
+};
