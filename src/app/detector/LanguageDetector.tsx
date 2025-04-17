@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { franc } from 'franc-min';
 
 interface LanguageDetectorProps {
@@ -28,10 +28,12 @@ const LanguageDetector: React.FC<LanguageDetectorProps> = ({ text }) => {
     }
   };
 
-  // Appeler la fonction de détection chaque fois que le texte change
-  if (text && text !== '') {
-    detectLanguage(text);
-  }
+  // Utilisation de useEffect pour appeler la fonction de détection lorsque le texte change
+  useEffect(() => {
+    if (text) {
+      detectLanguage(text);
+    }
+  }, [text]);  // Effectue l'appel à chaque changement de `text`
 
   return (
     <div>
