@@ -1,7 +1,7 @@
 import { getSession } from 'next-auth/react';  // Importer la fonction getSession
 import { v4 as uuidv4 } from 'uuid';  // Importer la bibliothèque UUID
 import db from '@/lib/db';
-import cookie from 'cookie';
+import { cookie } from 'cookie';
 
 export const POST = async (req: Request, res: Response) => {
   try {
