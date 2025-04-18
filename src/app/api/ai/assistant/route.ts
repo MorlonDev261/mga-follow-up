@@ -7,7 +7,7 @@ import { NextRequest, NextResponse } from 'next/server';
 export const POST = async (req: NextRequest) => {
   try {
     const session = await auth();
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     let userId = session?.user?.id;
     const existingCookie = req.cookies.get('userId')?.value;
 
