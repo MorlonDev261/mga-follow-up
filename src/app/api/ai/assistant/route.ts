@@ -2,14 +2,14 @@ import db from '@/lib/db';
 import { auth } from '@/lib/auth';
 import { v4 as uuidv4 } from 'uuid';
 import { cookies } from 'next/headers';
+import { NextRequest, NextResponse } from 'next/server';
 
-export const POST = async (req: Request) => {
+export const POST = async (req: NextRequest) => {
   try {
     const session = await auth();
     let userId = session?.user?.id;
 
-    const cookieStore = cookies();
-    const existingCookie = cookieStore.get('userId')?.value;
+    const existingCookie = req.cookies.get('userId')?.value;
 
     if (!userId) {
       if (existingCookie) {
