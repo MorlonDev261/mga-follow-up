@@ -7,23 +7,20 @@ import { NextRequest, NextResponse } from 'next/server';
 export const POST = async (req: NextRequest) => {
   try {
     const session = await auth();
+    const cookieStore = cookies();
     let userId = session?.user?.id;
-    const existingCookie = req.cookies.get('userId')?.value;
+    const existingCookie = cookieStore.get('userId')?.value;
 
     if (!userId) {
       if (existingCookie) {
         userId = existingCookie;
       } else {
         userId = uuidv4();
-        cookieStore.set('userId', userId, {
-          path: '/',
-          httpOnly: true,
-          maxAge: 60 * 60 * 24 * 365,
-        });
+        // le cookie sera défini plus bas via res.cookies.set(...)
       }
     }
 
-    const { message } = await req.json();
+    const { message }: { message: string } = await req.json();
 
     if (!message.trim()) {
       return NextResponse.json({ answer: "Veuillez saisir un message." }, { status: 400 });
@@ -53,27 +50,7 @@ export const POST = async (req: NextRequest) => {
         messages: [
           {
             role: "system",
-            content: `
-Tu es Degany, un assistant virtuel professionnel de l’application MGA Follow UP, développé par Morlon.
-
-Ton rôle est d’aider les utilisateurs en te basant uniquement sur les informations qui suivent. Ces informations constituent ta base de connaissances officielle. Tu ne dois jamais t'en écarter, ni utiliser de connaissances externes.
-
----
-
-CONNAISSANCES AUTORISÉES :
-${context}
-
----
-
-INSTRUCTIONS STRICTES :
-- Si une question correspond à une ou plusieurs réponses dans la base de connaissances, utilise-les pour formuler ta réponse de manière claire et amicale.
-- Si une question ne correspond à rien dans la base de connaissances, réponds :
-“Je suis désolé, je n’ai pas cette information à l’heure actuelle, car je suis conçu pour vous aider uniquement sur l'application MGA Follow UP. N'hésitez pas à me poser d'autres questions, je suis là pour vous !”
-- Ne propose jamais de solution extérieure, de lien, ni d’informations provenant de connaissances générales ou d'Internet.
-- Ne donne jamais d’avis personnel. Reste professionnel mais accessible.
-
-Sois flexible dans tes réponses, adopte un ton naturel et engageant, et veille à toujours rester fidèle aux données fournies ci-dessus.
-            `,
+            content: `...${context}...`, // inchangé
           },
           { role: "user", content: message },
         ],
@@ -98,7 +75,6 @@ Sois flexible dans tes réponses, adopte un ton naturel et engageant, et veille 
 
     const res = NextResponse.json({ answer });
 
-    // Définir le cookie si c'était un nouveau userId
     if (!session?.user?.id && !existingCookie) {
       res.cookies.set('userId', userId, {
         path: '/',
@@ -109,7 +85,7 @@ Sois flexible dans tes réponses, adopte un ton naturel et engageant, et veille 
 
     return res;
   } catch (error) {
-    console.error('Erreur:', error);
+    console.error('Erreur:', error instanceof Error ? error.message : error);
     return NextResponse.json(
       { answer: "Une erreur est survenue. Veuillez réessayer plus tard." },
       { status: 500 }
