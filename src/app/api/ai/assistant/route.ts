@@ -84,12 +84,12 @@ Sois flexible dans tes réponses, adopte un ton naturel et engageant, et veille 
                    "Je suis développé par MGA Follow UP pour vous assister seulement, alors que puis-je faire pour à propos de l’app MGA Follow UP ?";
 
     // Enregistrement de l'historique de la conversation dans la base de données
-    await db.conversationHistory.createMany({
+    /** await db.conversationHistory.createMany({
       data: [
         { userId, role: "user", content: message },
         { userId, role: "assistant", content: answer },
       ],
-    });
+    }); **/
 
     // Réponse à l'utilisateur avec la réponse de l'assistant
     const res = NextResponse.json({ answer });
