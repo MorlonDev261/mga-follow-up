@@ -77,6 +77,8 @@ export default function Chat() {
       },
     ]);
 
+    scrollToBottom()
+
     try {
       const res = await fetch('/api/ai/assistant', {
         method: 'POST',
