@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 
 const ChatComponent = () => {
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const [response, setResponse] = useState<string | null>(null);
 
   const sendMessage = async () => {
@@ -13,19 +13,21 @@ const ChatComponent = () => {
     }
 
     try {
-      const res = await fetch('/api/ai/assistant', {
-        method: 'POST',
+      const res = await fetch("/api/ai/assistant", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ message: 'Hello!' }),
+        body: JSON.stringify({ message }), // utilise le message réel
       });
 
       const data = await res.json();
+      setResponse(data.response); // met à jour la réponse ici
       console.log(data);
     } catch (error) {
-      console.error('Error:', error);
+      console.error("Error:", error);
     }
+  };
 
   return (
     <div>
@@ -37,7 +39,11 @@ const ChatComponent = () => {
       />
       <button onClick={sendMessage}>Envoyer</button>
 
-      {response && <p><strong>Réponse:</strong> {response}</p>}
+      {response && (
+        <p>
+          <strong>Réponse:</strong> {response}
+        </p>
+      )}
     </div>
   );
 };
