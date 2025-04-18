@@ -25,7 +25,6 @@ model User {
   sessions       Session[]
 
   // Chat avec les membres ou l'IA
-  conversationHistories ConversationHistory[]
 
   // Relations personnalisées
   entreprises   WorkRelation[]      @relation("EntrepriseWorkers")
