@@ -8,8 +8,7 @@ export const POST = async (req: NextRequest) => {
   try {
     const session = await auth();
     let userId = session?.user?.id;
-    const cookieStore = cookies();
-    const existingCookie = cookieStore.get('userId')?.value;
+    const existingCookie = req.get('userId')?.value;
 
     if (!userId) {
       if (existingCookie) {
