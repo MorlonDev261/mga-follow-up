@@ -12,37 +12,37 @@ import {
 
 export default async function middleware(req: NextRequest) {
   const { nextUrl } = req;
-  const session = await auth(); // Vérification de session correcte
+  const pathname = nextUrl.pathname;
+
+  const session = await auth();
   const isLoggedIn = !!session;
 
-  const isAPI = nextUrl.pathname.startsWith(API);
-  const isApiAuthRoute = apiAuthPrefix.includes(nextUrl.pathname);
-  const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
-  const isAuthRoute = authRoutes.includes(nextUrl.pathname);
+  const isApiRoute = pathname.startsWith(API);
+  const isApiAuthRoute = apiAuthPrefix.some(prefix => pathname.startsWith(prefix));
+  const isPublicRoute = publicRoutes.includes(pathname);
+  const isAuthRoute = authRoutes.includes(pathname);
+  const requiresApiAuth = isApiRoute && !isApiAuthRoute;
 
-  if (!isLoggedIn && isAPI && !isApiAuthRoute) {
+  // API route non auth et sans session => vérification du token
+  if (!isLoggedIn && requiresApiAuth) {
     const token = req.headers.get("Authorization")?.replace("Bearer ", "");
     if (!token) {
       return NextResponse.json({ message: "Authentification requise", errorCode: "MISSING_TOKEN" }, { status: 401 });
     }
 
     try {
-      // Vérifie le token JWT
-      const payload = await verifyToken(token);  // Assure-toi que `verifyToken` est une fonction pour valider le token JWT
-      
-      req.headers.set("x-user-id", payload.id);
-      
-      return NextResponse.next();  // Continue si le token est valide
+      const payload = await verifyToken(token);
+      // À ce stade, tu peux créer un NextResponse avec un header si besoin
+      return NextResponse.next();
     } catch (error) {
       console.error("[API Auth Error]", error);
       return NextResponse.json({ message: "Token invalide", errorCode: "INVALID_TOKEN" }, { status: 401 });
     }
   }
 
-  if (isApiAuthRoute) {
-    return NextResponse.next();
-  }
+  if (isApiAuthRoute) return NextResponse.next();
 
+  // Routes d'auth : redirige si déjà connecté
   if (isAuthRoute) {
     if (isLoggedIn) {
       return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
@@ -50,8 +50,9 @@ export default async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
+  // Route protégée, redirige vers login si non connecté
   if (!isLoggedIn && !isPublicRoute) {
-    const originalPath = nextUrl.pathname + nextUrl.search;
+    const originalPath = pathname + nextUrl.search;
     const encodedCallbackUrl = Buffer.from(originalPath).toString("base64");
 
     const loginUrl = new URL("/login", req.url);
@@ -63,7 +64,7 @@ export default async function middleware(req: NextRequest) {
   return NextResponse.next();
 }
 
-// Exclure les fichiers statiques et dossiers spéciaux du middleware
+// Matcher configuration
 export const config = {
   matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api|trpc)(.*)"],
 };
