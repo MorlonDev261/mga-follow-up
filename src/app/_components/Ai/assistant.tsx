@@ -23,6 +23,34 @@ export default function Chat() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const getFormattedTime = () => {
+    const now = new Date();
+    return `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+  };
+
+  // Charger l'historique des messages au premier rendu
+  useEffect(() => {
+    const fetchHistory = async () => {
+      try {
+        const res = await fetch('/api/ai/history');
+        const data = await res.json();
+
+        if (res.ok && data.messages) {
+          const formatted = data.messages.map((m: { user: string; bot: string }) => ({
+            user: m.user,
+            bot: m.bot,
+            timestamp: getFormattedTime(), // ou bien m.timestamp si disponible
+          }));
+          setMessages(formatted);
+        }
+      } catch (error) {
+        console.error("Erreur lors du chargement de l'historique :", error);
+      }
+    };
+
+    fetchHistory();
+  }, []);
+
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
@@ -33,11 +61,6 @@ export default function Chat() {
     }
   }, [isChatOpen]);
 
-  const getFormattedTime = () => {
-    const now = new Date();
-    return `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
-  };
-
   const sendMessage = async () => {
     if (!input.trim()) return;
 
@@ -45,7 +68,6 @@ export default function Chat() {
     setInput('');
     setIsLoading(true);
 
-    // Ajout immédiat du message de l'utilisateur
     setMessages(prev => [
       ...prev,
       {
@@ -64,25 +86,15 @@ export default function Chat() {
 
       const data = await res.json();
 
-      if (data && data.answer) {
-        // Mise à jour du dernier message avec la réponse du bot
-        setMessages(prev => {
-          const newMessages = [...prev];
-          newMessages[newMessages.length - 1].bot = data.answer;
-          return newMessages;
-        });
-      } else {
-        setMessages(prev => {
-          const newMessages = [...prev];
-          newMessages[newMessages.length - 1].bot = "Désolé, je n'ai pas pu traiter votre demande. Veuillez réessayer.";
-          return newMessages;
-        });
-      }
-    } catch (error) {
-      // Si une erreur survient, afficher un message d'erreur
       setMessages(prev => {
         const newMessages = [...prev];
-        newMessages[newMessages.length - 1].bot = "Désolé, je n'ai pas pu traiter votre demande. Veuillez réessayer.";
+        newMessages[newMessages.length - 1].bot = data.answer || "Désolé, je n'ai pas pu traiter votre demande.";
+        return newMessages;
+      });
+    } catch (error) {
+      setMessages(prev => {
+        const newMessages = [...prev];
+        newMessages[newMessages.length - 1].bot = "Erreur lors de l'envoi du message.";
         return newMessages;
       });
     } finally {
