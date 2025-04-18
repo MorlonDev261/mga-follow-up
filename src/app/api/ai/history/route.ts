@@ -10,8 +10,8 @@ export async function GET() {
 
   // Si l'utilisateur n'est pas connecté, on récupère l'ID utilisateur à partir du cookie
   if (!userId) {
-    const cookieStore = cookies();
-    userId = cookieStore.get('userId')?.value; // Assurez-vous que le cookie contient 'userId'
+    const cookieStore = await cookies();  // Utilisez await ici
+    userId = cookieStore.get('userId')?.value;  // Récupérez la valeur du cookie 'userId'
   }
 
   // Si aucun userId n'est trouvé, on retourne une erreur 401
