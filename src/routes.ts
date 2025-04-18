@@ -27,7 +27,7 @@ export const API = "/api";
 /**
 * The prefix for API authentication routes 
 * Routes that start with this prefix are used for API authentication purposes
-* @type {string}
+* @type {string[]}
 */
 export const apiAuthPrefix = ["/api/auth", "/api/ai"];
 
