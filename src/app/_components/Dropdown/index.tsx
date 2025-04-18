@@ -23,7 +23,7 @@ export default function Dropdown({ btn, title, children }: DropdownProps) {
         {btn}
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-48 mr-5">
-        <DropdownMenuLabel className="text-center">{title} Insertion</DropdownMenuLabel>
+        <DropdownMenuLabel className="text-center">{title}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {children}
       </DropdownMenuContent>
