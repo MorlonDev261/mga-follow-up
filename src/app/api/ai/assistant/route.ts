@@ -94,12 +94,17 @@ export const POST = async (req: NextRequest) => {
     const data = await response.json();
     const answer = data.choices?.[0]?.message?.content || "Je suis développé par MGA Follow UP pour vous assister seulement, alors que puis-je faire pour à propos de l’app MGA Follow UP ?";
 
-    await db.conversationHistory.create({
-      data: {
+    await db.conversationHistory.createMany({
+      data: [{
         userId,
-        userMessage: message,
-        botResponse: answer,
+        role: "user",
+        content: message,
       },
+      {
+        userId,
+        role: "assistant",
+        content: answer,
+      },]
     });
     
     return Response.json({ answer });
