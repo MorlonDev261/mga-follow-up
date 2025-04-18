@@ -32,7 +32,7 @@ export const POST = async (req: NextRequest) => {
 
     // Construction du contexte pour l'assistant
     const context = all
-      .map(item => `Q: ${item.question}\nR: ${item.answer}`)
+      .map(item => `${item.question}\n${item.answer}`)
       .join("\n\n");
 
     // Appel à l'API de chat pour obtenir une réponse de l'assistant
