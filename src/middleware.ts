@@ -16,7 +16,7 @@ export default async function middleware(req: NextRequest) {
   const isLoggedIn = !!session;
 
   const isAPI = nextUrl.pathname.startsWith(API);
-  const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
+  const isApiAuthRoute = apiAuthPrefix.includes(nextUrl.pathname);
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
