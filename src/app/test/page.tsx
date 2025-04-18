@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from 'react';
 
 const ChatComponent = () => {
@@ -11,25 +13,19 @@ const ChatComponent = () => {
     }
 
     try {
-      const res = await fetch('/api/ai/assistant, {
+      const res = await fetch('/api/ai/assistant', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ message }),
+        body: JSON.stringify({ message: 'Hello!' }),
       });
 
-      if (!res.ok) {
-        throw new Error('Échec de l\'appel à l\'API');
-      }
-
       const data = await res.json();
-      setResponse(data.answer);
+      console.log(data);
     } catch (error) {
-      console.error('Erreur:', error);
-      setResponse('Une erreur est survenue lors de l\'appel à l\'API.');
+      console.error('Error:', error);
     }
-  };
 
   return (
     <div>
