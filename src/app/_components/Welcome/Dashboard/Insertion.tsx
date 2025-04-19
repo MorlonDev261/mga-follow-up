@@ -8,9 +8,15 @@ import { AiOutlineProduct } from "react-icons/ai";
 import { ImUserPlus } from "react-icons/im";
 import DialogPopup from "@components/DialogPopup";
 import ProductForm from "@components/Insertion/ProductForm";
+import CustomerForm from "@components/Insertion/CustomerForm";
+import EmployerForm from "@components/Insertion/EmployerForm";
 
 export default function NewInsertionDropdown() {
-  const [open, setOpen] = useState({ product: false, customer: false, employer: false });
+  const [open, setOpen] = useState({
+    product: false,
+    customer: false,
+    employer: false,
+  });
 
   return (
     <>
@@ -33,14 +39,34 @@ export default function NewInsertionDropdown() {
         </DropdownMenuItem>
       </Dropdown>
 
-      {/* Modale ou panneau d'ajout de produit */}
-      <DialogPopup 
-        isOpen={open.product} 
+      {/* Modale Produit */}
+      <DialogPopup
+        isOpen={open.product}
         onClose={() => setOpen({ ...open, product: false })}
         title="Ajouter un nouveau produit"
         description="Veuillez remplir les détails du produit à enregistrer."
       >
         <ProductForm setOpen={() => setOpen(prev => ({ ...prev, product: false }))} />
+      </DialogPopup>
+
+      {/* Modale Client */}
+      <DialogPopup
+        isOpen={open.customer}
+        onClose={() => setOpen({ ...open, customer: false })}
+        title="Ajouter un nouveau client"
+        description="Veuillez remplir les détails du client."
+      >
+        <CustomerForm setOpen={() => setOpen(prev => ({ ...prev, customer: false }))} />
+      </DialogPopup>
+
+      {/* Modale Employé */}
+      <DialogPopup
+        isOpen={open.employer}
+        onClose={() => setOpen({ ...open, employer: false })}
+        title="Ajouter un nouvel employé"
+        description="Veuillez remplir les détails de l'employé."
+      >
+        <EmployerForm setOpen={() => setOpen(prev => ({ ...prev, employer: false }))} />
       </DialogPopup>
     </>
   );
