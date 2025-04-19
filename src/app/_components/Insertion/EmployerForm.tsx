@@ -58,7 +58,7 @@ export default function EmployerForm({ setOpen }: EmployerFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="grid gap-4 py-2">
+    <form onSubmit={handleSubmit} className="grid gap-4 rounded-sm py-2">
       <div>
         <label className="block mb-1 font-medium">Nom complet</label>
         <input
