@@ -6,7 +6,8 @@ import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { FaPlus, FaClipboardUser } from "react-icons/fa6";
 import { AiOutlineProduct } from "react-icons/ai";
 import { ImUserPlus } from "react-icons/im";
-import AddProduct from "@components/Insertion/product";
+import DialogPopup from "@components/DialogPopup";
+import ProductForm from "@components/Insertion/ProductForm";
 
 export default function NewInsertionDropdown() {
   const [open, setOpen] = useState({ product: false, customer: false, employer: false });
@@ -33,7 +34,14 @@ export default function NewInsertionDropdown() {
       </Dropdown>
 
       {/* Modale ou panneau d'ajout de produit */}
-      <AddProduct isOpen={open.product} onClose={() => setOpen({ ...open, product: false })} />
+      <DialogPopup 
+        isOpen={open.product} 
+        onClose={() => setOpen({ ...open, product: false })}
+        title="Ajouter un nouveau produit"
+        description="Veuillez remplir les détails du produit à enregistrer."
+      >
+        <ProductForm />
+      </DialogPopup>
     </>
   );
 }
