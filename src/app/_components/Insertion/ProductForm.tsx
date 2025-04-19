@@ -1,36 +1,56 @@
 'use client';
 
 import { useState } from 'react';
+import * as React from "react";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select";
 
 interface ProductFormProps {
   setOpen: () => void;
 }
 
 export interface ProductFormData {
-  name: string;
-  description: string;
-  price: number;
-  stock: number;
-  category: string;
+  arrival: number;
+  stockDate: number;
+  idProduct: string;
+  qty: number;
+  id: number;
+  comment: string;
 }
 
 export default function ProductForm({ setOpen }: ProductFormProps) {
   const [form, setForm] = useState<ProductFormData>({
-    name: '',
-    description: '',
-    price: 0,
-    stock: 0,
-    category: '',
+    arrival: 0,
+    stockDate: 0,
+    idProduct: '',
+    qty: 0,
+    id: 0,
+    comment: '',
   });
 
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setForm(prev => ({
       ...prev,
-      [name]: name === 'price' || name === 'stock' ? Number(value) : value,
+      [name]: name === 'arrival' || name === 'stockDate' || name === 'qty' || name === 'id'
+        ? Number(value)
+        : value,
     }));
+  };
+
+  const handleProductSelect = (value: string) => {
+    setForm(prev => ({ ...prev, idProduct: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -40,9 +60,7 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
     try {
       const response = await fetch('/api/products', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),
       });
 
@@ -54,7 +72,7 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
       setOpen();
     } catch (error) {
       console.error(error);
-      alert('Une erreur est survenue lors de l’enregistrement du produit.');
+      alert('Une erreur est survenue lors de l’enregistrement.');
     } finally {
       setLoading(false);
     }
@@ -62,71 +80,93 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="grid gap-4 py-2">
-      <div>
-        <label className="block mb-1 font-medium">Nom du produit</label>
-        <input
-          type="text"
-          name="name"
-          value={form.name}
-          onChange={handleChange}
-          required
-          className="w-full border border-gray-300 rounded px-3 py-2"
-        />
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <label className="block mb-1 font-medium">Arrivée</label>
+          <input
+            type="number"
+            name="arrival"
+            value={form.arrival}
+            onChange={handleChange}
+            min={0}
+            required
+            className="w-full border border-gray-300 rounded px-3 py-2"
+          />
+        </div>
+        <div>
+          <label className="block mb-1 font-medium">Date stock</label>
+          <input
+            type="number"
+            name="stockDate"
+            value={form.stockDate}
+            onChange={handleChange}
+            min={0}
+            required
+            className="w-full border border-gray-300 rounded px-3 py-2"
+          />
+        </div>
       </div>
 
-      <div>
-        <label className="block mb-1 font-medium">Description</label>
-        <textarea
-          name="description"
-          value={form.description}
-          onChange={handleChange}
-          required
-          className="w-full border border-gray-300 rounded px-3 py-2"
-        />
+      <div className="grid grid-cols-2 gap-4 items-end">
+        <div>
+          <label className="block mb-1 font-medium">Nom du produit</label>
+          <Select
+            value={form.idProduct}
+            onValueChange={handleProductSelect}
+          >
+            <SelectTrigger className="w-full border border-gray-300 rounded px-3 py-2">
+              <SelectValue placeholder="Sélectionnez le produit" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Fruits</SelectLabel>
+                <SelectItem value="apple">Apple</SelectItem>
+                <SelectItem value="banana">Banana</SelectItem>
+                <SelectItem value="blueberry">Blueberry</SelectItem>
+                <SelectItem value="grapes">Grapes</SelectItem>
+                <SelectItem value="pineapple">Pineapple</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <div>
+          <label className="block mb-1 font-medium">Quantité</label>
+          <input
+            type="number"
+            name="qty"
+            value={form.qty}
+            onChange={handleChange}
+            min={0}
+            required
+            className="w-full border border-gray-300 rounded px-3 py-2"
+          />
+        </div>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div>
-          <label className="block mb-1 font-medium">Prix (Ariary)</label>
+          <label className="block mb-1 font-medium">Identifiant (ex: IMEI)</label>
           <input
             type="number"
-            name="price"
-            value={form.price}
+            name="id"
+            value={form.id}
             onChange={handleChange}
-            min={0}
             required
             className="w-full border border-gray-300 rounded px-3 py-2"
           />
         </div>
         <div>
-          <label className="block mb-1 font-medium">Stock disponible</label>
+          <label className="block mb-1 font-medium">Commentaire</label>
           <input
-            type="number"
-            name="stock"
-            value={form.stock}
+            type="text"
+            name="comment"
+            value={form.comment}
             onChange={handleChange}
-            min={0}
             required
             className="w-full border border-gray-300 rounded px-3 py-2"
           />
         </div>
-      </div>
-
-      <div>
-        <label className="block mb-1 font-medium">Catégorie</label>
-        <select
-          name="category"
-          value={form.category}
-          onChange={handleChange}
-          required
-          className="w-full border border-gray-300 rounded px-3 py-2"
-        >
-          <option value="">Sélectionnez une catégorie</option>
-          <option value="alimentation">Alimentation</option>
-          <option value="hygiène">Hygiène</option>
-          <option value="électronique">Électronique</option>
-          <option value="autre">Autre</option>
-        </select>
       </div>
 
       <button
