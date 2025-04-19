@@ -7,7 +7,7 @@ import { ImUserPlus } from "react-icons/im";
 import Counter from "@components/Counter";
 import Dropdown from "@components/Dropdown";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import AddProduct from "@components/Insertion/product;
+import AddProduct from "@components/Insertion/product";
 import Balance from "@components/Balance";
 import ShortcutList from "@components/ShortcutList";
 import Statistique from "@components/Statistique";
