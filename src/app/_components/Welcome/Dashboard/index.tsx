@@ -1,14 +1,9 @@
 "use client";
 
-import { FaPlus, FaClipboardUser } from "react-icons/fa6";
-import { AiOutlineProduct } from "react-icons/ai";
 import { MdOutlineAccountBalanceWallet } from "react-icons/md";
-import { ImUserPlus } from "react-icons/im";
 import Counter from "@components/Counter";
-import Dropdown from "@components/Dropdown";
-import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import AddProduct from "@components/Insertion/product";
 import Balance from "@components/Balance";
+import Insertion from "@components/Welcome/Dashboard/Insertion";
 import ShortcutList from "@components/ShortcutList";
 import Statistique from "@components/Statistique";
 import MainTable from "@components/Table/MainTable";
@@ -40,24 +35,7 @@ export default function Dashboard() {
               </>
             }
           >
-            <Dropdown
-              btn={
-                <button className="flex items-center justify-center gap-1 rounded bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 px-2 py-1 text-sm text-white">
-                  <FaPlus /> New
-                </button>
-              }
-              title="Insertion"
-            >
-              <DropdownMenuItem>
-                <AiOutlineProduct /> <AddProduct />
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <ImUserPlus /> New customer
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <FaClipboardUser /> New employer
-              </DropdownMenuItem>
-            </Dropdown>
+            <Insertion />
           </Balance>
 
           <div className="mb-5 max-h-[100px] max-w-[250px]">
