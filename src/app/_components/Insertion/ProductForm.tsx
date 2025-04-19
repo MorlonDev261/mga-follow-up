@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 interface ProductFormProps {
-  onSubmit: (product: ProductFormData) => void;
+  setOpen: (value: boolean) => void;
 }
 
 export interface ProductFormData {
@@ -14,7 +14,7 @@ export interface ProductFormData {
   category: string;
 }
 
-export default function ProductForm({ onSubmit }: ProductFormProps) {
+export default function ProductForm({ setOpen }: ProductFormProps) {
   const [form, setForm] = useState<ProductFormData>({
     name: '',
     description: '',
@@ -22,6 +22,8 @@ export default function ProductForm({ onSubmit }: ProductFormProps) {
     stock: 0,
     category: '',
   });
+
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -31,9 +33,31 @@ export default function ProductForm({ onSubmit }: ProductFormProps) {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit(form);
+    setLoading(true);
+
+    try {
+      const response = await fetch('/api/products', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(form),
+      });
+
+      if (!response.ok) {
+        throw new Error('Échec de l’enregistrement');
+      }
+
+      alert('Produit enregistré avec succès !');
+      setOpen(false);
+    } catch (error) {
+      console.error(error);
+      alert('Une erreur est survenue lors de l’enregistrement du produit.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -105,8 +129,12 @@ export default function ProductForm({ onSubmit }: ProductFormProps) {
         </select>
       </div>
 
-      <button type="submit" className="btn-primary mt-2">
-        Enregistrer le produit
+      <button
+        type="submit"
+        className="btn-primary mt-2 disabled:opacity-50"
+        disabled={loading}
+      >
+        {loading ? 'Enregistrement...' : 'Enregistrer le produit'}
       </button>
     </form>
   );
