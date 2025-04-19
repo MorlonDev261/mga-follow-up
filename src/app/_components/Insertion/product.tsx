@@ -18,7 +18,7 @@ interface Props {
 export default function AddProduct({ isOpen, onClose }: Props) {
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent>
+      <DialogContent className="w-[90%] max-w-2xl mx-auto">
         <DialogHeader>
           <DialogTitle>Nouvel article en stock</DialogTitle>
           <DialogDescription>
@@ -26,7 +26,7 @@ export default function AddProduct({ isOpen, onClose }: Props) {
           </DialogDescription>
         </DialogHeader>
         <form className="grid gap-4 py-4">
-          {/* 🔧 Ajoute ici tes champs inputs */}
+          {/* 🔧 Tes champs de formulaire ici */}
         </form>
         <DialogFooter>
           <DialogClose className="btn-secondary">Annuler</DialogClose>
