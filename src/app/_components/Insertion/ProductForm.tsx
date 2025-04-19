@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 interface ProductFormProps {
-  setOpen: (value: boolean) => void;
+  setOpen: () => void;
 }
 
 export interface ProductFormData {
@@ -51,7 +51,7 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
       }
 
       alert('Produit enregistré avec succès !');
-      setOpen(false);
+      setOpen();
     } catch (error) {
       console.error(error);
       alert('Une erreur est survenue lors de l’enregistrement du produit.');
