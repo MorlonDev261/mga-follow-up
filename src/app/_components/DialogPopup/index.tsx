@@ -14,8 +14,8 @@ import {
 interface Props {
   isOpen: boolean;
   onClose: () => void;
-  title: string;
-  description: string;
+  title?: string;
+  description?: string;
   children: ReactNode;
 }
 
