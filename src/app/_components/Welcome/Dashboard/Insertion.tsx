@@ -40,7 +40,7 @@ export default function NewInsertionDropdown() {
         title="Ajouter un nouveau produit"
         description="Veuillez remplir les détails du produit à enregistrer."
       >
-        <ProductForm setOpen={setOpen} />
+        <ProductForm setOpen={() => setOpen(prev => ({ ...prev, product: false }))} />
       </DialogPopup>
     </>
   );
