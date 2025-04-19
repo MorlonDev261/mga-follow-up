@@ -1,18 +1,23 @@
+"use client";
+
 import {
   Dialog,
-  DialogTrigger,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogDescription,
   DialogFooter,
   DialogClose,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 
-export default function StockFormDialog() {
+interface Props {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export default function AddProduct({ isOpen, onClose }: Props) {
   return (
-    <Dialog>
-      <DialogTrigger className="btn-primary">Ajouter un stock</DialogTrigger>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Nouvel article en stock</DialogTitle>
@@ -21,7 +26,7 @@ export default function StockFormDialog() {
           </DialogDescription>
         </DialogHeader>
         <form className="grid gap-4 py-4">
-          {/* Inputs ici */}
+          {/* 🔧 Ajoute ici tes champs inputs */}
         </form>
         <DialogFooter>
           <DialogClose className="btn-secondary">Annuler</DialogClose>
@@ -29,5 +34,5 @@ export default function StockFormDialog() {
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
