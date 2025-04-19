@@ -11,7 +11,12 @@ import ProductForm from "@components/Insertion/ProductForm";
 
 export default function NewInsertionDropdown() {
   const [open, setOpen] = useState({ product: false, customer: false, employer: false });
-
+  
+  const handleProductSubmit = (data: ProductFormData) => {
+    console.log("Produit soumis :", data);
+    // Ici tu peux appeler une API : await fetch('/api/products', ...)
+    onClose(); // Fermer la modale après soumission
+  };
   return (
     <>
       <Dropdown
@@ -40,7 +45,7 @@ export default function NewInsertionDropdown() {
         title="Ajouter un nouveau produit"
         description="Veuillez remplir les détails du produit à enregistrer."
       >
-        <ProductForm />
+        <ProductForm onSubmit={handleProductSubmit} />
       </DialogPopup>
     </>
   );
