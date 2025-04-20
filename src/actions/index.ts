@@ -1,21 +1,28 @@
 import db from "@/lib/db"
+import {
+  createUserSchema, updateUserSchema, CreateUserInput, UpdateUserInput,
+  createCompanySchema, updateCompanySchema, CreateCompanyInput, UpdateCompanyInput,
+  companyUserSchema, CompanyUserInput,
+  createPurchaseSchema, updatePurchaseSchema, CreatePurchaseInput, UpdatePurchaseInput,
+  workRelationSchema, WorkRelationInput,
+  customerRelationSchema, CustomerRelationInput,
+  conversationSchema, ConversationInput
+} from "@/schemas/schema"
 
 // --- USERS ---
 
-// Récupérer un utilisateur par ID avec ses achats et relations d'entreprises
 export async function getUserById(id: string) {
   return db.user.findUnique({
     where: { id },
     include: {
-      purchases: true, // Inclure les achats
-      entreprises: true, // Inclure les relations avec les entreprises
-      workers: true, // Inclure les relations où l'utilisateur est un worker
-      owners: true, // Inclure les relations où l'utilisateur est un owner
+      purchases: true,
+      entreprises: true,
+      workers: true,
+      owners: true,
     },
   })
 }
 
-// Récupérer un utilisateur par email avec ses achats et relations d'entreprises
 export async function getUserByEmail(email: string) {
   return db.user.findUnique({
     where: { email },
@@ -28,167 +35,169 @@ export async function getUserByEmail(email: string) {
   })
 }
 
-// Créer un utilisateur
-export async function createUser(data: Omit<Parameters<typeof db.user.create>[0]['data'], 'id'>) {
-  return db.user.create({ data })
+export async function createUser(data: CreateUserInput) {
+  const parsed = createUserSchema.safeParse(data)
+  if (!parsed.success) throw new Error("Invalid user data")
+  return db.user.create({ data: parsed.data })
 }
 
-// Mettre à jour un utilisateur
-export async function updateUser(id: string, data: Partial<Parameters<typeof db.user.update>[0]['data']>) {
-  return db.user.update({ where: { id }, data })
+export async function updateUser(id: string, data: UpdateUserInput) {
+  const parsed = updateUserSchema.safeParse(data)
+  if (!parsed.success) throw new Error("Invalid user update data")
+  return db.user.update({ where: { id }, data: parsed.data })
 }
 
-// Supprimer un utilisateur
 export async function deleteUser(id: string) {
   return db.user.delete({ where: { id } })
 }
 
 // --- COMPANIES ---
 
-// Récupérer les entreprises d'un utilisateur
 export async function getCompaniesByUser(userId: string) {
-  return db.company.findMany({
-    where: {
-      OR: [
-        { idOwner: { has: userId } },
-        { subOwner: { has: userId } },
-        { members: { has: userId } },
-      ],
-    },
+  return db.companyUser.findMany({
+    where: { userId },
     include: {
-      idOwner: true, // Inclure les propriétaires
-      subOwner: true, // Inclure les sous-propriétaires
-      members: true, // Inclure les membres
+      company: true,
     },
   })
 }
 
-// Récupérer une entreprise par ID avec ses relations
+export async function getCompaniesByUserAndRole(userId: string, role: string) {
+  return db.companyUser.findMany({
+    where: { userId, role },
+    include: {
+      company: true,
+    },
+  })
+}
+
 export async function getCompanyById(id: string) {
   return db.company.findUnique({
     where: { id },
     include: {
-      idOwner: true, // Inclure les propriétaires
-      subOwner: true, // Inclure les sous-propriétaires
-      members: true, // Inclure les membres
+      users: {
+        include: {
+          user: true,
+        },
+      },
     },
   })
 }
 
-// Créer une entreprise
-export async function createCompany(data: Partial<Omit<Parameters<typeof db.company.create>[0]['data'], 'id'>>) {
-  return db.company.create({ data })
+export async function createCompany(data: CreateCompanyInput) {
+  const parsed = createCompanySchema.safeParse(data)
+  if (!parsed.success) throw new Error("Invalid company data")
+  return db.company.create({ data: parsed.data })
 }
 
-// Mettre à jour une entreprise
-export async function updateCompany(id: string, data: Partial<Parameters<typeof db.company.update>[0]['data']>) {
-  return db.company.update({ where: { id }, data })
+export async function updateCompany(id: string, data: UpdateCompanyInput) {
+  const parsed = updateCompanySchema.safeParse(data)
+  if (!parsed.success) throw new Error("Invalid company update data")
+  return db.company.update({ where: { id }, data: parsed.data })
 }
 
-// Supprimer une entreprise
 export async function deleteCompany(id: string) {
   return db.company.delete({ where: { id } })
 }
 
+// --- COMPANY USER ---
+
+export async function createCompanyUser(data: CompanyUserInput) {
+  const parsed = companyUserSchema.safeParse(data)
+  if (!parsed.success) throw new Error("Invalid company user data")
+  return db.companyUser.create({ data: parsed.data })
+}
+
 // --- CONVERSATION HISTORY ---
 
-// Récupérer les historiques de conversation d'un utilisateur
 export async function getConversationsByUser(userId: string) {
   return db.conversationHistory.findMany({
     where: { userId },
-    include: {
-      user: true, // Inclure l'utilisateur
-    },
   })
 }
 
-// Créer une conversation
-export async function createConversation(data: { userId: string; role: string; content: string }) {
-  return db.conversationHistory.create({ data })
+export async function createConversation(data: ConversationInput) {
+  const parsed = conversationSchema.safeParse(data)
+  if (!parsed.success) throw new Error("Invalid conversation data")
+  return db.conversationHistory.create({ data: parsed.data })
 }
 
-// Supprimer une conversation
 export async function deleteConversation(id: number) {
   return db.conversationHistory.delete({ where: { id } })
 }
 
 // --- PURCHASE ---
 
-// Récupérer les achats d'un utilisateur
 export async function getPurchasesByUser(userId: string) {
   return db.purchase.findMany({
     where: { userId },
-    include: {
-      user: true, // Inclure l'utilisateur
-    },
   })
 }
 
-// Créer un achat
-export async function createPurchase(data: { userId: string; productName: string; amount: number }) {
-  return db.purchase.create({ data })
+export async function createPurchase(data: CreatePurchaseInput) {
+  const parsed = createPurchaseSchema.safeParse(data)
+  if (!parsed.success) throw new Error("Invalid purchase data")
+  return db.purchase.create({ data: parsed.data })
 }
 
-// Mettre à jour un achat
-export async function updatePurchase(id: string, data: Partial<Parameters<typeof db.purchase.update>[0]['data']>) {
-  return db.purchase.update({ where: { id }, data })
+export async function updatePurchase(id: string, data: UpdatePurchaseInput) {
+  const parsed = updatePurchaseSchema.safeParse(data)
+  if (!parsed.success) throw new Error("Invalid purchase update data")
+  return db.purchase.update({ where: { id }, data: parsed.data })
 }
 
-// Supprimer un achat
 export async function deletePurchase(id: string) {
   return db.purchase.delete({ where: { id } })
 }
 
 // --- WORK RELATION ---
 
-// Récupérer les relations de travail d'un utilisateur en tant que worker
 export async function getWorkerRelations(userId: string) {
   return db.workRelation.findMany({
     where: { workerId: userId },
     include: {
-      entreprise: true, // Inclure l'entreprise
+      entreprise: true,
     },
   })
 }
 
-// Récupérer les relations de travail d'un utilisateur en tant qu'entreprise
 export async function getEntrepriseRelations(userId: string) {
   return db.workRelation.findMany({
     where: { entrepriseId: userId },
     include: {
-      worker: true, // Inclure le worker
+      worker: true,
     },
   })
 }
 
-// Créer une relation de travail
-export async function createWorkRelation(data: { workerId: string; entrepriseId: string }) {
-  return db.workRelation.create({ data })
+export async function createWorkRelation(data: WorkRelationInput) {
+  const parsed = workRelationSchema.safeParse(data)
+  if (!parsed.success) throw new Error("Invalid work relation data")
+  return db.workRelation.create({ data: parsed.data })
 }
 
 // --- CUSTOMER RELATION ---
 
-// Récupérer les relations clients pour un utilisateur
 export async function getCustomerRelations(userId: string) {
   return db.customerRelation.findMany({
     where: { ownerId: userId },
     include: {
-      customer: true, // Inclure le client
+      customer: true,
     },
   })
 }
 
-// Récupérer les relations de propriétaires d'un utilisateur
 export async function getOwnerRelations(userId: string) {
   return db.customerRelation.findMany({
     where: { customerId: userId },
     include: {
-      owner: true, // Inclure le propriétaire
+      owner: true,
     },
   })
 }
 
-// Créer une relation client-propriétaire
-export async function createCustomerRelation(data: { ownerId: string; customerId: string }) {
-  return db.customerRelation.create({ data })
+export async function createCustomerRelation(data: CustomerRelationInput) {
+  const parsed = customerRelationSchema.safeParse(data)
+  if (!parsed.success) throw new Error("Invalid customer relation data")
+  return db.customerRelation.create({ data: parsed.data })
 }
