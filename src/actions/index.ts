@@ -7,7 +7,7 @@ import {
   workRelationSchema, WorkRelationInput,
   customerRelationSchema, CustomerRelationInput,
   conversationSchema, ConversationInput
-} from "@/schemas/schema"
+} from "./schema"
 
 // --- USERS ---
 
