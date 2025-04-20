@@ -29,7 +29,7 @@ export async function getUserByEmail(email: string) {
 }
 
 // Créer un utilisateur
-export async function createUser(data: Partial<Omit<Parameters<typeof db.user.create>[0]['data'], 'id'>>) {
+export async function createUser(data: Omit<Parameters<typeof db.user.create>[0]['data'], 'id'>) {
   return db.user.create({ data })
 }
 
