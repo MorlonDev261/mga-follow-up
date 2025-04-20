@@ -182,7 +182,22 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
       <div className="grid gap-2">
         <div className="flex justify-between items-center">
           <label className="text-sm font-medium">Identifiants & Commentaires</label>
-          <Button type="button" size="sm" variant="outline" onClick={addIdentifier} disabled={form.identifiers.length >= form.qty}>
+          <Button
+            type="button"
+            size="sm"
+            variant="outline"
+            onClick={() => {
+              if (form.qty === 0) {
+                alert("Veuillez d'abord entrer une quantité.");
+                return;
+              }
+              if (form.identifiers.length >= form.qty) {
+                alert(`Vous avez déjà ajouté ${form.qty} identifiant(s).`);
+                return;
+              }
+              addIdentifier(); 
+            }
+          }>
             <PlusIcon className="w-4 h-4 mr-1" /> Ajouter
           </Button>
         </div>
