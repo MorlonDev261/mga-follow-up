@@ -1,4 +1,6 @@
 import db from "@/lib/db"
+import { Role } from "@prisma/client"
+
 import {
   createUserSchema, updateUserSchema, CreateUserInput, UpdateUserInput,
   createCompanySchema, updateCompanySchema, CreateCompanyInput, UpdateCompanyInput,
@@ -62,7 +64,7 @@ export async function getCompaniesByUser(userId: string) {
   })
 }
 
-export async function getCompaniesByUserAndRole(userId: string, role: string) {
+export async function getCompaniesByUserAndRole(userId: string, role: Role) {
   return db.companyUser.findMany({
     where: { userId, role },
     include: {
