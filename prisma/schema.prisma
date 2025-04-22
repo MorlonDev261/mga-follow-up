@@ -26,7 +26,7 @@ model User {
   emailVerified  DateTime?
   role           String   @default("USER")
 
-  // NextAuth
+  // Auth
   accounts       Account[]
   sessions       Session[]
 
@@ -36,7 +36,7 @@ model User {
   owners         CustomerRelation[]  @relation("OwnerCustomers")
   customers      CustomerRelation[]  @relation("CustomerOwners")
   purchases      Purchase[]
-  companyLinks   CompanyUser[]       // Relation avec les entreprises via pivot
+  companyLinks   CompanyUser[]
 }
 
 model Account {
@@ -133,6 +133,7 @@ model Company {
   createdAt  DateTime      @default(now())
 
   users      CompanyUser[]
+  products   Product[]
 }
 
 model CompanyUser {
@@ -149,4 +150,36 @@ model CompanyUser {
   @@unique([userId, companyId])
   @@index([userId])
   @@index([companyId])
+}
+
+model Product {
+  id         String       @id @default(cuid())
+  name       String
+  company    Company      @relation(fields: [companyId], references: [id])
+  companyId  String
+  entries    StockEntry[]
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+
+  @@index([companyId])
+}
+
+model StockEntry {
+  id          String           @id @default(cuid())
+  product     Product          @relation(fields: [productId], references: [id])
+  productId   String
+  qty         Int
+  arrival     DateTime
+  stockDate   DateTime
+  identifiers StockIdentifier[]
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+
+model StockIdentifier {
+  id          Int        @id @default(autoincrement())
+  entry       StockEntry @relation(fields: [entryId], references: [id])
+  entryId     String
+  identifier  Int
+  comment     String
 }
