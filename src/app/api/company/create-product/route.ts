@@ -1,4 +1,4 @@
-import { createProduct } from '@/actions/product'
+import { createProduct } from '@/actions'
 import { NextResponse } from 'next/server'
 
 export async function POST(req: Request) {
