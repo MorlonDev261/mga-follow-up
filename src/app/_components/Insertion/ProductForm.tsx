@@ -44,6 +44,7 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
   const [newProducts, setNewProducts] = useState<string[]>([]);
   const [showAddProduct, setShowAddProduct] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isAddProductFocus, setIsAddProductFocus] = useState(false); // Déclaration de l'état pour savoir si le champ est focus
 
   // Fonction pour gérer la modification de la quantité
   const handleQtyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
