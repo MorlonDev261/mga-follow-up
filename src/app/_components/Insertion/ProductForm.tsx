@@ -40,7 +40,8 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
     qty: 0,
     identifiers: [],
   });
-
+  const [newProducts, setNewProducts] = useState<string[]>([]);
+  const [showAddProduct, setShowAddProduct] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleQtyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,6 +52,48 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
       identifiers: prev.identifiers.slice(0, qty),
     }));
   };
+
+  // fonctionnalité d’ajout produit
+const addNewProductField = () => {
+  setNewProducts(prev => [...prev, '']);
+};
+
+const updateNewProductName = (index: number, value: string) => {
+  setNewProducts(prev => {
+    const updated = [...prev];
+    updated[index] = value;
+    return updated;
+  });
+};
+
+const saveNewProduct = async (index: number) => {
+  const name = newProducts[index];
+  if (!name) return;
+
+  try {
+    const response = await fetch('/api/company/create-product', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, companyId: 'your-company-id' }),
+    });
+
+    if (!response.ok) throw new Error();
+    const data = await response.json();
+
+    setForm(prev => ({
+      ...prev,
+      idProduct: data.id,
+    }));
+
+    setNewProducts(prev => {
+      const updated = [...prev];
+      updated.splice(index, 1);
+      return updated;
+    });
+  } catch (err) {
+    alert("Erreur lors de l'ajout du produit.");
+  }
+};
 
   const handleProductSelect = (value: string) => {
     setForm(prev => ({ ...prev, idProduct: value }));
@@ -154,19 +197,48 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Sélectionnez le produit" />
             </SelectTrigger>
+            
             <SelectContent>
               <SelectGroup>
                 <SelectLabel className="flex justify-between items-center">
                   <span>Produits</span>
-                  <PlusIcon />
-                </SelectLabel>
-                <SelectItem value="apple">Apple</SelectItem>
-                <SelectItem value="banana">Banana</SelectItem>
-                <SelectItem value="blueberry">Blueberry</SelectItem>
-                <SelectItem value="grapes">Grapes</SelectItem>
-                <SelectItem value="pineapple">Pineapple</SelectItem>
-              </SelectGroup>
-            </SelectContent>
+                  <Button
+                    type="button"
+                    size="icon"
+                    variant="ghost"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      setShowAddProduct(true);
+                      addNewProductField();
+                    }}
+                   >
+                     <PlusIcon className="w-4 h-4" />
+                   </Button>
+                 </SelectLabel>
+
+                 <div className="space-y-1">
+                   {['apple', 'banana', 'blueberry', 'grapes', 'pineapple'].map((prod) => (
+                     <SelectItem key={prod} value={prod}>{prod}</SelectItem>
+                   ))}
+
+                   {showAddProduct && newProducts.map((name, index) => (
+                     <div key={index} className="flex gap-1 items-center px-2 py-1">
+                       <Input
+                         placeholder="Nouveau produit"
+                         value={name}
+                         onChange={(e) => updateNewProductName(index, e.target.value)}
+                         className="flex-1"
+                       />
+                       <Button type="button" size="sm" onClick={() => saveNewProduct(index)}>
+                         Ajouter
+                       </Button>
+                      </div>
+                    ))}
+                  </div>
+               </SelectGroup>
+             </SelectContent>
+           
           </Select>
         </div>
         <div>
