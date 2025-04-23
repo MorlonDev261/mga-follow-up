@@ -40,10 +40,12 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
     qty: 0,
     identifiers: [],
   });
+
   const [newProducts, setNewProducts] = useState<string[]>([]);
   const [showAddProduct, setShowAddProduct] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  // Fonction pour gérer la modification de la quantité
   const handleQtyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const qty = Number(e.target.value);
     setForm(prev => ({
@@ -53,52 +55,52 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
     }));
   };
 
-  // fonctionnalité d’ajout produit
-const addNewProductField = () => {
-  setNewProducts(prev => [...prev, '']);
-};
+  // Fonction d’ajout de produit
+  const addNewProductField = () => {
+    setNewProducts(prev => [...prev, '']);
+  };
 
-const updateNewProductName = (index: number, value: string) => {
-  setNewProducts(prev => {
-    const updated = [...prev];
-    updated[index] = value;
-    return updated;
-  });
-};
-
-const saveNewProduct = async (index: number) => {
-  const name = newProducts[index];
-  if (!name) return;
-
-  try {
-    const response = await fetch('/api/company/create-product', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, companyId: 'your-company-id' }),
-    });
-
-    if (!response.ok) throw new Error();
-    const data = await response.json();
-
-    setForm(prev => ({
-      ...prev,
-      idProduct: data.id,
-    }));
-
+  // Mise à jour du nom du produit ajouté
+  const updateNewProductName = (index: number, value: string) => {
     setNewProducts(prev => {
       const updated = [...prev];
-      updated.splice(index, 1);
+      updated[index] = value;
       return updated;
     });
-  } catch (err) {
-    alert("Erreur lors de l'ajout du produit.");
-  }
-};
+  };
 
+  // Sauvegarde d’un nouveau produit
+  const saveNewProduct = async (index: number) => {
+    const name = newProducts[index];
+    if (!name) return;
+
+    try {
+      const response = await fetch('/api/company/create-product', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, companyId: 'your-company-id' }), // Dynamise `companyId` selon l'entreprise de l'utilisateur
+      });
+
+      if (!response.ok) throw new Error();
+      const data = await response.json();
+
+      setForm(prev => ({
+        ...prev,
+        idProduct: data.id,
+      }));
+
+      setNewProducts(prev => prev.filter((_, idx) => idx !== index)); // Utilisation de `filter` pour plus de sécurité
+    } catch (err) {
+      alert("Erreur lors de l'ajout du produit.");
+    }
+  };
+
+  // Sélection d’un produit existant
   const handleProductSelect = (value: string) => {
     setForm(prev => ({ ...prev, idProduct: value }));
   };
 
+  // Gestion de la modification des dates
   const handleDateChange = (key: 'arrival' | 'stockDate', date: Date | undefined) => {
     if (!date) return;
     setForm(prev => ({
@@ -107,6 +109,7 @@ const saveNewProduct = async (index: number) => {
     }));
   };
 
+  // Modification des identifiants
   const handleIdentifierChange = (index: number, field: 'id' | 'comment', value: string) => {
     setForm(prev => {
       const updated = [...prev.identifiers];
@@ -115,6 +118,7 @@ const saveNewProduct = async (index: number) => {
     });
   };
 
+  // Ajout d’un identifiant
   const addIdentifier = () => {
     if (form.identifiers.length < form.qty) {
       setForm(prev => ({
@@ -124,6 +128,7 @@ const saveNewProduct = async (index: number) => {
     }
   };
 
+  // Suppression d’un identifiant
   const removeIdentifier = (index: number) => {
     setForm(prev => {
       const updated = [...prev.identifiers];
@@ -132,6 +137,7 @@ const saveNewProduct = async (index: number) => {
     });
   };
 
+  // Soumission du formulaire
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (form.identifiers.length !== form.qty) {
@@ -197,7 +203,6 @@ const saveNewProduct = async (index: number) => {
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Sélectionnez le produit" />
             </SelectTrigger>
-            
             <SelectContent>
               <SelectGroup>
                 <SelectLabel className="flex justify-between items-center">
@@ -238,7 +243,6 @@ const saveNewProduct = async (index: number) => {
                   </div>
                </SelectGroup>
              </SelectContent>
-           
           </Select>
         </div>
         <div>
@@ -271,8 +275,8 @@ const saveNewProduct = async (index: number) => {
                 return;
               }
               addIdentifier(); 
-            }
-          }>
+            }}
+          >
             <PlusIcon className="w-4 h-4 mr-1" /> Ajouter
           </Button>
         </div>
