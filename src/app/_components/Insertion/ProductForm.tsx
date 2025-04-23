@@ -117,7 +117,7 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="grid gap-4 py-2">
-      <div className="grid md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-2 md:gap-4">
         {['arrival', 'stockDate'].map((key) => (
           <div key={key}>
             <label className="block mb-1 text-sm font-medium">
@@ -156,7 +156,10 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectLabel>Fruits</SelectLabel>
+                <SelectLabel>
+                  <span>Listes des produits</span>
+                  <PlusIcon />
+                </SelectLabel>
                 <SelectItem value="apple">Apple</SelectItem>
                 <SelectItem value="banana">Banana</SelectItem>
                 <SelectItem value="blueberry">Blueberry</SelectItem>
