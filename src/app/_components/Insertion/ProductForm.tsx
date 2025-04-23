@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import * as React from 'react';
 import { format } from 'date-fns';
+import Select from "@components/ui/select";
 import { CalendarIcon, PlusIcon, Trash2 } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
@@ -200,7 +201,21 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
       <div className="grid grid-cols-3 md:grid-cols-4 gap-4 items-end">
         <div className="col-span-2 md:col-span-3">
           <label className="block mb-1 text-sm font-medium">Nom du produit</label>
-          <Select value={form.idProduct} onValueChange={handleProductSelect}>
+          
+          <Combobox
+            frameworks={[
+              { value: "next.js", label: "Next.js" },
+              { value: "sveltekit", label: "SvelteKit" },
+              { value: "nuxt.js", label: "Nuxt.js" },
+              { value: "remix", label: "Remix" },
+              { value: "astro", label: "Astro" },
+            ]}
+            showSearch={true}  // Affiche la barre de recherche
+            closeOnSelect={false}  // Laisse le sélecteur ouvert après la sélection
+          />
+
+      
+          <Select className="hidden" value={form.idProduct} onValueChange={handleProductSelect}>
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Sélectionnez le produit" />
             </SelectTrigger>
