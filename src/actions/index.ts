@@ -203,3 +203,28 @@ export async function createCustomerRelation(data: CustomerRelationInput) {
   if (!parsed.success) throw new Error("Invalid customer relation data")
   return db.customerRelation.create({ data: parsed.data })
 }
+
+// --- Product ---
+export async function createProduct(data: {
+  name: string
+  companyId: string
+}) {
+  const { name, companyId } = data
+
+  if (!name || !companyId) {
+    throw new Error('Nom du produit et companyId requis.')
+  }
+
+  try {
+    const newProduct = await db.product.create({
+      data: {
+        name,
+        companyId,
+      },
+    })
+    return newProduct
+  } catch (error) {
+    console.error('Erreur lors de la création du produit:', error)
+    throw new Error('Erreur serveur lors de la création du produit.')
+  }
+}
