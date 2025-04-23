@@ -44,6 +44,7 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
   const [newProducts, setNewProducts] = useState<string[]>([]);
   const [showAddProduct, setShowAddProduct] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isAddProductFocus, setIsAddProductFocus] = useState(false); // Ajout de l'état pour focus
 
   // Fonction pour gérer la modification de la quantité
   const handleQtyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -222,25 +223,30 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
                    </Button>
                  </SelectLabel>
 
-                 <div className="space-y-1">
-                   {['apple', 'banana', 'blueberry', 'grapes', 'pineapple'].map((prod) => (
-                     <SelectItem key={prod} value={prod}>{prod}</SelectItem>
-                   ))}
+                 {/* Si on veut ajouter un produit, masquons la liste */}
+                 {!showAddProduct && (
+                   <div className="space-y-1">
+                     {['apple', 'banana', 'blueberry', 'grapes', 'pineapple'].map((prod) => (
+                       <SelectItem key={prod} value={prod}>{prod}</SelectItem>
+                     ))}
+                   </div>
+                 )}
 
-                   {showAddProduct && newProducts.map((name, index) => (
-                     <div key={index} className="flex gap-1 items-center px-2 py-1">
-                       <Input
-                         placeholder="Nouveau produit"
-                         value={name}
-                         onChange={(e) => updateNewProductName(index, e.target.value)}
-                         className="flex-1"
-                       />
-                       <Button type="button" size="sm" onClick={() => saveNewProduct(index)}>
-                         Ajouter
-                       </Button>
-                      </div>
-                    ))}
-                  </div>
+                 {showAddProduct && newProducts.map((name, index) => (
+                   <div key={index} className="flex gap-1 items-center px-2 py-1">
+                     <Input
+                       placeholder="Nouveau produit"
+                       value={name}
+                       onChange={(e) => updateNewProductName(index, e.target.value)}
+                       className="flex-1"
+                       onFocus={() => setIsAddProductFocus(true)} // Lorsqu'on entre dans le champ d'ajout
+                       onBlur={() => setIsAddProductFocus(false)}  // Lorsqu'on quitte le champ d'ajout
+                     />
+                     <Button type="button" size="sm" onClick={() => saveNewProduct(index)}>
+                       Ajouter
+                     </Button>
+                   </div>
+                 ))}
                </SelectGroup>
              </SelectContent>
           </Select>
