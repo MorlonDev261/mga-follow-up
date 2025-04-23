@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import * as React from 'react';
 import { format } from 'date-fns';
 import { CalendarIcon, PlusIcon, Trash2 } from 'lucide-react';
@@ -44,7 +44,7 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
   const [newProducts, setNewProducts] = useState<string[]>([]);
   const [showAddProduct, setShowAddProduct] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [isAddProductFocus, setIsAddProductFocus] = useState(false); // Déclaration de l'état pour savoir si le champ est focus
+  const [isAddProductFocus, setIsAddProductFocus] = useState(false); // Ajout de l'état pour focus
 
   // Fonction pour gérer la modification de la quantité
   const handleQtyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -165,11 +165,6 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
     }
   };
 
-  // Fonction pour empêcher la fermeture du Select
-  const handleSelectClick = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Empêche la fermeture du Select
-  };
-
   return (
     <form onSubmit={handleSubmit} className="grid gap-4 py-2">
       <div className="grid grid-cols-2 gap-2 md:gap-4">
@@ -206,7 +201,7 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
         <div className="col-span-2 md:col-span-3">
           <label className="block mb-1 text-sm font-medium">Nom du produit</label>
           <Select value={form.idProduct} onValueChange={handleProductSelect}>
-            <SelectTrigger className="w-full" onClick={handleSelectClick}>
+            <SelectTrigger className="w-full">
               <SelectValue placeholder="Sélectionnez le produit" />
             </SelectTrigger>
             <SelectContent>
@@ -219,7 +214,7 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
                     variant="ghost"
                     onClick={(e) => {
                       e.preventDefault();
-                      e.stopPropagation();  // Empêche la fermeture du Select
+                      e.stopPropagation();
                       setShowAddProduct(true);
                       addNewProductField();
                     }}
