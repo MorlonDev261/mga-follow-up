@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import * as React from 'react';
 import { format } from 'date-fns';
-import Select from "@components/ui/select";
+import Combobox from "@components/ui/select";
 import { CalendarIcon, PlusIcon, Trash2 } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
