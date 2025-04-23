@@ -156,8 +156,8 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>
-                <SelectLabel>
-                  <span>Listes des produits</span>
+                <SelectLabel className="flex justify-between items-center">
+                  <span>Produits</span>
                   <PlusIcon />
                 </SelectLabel>
                 <SelectItem value="apple">Apple</SelectItem>
