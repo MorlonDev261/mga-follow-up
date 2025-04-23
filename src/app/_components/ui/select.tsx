@@ -24,7 +24,7 @@ interface ComboboxProps {
   closeOnSelect?: boolean
 }
 
-export function Combobox({
+export default function Combobox({
   frameworks,
   showSearch = true,
   closeOnSelect = true,
