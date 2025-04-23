@@ -215,7 +215,7 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
           />
 
       
-          <Select className="hidden" value={form.idProduct} onValueChange={handleProductSelect}>
+          <Select value={form.idProduct} onValueChange={handleProductSelect}>
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Sélectionnez le produit" />
             </SelectTrigger>
