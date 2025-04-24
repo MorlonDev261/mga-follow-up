@@ -153,7 +153,8 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
               { value: "remix", label: "Remix" },
               { value: "astro", label: "Astro" },
             ]}
-            setForm={setForm}
+            form
+            setForm
             showSearch={true}  // Affiche la barre de recherche
             closeOnSelect={false}  // Laisse le sélecteur ouvert après la sélection
           />
