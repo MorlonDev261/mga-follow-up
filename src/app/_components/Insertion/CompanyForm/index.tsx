@@ -55,8 +55,8 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
         const updatedCompany = await updateCompany(initialData.id, company);
         router.push(`/companies/${updatedCompany.id}`);
       }
-    } catch (err) {
-      setError(err.message || "Une erreur est survenue lors de l'opération.");
+    } catch () {
+      setError("Une erreur est survenue lors de l'opération.");
       console.error("Erreur lors de la soumission", err);
     } finally {
       setLoading(false);
