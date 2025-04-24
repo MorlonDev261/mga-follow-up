@@ -68,7 +68,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
         const updatedCompany = await updateCompany(initialData.id, company);
         router.push(`/companies/${updatedCompany.id}`);
       }
-    } catch (err: any) {
+    } catch (err) {
       setError(err.message || "Une erreur est survenue lors de l'opération.");
       console.error("Erreur lors de la soumission", err);
     } finally {
@@ -88,7 +88,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
       {error && <p style={{ color: "red" }}>{error}</p>}
 
       <div>
-        <label htmlFor="name">Nom de l'entreprise :</label>
+        <label htmlFor="name">Nom de l&apos;entreprise :</label>
         <input
           type="text"
           id="name"
@@ -136,8 +136,8 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
         {loading
           ? "En cours..."
           : mode === "create"
-          ? "Créer l'entreprise"
-          : "Mettre à jour l'entreprise"}
+          ? "Créer l&apos;entreprise"
+          : "Mettre à jour l&apos;entreprise"}
       </button>
     </form>
   );
