@@ -38,6 +38,7 @@ interface ProductFormData {
 
 interface ComboboxProps {
   frameworks: { value: string; label: string }[]
+  form: React.Dispatch<React.SetStateAction<ProductFormData>>
   setForm: React.Dispatch<React.SetStateAction<ProductFormData>>
   showSearch?: boolean
   closeOnSelect?: boolean
@@ -45,6 +46,7 @@ interface ComboboxProps {
 
 export default function Combobox({
   frameworks,
+  form,
   setForm,
   showSearch = true,
   closeOnSelect = true,
