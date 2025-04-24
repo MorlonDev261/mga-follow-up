@@ -30,6 +30,7 @@ import { Input } from '@/components/ui/input'
 
 interface ComboboxProps {
   frameworks: { value: string; label: string }[]
+  setForm: React.Dispatch<React.SetStateAction<ProductFormData>>
   showSearch?: boolean
   closeOnSelect?: boolean
 }
