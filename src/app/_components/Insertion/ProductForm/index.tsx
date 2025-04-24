@@ -146,13 +146,7 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
           <label className="block mb-1 text-sm font-medium">Nom du produit</label>
           
           <Combobox
-            frameworks={[
-              { value: "next.js", label: "Next.js" },
-              { value: "sveltekit", label: "SvelteKit" },
-              { value: "nuxt.js", label: "Nuxt.js" },
-              { value: "remix", label: "Remix" },
-              { value: "astro", label: "Astro" },
-            ]}
+            companyId="136-er"
             form={form}
             setForm={setForm}
             showSearch={true}  // Affiche la barre de recherche
