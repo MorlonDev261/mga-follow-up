@@ -154,7 +154,7 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
               { value: "astro", label: "Astro" },
             ]}
             form={form}
-            setForm
+            setForm={setForm}
             showSearch={true}  // Affiche la barre de recherche
             closeOnSelect={false}  // Laisse le sélecteur ouvert après la sélection
           />
