@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Check, ChevronsUpDown, PlusIcon } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import * as React from "react";
+import { Check, ChevronsUpDown, PlusIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -11,22 +11,13 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue
-} from '@/components/ui/select'
+} from "@/components/ui/command";
+import { Input } from "@/components/ui/input";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
-import { Input } from '@/components/ui/input'
+} from "@/components/ui/popover";
 
 interface ProductFormData {
   arrival: number;
@@ -37,76 +28,88 @@ interface ProductFormData {
 }
 
 interface ComboboxProps {
-  frameworks: { value: string; label: string }[]
-  form: ProductFormData
-  setForm: React.Dispatch<React.SetStateAction<ProductFormData>>
-  showSearch?: boolean
-  closeOnSelect?: boolean
+  form: ProductFormData;
+  setForm: React.Dispatch<React.SetStateAction<ProductFormData>>;
+  companyId: string;
+  showSearch?: boolean;
+  closeOnSelect?: boolean;
 }
 
 export default function Combobox({
-  frameworks,
   form,
   setForm,
+  companyId,
   showSearch = true,
   closeOnSelect = true,
 }: ComboboxProps) {
-  const [open, setOpen] = React.useState(false)
-  const [value, setValue] = React.useState("")
-  const [newProducts, setNewProducts] = React.useState<string[]>([])
-  const [showAddProduct, setShowAddProduct] = React.useState(false)
-  const [isAddProductFocus, setIsAddProductFocus] = React.useState(false)
-  
-  const handleSelect = (currentValue: string) => {
-    setValue(currentValue === value ? "" : currentValue)
-    if (closeOnSelect) {
-      setOpen(false)
-    }
-  }
+  const [open, setOpen] = React.useState(false);
+  const [value, setValue] = React.useState(form.idProduct || "");
+  const [products, setProducts] = React.useState<{ id: string; name: string }[]>([]);
+  const [loading, setLoading] = React.useState(true);
+  const [newProducts, setNewProducts] = React.useState<string[]>([]);
+  const [showAddProduct, setShowAddProduct] = React.useState(false);
 
-  // Fonction d’ajout de produit
-  const addNewProductField = () => {
-    setNewProducts(prev => [...prev, '']);
+  React.useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch(`/api/company/${companyId}/products`);
+        const data = await res.json();
+        setProducts(data);
+      } catch (err) {
+        console.error("Erreur lors du chargement des produits");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, [companyId]);
+
+  React.useEffect(() => {
+    setValue(form.idProduct || "");
+  }, [form.idProduct]);
+
+  const handleSelect = (id: string) => {
+    const selected = id === value ? "" : id;
+    setValue(selected);
+    setForm((prev) => ({ ...prev, idProduct: selected }));
+    if (closeOnSelect) setOpen(false);
   };
 
-  // Mise à jour du nom du produit ajouté
-  const updateNewProductName = (index: number, value: string) => {
-    setNewProducts(prev => {
+  const addNewProductField = () => {
+    setShowAddProduct(true);
+    setNewProducts((prev) => [...prev, ""]);
+  };
+
+  const updateNewProductName = (index: number, newName: string) => {
+    setNewProducts((prev) => {
       const updated = [...prev];
-      updated[index] = value;
+      updated[index] = newName;
       return updated;
     });
   };
 
-  // Sauvegarde d’un nouveau produit
   const saveNewProduct = async (index: number) => {
     const name = newProducts[index];
     if (!name) return;
 
     try {
-      const response = await fetch('/api/company/create-product', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, companyId: 'your-company-id' }), // Dynamise `companyId` selon l'entreprise de l'utilisateur
+      const response = await fetch("/api/company/create-product", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, companyId }),
       });
 
       if (!response.ok) throw new Error();
       const data = await response.json();
 
-      setForm(prev => ({
-        ...prev,
-        idProduct: data.id,
-      }));
-
-      setNewProducts(prev => prev.filter((_, idx) => idx !== index)); // Utilisation de `filter` pour plus de sécurité
+      setForm((prev) => ({ ...prev, idProduct: data.id }));
+      setProducts((prev) => [...prev, { id: data.id, name: data.name }]);
+      setNewProducts((prev) => prev.filter((_, i) => i !== index));
+      setShowAddProduct(false);
     } catch (err) {
       alert("Erreur lors de l'ajout du produit.");
     }
-  };
-
-  // Sélection d’un produit existant
-  const handleProductSelect = (value: string) => {
-    setForm(prev => ({ ...prev, idProduct: value }));
   };
 
   return (
@@ -119,88 +122,75 @@ export default function Combobox({
           className="w-[200px] justify-between"
         >
           {value
-            ? frameworks.find((framework) => framework.value === value)?.label
-            : "Select framework..."}
+            ? products.find((p) => p.id === value)?.name
+            : loading
+            ? "Chargement..."
+            : "Sélectionner un produit..."}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
+
       <PopoverContent className="w-[200px] p-0">
         <Command>
-          {showSearch && <CommandInput placeholder="Search framework..." />}
+          <div className="flex items-center justify-between px-2 pt-2 pb-1">
+            <span className="text-sm font-medium">Produits</span>
+            <Button
+              type="button"
+              size="icon"
+              variant="ghost"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                addNewProductField();
+              }}
+            >
+              <PlusIcon className="w-4 h-4" />
+            </Button>
+          </div>
+
+          {showSearch && <CommandInput placeholder="Rechercher un produit..." />}
           <CommandList>
-            <CommandEmpty>No framework found.</CommandEmpty>
+            <CommandEmpty>Aucun produit trouvé.</CommandEmpty>
             <CommandGroup>
-              {frameworks.map((framework) => (
-                <CommandItem
-                  key={framework.value}
-                  value={framework.value}
-                  onSelect={() => handleSelect(framework.value)}
-                >
-                  <Check
-                    className={cn(
-                      "mr-2 h-4 w-4",
-                      value === framework.value ? "opacity-100" : "opacity-0"
-                    )}
-                  />
-                  {framework.label}
-                </CommandItem>
-              ))}
+              {!showAddProduct &&
+                products.map((product) => (
+                  <CommandItem
+                    key={product.id}
+                    value={product.id}
+                    onSelect={() => handleSelect(product.id)}
+                  >
+                    <Check
+                      className={cn(
+                        "mr-2 h-4 w-4",
+                        value === product.id ? "opacity-100" : "opacity-0"
+                      )}
+                    />
+                    {product.name}
+                  </CommandItem>
+                ))}
+
+              {showAddProduct &&
+                newProducts.map((name, index) => (
+                  <div key={index} className="flex gap-1 items-center px-2 py-1">
+                    <Input
+                      placeholder="Nouveau produit"
+                      value={name}
+                      onChange={(e) => updateNewProductName(index, e.target.value)}
+                      className="flex-1"
+                    />
+                    <Button
+                      type="button"
+                      size="sm"
+                      onClick={() => saveNewProduct(index)}
+                    >
+                      Ajouter
+                    </Button>
+                  </div>
+                ))}
             </CommandGroup>
           </CommandList>
         </Command>
-
-        <Select value={form.idProduct} onValueChange={handleProductSelect}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Sélectionnez le produit" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel className="flex justify-between items-center">
-                  <span>Produits</span>
-                  <Button
-                    type="button"
-                    size="icon"
-                    variant="ghost"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      setShowAddProduct(true);
-                      addNewProductField();
-                    }}
-                   >
-                     <PlusIcon className="w-4 h-4" />
-                   </Button>
-                 </SelectLabel>
-
-                 {/* Si on veut ajouter un produit, masquons la liste */}
-                 {!showAddProduct && (
-                   <div className="space-y-1">
-                     {['apple', 'banana', 'blueberry', 'grapes', 'pineapple'].map((prod) => (
-                       <SelectItem key={prod} value={prod}>{prod}</SelectItem>
-                     ))}
-                   </div>
-                 )}
-
-                 {showAddProduct && newProducts.map((name, index) => (
-                   <div key={index} className="flex gap-1 items-center px-2 py-1">
-                     <Input
-                       placeholder="Nouveau produit"
-                       value={name}
-                       onChange={(e) => updateNewProductName(index, e.target.value)}
-                       className="flex-1"
-                       onFocus={() => setIsAddProductFocus(true)} // Lorsqu'on entre dans le champ d'ajout
-                       onBlur={() => setIsAddProductFocus(false)}  // Lorsqu'on quitte le champ d'ajout
-                     />
-                     <Button type="button" size="sm" onClick={() => saveNewProduct(index)}>
-                       Ajouter
-                     </Button>
-                   </div>
-                 ))}
-               </SelectGroup>
-             </SelectContent>
-          </Select>
-        
       </PopoverContent>
     </Popover>
-  )
+  );
 }
