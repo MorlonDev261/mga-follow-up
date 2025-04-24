@@ -228,3 +228,30 @@ export async function createProduct(data: {
     throw new Error('Erreur serveur lors de la création du produit.')
   }
 }
+
+export async function getProductsByCompany(companyId: string) {
+  if (!companyId) {
+    throw new Error("L'identifiant de l'entreprise est requis.");
+  }
+
+  try {
+    const products = await db.product.findMany({
+      where: { companyId },
+      include: {
+        entries: {
+          include: {
+            identifiers: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    return products;
+  } catch (error) {
+    console.error("Erreur lors de la récupération des produits:", error);
+    throw new Error("Erreur serveur lors de la récupération des produits.");
+  }
+}
