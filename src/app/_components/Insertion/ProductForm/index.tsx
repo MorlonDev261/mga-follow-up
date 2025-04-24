@@ -41,11 +41,8 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
     qty: 0,
     identifiers: [],
   });
-
-  const [newProducts, setNewProducts] = useState<string[]>([]);
-  const [showAddProduct, setShowAddProduct] = useState(false);
+  
   const [loading, setLoading] = useState(false);
-  const [isAddProductFocus, setIsAddProductFocus] = useState(false); // Ajout de l'état pour focus
 
   // Fonction pour gérer la modification de la quantité
   const handleQtyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,51 +52,6 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
       qty,
       identifiers: prev.identifiers.slice(0, qty),
     }));
-  };
-
-  // Fonction d’ajout de produit
-  const addNewProductField = () => {
-    setNewProducts(prev => [...prev, '']);
-  };
-
-  // Mise à jour du nom du produit ajouté
-  const updateNewProductName = (index: number, value: string) => {
-    setNewProducts(prev => {
-      const updated = [...prev];
-      updated[index] = value;
-      return updated;
-    });
-  };
-
-  // Sauvegarde d’un nouveau produit
-  const saveNewProduct = async (index: number) => {
-    const name = newProducts[index];
-    if (!name) return;
-
-    try {
-      const response = await fetch('/api/company/create-product', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, companyId: 'your-company-id' }), // Dynamise `companyId` selon l'entreprise de l'utilisateur
-      });
-
-      if (!response.ok) throw new Error();
-      const data = await response.json();
-
-      setForm(prev => ({
-        ...prev,
-        idProduct: data.id,
-      }));
-
-      setNewProducts(prev => prev.filter((_, idx) => idx !== index)); // Utilisation de `filter` pour plus de sécurité
-    } catch (err) {
-      alert("Erreur lors de l'ajout du produit.");
-    }
-  };
-
-  // Sélection d’un produit existant
-  const handleProductSelect = (value: string) => {
-    setForm(prev => ({ ...prev, idProduct: value }));
   };
 
   // Gestion de la modification des dates
@@ -215,56 +167,7 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
           />
 
       
-          <Select value={form.idProduct} onValueChange={handleProductSelect}>
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Sélectionnez le produit" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel className="flex justify-between items-center">
-                  <span>Produits</span>
-                  <Button
-                    type="button"
-                    size="icon"
-                    variant="ghost"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                      setShowAddProduct(true);
-                      addNewProductField();
-                    }}
-                   >
-                     <PlusIcon className="w-4 h-4" />
-                   </Button>
-                 </SelectLabel>
-
-                 {/* Si on veut ajouter un produit, masquons la liste */}
-                 {!showAddProduct && (
-                   <div className="space-y-1">
-                     {['apple', 'banana', 'blueberry', 'grapes', 'pineapple'].map((prod) => (
-                       <SelectItem key={prod} value={prod}>{prod}</SelectItem>
-                     ))}
-                   </div>
-                 )}
-
-                 {showAddProduct && newProducts.map((name, index) => (
-                   <div key={index} className="flex gap-1 items-center px-2 py-1">
-                     <Input
-                       placeholder="Nouveau produit"
-                       value={name}
-                       onChange={(e) => updateNewProductName(index, e.target.value)}
-                       className="flex-1"
-                       onFocus={() => setIsAddProductFocus(true)} // Lorsqu'on entre dans le champ d'ajout
-                       onBlur={() => setIsAddProductFocus(false)}  // Lorsqu'on quitte le champ d'ajout
-                     />
-                     <Button type="button" size="sm" onClick={() => saveNewProduct(index)}>
-                       Ajouter
-                     </Button>
-                   </div>
-                 ))}
-               </SelectGroup>
-             </SelectContent>
-          </Select>
+          
         </div>
         <div>
           <label className="block mb-1 text-sm font-medium">Quantité</label>
