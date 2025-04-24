@@ -28,6 +28,14 @@ import {
 } from "@/components/ui/popover"
 import { Input } from '@/components/ui/input'
 
+interface ProductFormData {
+  arrival: number;
+  stockDate: number;
+  idProduct: string;
+  qty: number;
+  identifiers: { id: number; comment: string }[];
+}
+
 interface ComboboxProps {
   frameworks: { value: string; label: string }[]
   setForm: React.Dispatch<React.SetStateAction<ProductFormData>>
