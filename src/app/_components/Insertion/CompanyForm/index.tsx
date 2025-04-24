@@ -1,7 +1,7 @@
 import React, { useState, useEffect, FormEvent } from "react";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
-import { createCompany, updateCompany } from "@/lib/actions";
+import { createCompany, updateCompany } from "@/actions";
 
 // Définition du type entreprise (vous pouvez l'ajuster selon les champs de votre modèle)
 interface Company {
