@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { getProductsByCompany, createProduct } from "@/lib/actions";
 import { Check, ChevronsUpDown, PlusIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -52,8 +53,7 @@ export default function Combobox({
   React.useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch(`/api/company/${companyId}/products`);
-        const data = await res.json();
+        const data = await getProductsByCompany(companyId);
         setProducts(data);
       } catch (err) {
         console.error("Erreur lors du chargement des produits");
@@ -94,12 +94,7 @@ export default function Combobox({
     if (!name) return;
 
     try {
-      const response = await fetch("/api/company/create-product", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, companyId }),
-      });
-
+      const response = await createProduct({ name: name.trim(), companyId });
       if (!response.ok) throw new Error();
       const data = await response.json();
 
