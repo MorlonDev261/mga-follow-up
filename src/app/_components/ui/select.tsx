@@ -37,6 +37,7 @@ interface ComboboxProps {
 
 export default function Combobox({
   frameworks,
+  setForm,
   showSearch = true,
   closeOnSelect = true,
 }: ComboboxProps) {
