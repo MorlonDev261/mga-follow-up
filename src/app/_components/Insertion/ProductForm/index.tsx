@@ -28,31 +28,49 @@ interface ProductFormData {
 }
 
 interface ComboboxProps {
-  products: { value: string; label: string }[];
   form: ProductFormData;
   setForm: React.Dispatch<React.SetStateAction<ProductFormData>>;
+  companyId: string;
   showSearch?: boolean;
   closeOnSelect?: boolean;
 }
 
 export default function Combobox({
-  products,
   form,
   setForm,
+  companyId,
   showSearch = true,
   closeOnSelect = true,
 }: ComboboxProps) {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState(form.idProduct || "");
+  const [products, setProducts] = React.useState<{ id: string; name: string }[]>([]);
+  const [loading, setLoading] = React.useState(true);
   const [newProducts, setNewProducts] = React.useState<string[]>([]);
   const [showAddProduct, setShowAddProduct] = React.useState(false);
+
+  React.useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch(`/api/company/${companyId}/products`);
+        const data = await res.json();
+        setProducts(data);
+      } catch (err) {
+        console.error("Erreur lors du chargement des produits");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, [companyId]);
 
   React.useEffect(() => {
     setValue(form.idProduct || "");
   }, [form.idProduct]);
 
-  const handleSelect = (currentValue: string) => {
-    const selected = currentValue === value ? "" : currentValue;
+  const handleSelect = (id: string) => {
+    const selected = id === value ? "" : id;
     setValue(selected);
     setForm((prev) => ({ ...prev, idProduct: selected }));
     if (closeOnSelect) setOpen(false);
@@ -79,17 +97,14 @@ export default function Combobox({
       const response = await fetch("/api/company/create-product", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, companyId: "your-company-id" }),
+        body: JSON.stringify({ name, companyId }),
       });
 
       if (!response.ok) throw new Error();
       const data = await response.json();
 
-      setForm((prev) => ({
-        ...prev,
-        idProduct: data.id,
-      }));
-
+      setForm((prev) => ({ ...prev, idProduct: data.id }));
+      setProducts((prev) => [...prev, { id: data.id, name: data.name }]);
       setNewProducts((prev) => prev.filter((_, i) => i !== index));
       setShowAddProduct(false);
     } catch (err) {
@@ -107,14 +122,16 @@ export default function Combobox({
           className="w-[200px] justify-between"
         >
           {value
-            ? products.find((p) => p.value === value)?.label
+            ? products.find((p) => p.id === value)?.name
+            : loading
+            ? "Chargement..."
             : "Sélectionner un produit..."}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
 
       <PopoverContent className="w-[200px] p-0">
-        <Command value={value} onValueChange={handleSelect}>
+        <Command>
           <div className="flex items-center justify-between px-2 pt-2 pb-1">
             <span className="text-sm font-medium">Produits</span>
             <Button
@@ -138,17 +155,17 @@ export default function Combobox({
               {!showAddProduct &&
                 products.map((product) => (
                   <CommandItem
-                    key={product.value}
-                    value={product.value}
-                    onSelect={() => handleSelect(product.value)}
+                    key={product.id}
+                    value={product.id}
+                    onSelect={() => handleSelect(product.id)}
                   >
                     <Check
                       className={cn(
                         "mr-2 h-4 w-4",
-                        value === product.value ? "opacity-100" : "opacity-0"
+                        value === product.id ? "opacity-100" : "opacity-0"
                       )}
                     />
-                    {product.label}
+                    {product.name}
                   </CommandItem>
                 ))}
 
