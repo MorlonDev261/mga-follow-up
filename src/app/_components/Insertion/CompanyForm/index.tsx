@@ -1,6 +1,6 @@
 import React, { useState, useEffect, FormEvent } from "react";
 import { useRouter } from "next/router";
-import { auth } from "@/lib/auth";
+import { useSession } from "next-auth/react";
 import { createCompany, updateCompany } from "@/lib/actions";
 
 // Définition du type entreprise (vous pouvez l'ajuster selon les champs de votre modèle)
@@ -20,7 +20,7 @@ interface CompanyFormProps {
 
 const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
   const router = useRouter();
-  const [session, setSession] = useState<any>(null);
+  const session = useSession();
   const [company, setCompany] = useState<Company>({
     name: initialData?.name || "",
     nif: initialData?.nif || "",
@@ -29,19 +29,6 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  // Récupère la session utilisateur dès le montage du composant
-  useEffect(() => {
-    const fetchSession = async () => {
-      try {
-        const sessionData = await auth();
-        setSession(sessionData);
-      } catch (err) {
-        setError("Vous devez être connecté pour accéder à ce contenu.");
-      }
-    };
-    fetchSession();
-  }, []);
 
   // Gestion des changements dans le formulaire
   const handleChange = (
