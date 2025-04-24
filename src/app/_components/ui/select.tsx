@@ -41,8 +41,8 @@ export default function Combobox({
 }: ComboboxProps) {
   const [open, setOpen] = React.useState(false)
   const [value, setValue] = React.useState("")
-  const [isAddProductFocus, setIsAddProductFocus] = useState(false)
-  const [newProducts, setNewProducts] = useState<string[]>([]);
+  const [isAddProductFocus, setIsAddProductFocus] = React.useState(false)
+  const [newProducts, setNewProducts] = React.useState<string[]>([]);
   
   const handleSelect = (currentValue: string) => {
     setValue(currentValue === value ? "" : currentValue)
