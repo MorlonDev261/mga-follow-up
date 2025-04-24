@@ -94,9 +94,7 @@ export default function Combobox({
     if (!name) return;
 
     try {
-      const response = await createProduct({ name: name.trim(), companyId });
-      if (!response.ok) throw new Error();
-      const data = await response.json();
+      const data = await createProduct({ name: name.trim(), companyId });
 
       setForm((prev) => ({ ...prev, idProduct: data.id }));
       setProducts((prev) => [...prev, { id: data.id, name: data.name }]);
