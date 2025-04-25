@@ -33,7 +33,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
     nif: initialData?.nif || "",
     stat: initialData?.stat || "",
     desc: initialData?.desc || "",
-    logo: initialData.logo || null,
+    logo: initialData?.logo || null,
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
