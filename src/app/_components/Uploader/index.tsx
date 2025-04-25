@@ -18,26 +18,34 @@ export default function LogoUploader({ logo, setLogo }: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const file = e.target.files?.[0];
+  if (!file) return;
 
-    const formData = new FormData();
-    formData.append('file', file);
+  const formData = new FormData();
+  formData.append('file', file);
 
-    try {
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
-      });
+  try {
+    const res = await fetch('/api/upload', {
+      method: 'POST',
+      body: formData,
+    });
 
-      const data = await res.json();
-      setLogo({ url: data.secure_url, public_id: data.public_id });
-      console.log(data);
-    } catch (err) {
-      console.error(err);
-      alert("Erreur lors de l'upload du logo.");
+    if (!res.ok) {
+      throw new Error(`Erreur HTTP: ${res.status}`);
     }
-  };
+
+    const data = await res.json();
+    setLogo({ url: data.secure_url, public_id: data.public_id });
+
+    // Réinitialise l'input fichier
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  } catch (err) {
+    console.error(err);
+    alert("Erreur lors de l'upload du logo.");
+  }
+};
 
   return (
     <div className="grid gap-2">
