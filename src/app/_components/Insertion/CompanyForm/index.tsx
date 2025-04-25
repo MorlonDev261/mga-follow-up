@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, FormEvent } from "react";
+import React, { useState, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { createCompany, updateCompany } from "@/actions";
@@ -27,7 +27,8 @@ interface CompanyFormProps {
 
 const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
   const router = useRouter();
-  const session = useSession();
+  const { data: session, status } = useSession();
+
   const [company, setCompany] = useState<Company>({
     name: initialData?.name || "",
     nif: initialData?.nif || "",
@@ -35,55 +36,56 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
     desc: initialData?.desc || "",
     logo: initialData?.logo || null,
   });
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [logo, setLogo] = useState<Company["logo"]>(initialData?.logo || null);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setCompany({
-      ...company,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+    setCompany((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
+
     try {
-      const dataToSubmit = { ...company, logo };
       if (mode === "create") {
-        const newCompany = await createCompany(dataToSubmit);
+        const newCompany = await createCompany(company);
         router.push(`/companies/${newCompany.id}`);
       } else if (mode === "edit") {
-        if (!initialData?.id) throw new Error("L'identifiant de l'entreprise est manquant");
-        const updatedCompany = await updateCompany(initialData.id, dataToSubmit);
-        router.push(`/companies/${updatedCompany.id}`);
+        if (!initialData?.id) throw new Error("ID manquant pour la modification.");
+        const updated = await updateCompany(initialData.id, company);
+        router.push(`/companies/${updated.id}`);
       }
     } catch (err) {
-      setError("Une erreur est survenue lors de l'opération.");
-      console.error("Erreur lors de la soumission", err);
+      setError("Une erreur est survenue.");
+      console.error(err);
     } finally {
       setLoading(false);
     }
   };
 
-  if (!session) {
-    return <div>Chargement de la session...</div>;
-  }
+  if (status === "loading") return <div>Chargement de la session...</div>;
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>{mode === "create" ? "Créer une entreprise" : "Modifier l'entreprise"}</h2>
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <h2 className="text-xl font-semibold">
+        {mode === "create" ? "Créer une entreprise" : "Modifier l'entreprise"}
+      </h2>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <p className="text-red-500">{error}</p>}
 
-      <LogoUploader logo={logo} setLogo={setLogo} />
+      <LogoUploader
+        logo={company.logo}
+        setLogo={(newLogo) => setCompany((prev) => ({ ...prev, logo: newLogo }))}
+      />
 
       <div>
-        <label htmlFor="name">Nom de l&apos;entreprise :</label>
+        <label htmlFor="name">Nom :</label>
         <input
           type="text"
           id="name"
