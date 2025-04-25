@@ -39,7 +39,7 @@ export default function LogoUploader({ logo, setLogo }: Props) {
 
     // Réinitialise l'input fichier
     if (fileInputRef.current) {
-      fileInputRef.current.value = '';
+      (fileInputRef.current as HTMLInputElement).value = '';
     }
   } catch (err) {
     console.error(err);
@@ -51,7 +51,7 @@ export default function LogoUploader({ logo, setLogo }: Props) {
     <div className="grid gap-2">
       <label className="text-sm font-medium">Logo de l’entreprise</label>
 
-      {logo ? (
+      {logo.url !== "" ? (
         <div className="flex items-center gap-4">
           <Image
             src={logo.url}
