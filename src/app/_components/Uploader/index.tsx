@@ -11,7 +11,7 @@ type Logo = {
 
 type Props = {
   logo: Logo;
-  setLogo: (logo: Logo | null) => void;
+  setLogo: (logo: Logo) => void;
 };
 
 export default function LogoUploader({ logo, setLogo }: Props) {
