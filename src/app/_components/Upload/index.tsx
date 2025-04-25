@@ -14,7 +14,7 @@ type Props = {
   setLogo: (logo: Logo | null) => void;
 };
 
-export function LogoUploader({ logo, setLogo }: Props) {
+export default function LogoUploader({ logo, setLogo }: Props) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
