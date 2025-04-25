@@ -31,7 +31,7 @@ export default function LogoUploader({ logo, setLogo }: Props) {
       });
 
       const data = await res.json();
-      setLogo({ url: data.url, public_id: data.public_id });
+      setLogo({ url: data.secure_url, public_id: data.public_id });
     } catch (err) {
       console.error(err);
       alert("Erreur lors de l'upload du logo.");
