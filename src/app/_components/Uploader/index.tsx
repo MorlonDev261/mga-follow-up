@@ -10,7 +10,7 @@ type Logo = {
 };
 
 type Props = {
-  logo: Logo | null;
+  logo: Logo;
   setLogo: (logo: Logo | null) => void;
 };
 
