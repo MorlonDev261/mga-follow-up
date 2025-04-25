@@ -37,7 +37,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [logo, setLogo] = useState<Logo>(initialData?.logo || { url: "", public_id: "" });
+  const [logo, setLogo] = useState<Logo | null>(initialData?.logo || null);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
