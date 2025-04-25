@@ -17,7 +17,7 @@ interface Company {
   nif?: string;
   stat?: string;
   desc: string;
-  logo: Logo | null;
+  logo: Logo;
 }
 
 interface CompanyFormProps {
