@@ -1,20 +1,23 @@
 "use client";
 
 import React, { useState, useEffect, FormEvent } from "react";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { createCompany, updateCompany } from "@/actions";
+import { LogoUploader } from "@/components/LogoUploader";
 
-// Définition du type entreprise (vous pouvez l'ajuster selon les champs de votre modèle)
 interface Company {
   id?: string;
   name: string;
   nif?: string;
   stat?: string;
   desc: string;
+  logo?: {
+    url: string;
+    public_id: string;
+  } | null;
 }
 
-// Props du composant. En mode "edit", on attend un objet initialData pour préremplir le formulaire.
 interface CompanyFormProps {
   mode: "create" | "edit";
   initialData?: Company;
@@ -28,11 +31,12 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
     nif: initialData?.nif || "",
     stat: initialData?.stat || "",
     desc: initialData?.desc || "",
+    logo: initialData?.logo || null,
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [logo, setLogo] = useState<Company["logo"]>(initialData?.logo || null);
 
-  // Gestion des changements dans le formulaire
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -42,19 +46,18 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
     });
   };
 
-  // Gestion de la soumission du formulaire
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
     try {
+      const dataToSubmit = { ...company, logo };
       if (mode === "create") {
-        // Appel à la fonction de création d'entreprise
-        const newCompany = await createCompany(company);
-        router.push(`/companies/${newCompany.id}`); // Redirection vers la page de détails par exemple
+        const newCompany = await createCompany(dataToSubmit);
+        router.push(`/companies/${newCompany.id}`);
       } else if (mode === "edit") {
         if (!initialData?.id) throw new Error("L'identifiant de l'entreprise est manquant");
-        const updatedCompany = await updateCompany(initialData.id, company);
+        const updatedCompany = await updateCompany(initialData.id, dataToSubmit);
         router.push(`/companies/${updatedCompany.id}`);
       }
     } catch (err) {
@@ -65,7 +68,6 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
     }
   };
 
-  // Affichage d'un loader ou d'un message si la session n'est pas encore récupérée
   if (!session) {
     return <div>Chargement de la session...</div>;
   }
@@ -73,8 +75,10 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
   return (
     <form onSubmit={handleSubmit}>
       <h2>{mode === "create" ? "Créer une entreprise" : "Modifier l'entreprise"}</h2>
-      
+
       {error && <p style={{ color: "red" }}>{error}</p>}
+
+      <LogoUploader logo={logo} setLogo={setLogo} />
 
       <div>
         <label htmlFor="name">Nom de l&apos;entreprise :</label>
@@ -125,8 +129,8 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
         {loading
           ? "En cours..."
           : mode === "create"
-          ? "Créer l&apos;entreprise"
-          : "Mettre à jour l&apos;entreprise"}
+          ? "Créer l'entreprise"
+          : "Mettre à jour l'entreprise"}
       </button>
     </form>
   );
