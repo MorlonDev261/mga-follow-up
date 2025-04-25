@@ -4,7 +4,7 @@ import React, { useState, useEffect, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { createCompany, updateCompany } from "@/actions";
-import { LogoUploader } from "@components/Uploader";
+import LogoUploader from "@components/Uploader";
 
 interface Company {
   id?: string;
