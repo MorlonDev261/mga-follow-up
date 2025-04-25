@@ -130,6 +130,7 @@ model Company {
   nif        String?
   stat       String?
   desc       String
+  logo       Json?
   createdAt  DateTime      @default(now())
 
   users      CompanyUser[]
