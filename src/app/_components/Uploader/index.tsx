@@ -61,7 +61,7 @@ export default function LogoUploader({ logo, setLogo }: Props) {
             className="rounded border object-contain"
           />
           <div className="flex gap-2">
-            <Button type="button" variant="outline" onClick={() => setLogo(null)}>
+            <Button type="button" variant="outline" onClick={() => setLogo({ url: "", public_id: "" })}>
               Supprimer
             </Button>
             <Button type="button" variant="secondary" onClick={() => fileInputRef.current?.click()}>
