@@ -109,6 +109,7 @@ CREATE TABLE "Company" (
     "nif" TEXT,
     "stat" TEXT,
     "desc" TEXT NOT NULL,
+    "logo" JSONB,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Company_pkey" PRIMARY KEY ("id")
