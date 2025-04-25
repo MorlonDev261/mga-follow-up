@@ -6,16 +6,18 @@ import { useSession } from "next-auth/react";
 import { createCompany, updateCompany } from "@/actions";
 import LogoUploader from "@components/Uploader";
 
+type Logo = {
+  url: string;
+  public_id: string;
+};
+
 interface Company {
   id?: string;
   name: string;
   nif?: string;
   stat?: string;
   desc: string;
-  logo?: {
-    url: string;
-    public_id: string;
-  } | null;
+  logo?: Logo | null;
 }
 
 interface CompanyFormProps {
