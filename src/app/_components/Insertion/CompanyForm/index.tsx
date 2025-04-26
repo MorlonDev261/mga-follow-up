@@ -205,7 +205,6 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
               />
             </div>
           </div>
-        </div>
         
         <div className="pt-4 border-t border-gray-200 mt-6">
           <div className="flex justify-end">
@@ -238,6 +237,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
               )}
             </button>
           </div>
+        </div>
       </form>
     </div>
   );
