@@ -95,35 +95,39 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
           {/* Logo section (left side) */}
           <div className="w-full md:w-1/3">
             <div className="flex flex-col items-center">
-              <LogoUploader logo={logo} setLogo={setLogo}>
-                {({ isLoading }) => (
-                  <div className="relative">
-                    {logo.url ? (
-                      <Image
-                        src={logo.url}
-                        alt="Logo"
-                        width={90}
-                        height={80}
-                        className={`rounded border object-cover ${isLoading ? 'opacity-50' : ''}`}
-                      />
-                    ) : (
-                      <Image
-                        src="/assets/add-campany.png"
-                        alt="Ajouter un logo"
-                        width={90}
-                        height={80}
-                        className={`rounded border object-cover ${isLoading ? 'opacity-50' : ''}`}
-                      />
-                    )}
-                    {isLoading && (
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="w-8 h-8 border-t-2 border-b-2 border-green-500 rounded-full animate-spin"></div>
-                      </div>
-                    )}
-                  </div>
-                 )}
-               </LogoUploader>
-            </div>
+              <LogoUploader 
+                isPerso 
+                logo={logo} 
+                setLogo={setLogo}
+               >
+                 {(props) => (
+                   <div className="relative">
+                     {props.logo.url ? (
+                       <Image
+                         src={props.logo.url}
+                         alt="Logo"
+                         width={90}
+                         height={80}
+                         className={`rounded border object-cover ${props.isLoading ? 'opacity-50' : ''}`}
+                       />
+                      ) : (
+                        <Image
+                          src="/assets/add-campany.png"
+                          alt="Ajouter un logo"
+                          width={90}
+                          height={80}
+                          className={`rounded border object-cover ${props.isLoading ? 'opacity-50' : ''}`}
+                        />
+                      )}
+                      {props.isLoading && (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="w-8 h-8 border-t-2 border-b-2 border-green-500 rounded-full animate-spin"></div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </LogoUploader>
+             </div>
           </div>
           
           {/* Form fields (right side) */}
