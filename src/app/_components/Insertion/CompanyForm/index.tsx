@@ -234,7 +234,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
                   En cours...
                 </span>
               ) : (
-                mode === "create" ? "Créer l&apos;entreprise" : "Mettre à jour l&apos;entreprise"
+                mode === "create" ? "Créer l'entreprise" : "Mettre à jour l'entreprise"
               )}
             </button>
           </div>
