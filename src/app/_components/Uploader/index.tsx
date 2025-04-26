@@ -56,6 +56,8 @@ export default function LogoUploader({ logo, setLogo, children, isPerso }: Props
       {logo.url !== "" ? (
         <div className="flex flex-col items-center gap-1">
           {isPerso ? (
+            children
+          ) : (
             <Image
               src={logo.url}
               alt="Logo"
@@ -63,8 +65,6 @@ export default function LogoUploader({ logo, setLogo, children, isPerso }: Props
               height={80}
               className="rounded border object-contain"
             />
-          ) : (
-           children
           )}
           <div className="flex gap-2">
             <Button
