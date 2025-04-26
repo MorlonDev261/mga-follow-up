@@ -106,7 +106,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
               <LogoUploader 
                 isPerso 
                 logo={company.logo} 
-                setLogo={setCompany.logo}
+                setLogo={setCompany}
                >
                  {(props) => (
                    <div className="relative">
