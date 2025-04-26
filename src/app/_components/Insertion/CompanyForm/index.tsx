@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState, useEffect, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -39,6 +40,13 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
   const [error, setError] = useState<string | null>(null);
   const [logo, setLogo] = useState<Logo>(initialData?.logo || { url: "", public_id: "" });
 
+  useEffect(() => {
+    setCompany((prev) => ({
+      ...prev,
+      logo: logo,
+    }));
+  }, [logo]);
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -60,7 +68,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
       } else if (mode === "edit") {
         if (!initialData?.id) throw new Error("L'identifiant de l'entreprise est manquant");
         const updatedCompany = await updateCompany(initialData.id, dataToSubmit);
-        router.push(`/companies/${updatedCompany.id}`);
+        router.push("/");
       }
     } catch (err) {
       setError("Une erreur est survenue lors de l'opération.");
@@ -91,9 +99,9 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
       )}
       
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="flex flex-col md:flex-row gap-6">
+        <div className="flex gap:2 md:gap-6">
           {/* Logo section (left side) */}
-          <div className="w-full md:w-1/3">
+          <div className="w-1/3">
             <div className="flex flex-col items-center">
               <LogoUploader 
                 isPerso 
@@ -131,7 +139,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
           </div>
           
           {/* Form fields (right side) */}
-          <div className="w-full md:w-2/3">
+          <div className="w-2/3">
             <div className="mb-4">
               <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
                 Nom de l&apos;entreprise
@@ -147,6 +155,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
                 placeholder="Entrez le nom de l'entreprise"
               />
             </div>
+          </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -229,7 +238,6 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
               )}
             </button>
           </div>
-        </div>
       </form>
     </div>
   );
