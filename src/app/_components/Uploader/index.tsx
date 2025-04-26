@@ -35,7 +35,7 @@ export default function LogoUploader({ logo, setLogo }: Props) {
     }
 
     const data = await res.json();
-    setLogo({ url: "haheheg", public_id: "hfhfhhf" });
+    setLogo({ url: data.secure_url, public_id: data.public_id });
 
     // Réinitialise l'input fichier
     if (fileInputRef.current) {
