@@ -1,5 +1,4 @@
 'use client';
-
 import { useRef, ReactNode, useState } from 'react';
 import Image from 'next/image';
 
@@ -8,10 +7,17 @@ type Logo = {
   public_id: string;
 };
 
+// Interface pour les props passées à la fonction enfant
+interface RenderProps {
+  logo: Logo;
+  isLoading: boolean;
+  isDragging: boolean;
+}
+
 type Props = {
   logo: Logo;
   setLogo: (logo: Logo) => void;
-  children?: ReactNode;
+  children?: ReactNode | ((props: RenderProps) => ReactNode);
   isPerso?: boolean;
 };
 
@@ -108,7 +114,7 @@ export default function LogoUploader({ logo, setLogo, children, isPerso }: Props
 
   return (
     <div className="grid gap-2">
-      <label className="text-sm font-medium">Logo de l&apos;entreprise</label>
+      <label className="text-sm font-medium">Logo de l'entreprise</label>
       
       <div 
         onClick={handleClick}
