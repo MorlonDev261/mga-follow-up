@@ -62,6 +62,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
     setError(null);
     try {
       const dataToSubmit = { ...company, logo };
+      alert(dataToSubmit);
       if (mode === "create") {
         const newCompany = await createCompany(dataToSubmit);
         router.push(`/companies/${newCompany.id}`);
