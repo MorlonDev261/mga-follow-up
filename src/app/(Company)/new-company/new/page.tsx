@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import LogoUploader from '@/components/LogoUploader';
+import LogoUploader from '@components/Uploader';
 import { Button } from '@/components/ui/button';
 
 type Logo = {
