@@ -120,7 +120,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
                        />
                       ) : (
                         <Image
-                          src="/assets/add-campany.png"
+                          src="/assets/add-company.png"
                           alt="Ajouter un logo"
                           width={90}
                           height={80}
