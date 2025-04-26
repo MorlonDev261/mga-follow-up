@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import LogoUploader from '@components/Uploader';
 import { Button } from '@/components/ui/button';
 
@@ -12,6 +12,10 @@ type Logo = {
 export default function CompanyForm() {
   const [logo, setLogo] = useState<Logo>({ url: '', public_id: '' });
 
+  useEffect(() => {
+    alert(JSON.stringify(logo, null, 2));
+  }, [logo]);
+  
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
