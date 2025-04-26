@@ -114,7 +114,7 @@ export default function LogoUploader({ logo, setLogo, children, isPerso }: Props
 
   return (
     <div className="grid gap-2">
-      <label className="text-sm font-medium">Logo de l'entreprise</label>
+      <label className="text-sm font-medium">Logo de l&apos;entreprise</label>
       
       <div 
         onClick={handleClick}
