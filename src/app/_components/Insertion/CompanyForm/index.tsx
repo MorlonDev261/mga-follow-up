@@ -1,7 +1,7 @@
 "use client";
-
 import React, { useState, useEffect, FormEvent } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { createCompany, updateCompany } from "@/actions";
 import LogoUploader from "@components/Uploader";
@@ -71,70 +71,159 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
   };
 
   if (!session) {
-    return <div>Chargement de la session...</div>;
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-green-500"></div>
+      </div>
+    );
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>{mode === "create" ? "Créer une entreprise" : "Modifier l'entreprise"}</h2>
-
-      {error && <p style={{ color: "red" }}>{error}</p>}
-
-      <LogoUploader logo={logo} setLogo={setLogo} />
-
-      <div>
-        <label htmlFor="name">Nom de l&apos;entreprise :</label>
-        <input
-          type="text"
-          id="name"
-          name="name"
-          value={company.name}
-          onChange={handleChange}
-          required
-        />
-      </div>
-
-      <div>
-        <label htmlFor="nif">NIF :</label>
-        <input
-          type="text"
-          id="nif"
-          name="nif"
-          value={company.nif}
-          onChange={handleChange}
-        />
-      </div>
-
-      <div>
-        <label htmlFor="stat">STAT :</label>
-        <input
-          type="text"
-          id="stat"
-          name="stat"
-          value={company.stat}
-          onChange={handleChange}
-        />
-      </div>
-
-      <div>
-        <label htmlFor="desc">Description :</label>
-        <textarea
-          id="desc"
-          name="desc"
-          value={company.desc}
-          onChange={handleChange}
-          required
-        />
-      </div>
-
-      <button type="submit" disabled={loading}>
-        {loading
-          ? "En cours..."
-          : mode === "create"
-          ? "Créer l'entreprise"
-          : "Mettre à jour l'entreprise"}
-      </button>
-    </form>
+    <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
+      <h2 className="text-2xl font-bold mb-6 text-gray-800 pb-2 border-b border-gray-200">
+        {mode === "create" ? "Créer une entreprise" : "Modifier l'entreprise"}
+      </h2>
+      
+      {error && (
+        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md">
+          {error}
+        </div>
+      )}
+      
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="flex flex-col md:flex-row gap-6">
+          {/* Logo section (left side) */}
+          <div className="w-full md:w-1/3">
+            <div className="flex flex-col items-center">
+              <LogoUploader isPerso logo={logo} setLogo={setLogo}>
+                <div className="w-32 h-32 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden border-2 border-dashed border-gray-300 hover:border-green-500 transition-colors cursor-pointer">
+                  {logo.url ? (
+                    <Image
+                      src={logo.url}
+                      alt="Logo de l'entreprise"
+                      width={128}
+                      height={128}
+                      className="object-cover w-full h-full"
+                    />
+                  ) : (
+                    <Image
+                      src="/assets/add-campany.png"
+                      alt="Ajouter un logo"
+                      width={64}
+                      height={64}
+                      className="opacity-70"
+                    />
+                  )}
+                </div>
+                <p className="text-sm text-gray-500 mt-2 text-center">
+                  Cliquez pour {logo.url ? "modifier" : "ajouter"} le logo
+                </p>
+              </LogoUploader>
+            </div>
+          </div>
+          
+          {/* Form fields (right side) */}
+          <div className="w-full md:w-2/3">
+            <div className="mb-4">
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                Nom de l&apos;entreprise
+              </label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={company.name}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-2 border-2 border-green-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors"
+                placeholder="Entrez le nom de l'entreprise"
+              />
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="nif" className="block text-sm font-medium text-gray-700 mb-1">
+                  NIF
+                </label>
+                <input
+                  type="text"
+                  id="nif"
+                  name="nif"
+                  value={company.nif}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
+                  placeholder="Numéro d'identification fiscale"
+                />
+              </div>
+              
+              <div>
+                <label htmlFor="stat" className="block text-sm font-medium text-gray-700 mb-1">
+                  STAT
+                </label>
+                <input
+                  type="text"
+                  id="stat"
+                  name="stat"
+                  value={company.stat}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
+                  placeholder="Numéro statistique"
+                />
+              </div>
+            </div>
+            
+            <div className="mt-4">
+              <label htmlFor="desc" className="block text-sm font-medium text-gray-700 mb-1">
+                Description
+              </label>
+              <textarea
+                id="desc"
+                name="desc"
+                value={company.desc}
+                onChange={handleChange}
+                required
+                rows={4}
+                className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors resize-none"
+                placeholder="Décrivez l'entreprise en quelques mots..."
+              />
+            </div>
+          </div>
+        </div>
+        
+        <div className="pt-4 border-t border-gray-200 mt-6">
+          <div className="flex justify-end">
+            <button
+              type="button"
+              onClick={() => router.back()}
+              className="px-5 py-2 mr-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+            >
+              Annuler
+            </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className={`px-5 py-2 rounded-lg text-white font-medium transition-colors ${
+                loading 
+                  ? "bg-gray-400 cursor-not-allowed" 
+                  : "bg-green-500 hover:bg-green-600 active:bg-green-700"
+              }`}
+            >
+              {loading ? (
+                <span className="flex items-center">
+                  <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  En cours...
+                </span>
+              ) : (
+                mode === "create" ? "Créer l'entreprise" : "Mettre à jour l'entreprise"
+              )}
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
   );
 };
 
