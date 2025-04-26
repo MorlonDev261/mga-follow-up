@@ -156,6 +156,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
               />
             </div>
           </div>
+        </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -204,7 +205,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
                 placeholder="Décrivez l'entreprise en quelques mots..."
               />
             </div>
-          </div>
+          
         
         <div className="pt-4 border-t border-gray-200 mt-6">
           <div className="flex justify-end">
