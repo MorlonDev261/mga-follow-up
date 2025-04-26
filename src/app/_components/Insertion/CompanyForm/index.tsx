@@ -81,7 +81,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
       <h2 className="text-2xl font-bold mb-6 text-gray-800 pb-2 border-b border-gray-200">
-        {mode === "create" ? "Créer une entreprise" : "Modifier l'entreprise"}
+        {mode === "create" ? "Créer une entreprise" : "Modifier l&apos;entreprise"}
       </h2>
       
       {error && (
@@ -225,7 +225,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
                   En cours...
                 </span>
               ) : (
-                mode === "create" ? "Créer l'entreprise" : "Mettre à jour l'entreprise"
+                mode === "create" ? "Créer l&apos;entreprise" : "Mettre à jour l&apos;entreprise"
               )}
             </button>
           </div>
