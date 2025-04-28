@@ -30,7 +30,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
   const router = useRouter();
   const session = useSession();
   const [company, setCompany] = useState<Company>({
-    owner: session.data?.user?.id ?? "",
+    owner: initialData?.owner || session.data?.user?.id ?? "",
     name: initialData?.name || "",
     nif: initialData?.nif || "",
     stat: initialData?.stat || "",
