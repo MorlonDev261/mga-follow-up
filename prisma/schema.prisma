@@ -127,10 +127,12 @@ model Purchase {
 model Company {
   id         String        @id @default(cuid())
   name       String
+  contact    Int
   nif        String?
   stat       String?
   desc       String
   logo       Json?
+  owner      String
   createdAt  DateTime      @default(now())
 
   users      CompanyUser[]
