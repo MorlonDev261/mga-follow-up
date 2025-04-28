@@ -33,6 +33,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
     name: initialData?.name || "",
     nif: initialData?.nif || "",
     stat: initialData?.stat || "",
+    contact: initialData?.contact || "",
     desc: initialData?.desc || "",
     logo: initialData?.logo || { url: "", public_id: "" },
   });
@@ -117,7 +118,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
                          alt="Logo"
                          width={90}
                          height={80}
-                         className={`rounded border object-cover ${props.isLoading ? 'opacity-50' : ''}`}
+                         className={`rounded w-full h-full border object-cover ${props.isLoading ? 'opacity-50' : ''}`}
                        />
                       ) : (
                         <Image
@@ -158,14 +159,14 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
             </div>
 
             <div className="mb-4">
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="contact" className="block text-sm font-medium text-gray-700 mb-1">
                 Contact Joignable
               </label>
               <input
                 type="text"
-                id="name"
-                name="name"
-                value={company.name}
+                id="contact"
+                name="contact"
+                value={company.contact}
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
