@@ -169,7 +169,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
-                placeholder="Entrez le nom de l'entreprise"
+                placeholder="Entrez le contact de l'entreprise"
               />
             </div>
           </div>
