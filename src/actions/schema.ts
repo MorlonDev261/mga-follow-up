@@ -23,6 +23,8 @@ export const createCompanySchema = z.object({
   nif: z.string().optional(),
   stat: z.string().optional(),
   desc: z.string().min(1),
+  owner: z.string().min(1),
+  contact: z.string().min(1),
 })
 
 export const updateCompanySchema = createCompanySchema.partial()
