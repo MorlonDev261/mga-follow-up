@@ -152,7 +152,23 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
                 value={company.name}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border-2 border-green-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors"
+                className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
+                placeholder="Entrez le nom de l'entreprise"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                Contact Joignable
+              </label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={company.name}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
                 placeholder="Entrez le nom de l'entreprise"
               />
             </div>
