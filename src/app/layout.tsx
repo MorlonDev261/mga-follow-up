@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ReactQueryProvider } from "@/components/react-query";
 import { ToastContainer } from "react-toastify";
+import { Toaster } from 'sonner';
 import "react-toastify/dist/ReactToastify.css";
 
 import SessionProvider from "@/components/SessionProvider";
@@ -85,6 +86,7 @@ export default async function RootLayout({
               <ToastManager>
                 <main className="min-h-screen">{children}</main>
 
+                <Toaster />
                 {/* Assistant flottant */}
                 <VirtualAssistant />
 
