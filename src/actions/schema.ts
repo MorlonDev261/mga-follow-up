@@ -19,6 +19,7 @@ export type UpdateUserInput = z.infer<typeof updateUserSchema>
 
 // --- COMPANY ---
 export const createCompanySchema = z.object({
+  id: z.string().optional(),
   name: z.string().min(1),
   nif: z.string().optional(),
   stat: z.string().optional(),
