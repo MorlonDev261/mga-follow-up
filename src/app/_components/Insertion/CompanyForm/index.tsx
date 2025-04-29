@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useSession } from "next-auth/react";
 import { createCompany, updateCompany } from "@/actions";
 import LogoUploader from "@components/Uploader";
+import { cn } from "@/lib/utils";
 
 type Logo = {
   url: string;
@@ -68,7 +69,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
     setError(null);
     try {
       const dataToSubmit = { ...company, logo };
-      alert(dataToSubmit);
+      alert(jsonStringfy(dataToSubmit));
       if (mode === "create") {
         const newCompany = await createCompany(dataToSubmit);
         router.push(`/companies/${newCompany.id}`);
@@ -94,8 +95,8 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
-      <h2 className="text-2xl font-bold mb-6 text-gray-800 pb-2 border-b border-gray-200">
+    <div className="max-w-4xl mx-auto p-6 rounded-lg shadow-lg">
+      <h2 className={cn("text-2xl font-bold mb-6 pb-2 border-b", mode === "create" ? "text-green-800 border-green-200" : "text-orange-800 border-green-200")}>
         {mode === "create" ? "Créer une entreprise" : "Modifier l&apos;entreprise"}
       </h2>
       
@@ -158,7 +159,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
                 value={company.name}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
+                className="w-full px-4 py-2 bg-transparent border-0 border-b border-gray-300 focus:border-green-500 hover:border-green-400 focus:outline-none focus:ring-0 transition-colors"
                 placeholder="Entrez le nom de l'entreprise"
               />
             </div>
@@ -174,7 +175,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
                 value={company.contact}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
+                className="w-full px-4 py-2 bg-transparent border-0 border-b border-gray-300 focus:border-green-500 hover:border-green-400 focus:outline-none focus:ring-0 transition-colors"
                 placeholder="Entrez le contact de l'entreprise"
               />
             </div>
@@ -190,7 +191,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
                 value={company.adress}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
+                className="w-full px-4 py-2 bg-transparent border-0 border-b border-gray-300 focus:border-green-500 hover:border-green-400 focus:outline-none focus:ring-0 transition-colors"
                 placeholder="Entrez l’adresse de l'entreprise"
               />
             </div>
