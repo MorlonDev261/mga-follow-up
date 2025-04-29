@@ -20,14 +20,18 @@ export type UpdateUserInput = z.infer<typeof updateUserSchema>
 // --- COMPANY ---
 export const createCompanySchema = z.object({
   id: z.string().optional(),
-  name: z.string().min(1),
+  name: z.string().min(1, "Le nom est requis"),
   nif: z.string().optional(),
   stat: z.string().optional(),
-  desc: z.string().min(1),
-  owner: z.string().min(1),
-  contact: z.string().min(1),
-  adress: z.string().min(1),
-})
+  desc: z.string().min(1, "La description est requise"),
+  owner: z.string().min(1, "Le propriétaire est requis"),
+  contact: z.string().min(1, "Le contact est requis"),
+  adress: z.string().min(1, "L'adresse est requise"),
+  logo: z.object({
+    url: z.string().min(1, "L'URL du logo est requise"),
+    public_id: z.string().min(1, "L'ID public du logo est requis")
+  }),
+});
 
 export const updateCompanySchema = createCompanySchema.partial()
 export type CreateCompanyInput = z.infer<typeof createCompanySchema>
