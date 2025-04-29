@@ -17,7 +17,7 @@ interface Company {
   name: string;
   nif?: string;
   stat?: string;
-  contact: string;
+  contact: number;
   desc: string;
   logo: Logo;
   owner: string;
