@@ -25,6 +25,7 @@ export const createCompanySchema = z.object({
   desc: z.string().min(1),
   owner: z.string().min(1),
   contact: z.string().min(1),
+  adress: z.string().min(1),
 })
 
 export const updateCompanySchema = createCompanySchema.partial()
