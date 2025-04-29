@@ -25,7 +25,12 @@ export const createCompanySchema = z.object({
   stat: z.string().optional(),
   desc: z.string().min(1, "La description est requise"),
   owner: z.string().min(1, "Le propriétaire est requis"),
-  contact: z.string().min(1, "Le contact est requis"),
+  contact: z
+  .string()
+  .regex(
+    /^(?:\+261|0)3[234789](?:\d{7}|\s?\d{2}\s?\d{2}\s?\d{3})$/,
+    "Numéro de téléphone invalide(032,033,034,037,038,039)"
+  ),
   adress: z.string().min(1, "L'adresse est requise"),
   logo: z.object({
     url: z.string().min(1, "L'URL du logo est requise"),
