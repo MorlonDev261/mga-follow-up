@@ -21,6 +21,7 @@ interface Company {
   desc: string;
   logo: Logo;
   owner: string;
+  adress: string;
 }
 
 interface CompanyFormProps {
@@ -38,6 +39,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
     stat: initialData?.stat || "",
     contact: initialData?.contact || "",
     desc: initialData?.desc || "",
+    adress: initialData?.adress || "",
     logo: initialData?.logo || { url: "", public_id: "" },
   });
   const [loading, setLoading] = useState(false);
@@ -174,6 +176,22 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
                 required
                 className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
                 placeholder="Entrez le contact de l'entreprise"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="adress" className="block text-sm font-medium text-gray-700 mb-1">
+                Adresse de l’entreprise
+              </label>
+              <input
+                type="text"
+                id="adress"
+                name="adress"
+                value={company.adress}
+                onChange={handleChange}
+                required
+                className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
+                placeholder="Entrez l’adresse de l'entreprise"
               />
             </div>
           </div>
