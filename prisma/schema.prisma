@@ -127,7 +127,7 @@ model Purchase {
 model Company {
   id         String        @id @default(cuid())
   name       String
-  contact    Int
+  contact    String
   nif        String?
   stat       String?
   desc       String
