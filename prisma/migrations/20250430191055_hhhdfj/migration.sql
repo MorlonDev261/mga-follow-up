@@ -106,10 +106,12 @@ CREATE TABLE "Purchase" (
 CREATE TABLE "Company" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
+    "contact" TEXT NOT NULL,
     "nif" TEXT,
     "stat" TEXT,
     "desc" TEXT NOT NULL,
     "logo" JSONB,
+    "owner" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "Company_pkey" PRIMARY KEY ("id")
