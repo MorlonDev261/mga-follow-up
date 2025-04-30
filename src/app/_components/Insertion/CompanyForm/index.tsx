@@ -149,7 +149,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
           {/* Form fields (right side) */}
           <div className="w-2/3">
             <div className="mb-4">
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="name" className="block text-sm font-medium text-gray-500 mb-1">
                 Nom de l&apos;entreprise
               </label>
               <input
@@ -165,7 +165,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
             </div>
 
             <div className="mb-4">
-              <label htmlFor="contact" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="contact" className="block text-sm font-medium text-gray-500 mb-1">
                 Contact Joignable
               </label>
               <input
@@ -181,7 +181,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
             </div>
 
             <div className="mb-4">
-              <label htmlFor="adress" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="adress" className="block text-sm font-medium text-gray-500 mb-1">
                 Adresse de l’entreprise
               </label>
               <input
@@ -200,7 +200,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="nif" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="nif" className="block text-sm font-medium text-gray-500 mb-1">
                   NIF
                 </label>
                 <input
@@ -209,13 +209,13 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
                   name="nif"
                   value={company.nif}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
+                  className="w-full px-4 py-2 bg-background border border-foreground rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
                   placeholder="Numéro d'identification fiscale"
                 />
               </div>
               
               <div>
-                <label htmlFor="stat" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="stat" className="block text-sm font-medium text-gray-500 mb-1">
                   STAT
                 </label>
                 <input
@@ -224,14 +224,14 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
                   name="stat"
                   value={company.stat}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
+                  className="w-full px-4 py-2 bg-background border border-foreground rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
                   placeholder="Numéro statistique"
                 />
               </div>
             </div>
             
             <div className="mt-4">
-              <label htmlFor="desc" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="desc" className="block text-sm font-medium text-gray-500 mb-1">
                 Description
               </label>
               <textarea
@@ -241,7 +241,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
                 onChange={handleChange}
                 required
                 rows={4}
-                className="w-full px-4 py-2 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors resize-none"
+                className="w-full px-4 py-2 bg-background border border-foreground rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors resize-none"
                 placeholder="Décrivez l'entreprise en quelques mots..."
               />
             </div>
