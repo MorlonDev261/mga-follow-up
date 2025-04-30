@@ -96,7 +96,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
 
   return (
     <div className="max-w-4xl mx-auto p-6 rounded-lg shadow-lg">
-      <h2 className={cn("text-2xl font-bold mb-6 pb-2 border-b", mode === "create" ? "text-green-800 border-green-200" : "text-orange-800 border-green-200")}>
+      <h2 className={cn("text-2xl font-bold mb-6 pb-2 border-b", mode === "create" ? "text-green-800 border-green-400" : "text-orange-800 border-orange-400")}>
         {mode === "create" ? "Créer une entreprise" : "Modifier l&apos;entreprise"}
       </h2>
       
@@ -159,7 +159,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
                 value={company.name}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 bg-transparent border-0 border-b border-gray-300 focus:border-green-500 hover:border-green-400 focus:outline-none focus:ring-0 transition-colors"
+                className="w-full p-2 bg-transparent border-0 border-b border-gray-300 focus:border-green-500 hover:border-green-400 focus:outline-none focus:ring-0 transition-colors"
                 placeholder="Entrez le nom de l'entreprise"
               />
             </div>
@@ -175,7 +175,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
                 value={company.contact}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 bg-transparent border-0 border-b border-gray-300 focus:border-green-500 hover:border-green-400 focus:outline-none focus:ring-0 transition-colors"
+                className="w-full p-2 bg-transparent border-0 border-b border-gray-300 focus:border-green-500 hover:border-green-400 focus:outline-none focus:ring-0 transition-colors"
                 placeholder="Entrez le contact de l'entreprise"
               />
             </div>
@@ -191,7 +191,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
                 value={company.adress}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 bg-transparent border-0 border-b border-gray-300 focus:border-green-500 hover:border-green-400 focus:outline-none focus:ring-0 transition-colors"
+                className="w-full p-2 bg-transparent border-0 border-b border-gray-300 focus:border-green-500 hover:border-green-400 focus:outline-none focus:ring-0 transition-colors"
                 placeholder="Entrez l’adresse de l'entreprise"
               />
             </div>
