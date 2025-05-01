@@ -40,7 +40,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
     stat: initialData?.stat || "",
     contact: initialData?.contact || "",
     desc: initialData?.desc || "",
-    address: initialData?.adress || "",
+    address: initialData?.address || "",
     logo: initialData?.logo || { url: "", public_id: "" },
   });
   const [loading, setLoading] = useState(false);
