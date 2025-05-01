@@ -31,7 +31,7 @@ export const createCompanySchema = z.object({
     /^(?:\+261|0)3[234789](?:\d{7}|\s?\d{2}\s?\d{2}\s?\d{3})$/,
     "Numéro de téléphone invalide(032,033,034,037,038,039)"
   ),
-  adress: z.string().min(1, "L'adresse est requise"),
+  address: z.string().min(1, "L'adresse est requise"),
   logo: z.object({
     url: z.string().min(1, "L'URL du logo est requise"),
     public_id: z.string().min(1, "L'ID public du logo est requis")
