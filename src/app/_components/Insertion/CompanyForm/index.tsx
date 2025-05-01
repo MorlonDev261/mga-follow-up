@@ -186,8 +186,8 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
               </label>
               <input
                 type="text"
-                id="adress"
-                name="adress"
+                id="address"
+                name="address"
                 value={company.address}
                 onChange={handleChange}
                 required
