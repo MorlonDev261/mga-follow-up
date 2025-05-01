@@ -22,7 +22,7 @@ interface Company {
   desc: string;
   logo: Logo;
   owner: string;
-  adress: string;
+  address: string;
 }
 
 interface CompanyFormProps {
@@ -40,7 +40,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
     stat: initialData?.stat || "",
     contact: initialData?.contact || "",
     desc: initialData?.desc || "",
-    adress: initialData?.adress || "",
+    address: initialData?.adress || "",
     logo: initialData?.logo || { url: "", public_id: "" },
   });
   const [loading, setLoading] = useState(false);
@@ -181,7 +181,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
             </div>
 
             <div className="mb-4">
-              <label htmlFor="adress" className="block text-sm font-medium text-gray-500 mb-1">
+              <label htmlFor="address" className="block text-sm font-medium text-gray-500 mb-1">
                 Adresse de l’entreprise
               </label>
               <input
