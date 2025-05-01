@@ -107,7 +107,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
       )}
       
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="flex gap:2 md:gap-6">
+        <div className="flex gap-2 md:gap-6">
           {/* Logo section (left side) */}
           <div className="w-1/3">
             <div className="flex flex-col items-center">
