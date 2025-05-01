@@ -188,7 +188,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
                 type="text"
                 id="adress"
                 name="adress"
-                value={company.adress}
+                value={company.address}
                 onChange={handleChange}
                 required
                 className="w-full p-2 bg-transparent border-0 border-b border-gray-300 focus:border-green-500 hover:border-green-400 focus:outline-none focus:ring-0 transition-colors"
