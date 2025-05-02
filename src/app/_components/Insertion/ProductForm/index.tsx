@@ -19,7 +19,7 @@ interface ProductFormProps {
 export interface ProductFormData {
   arrival: number;
   stockDate: number;
-  idProduct: string;
+  productId: string;
   qty: number;
   identifiers: { id: number; comment: string }[];
 }
@@ -28,7 +28,7 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
   const [form, setForm] = useState<ProductFormData>({
     arrival: Date.now(),
     stockDate: Date.now(),
-    idProduct: '',
+    productId: 'cma5mvy3i0000l504izi8zb2i',
     qty: 0,
     identifiers: [],
   });
