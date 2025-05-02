@@ -1,55 +1,11 @@
-// Supprime "use client"
-import Link from "next/link";
-import { cn } from "@/lib/utils";
-import { FaRegCheckCircle, FaRegCalendarAlt } from "react-icons/fa";
 import { listStocksByCompany } from "@/actions";
-import { headers } from "next/headers";
-
-type Stock = {
-  id: string;
-  name: string;
-  inStock?: number;
-  sales?: number;
-  value?: number;
-  color?: string;
-};
+import StockListClient from "./StockListClient";
 
 const StockList = async () => {
-  const searchParams = new URLSearchParams(headers().get("x-url")?.split("?")[1]);
-  const activeStockId = searchParams.get("stock");
-
   const companyId = "cma5mvy3i0000l504izi8zb2i";
   const stocks = await listStocksByCompany(companyId);
 
-  return (
-    <nav className="grid grid-cols-3 md:grid-cols-7 sm:grid-cols-5 gap-3 p-2 w-full">
-      {stocks.map((stock) => {
-        const isActive = stock.id === activeStockId;
-
-        return (
-          <Link
-            key={stock.id}
-            href={`?stock=${stock.id}`}
-            className={cn(
-              "flex h-20 flex-col items-center justify-center rounded shadow-md dark:shadow-none dark:bg-[#262a2e] p-2 relative",
-              "transition-all duration-300 transform hover:scale-105",
-              "hover:bg-gray-100 dark:hover:bg-gray-700",
-              stock.color || "bg-gray-200 dark:bg-gray-800 text-gray-600 dark:text-gray-300"
-            )}
-          >
-            {isActive && (
-              <div className="absolute bg-background p-1 rounded-full top-1 right-1 text-green-500">
-                <FaRegCheckCircle />
-              </div>
-            )}
-            <FaRegCalendarAlt />
-            <span className="text-xs">{stock.name}</span>
-            {stock.value !== undefined && <b className="text-xs">{stock.value.toLocaleString()} Ar</b>}
-          </Link>
-        );
-      })}
-    </nav>
-  );
+  return <StockListClient stocks={stocks} />;
 };
 
 export default StockList;
