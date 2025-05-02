@@ -146,7 +146,7 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
           <label className="block mb-1 text-sm font-medium">Nom du produit</label>
           
           <Combobox
-            companyId="13645e"
+            companyId="cma5mvy3i0000l504izi8zb2i"
             form={form}
             setForm={setForm}
             showSearch={true}  // Affiche la barre de recherche
