@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { FaPlus } from "react-icons/fa";
 import { FiClock } from "react-icons/fi";
@@ -205,9 +204,7 @@ export default function PendingContent() {
         </div>
     </div>
     
-      <Suspense>
         <StockList />
-      </Suspense>
       
       <div className="pt-2">
         {loading ? (
