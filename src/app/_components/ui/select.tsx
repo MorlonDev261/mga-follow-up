@@ -23,7 +23,7 @@ import {
 interface ProductFormData {
   arrival: number;
   stockDate: number;
-  idProduct: string;
+  productId: string;
   qty: number;
   identifiers: { id: number; comment: string }[];
 }
@@ -72,7 +72,7 @@ export default function Combobox({
   const handleSelect = (id: string) => {
     const selected = id === value ? "" : id;
     setValue(selected);
-    setForm((prev) => ({ ...prev, idProduct: selected }));
+    setForm((prev) => ({ ...prev, productId: selected }));
     if (closeOnSelect) setOpen(false);
   };
 
@@ -96,7 +96,7 @@ export default function Combobox({
     try {
       const data = await createProduct({ name: name.trim(), companyId });
 
-      setForm((prev) => ({ ...prev, idProduct: data.id }));
+      setForm((prev) => ({ ...prev, productId: data.id }));
       setProducts((prev) => [...prev, { id: data.id, name: data.name }]);
       setNewProducts((prev) => prev.filter((_, i) => i !== index));
       setShowAddProduct(false);
