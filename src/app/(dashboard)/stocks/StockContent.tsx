@@ -8,7 +8,6 @@ import { FiClock } from "react-icons/fi";
 import { MoreHorizontal } from "lucide-react";
 import moment from "moment";
 import StockList from "./StockList";
-import { listStocksByCompany } from "@/actions";
 import Statistique from "@components/Statistique";
 import TableStock from "@components/Table/Stock";
 import Counter from "@components/Counter";
@@ -34,25 +33,11 @@ type Payment = {
 
 type DataType = Payment & { Qte?: number; sum?: number };
 
-export default async function PendingContent() {
+export default function PendingContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const show = searchParams.get("show");
 
-  /**const stocks = [
-    { id: 'hzhe58', name: '24-03-25', value: 457900, sales: 3636 },
-    { id: 'jrfhz8', name: '01-02-25', value: 457900, sales: 846 },
-    { id: 'hzshr8', name: '24-01-25', value: 457900, sales: 5353 },
-    { id: 'ryhey6', name: '07-02-25', value: 7, sales: 35 },
-    { id: 'hry488', name: '10-02-25', value: 53, sales: 386 },
-    { id: 'hjfe58', name: '14-02-25', value: 7, sales: 5263 },
-    { id: 'hzjrj8', name: '06-03-25', value: 568, sales: 56 },
-    { id: 'hkrjra', name: '08-03-25', value: 567, sales: 56 },
-  ];**/
-
-  const companyId = "cma5mvy3i0000l504izi8zb2i";
-  const stocks = await listStocksByCompany(companyId);
-  
   const [rawData, setRawData] = React.useState<Payment[]>([]);
   const [loading, setLoading] = React.useState(true);
 
@@ -221,7 +206,7 @@ export default async function PendingContent() {
     </div>
     
       <Suspense>
-        <StockList stocks={stocks} />
+        <StockList />
       </Suspense>
       
       <div className="pt-2">
