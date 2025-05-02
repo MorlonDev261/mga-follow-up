@@ -14,7 +14,7 @@ type Stock = {
   color?: string;
 };
 
-const StockListClient = ({ stocks }: { stocks: Stock[] }) => {
+const StockList = ({ stocks }: { stocks: Stock[] }) => {
   const searchParams = useSearchParams();
   const activeStockId = searchParams.get("stock");
 
@@ -49,4 +49,4 @@ const StockListClient = ({ stocks }: { stocks: Stock[] }) => {
   );
 };
 
-export default StockListClient;
+export default StockList;
