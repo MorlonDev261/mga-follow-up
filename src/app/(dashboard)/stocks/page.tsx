@@ -1,10 +1,7 @@
-import { Suspense } from "react";
-import StockContent from "./StockContent";
+import StockList from "./StockList";
 
 export default function Page() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <StockContent />
-    </Suspense>
+    <StockList />
   );
 }
