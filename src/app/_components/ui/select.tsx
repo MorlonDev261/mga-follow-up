@@ -44,7 +44,7 @@ export default function Combobox({
   closeOnSelect = true,
 }: ComboboxProps) {
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState(form.idProduct || "");
+  const [value, setValue] = React.useState(form.productId || "");
   const [products, setProducts] = React.useState<{ id: string; name: string }[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [newProducts, setNewProducts] = React.useState<string[]>([]);
@@ -66,8 +66,8 @@ export default function Combobox({
   }, [companyId]);
 
   React.useEffect(() => {
-    setValue(form.idProduct || "");
-  }, [form.idProduct]);
+    setValue(form.productId || "");
+  }, [form.productId]);
 
   const handleSelect = (id: string) => {
     const selected = id === value ? "" : id;
