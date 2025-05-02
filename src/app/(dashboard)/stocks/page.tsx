@@ -1,7 +1,7 @@
-import StockList from "./StockList";
+import StockContent from "./StockContent";
 
 export default function Page() {
   return (
-    <StockList />
+    <StockContent />
   );
 }
