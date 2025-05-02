@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { FaPlus } from "react-icons/fa";
 import { FiClock } from "react-icons/fi";
@@ -180,6 +181,7 @@ export default function PendingContent() {
   return (
     <>
       <div className="px-2 transition-opacity">
+        <Suspense>
         <Balance 
           title={<><FiClock /> Pending Payment</>} 
           balance={loading ? "Loading..." : data.length > 0 ? <><Counter end={totalPending} duration={0.8} /> Ar.</> : "No pending payment added."}
@@ -193,24 +195,33 @@ export default function PendingContent() {
             </button>
           )}
         </Balance>
+        </Suspense>
 
           
         {/* Statistique Component */}
         <div className="text-white p-2">
           <h3 className="mb-4">Statistique de vente:</h3>
           <div className="w-full">
-            <Statistique type="bar" legende={false} />
+            <Suspense>
+              <Statistique type="bar" legende={false} />
+            </Suspense>
           </div>
         </div>
     </div>
     
-        <StockList />
+        <Suspense>
+          <StockList />
+        </Suspense>
       
       <div className="pt-2">
         {loading ? (
-          <TableStock Columns={Columns} data={data} loading={false} />
+          <Suspense>
+            <TableStock Columns={Columns} data={data} loading={false} />
+          </Suspense>
         ) : data.length > 0 ? (
-          <TableStock Columns={Columns} data={data} loading={false} />
+          <Suspense>
+            <TableStock Columns={Columns} data={data} loading={false} />
+          </Suspense>
         ) : (
           <div className="w-full h-[65vh] flex items-center justify-center">
             <div className="-mt-5 flex flex-col items-center">
