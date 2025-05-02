@@ -1,9 +1,12 @@
-"use client";
+"use client"
 
+import { Suspense } from "react";
 import StockContent from "./StockContent";
 
 export default function Page() {
   return (
-    <StockContent />
+    <Suspense>
+      <StockContent />
+    </Suspense>
   );
 }
