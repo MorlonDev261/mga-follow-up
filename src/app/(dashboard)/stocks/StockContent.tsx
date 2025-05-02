@@ -8,7 +8,7 @@ import { FiClock } from "react-icons/fi";
 import { MoreHorizontal } from "lucide-react";
 import moment from "moment";
 import StockList from "./StockList";
-import { listStocksByCompany } from "@/lib/actions";
+import { listStocksByCompany } from "@/actions";
 import Statistique from "@components/Statistique";
 import TableStock from "@components/Table/Stock";
 import Counter from "@components/Counter";
