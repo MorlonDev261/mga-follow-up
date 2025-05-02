@@ -209,9 +209,7 @@ export default function PendingContent() {
         </div>
     </div>
     
-        <Suspense>
           <StockList />
-        </Suspense>
       
       <div className="pt-2">
         {loading ? (
