@@ -259,32 +259,36 @@ export async function getProductsByCompany(companyId: string) {
   }
 }
 
-
-async function listStocksByCompany(companyId: string) {
+export async function listStocksByCompany(companyId: string) {
   const entries = await db.stockEntry.findMany({
-    // Filtrer par companyId via la relation produit → company
     where: {
       product: {
-        companyId: companyId
-      }
+        companyId: companyId,
+      },
     },
-    orderBy: { stockDate: 'asc' },
+    orderBy: {
+      stockDate: 'asc',
+    },
     select: {
-      id: true,
       qty: true,
       stockDate: true,
-      product: {
-        select: {
-          name: true
-        }
-      }
-    }
-  })
+    },
+  });
 
-  return entries.map(e => ({
-    id: e.id,
-    productName: e.product.name,
-    qty: e.qty,
-    date: moment(e.stockDate).format('DD-MM-YYYY')
-  }))
+  // Grouper par date (formatée)
+  const grouped = entries.reduce((acc, entry) => {
+    const date = moment(entry.stockDate).format('DD-MM-YYYY');
+    if (!acc[date]) acc[date] = 0;
+    acc[date] += entry.qty;
+    return acc;
+  }, {} as Record<string, number>);
+
+  // Transformer en tableau trié
+  return Object.entries(grouped)
+    .map(([date, totalQty]) => ({
+      id: date, // Utiliser la date comme ID unique
+      name: date,
+      value: totalQty,
+    }))
+    .sort((a, b) => moment(a.name, 'DD-MM-YYYY').toDate().getTime() - moment(b.name, 'DD-MM-YYYY').toDate().getTime());
 }
