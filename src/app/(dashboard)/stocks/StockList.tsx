@@ -1,11 +1,11 @@
-"use client";
-
+// Supprime "use client"
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { useSearchParams } from "next/navigation";
 import { FaRegCheckCircle, FaRegCalendarAlt } from "react-icons/fa";
+import { listStocksByCompany } from "@/actions";
+import { headers } from "next/headers";
 
-type StockProps = {
+type Stock = {
   id: string;
   name: string;
   inStock?: number;
@@ -14,11 +14,12 @@ type StockProps = {
   color?: string;
 };
 
-type StockListProps = { stocks: StockProps[] };
-
-const StockList = ({ stocks }: StockListProps) => {
-  const searchParams = useSearchParams();
+const StockList = async () => {
+  const searchParams = new URLSearchParams(headers().get("x-url")?.split("?")[1]);
   const activeStockId = searchParams.get("stock");
+
+  const companyId = "cma5mvy3i0000l504izi8zb2i";
+  const stocks = await listStocksByCompany(companyId);
 
   return (
     <nav className="grid grid-cols-3 md:grid-cols-7 sm:grid-cols-5 gap-3 p-2 w-full">
