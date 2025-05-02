@@ -206,7 +206,7 @@ export async function createCustomerRelation(data: CustomerRelationInput) {
   return db.customerRelation.create({ data: parsed.data })
 }
 
-// --- Product ---
+// --- Stocks & Product ---
 export async function createProduct(data: {
   name: string
   companyId: string
@@ -256,4 +256,34 @@ export async function getProductsByCompany(companyId: string) {
     console.error("Erreur lors de la récupération des produits:", error);
     throw new Error("Erreur serveur lors de la récupération des produits.");
   }
+}
+
+
+async function listStocksByCompany(companyId: string) {
+  const entries = await db.stockEntry.findMany({
+    // Filtrer par companyId via la relation produit → company
+    where: {
+      product: {
+        companyId: companyId
+      }
+    },
+    orderBy: { stockDate: 'asc' },
+    select: {
+      id: true,
+      qty: true,
+      stockDate: true,
+      product: {
+        select: {
+          name: true
+        }
+      }
+    }
+  })
+
+  return entries.map(e => ({
+    id: e.id,
+    productName: e.product.name,
+    qty: e.qty,
+    date: moment(e.stockDate).format('DD-MM-YYYY')
+  }))
 }
