@@ -31,9 +31,18 @@ type Payment = {
   price: number;
 };
 
+type Stock = {
+  id: string;
+  name: string;
+  inStock?: number;
+  sales?: number;
+  value?: number;
+  color?: string;
+};
+
 type DataType = Payment & { Qte?: number; sum?: number };
 
-export default function PendingContent() {
+export default function StockContent({ stocks }: { stocks: Stock[] }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const show = searchParams.get("show");
@@ -209,7 +218,7 @@ export default function PendingContent() {
         </div>
     </div>
     
-          <StockList />
+          <StockList stocks={stocks} />
       
       <div className="pt-2">
         {loading ? (
