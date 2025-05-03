@@ -5,37 +5,23 @@ export async function GET(
   request: NextRequest,
   { params }: { params: { companyId: string } }
 ) {
-  const { companyId } = params
-
-  // Vérification basique
-  if (!companyId) {
-    return NextResponse.json(
-      { message: 'companyId manquant dans l’URL' },
-      { status: 400 }
-    )
-  }
-
   try {
-    // Requête Prisma pour récupérer tous les produits de l’entreprise
-    const products = await db.product.findMany({
-      where: { companyId },
-      include: {
-        entries: {
-          include: {
-            identifiers: true,
-          },
-        },
-      },
-    })
+    const { companyId } = params
 
-    if (products.length === 0) {
+    if (!companyId) {
       return NextResponse.json(
-        { message: 'Aucun produit trouvé pour cette entreprise' },
-        { status: 404 }
+        { message: 'companyId manquant dans l’URL' },
+        { status: 400 }
       )
     }
 
-    return NextResponse.json(products)
+    const products = await db.product.findMany({
+      where: { companyId },
+      include: { entries: { include: { identifiers: true } } },
+    })
+
+    return NextResponse.json(products || [])
+    
   } catch (error) {
     return NextResponse.json(
       { message: 'Erreur serveur', error: error instanceof Error ? error.message : 'Unknown error' },
