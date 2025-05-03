@@ -1,5 +1,5 @@
 import { listStocksByCompany } from "@/actions";
-import TransactionContent from "./StockContent";
+import TransactionContent from "./TransactionContent";
 
 export default async function Page() {
   const companyId = "cma5mvy3i0000l504izi8zb2i";
