@@ -1,8 +1,8 @@
 import { NextResponse, NextRequest } from 'next/server'
 import db from '@/lib/db'
 
-export async function GET(req: NextRequest) {
-  const { companyId } = req.query
+export async function GET(req: NextRequest, { params }: { params: { companyId: string } }) {
+  const companyId = params.companyId
 
   // Vérification basique
   if (!companyId) {
