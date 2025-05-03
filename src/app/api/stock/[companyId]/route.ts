@@ -3,12 +3,12 @@ import { NextResponse } from 'next/server'
 import db from '@/lib/db'
 
 export async function GET(
-  req: NextRequest,
-  context: { params: { companyId: string } }
+  request: Request,
+  { params }: { params: Promise<{ slug: string }> }
 ) {
   try {
-    const { params } = context;
-    const companyId = params.companyId;
+    const { slug } = await params
+    const companyId = slug.companyId;
 
     if (!companyId) {
       return NextResponse.json(
