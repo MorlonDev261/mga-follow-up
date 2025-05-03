@@ -52,10 +52,6 @@ type Stock = {
   { id: "djhe5292H", name: "Caisse 6", value: 364900, color: "bg-gray-200 dark:bg-gray-800 text-gray-600 dark:text-gray-300" },
 ];**/
 
-// Fonction pour obtenir le nom de la caisse
-const getCaisseName = (caisseId: string) =>
-  dataCaisse.find((caisse) => caisse.id === caisseId)?.name || "Unknown";
-
 export default function PendingContent(stocks }: { stocks: Stock[] }) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -66,6 +62,10 @@ export default function PendingContent(stocks }: { stocks: Stock[] }) {
   const [loading, setLoading] = React.useState(true);
 
   const dataCaisse = stocks;
+  // Fonction pour obtenir le nom de la caisse
+  const getCaisseName = (caisseId: string) => dataCaisse.find((caisse) => caisse.id === caisseId)?.name || "Unknown";
+
+  
   // Fetch des données au montage
   React.useEffect(() => {
     const fetchData = async () => {
