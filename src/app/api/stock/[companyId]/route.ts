@@ -1,8 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server'
+// src/app/api/stock/[companyId]/route.ts
+import { NextResponse } from 'next/server'
 import db from '@/lib/db'
 
 export async function GET(
-  request: NextRequest,
+  request: Request,
   { params }: { params: { companyId: string } }
 ) {
   try {
@@ -17,11 +18,11 @@ export async function GET(
 
     const products = await db.product.findMany({
       where: { companyId },
-      include: { entries: { include: { identifiers: true } } },
+      include: { entries: { include: { identifiers: true } },
     })
 
-    return NextResponse.json(products || [])
-    
+    return NextResponse.json(products)
+
   } catch (error) {
     return NextResponse.json(
       { message: 'Erreur serveur', error: error instanceof Error ? error.message : 'Unknown error' },
