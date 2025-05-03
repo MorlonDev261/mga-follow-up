@@ -52,7 +52,7 @@ type Stock = {
   { id: "djhe5292H", name: "Caisse 6", value: 364900, color: "bg-gray-200 dark:bg-gray-800 text-gray-600 dark:text-gray-300" },
 ];**/
 
-export default function PendingContent(stocks }: { stocks: Stock[] }) {
+export default function PendingContent({ stocks }: { stocks: Stock[] }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const caisseParam = searchParams.get("caisse");
