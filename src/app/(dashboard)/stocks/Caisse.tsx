@@ -5,14 +5,16 @@ import { cn } from "@/lib/utils";
 import { useSearchParams } from "next/navigation"; // Pour accéder aux paramètres de l'URL
 import { FaRegCheckCircle } from "react-icons/fa"; // Importez l'icône de vérification de Font Awesome
 
-type CaisseProps = {
+type StockProps = {
   id: string;
   name: string;
-  value: number;
+  inStock?: number;
+  sales?: number;
+  value?: number;
   color?: string;
 };
 
-const Caisse = ({ caisses }: { caisses: CaisseProps[] }) => {
+const Caisse = ({ caisses }: { caisses: StockProps[] }) => {
   const searchParams = useSearchParams(); // Récupérer les paramètres de l'URL
   const activeCaisseId = searchParams.get("caisse"); // Récupérer la valeur du paramètre "caisse"
 
@@ -43,7 +45,9 @@ const Caisse = ({ caisses }: { caisses: CaisseProps[] }) => {
             )}
 
             <span className="text-xs">{caisse.name}</span>
-            {caisse.value !== undefined && <b className="text-xs">{caisse.value.toLocaleString()} Ar</b>}
+            {caisse.value !== undefined && <b className="text-xs">{caisse.value.toLocaleString()}</b>}
+            {caisse.inStock !== undefined && <b className="text-xs">{caisse.inStock.toLocaleString()}</b>}
+            {caisse.sales !== undefined && <b className="text-xs">{caisse.sales.toLocaleString()}</b>}
           </Link>
         );
       })}
