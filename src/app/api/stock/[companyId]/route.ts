@@ -4,11 +4,10 @@ import db from '@/lib/db'
 
 export async function GET(
   request: Request,
-  { params }: { params: Promise<{ slug: string }> }
+  { params }: { params: { companyId: string } } // Correction du type des params
 ) {
   try {
-    const { slug } = await params
-    const companyId = slug.companyId;
+    const companyId = params.companyId; // Accès direct au paramètre
 
     if (!companyId) {
       return NextResponse.json(
@@ -17,7 +16,6 @@ export async function GET(
       )
     }
 
-    // Correction ici : Ajout de la parenthèse manquante
     const products = await db.product.findMany({
       where: { companyId },
       include: { 
@@ -26,7 +24,7 @@ export async function GET(
             identifiers: true 
           } 
         } 
-      }, // ← Parenthèse fermante ajoutée
+      }
     })
 
     return NextResponse.json(products)
