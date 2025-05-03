@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { SwapWallet } from "@icons";
 import { MoreHorizontal } from "lucide-react";
@@ -32,21 +33,30 @@ type Payment = {
   caisseId: string;
 };
 
+type Stock = {
+  id: string;
+  name: string;
+  inStock?: number;
+  sales?: number;
+  value?: number;
+  color?: string;
+};
+
 // Liste des caisses (stocké en local ou récupéré depuis une API)
-const dataCaisse = [
+/**const dataCaisse = [
   { id: "uzRt253", name: "Caisse 1", value: 457900, color: "from-blue-500 to-blue-700 text-white" },
   { id: "7264Yehf", name: "Caisse 2", value: 457900, color: "from-orange-500 to-orange-700 text-white" },
   { id: "jdjbe59Jz", name: "Caisse 3", value: 457900, color: "from-yellow-400 to-yellow-600 text-white" },
   { id: "7uet357eH", name: "Caisse 4", value: 4476900, color: "bg-gray-200 dark:bg-gray-800 text-gray-600 dark:text-gray-300" },
   { id: "zyegq753JsG", name: "Caisse 5", value: 4837900, color: "bg-gray-200 dark:bg-gray-800 text-gray-600 dark:text-gray-300" },
   { id: "djhe5292H", name: "Caisse 6", value: 364900, color: "bg-gray-200 dark:bg-gray-800 text-gray-600 dark:text-gray-300" },
-];
+];**/
 
 // Fonction pour obtenir le nom de la caisse
 const getCaisseName = (caisseId: string) =>
   dataCaisse.find((caisse) => caisse.id === caisseId)?.name || "Unknown";
 
-export default function PendingContent() {
+export default function PendingContent(stocks }: { stocks: Stock[] }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const caisseParam = searchParams.get("caisse");
@@ -55,6 +65,7 @@ export default function PendingContent() {
   const [rawData, setRawData] = React.useState<Payment[]>([]);
   const [loading, setLoading] = React.useState(true);
 
+  const dataCaisse = stocks;
   // Fetch des données au montage
   React.useEffect(() => {
     const fetchData = async () => {
