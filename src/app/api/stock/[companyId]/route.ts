@@ -1,7 +1,7 @@
 import { NextResponse, NextRequest } from 'next/server'
 import db from '@/lib/db'
 
-export async function GET(req: NextRequest, res: NextResponse) {
+export async function GET(req: NextRequest) {
   const { companyId } = req.query
 
   // Vérification basique
