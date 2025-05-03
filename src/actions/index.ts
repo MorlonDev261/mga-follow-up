@@ -1,6 +1,7 @@
 "use server"
 
 import db from "@/lib/db"
+import { Prisma } from "@prisma/client"
 import { Role } from "@prisma/client"
 import moment from "moment"
 
@@ -232,14 +233,32 @@ export async function createProduct(data: {
   }
 }
 
-export async function getProductsByCompany(companyId: string) {
+export async function getProductsByCompany(
+  companyId: string,
+  date?: string // format 'YYYY-MM-DD'
+) {
   if (!companyId) {
     throw new Error("L'identifiant de l'entreprise est requis.");
   }
 
   try {
+    const where: Prisma.ProductWhereInput = {
+      companyId,
+    };
+
+    if (date) {
+      const start = new Date(date);
+      const end = new Date(date);
+      end.setHours(23, 59, 59, 999); // fin de la journée
+
+      where.createdAt = {
+        gte: start,
+        lte: end,
+      };
+    }
+
     const products = await db.product.findMany({
-      where: { companyId },
+      where,
       include: {
         entries: {
           include: {
