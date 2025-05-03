@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getProductsByCompany } from "@/actions";
 
 export type Product = {
   id: string;
@@ -12,18 +13,8 @@ export type Product = {
 };
 
 export async function GET() {
-  const data: Product[] = [
-    { id: "1", date: "2025-01-25", designation: "iPhone 11 128", idProduct: "6784geH", comments: "Misy dot kely", amount: 2507 },
-    { id: "2", date: "2025-01-25", designation: "iPhone 11 64", idProduct: "HtGghd3635", comments: "Display message", amount: 316 },
-    { id: "3", date: "2025-01-25", designation: "iPhone 11 64", idProduct: "HtGghd3635", comments: "", amount: 316 },
-    { id: "4", date: "2025-01-23", designation: "iPhone XS 256", idProduct: "3662HFCOl", comments: "", amount: 568 },
-    { id: "5", date: "2025-01-23", designation: "iPhone XS 256", idProduct: "3662HFCOl", comments: "Vente iPhone XS null", amount: 568 },
-    { id: "6", date: "2025-01-23", designation: "iPhone 8 64", idProduct: "roY46074", comments: "Scrach", amount: 316 },
-    { id: "7", date: "2025-01-28", designation: "iPhone 11 128", idProduct: "6784geH", comments: "Housing", amount: 2507 },
-    { id: "8", date: "2025-01-28", designation: "iPhone 11 64", idProduct: "HtGghd3635", comments: "Notif bat", amount: 316 },
-    { id: "9", date: "2025-01-28", designation: "iPhone 11 128", idProduct: "6784geH", comments: "", amount: 2507 },
-    { id: "10", date: "2025-01-28", designation: "iPhone 11 128", idProduct: "6784geH", comments: "", amount: 2507 },
-  ];
+  const companyId = "cma5mvy3i0000l504izi8zb2i";
+  const data: Product[] = await getProductsByCompany(companyId);
 
   return NextResponse.json(data);
 }
