@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { getProductsByCompany } from "@/actions";
-import type { Product } from "@/types";
 import moment from "moment";
 
 // Type local si tu n'as pas de fichier partagé
