@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { getProductsByCompany } from "@/actions";
 
 export type Product = {
-  id: string;
+  id: number;
   date: string;
   Qte?: number;
   designation: string;
