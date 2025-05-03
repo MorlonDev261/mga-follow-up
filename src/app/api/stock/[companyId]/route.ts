@@ -1,39 +1,32 @@
-import { NextResponse } from 'next/server'
+import { NextResponse, NextRequest } from 'next/server'
 import db from '@/lib/db'
 
-interface Params {
-  params: {
-    companyId: string
-  }
-}
-
 export async function GET(
-  request: Request,
-  { params }: Params
+  request: NextRequest,
+  { params }: { params: { companyId: string } }
 ) {
   const { companyId } = params
 
-  // 1. (Optionnel) Vérifier que companyId est un UUID ou un cuid valide
-  if (!companyId || typeof companyId !== 'string') {
+  // Vérification basique
+  if (!companyId) {
     return NextResponse.json(
-      { message: 'Paramètre companyId invalide' },
+      { message: 'companyId manquant dans l’URL' },
       { status: 400 }
     )
   }
 
-  // 2. Récupérer tous les produits de cette entreprise
+  // Requête Prisma pour récupérer tous les produits de l’entreprise
   const products = await db.product.findMany({
     where: { companyId },
     include: {
       entries: {
         include: {
-          identifiers: true
-        }
-      }
-    }
+          identifiers: true,
+        },
+      },
+    },
   })
 
-  // 3. Si vous voulez renvoyer une 404 quand il n'y a **aucun** produit :
   if (products.length === 0) {
     return NextResponse.json(
       { message: 'Aucun produit trouvé pour cette entreprise' },
@@ -41,6 +34,5 @@ export async function GET(
     )
   }
 
-  // 4. Retourner le JSON
   return NextResponse.json(products)
 }
