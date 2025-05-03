@@ -14,7 +14,24 @@ export type Product = {
 
 export async function GET() {
   const companyId = "cma5mvy3i0000l504izi8zb2i";
-  const data: Product[] = await getProductsByCompany(companyId);
+  const rawProducts = await getProductsByCompany(companyId);
 
-  return NextResponse.json(data);
+  const products: Product[] = [];
+
+  for (const product of rawProducts) {
+    for (const entry of product.entries) {
+      for (const identifier of entry.identifiers) {
+        products.push({
+          id: identifier.id,
+          date: entry.date.toISOString().split("T")[0], // format YYYY-MM-DD
+          designation: product.designation,
+          idProduct: product.id,
+          comments: identifier.comments || "",
+          amount: entry.amount,
+        });
+      }
+    }
+  }
+
+  return NextResponse.json(products);
 }
