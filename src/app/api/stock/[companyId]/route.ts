@@ -16,16 +16,26 @@ export async function GET(
       )
     }
 
+    // Correction ici : Ajout de la parenthèse manquante
     const products = await db.product.findMany({
       where: { companyId },
-      include: { entries: { include: { identifiers: true } },
+      include: { 
+        entries: { 
+          include: { 
+            identifiers: true 
+          } 
+        } 
+      }, // ← Parenthèse fermante ajoutée
     })
 
     return NextResponse.json(products)
 
   } catch (error) {
     return NextResponse.json(
-      { message: 'Erreur serveur', error: error instanceof Error ? error.message : 'Unknown error' },
+      { 
+        message: 'Erreur serveur', 
+        error: error instanceof Error ? error.message : 'Unknown error' 
+      },
       { status: 500 }
     )
   }
