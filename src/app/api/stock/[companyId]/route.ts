@@ -4,10 +4,10 @@ import db from '@/lib/db'
 
 export async function GET(
   request: Request,
-  { params }: { params: { companyId: string } } // Correction du type des params
+  { params }: { params: Promise<{ companyId: string }> }
 ) {
   try {
-    const companyId = params.companyId; // Accès direct au paramètre
+    const { companyId ) = await params
 
     if (!companyId) {
       return NextResponse.json(
