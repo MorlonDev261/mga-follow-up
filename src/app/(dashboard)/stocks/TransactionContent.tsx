@@ -70,7 +70,7 @@ export default function PendingContent({ stocks }: { stocks: Stock[] }) {
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/transactions");
+        const response = await fetch("/api/stocks/cma5mvy3i0000l504izi8zb2i");
         if (!response.ok) throw new Error("Failed to fetch data");
 
         const result: Payment[] = await response.json();
