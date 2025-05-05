@@ -1,4 +1,5 @@
 import db from "@/lib/db"
+import moment from "moment"
 
 // ==========================
 // USER
@@ -173,4 +174,40 @@ export async function deleteStockEntry(id: string) {
   return db.stockEntry.delete({
     where: { id },
   })
+}
+
+export async function listStocksByCompany(companyId: string) {
+  const entries = await db.stockEntry.findMany({
+    where: {
+      product: {
+        companyId: companyId,
+      },
+    },
+    orderBy: {
+      stockDate: 'asc',
+    },
+    select: {
+      stockDate: true,
+    },
+  })
+
+  // Grouper par date formatée
+  const grouped = entries.reduce((acc, entry) => {
+    const date = moment(entry.stockDate).format('DD-MM-YYYY')
+    if (!acc[date]) acc[date] = 0
+    acc[date] += 1 // Chaque entrée = 1 identifiant
+    return acc
+  }, {} as Record<string, number>)
+
+  // Transformer en tableau trié
+  return Object.entries(grouped)
+    .map(([date, totalQty]) => ({
+      id: date, // Identifiant unique basé sur la date
+      name: date,
+      value: totalQty,
+    }))
+    .sort((a, b) =>
+      moment(a.name, 'DD-MM-YYYY').toDate().getTime() -
+      moment(b.name, 'DD-MM-YYYY').toDate().getTime()
+    )
 }
