@@ -3,7 +3,7 @@ import db from '@/lib/db';
 import { auth } from '@/lib/auth';
 import { z } from 'zod';
 
-// Schéma de validation simplifié
+// Schéma de validation
 const productSchema = z
   .object({
     arrival: z.number(),
@@ -23,13 +23,11 @@ const productSchema = z
   });
 
 export async function POST(req: NextRequest) {
-  // Vérifie la session utilisateur
   const session = await auth();
   if (!session) {
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
   }
 
-  // Analyse et validation du payload
   let payload;
   try {
     payload = productSchema.parse(await req.json());
@@ -42,24 +40,22 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    // Création de l'enregistrement dans la table StockEntry
-    const record = await db.stockEntry.create({
-      data: {
-        arrival: new Date(payload.arrival),
-        stockDate: new Date(payload.stockDate),
-        qty: payload.qty,
-        product: { connect: { id: payload.productId } },
-        identifiers: {
-          create: payload.identifiers.map((item) => ({
+    // Création multiple d’entrées StockEntry
+    const created = await db.$transaction(
+      payload.identifiers.map((item) =>
+        db.stockEntry.create({
+          data: {
+            arrival: new Date(payload.arrival),
+            stockDate: new Date(payload.stockDate),
+            product: { connect: { id: payload.productId } },
             identifier: item.id,
             comment: item.comment,
-          })),
-        },
-      },
-      include: { identifiers: true },
-    });
+          },
+        })
+      )
+    );
 
-    return NextResponse.json(record, { status: 201 });
+    return NextResponse.json(created, { status: 201 });
   } catch (error) {
     console.error('[Product API] Database Error:', error);
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
