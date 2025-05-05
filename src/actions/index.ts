@@ -1,4 +1,4 @@
-import { db } from "@/lib/db"
+import db from "@/lib/db"
 
 // ==========================
 // USER
@@ -24,6 +24,12 @@ export async function getUserById(id: string) {
 // ==========================
 // COMPANY
 // ==========================
+
+export async function createCompany(data: CreateCompanyInput) {
+  const parsed = createCompanySchema.safeParse(data)
+  if (!parsed.success) throw new Error("Invalid company data")
+  return db.company.create({ data: parsed.data })
+}
 
 export async function getCompaniesByUser(userId: string) {
   return db.company.findMany({
