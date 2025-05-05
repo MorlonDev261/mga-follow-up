@@ -172,18 +172,10 @@ model StockEntry {
   id          String           @id @default(cuid())
   product     Product          @relation(fields: [productId], references: [id])
   productId   String
-  qty         Int
-  arrival     DateTime
-  stockDate   DateTime
-  identifiers StockIdentifier[]
-  createdAt   DateTime         @default(now())
-  updatedAt   DateTime         @updatedAt
-}
-
-model StockIdentifier {
-  id          Int        @id @default(autoincrement())
-  entry       StockEntry @relation(fields: [entryId], references: [id])
-  entryId     String
   identifier  Int
   comment     String
+  arrival     DateTime
+  stockDate   DateTime
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
 }
