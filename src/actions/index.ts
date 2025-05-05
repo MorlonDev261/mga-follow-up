@@ -32,6 +32,16 @@ export async function createCompany(data: CreateCompanyInput) {
   return db.company.create({ data: parsed.data })
 }
 
+export async function updateCompany(id: string, data: UpdateCompanyInput) {
+  const parsed = updateCompanySchema.safeParse(data)
+  if (!parsed.success) throw new Error("Invalid company update data")
+  return db.company.update({ where: { id }, data: parsed.data })
+}
+
+export async function deleteCompany(id: string) {
+  return db.company.delete({ where: { id } })
+}
+
 export async function getCompaniesByUser(userId: string) {
   return db.company.findMany({
     where: {
