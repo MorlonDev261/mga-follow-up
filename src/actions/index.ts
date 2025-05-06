@@ -1,5 +1,10 @@
+"use server"
+
 import db from "@/lib/db"
+import { Prisma } from "@prisma/client"
+import { Role } from "@prisma/client"
 import moment from "moment"
+
 import {
   createUserSchema, updateUserSchema, CreateUserInput, UpdateUserInput,
   createCompanySchema, updateCompanySchema, CreateCompanyInput, UpdateCompanyInput,
@@ -10,30 +15,80 @@ import {
   conversationSchema, ConversationInput
 } from "./schema"
 
-// ==========================
-// USER
-// ==========================
+// --- USERS ---
 
 export async function getUserById(id: string) {
-  try {
-    return await db.user.findUnique({
-      where: { id },
-      include: {
-        purchases: true,
-        entreprises: true,
-        workers: true,
-        owners: true,
-      },
-    })
-  } catch (error) {
-    console.error("Error in getUserById:", error)
-    throw error
-  }
+  return db.user.findUnique({
+    where: { id },
+    include: {
+      purchases: true,
+      entreprises: true,
+      workers: true,
+      owners: true,
+    },
+  })
 }
 
-// ==========================
-// COMPANY
-// ==========================
+export async function getUserByEmail(email: string) {
+  return db.user.findUnique({
+    where: { email },
+    include: {
+      purchases: true,
+      entreprises: true,
+      workers: true,
+      owners: true,
+    },
+  })
+}
+
+export async function createUser(data: CreateUserInput) {
+  const parsed = createUserSchema.safeParse(data)
+  if (!parsed.success) throw new Error("Invalid user data")
+  return db.user.create({ data: parsed.data })
+}
+
+export async function updateUser(id: string, data: UpdateUserInput) {
+  const parsed = updateUserSchema.safeParse(data)
+  if (!parsed.success) throw new Error("Invalid user update data")
+  return db.user.update({ where: { id }, data: parsed.data })
+}
+
+export async function deleteUser(id: string) {
+  return db.user.delete({ where: { id } })
+}
+
+// --- COMPANIES ---
+
+export async function getCompaniesByUser(userId: string) {
+  return db.companyUser.findMany({
+    where: { userId },
+    include: {
+      company: true,
+    },
+  })
+}
+
+export async function getCompaniesByUserAndRole(userId: string, role: Role) {
+  return db.companyUser.findMany({
+    where: { userId, role },
+    include: {
+      company: true,
+    },
+  })
+}
+
+export async function getCompanyById(id: string) {
+  return db.company.findUnique({
+    where: { id },
+    include: {
+      users: {
+        include: {
+          user: true,
+        },
+      },
+    },
+  })
+}
 
 export async function createCompany(data: CreateCompanyInput) {
   const parsed = createCompanySchema.safeParse(data)
@@ -51,99 +106,176 @@ export async function deleteCompany(id: string) {
   return db.company.delete({ where: { id } })
 }
 
-export async function getCompaniesByUser(userId: string) {
-  return db.company.findMany({
-    where: {
-  OR: [
-    { owner: userId }, // relation 1-1
-    { workers: { some: { id: userId } } }, // relation 1-n
-    { purchases: { some: { userId } } },   // relation 1-n vers Purchase
-  ],
-},
+// --- COMPANY USER ---
+
+export async function createCompanyUser(data: CompanyUserInput) {
+  const parsed = companyUserSchema.safeParse(data)
+  if (!parsed.success) throw new Error("Invalid company user data")
+  return db.companyUser.create({ data: parsed.data })
+}
+
+// --- CONVERSATION HISTORY ---
+
+export async function getConversationsByUser(userId: string) {
+  return db.conversationHistory.findMany({
+    where: { userId },
+  })
+}
+
+export async function createConversation(data: ConversationInput) {
+  const parsed = conversationSchema.safeParse(data)
+  if (!parsed.success) throw new Error("Invalid conversation data")
+  return db.conversationHistory.create({ data: parsed.data })
+}
+
+export async function deleteConversation(id: number) {
+  return db.conversationHistory.delete({ where: { id } })
+}
+
+// --- PURCHASE ---
+
+export async function getPurchasesByUser(userId: string) {
+  return db.purchase.findMany({
+    where: { userId },
+  })
+}
+
+export async function createPurchase(data: CreatePurchaseInput) {
+  const parsed = createPurchaseSchema.safeParse(data)
+  if (!parsed.success) throw new Error("Invalid purchase data")
+  return db.purchase.create({ data: parsed.data })
+}
+
+export async function updatePurchase(id: string, data: UpdatePurchaseInput) {
+  const parsed = updatePurchaseSchema.safeParse(data)
+  if (!parsed.success) throw new Error("Invalid purchase update data")
+  return db.purchase.update({ where: { id }, data: parsed.data })
+}
+
+export async function deletePurchase(id: string) {
+  return db.purchase.delete({ where: { id } })
+}
+
+// --- WORK RELATION ---
+
+export async function getWorkerRelations(userId: string) {
+  return db.workRelation.findMany({
+    where: { workerId: userId },
     include: {
-      owner: true,
-      workers: true,
-      purchases: true,
+      entreprise: true,
     },
   })
 }
 
-export async function getCompaniesByUserAndRole(userId: string, role: string) {
-  if (role === "OWNER") {
-    return db.company.findMany({
-      where: {
-        owner: {
-          some: {
-            userId,
-          },
-        },
-      },
-    })
-  }
-
-  if (role === "WORKER") {
-    return db.company.findMany({
-      where: {
-        workers: {
-          some: {
-            userId,
-          },
-        },
-      },
-    })
-  }
-
-  if (role === "BUYER") {
-    return db.company.findMany({
-      where: {
-        purchases: {
-          some: {
-            userId,
-          },
-        },
-      },
-    })
-  }
-
-  return []
-}
-
-// ==========================
-// PRODUCT
-// ==========================
-
-export async function getProductById(id: string) {
-  return db.product.findUnique({
-    where: { id },
+export async function getEntrepriseRelations(userId: string) {
+  return db.workRelation.findMany({
+    where: { entrepriseId: userId },
+    include: {
+      worker: true,
+    },
   })
 }
 
-export async function getProductsByCompany(companyId: string) {
-  return db.product.findMany({
-    where: { companyId },
+export async function createWorkRelation(data: WorkRelationInput) {
+  const parsed = workRelationSchema.safeParse(data)
+  if (!parsed.success) throw new Error("Invalid work relation data")
+  return db.workRelation.create({ data: parsed.data })
+}
+
+// --- CUSTOMER RELATION ---
+
+export async function getCustomerRelations(userId: string) {
+  return db.customerRelation.findMany({
+    where: { ownerId: userId },
+    include: {
+      customer: true,
+    },
   })
 }
 
+export async function getOwnerRelations(userId: string) {
+  return db.customerRelation.findMany({
+    where: { customerId: userId },
+    include: {
+      owner: true,
+    },
+  })
+}
+
+export async function createCustomerRelation(data: CustomerRelationInput) {
+  const parsed = customerRelationSchema.safeParse(data)
+  if (!parsed.success) throw new Error("Invalid customer relation data")
+  return db.customerRelation.create({ data: parsed.data })
+}
+
+// --- Stocks & Product ---
 export async function createProduct(data: {
   name: string
   companyId: string
 }) {
-  return db.product.create({
-    data,
-  })
+  const { name, companyId } = data
+
+  if (!name || !companyId) {
+    throw new Error('Nom du produit et companyId requis.')
+  }
+
+  try {
+    const newProduct = await db.product.create({
+      data: {
+        name,
+        companyId,
+      },
+    })
+    return newProduct
+  } catch (error) {
+    console.error('Erreur lors de la création du produit:', error)
+    throw new Error('Erreur serveur lors de la création du produit.')
+  }
 }
 
-export async function updateProduct(id: string, data: Partial<{ name: string }>) {
-  return db.product.update({
-    where: { id },
-    data,
-  })
-}
+export async function getProductsByCompany(
+  companyId: string,
+  date?: string // format 'YYYY-MM-DD'
+) {
+  if (!companyId) {
+    throw new Error("L'identifiant de l'entreprise est requis.");
+  }
 
-export async function deleteProduct(id: string) {
-  return db.product.delete({
-    where: { id },
-  })
+  try {
+    const where: Prisma.ProductWhereInput = {
+      companyId,
+    };
+
+    if (date) {
+      const start = new Date(date);
+      const end = new Date(date);
+      end.setHours(23, 59, 59, 999); // fin de la journée
+
+      where.createdAt = {
+        gte: start,
+        lte: end,
+      };
+    }
+
+    const products = await db.product.findMany({
+      where,
+      include: {
+        entries: {
+          include: {
+            identifiers: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    return products;
+  } catch (error) {
+    console.error("Erreur lors de la récupération des produits:", error);
+    throw new Error("Erreur serveur lors de la récupération des produits.");
+  }
 }
 
 // ==========================
@@ -169,7 +301,6 @@ export async function createStockEntry(data: {
   productId: string
   arrivalDate: Date
   stockDate: Date
-  quantity: number
   identifiers: string[]
   comments: string[]
 }) {
@@ -179,7 +310,6 @@ export async function createStockEntry(data: {
 export async function updateStockEntry(id: string, data: Partial<{
   arrivalDate: Date
   stockDate: Date
-  quantity: number
   identifiers: string[]
   comments: string[]
 }>) {
