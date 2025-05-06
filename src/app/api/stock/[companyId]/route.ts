@@ -1,6 +1,7 @@
 // src/app/api/stock/[companyId]/route.ts
 import { NextResponse } from 'next/server'
 import db from '@/lib/db'
+import { getProductsByCompany } from '@/actions'
 
 export async function GET(
   request: Request,
@@ -16,12 +17,7 @@ export async function GET(
       )
     }
 
-    const products = await db.product.findMany({
-      where: { companyId },
-      include: { 
-        entries: true,
-      },
-    })
+    const products = await getProductsByCompany(companyId);
 
     return NextResponse.json(products)
 
