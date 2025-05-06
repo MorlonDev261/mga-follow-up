@@ -55,7 +55,7 @@ export async function getCompaniesByUser(userId: string) {
   return db.company.findMany({
     where: {
   OR: [
-    { owner: { id: userId } }, // relation 1-1
+    { owner: userId }, // relation 1-1
     { workers: { some: { id: userId } } }, // relation 1-n
     { purchases: { some: { userId } } },   // relation 1-n vers Purchase
   ],
