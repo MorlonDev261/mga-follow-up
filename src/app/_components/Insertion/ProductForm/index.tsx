@@ -21,7 +21,7 @@ export interface ProductFormData {
   stockDate: number;
   productId: string;
   qty: number;
-  identifiers: { id: number; comment: string }[];
+  identifiers: { identifier: number; comment: string }[];
 }
 
 export default function ProductForm({ setOpen }: ProductFormProps) {
@@ -68,7 +68,7 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
     if (form.identifiers.length < form.qty) {
       setForm(prev => ({
         ...prev,
-        identifiers: [...prev.identifiers, { id: 0, comment: '' }],
+        identifiers: [...prev.identifiers, { identifier: 0, comment: '' }],
       }));
     }
   };
@@ -195,8 +195,8 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
             <Input
               type="number"
               placeholder="Identifiant"
-              value={item.id}
-              onChange={(e) => handleIdentifierChange(index, 'id', e.target.value)}
+              value={item.identifier}
+              onChange={(e) => handleIdentifierChange(index, 'identifier', e.target.value)}
               required
               className="col-span-2"
             />
