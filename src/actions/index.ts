@@ -208,14 +208,16 @@ export async function createCustomerRelation(data: CustomerRelationInput) {
   return db.customerRelation.create({ data: parsed.data })
 }
 
-// --- Stocks & Product ---
-export async function createProduct(data: {
-  name: string
-  companyId: string
-}) {
+import { Prisma } from '@prisma/client'
+import { db } from '@/lib/db' // ajuste ce chemin selon ton projet
+import moment from 'moment'
+
+// === PRODUCTS ===
+
+export async function createProduct(data: { name: string; companyId: string }) {
   const { name, companyId } = data
 
-  if (!name || !companyId) {
+  if (!name.trim() || !companyId.trim()) {
     throw new Error('Nom du produit et companyId requis.')
   }
 
@@ -233,155 +235,61 @@ export async function createProduct(data: {
   }
 }
 
-export async function getProductsByCompany(
-  companyId: string,
-  date?: string // format 'YYYY-MM-DD'
-) {
-  if (!companyId) {
-    throw new Error("L'identifiant de l'entreprise est requis.");
+export async function getProductsByCompany(companyId: string, date?: string) {
+  if (!companyId.trim()) {
+    throw new Error("L'identifiant de l'entreprise est requis.")
   }
 
   try {
     const where: Prisma.ProductWhereInput = {
       companyId,
-    };
+    }
 
     if (date) {
-      const start = new Date(date);
-      const end = new Date(date);
-      end.setHours(23, 59, 59, 999); // fin de la journée
+      const start = moment(date, 'YYYY-MM-DD').startOf('day').toDate()
+      const end = moment(date, 'YYYY-MM-DD').endOf('day').toDate()
 
       where.createdAt = {
         gte: start,
         lte: end,
-      };
+      }
     }
 
     const products = await db.product.findMany({
       where,
       include: {
         entries: {
-          include: {
-            stockEntry: true,
-          },
+          orderBy: { createdAt: 'desc' }, // ordonne les entrées aussi
         },
       },
       orderBy: {
-        createdAt: "desc",
+        createdAt: 'desc',
       },
-    });
+    })
 
-    return products;
+    return products
   } catch (error) {
-    console.error("Erreur lors de la récupération des produits:", error);
-    throw new Error("Erreur serveur lors de la récupération des produits.");
+    console.error("Erreur lors de la récupération des produits:", error)
+    throw new Error("Erreur serveur lors de la récupération des produits.")
   }
 }
 
-// ==========================
-// STOCK ENTRY
-// ==========================
+// === STOCK ENTRIES ===
 
 export async function getStockEntriesByProduct(productId: string) {
-  return db.stockEntry.findMany({
-    where: { productId },
-    orderBy: { createdAt: "desc" },
-  })
-}
-
-export async function getStockEntriesByCompany(companyId: string) {
-  return db.stockEntry.findMany({
-    where: { product: { companyId } },
-    include: { product: true },
-    orderBy: { createdAt: "desc" },
-  })
-}
-
-export async function createStockEntry(data: {
-  productId: string
-  arrivalDate: Date
-  stockDate: Date
-  identifiers: string[]
-  comments: string[]
-}) {
-  return db.stockEntry.create({ data })
-}
-
-export async function updateStockEntry(id: string, data: Partial<{
-  arrivalDate: Date
-  stockDate: Date
-  identifiers: string[]
-  comments: string[]
-}>) {
-  return db.stockEntry.update({
-    where: { id },
-    data,
-  })
-}
-
-export async function deleteStockEntry(id: string) {
-  return db.stockEntry.delete({
-    where: { id },
-  })
-}
-
-export async function listStocksByCompany(
-  companyId: string,
-  from?: string,
-  to?: string
-) {
-  const whereClause: Prisma.StockEntryWhereInput = {
-    product: {
-      companyId: companyId,
-    },
+  if (!productId.trim()) {
+    throw new Error("L'identifiant du produit est requis.")
   }
 
-  let fromDate: Date | null = null
-  let toDate: Date | null = null
+  try {
+    const entries = await db.stockEntry.findMany({
+      where: { productId },
+      orderBy: { createdAt: 'desc' },
+    })
 
-  if (from || to) {
-    whereClause.stockDate = {}
-    if (from) {
-      fromDate = moment(from, 'DD-MM-YYYY').startOf('day').toDate()
-      whereClause.stockDate.gte = fromDate
-    }
-    if (to) {
-      toDate = moment(to, 'DD-MM-YYYY').endOf('day').toDate()
-      whereClause.stockDate.lte = toDate
-    }
-  }
-
-  const entries = await db.stockEntry.findMany({
-    where: whereClause,
-    orderBy: {
-      stockDate: 'asc',
-    },
-    select: {
-      stockDate: true,
-    },
-  })
-
-  const grouped = entries.reduce((acc, entry) => {
-    const formatted = moment(entry.stockDate).format('DD-MM-YYYY')
-    if (!acc[formatted]) acc[formatted] = 0
-    acc[formatted] += 1
-    return acc
-  }, {} as Record<string, number>)
-
-  const data = Object.entries(grouped)
-    .map(([formattedDate, totalQty]) => ({
-      id: formattedDate,
-      name: formattedDate,
-      value: totalQty,
-    }))
-    .sort((a, b) =>
-      moment(a.name, 'DD-MM-YYYY').toDate().getTime() -
-      moment(b.name, 'DD-MM-YYYY').toDate().getTime()
-    )
-
-  return {
-    from: fromDate,
-    to: toDate,
-    data,
+    return entries
+  } catch (error) {
+    console.error("Erreur lors de la récupération des stocks:", error)
+    throw new Error("Erreur serveur lors de la récupération des stocks.")
   }
 }
