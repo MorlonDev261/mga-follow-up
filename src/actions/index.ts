@@ -294,8 +294,9 @@ export async function listStocksByCompany(companyId: string) {
     })
 
     return summary.map(item => ({
-      stockDate: item.stockDate,
-      nbrProduct: item._count.id,
+      id: item.stockDate,
+      name: item.stockDate,
+      value: item._count.id,
     }))
   } catch (error) {
     console.error("Erreur lors du résumé des stocks par entreprise:", error)
