@@ -330,7 +330,7 @@ export async function listStocksByCompany(
   from?: string,
   to?: string
 ) {
-  const whereClause: any = {
+  const whereClause: Prisma.StockEntryWhereInput = {
     product: {
       companyId: companyId,
     },
