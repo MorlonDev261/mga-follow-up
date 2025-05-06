@@ -54,7 +54,7 @@ export default function Combobox({
     const fetchProducts = async () => {
       try {
         const data = await getProductsByCompany(companyId);
-        setProducts(data);
+        setProducts(data.map(p => ({ id: p.productId, name: p.productName })));
       } catch (err) {
         console.error("Erreur lors du chargement des produits");
       } finally {
