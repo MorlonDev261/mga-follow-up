@@ -2,7 +2,7 @@ import { listStocksByCompany } from "@/actions";
 import TransactionContent from "./TransactionContent";
 
 export default async function Page() {
-  const companyId = "cma5mvy3i0000l504izi8zb2i";
+  const companyId = "cmacjsr390004ld0406t3vxpq";
   const stocks = await listStocksByCompany(companyId);
   
   return (
