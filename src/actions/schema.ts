@@ -51,6 +51,21 @@ export const companyUserSchema = z.object({
 
 export type CompanyUserInput = z.infer<typeof companyUserSchema>
 
+export const stockGroupSchema = z.object({
+  id: z.string(),     // format: 'DD-MM-YYYY'
+  name: z.string(),   // même que id
+  value: z.number(),  // total d’entrées à cette date
+})
+
+export const listStocksByCompanyResponseSchema = z.object({
+  from: z.date().nullable(),
+  to: z.date().nullable(),
+  data: z.array(stockGroupSchema),
+})
+
+// Type TypeScript associé (optionnel si tu veux l'utiliser)
+export type ListStocksByCompanyResponse = z.infer<typeof listStocksByCompanyResponseSchema>
+
 // --- PURCHASE ---
 export const createPurchaseSchema = z.object({
   userId: z.string(),
