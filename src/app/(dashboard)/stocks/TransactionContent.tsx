@@ -34,8 +34,8 @@ type Payment = {
 };
 
 type Stock = {
-  id: string;
-  name: string;
+  id: Date;
+  name: Date;
   inStock?: number;
   sales?: number;
   value?: number;
