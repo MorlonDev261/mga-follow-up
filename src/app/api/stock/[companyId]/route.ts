@@ -19,10 +19,7 @@ export async function GET(
     const products = await db.product.findMany({
       where: { companyId },
       include: { 
-        entries: { 
-          include: { 
-            identifiers: true 
-          } 
+        entries: true
         } 
       }
     })
