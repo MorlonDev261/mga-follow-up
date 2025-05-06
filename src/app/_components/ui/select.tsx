@@ -25,7 +25,7 @@ interface ProductFormData {
   stockDate: number;
   productId: string;
   qty: number;
-  identifiers: { id: number; comment: string }[];
+  identifiers: { identifier: number; comment: string }[];
 }
 
 interface ComboboxProps {
