@@ -294,8 +294,8 @@ export async function listStocksByCompany(companyId: string) {
     })
 
     return summary.map(item => ({
-      id: item.stockDate,
-      name: item.stockDate,
+      id: moment(item.stockDate).format('DD-MM-YYYY'),
+      name: moment(item.stockDate).format('DD-MM-YYYY'),
       value: item._count.id,
     }))
   } catch (error) {
