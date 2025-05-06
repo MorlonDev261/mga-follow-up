@@ -262,7 +262,7 @@ export async function getProductsByCompany(
       include: {
         entries: {
           include: {
-            identifiers: true,
+            stockEntry: true,
           },
         },
       },
@@ -325,13 +325,34 @@ export async function deleteStockEntry(id: string) {
   })
 }
 
-export async function listStocksByCompany(companyId: string) {
-  const entries = await db.stockEntry.findMany({
-    where: {
-      product: {
-        companyId: companyId,
-      },
+export async function listStocksByCompany(
+  companyId: string,
+  from?: string,
+  to?: string
+) {
+  const whereClause: any = {
+    product: {
+      companyId: companyId,
     },
+  }
+
+  let fromDate: Date | null = null
+  let toDate: Date | null = null
+
+  if (from || to) {
+    whereClause.stockDate = {}
+    if (from) {
+      fromDate = moment(from, 'DD-MM-YYYY').startOf('day').toDate()
+      whereClause.stockDate.gte = fromDate
+    }
+    if (to) {
+      toDate = moment(to, 'DD-MM-YYYY').endOf('day').toDate()
+      whereClause.stockDate.lte = toDate
+    }
+  }
+
+  const entries = await db.stockEntry.findMany({
+    where: whereClause,
     orderBy: {
       stockDate: 'asc',
     },
@@ -340,23 +361,27 @@ export async function listStocksByCompany(companyId: string) {
     },
   })
 
-  // Grouper par date formatée
   const grouped = entries.reduce((acc, entry) => {
-    const date = moment(entry.stockDate).format('DD-MM-YYYY')
-    if (!acc[date]) acc[date] = 0
-    acc[date] += 1 // Chaque entrée = 1 identifiant
+    const formatted = moment(entry.stockDate).format('DD-MM-YYYY')
+    if (!acc[formatted]) acc[formatted] = 0
+    acc[formatted] += 1
     return acc
   }, {} as Record<string, number>)
 
-  // Transformer en tableau trié
-  return Object.entries(grouped)
-    .map(([date, totalQty]) => ({
-      id: date, // Identifiant unique basé sur la date
-      name: date,
+  const data = Object.entries(grouped)
+    .map(([formattedDate, totalQty]) => ({
+      id: formattedDate,
+      name: formattedDate,
       value: totalQty,
     }))
     .sort((a, b) =>
       moment(a.name, 'DD-MM-YYYY').toDate().getTime() -
       moment(b.name, 'DD-MM-YYYY').toDate().getTime()
     )
+
+  return {
+    from: fromDate,
+    to: toDate,
+    data,
+  }
 }
