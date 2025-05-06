@@ -255,7 +255,7 @@ export async function getProductsByCompany(companyId: string, date?: string) {
       where,
       include: {
         entries: {
-          orderBy: { createdAt: 'desc' }, // ordonne les entrées aussi
+          orderBy: { createdAt: 'desc' },
         },
       },
       orderBy: {
@@ -263,7 +263,19 @@ export async function getProductsByCompany(companyId: string, date?: string) {
       },
     })
 
-    return products
+    // Mapper les données pour le format souhaité
+    const formatted = products.flatMap(product =>
+      product.entries.map(entry => ({
+        id: entry.identifier,
+        productId: product.id,
+        productName: product.name,
+        date: entry.arrival,
+        dateStock: entry.stockDate,
+        comment: entry.comment,
+      }))
+    )
+
+    return formatted
   } catch (error) {
     console.error("Erreur lors de la récupération des produits:", error)
     throw new Error("Erreur serveur lors de la récupération des produits.")
