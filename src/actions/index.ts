@@ -1,5 +1,6 @@
 import db from "@/lib/db"
 import moment from "moment"
+import { CreateCompanyInput } from "./schema"
 
 // ==========================
 // USER
