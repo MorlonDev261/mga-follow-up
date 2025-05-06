@@ -58,7 +58,7 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
   const handleIdentifierChange = (index: number, field: 'identifier' | 'comment', value: string) => {
     setForm(prev => {
       const updated = [...prev.identifiers];
-      updated[index] = { ...updated[index], [field]: field === 'id' ? Number(value) : value };
+      updated[index] = { ...updated[index], [field]: field === 'identifier' ? Number(value) : value };
       return { ...prev, identifiers: updated };
     });
   };
