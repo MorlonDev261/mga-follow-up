@@ -28,7 +28,7 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
   const [form, setForm] = useState<ProductFormData>({
     arrival: Date.now(),
     stockDate: Date.now(),
-    productId: 'cma5mvy3i0000l504izi8zb2i',
+    productId: 'cmack6du60001ld04gpmqjxln',
     qty: 0,
     identifiers: [],
   });
