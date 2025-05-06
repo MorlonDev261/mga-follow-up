@@ -54,12 +54,12 @@ export async function deleteCompany(id: string) {
 export async function getCompaniesByUser(userId: string) {
   return db.company.findMany({
     where: {
-      OR: [
-        { owner: { some: { userId } } },
-        { workers: { some: { userId } } },
-        { purchases: { some: { userId } } },
-      ],
-    },
+  OR: [
+    { owner: { id: userId } }, // relation 1-1
+    { workers: { some: { id: userId } } }, // relation 1-n
+    { purchases: { some: { userId } } },   // relation 1-n vers Purchase
+  ],
+},
     include: {
       owner: true,
       workers: true,
