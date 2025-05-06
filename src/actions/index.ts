@@ -208,10 +208,6 @@ export async function createCustomerRelation(data: CustomerRelationInput) {
   return db.customerRelation.create({ data: parsed.data })
 }
 
-import { Prisma } from '@prisma/client'
-import { db } from '@/lib/db' // ajuste ce chemin selon ton projet
-import moment from 'moment'
-
 // === PRODUCTS ===
 
 export async function createProduct(data: { name: string; companyId: string }) {
