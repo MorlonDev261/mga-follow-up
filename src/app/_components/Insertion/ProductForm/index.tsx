@@ -92,13 +92,10 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
 
     setLoading(true);
     try {
-      // Exclure qty avant l'envoi
-      const { qty, ...formWithoutQty } = form;
-      
       const response = await fetch('/api/products', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formWithoutQty),
+        body: JSON.stringify(form),
       });
 
       if (!response.ok) throw new Error('Échec de l’enregistrement');
