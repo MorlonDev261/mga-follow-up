@@ -272,6 +272,37 @@ export async function getProductsByCompany(companyId: string, date?: string) {
 
 // === STOCK ENTRIES ===
 
+export async function listStocksByCompany(companyId: string) {
+  if (!companyId.trim()) {
+    throw new Error("L'identifiant de l'entreprise est requis.")
+  }
+
+  try {
+    const summary = await db.stockEntry.groupBy({
+      by: ['stockDate'],
+      where: {
+        product: {
+          companyId,
+        },
+      },
+      _count: {
+        id: true,
+      },
+      orderBy: {
+        stockDate: 'desc',
+      },
+    })
+
+    return summary.map(item => ({
+      stockDate: item.stockDate,
+      nbrProduct: item._count.id,
+    }))
+  } catch (error) {
+    console.error("Erreur lors du résumé des stocks par entreprise:", error)
+    throw new Error("Erreur serveur lors du résumé des stocks.")
+  }
+}
+
 export async function getStockEntriesByProduct(productId: string) {
   if (!productId.trim()) {
     throw new Error("L'identifiant du produit est requis.")
