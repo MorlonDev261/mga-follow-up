@@ -9,11 +9,11 @@ const productSchema = z
     arrival: z.number(),
     stockDate: z.number(),
     productId: z.string().cuid(),
-    qty: z.number().int().nonnegative(),
+    qty: z.number().int().positive(),
     identifiers: z.array(
       z.object({
-        id: z.number().int(),
-        comment: z.string().max(255),
+        identifier: z.number().int(),
+        comment: z.string().trim().max(255),
       })
     ),
   })
@@ -40,16 +40,15 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    // Création multiple d’entrées StockEntry
     const created = await db.$transaction(
-      payload.identifiers.map((item) =>
+      payload.identifiers.map((entry) =>
         db.stockEntry.create({
           data: {
             arrival: new Date(payload.arrival),
             stockDate: new Date(payload.stockDate),
-            product: { connect: { id: payload.productId } },
-            identifier: item.id,
-            comment: item.comment,
+            productId: payload.productId,
+            identifier: entry.identifier,
+            comment: entry.comment,
           },
         })
       )
