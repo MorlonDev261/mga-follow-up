@@ -19,9 +19,8 @@ export async function GET(
     const products = await db.product.findMany({
       where: { companyId },
       include: { 
-        entries: true
-        } 
-      }
+        entries: true,
+      },
     })
 
     return NextResponse.json(products)
