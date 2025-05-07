@@ -138,7 +138,7 @@ export default function PendingContent({ stocks }: { stocks: Stock[] }) {
     <>
       <NextSeo
         title={`Pending Payments - ${stockParam ? getCaisseName(stockParam) : "All Caisse"}`}
-        description={`View all pending payments${caisseParam ? ` from ${getCaisseName(stockParam)}` : ""}.`}
+        description={`View all pending payments${stockParam ? ` from ${getCaisseName(stockParam)}` : ""}.`}
       />
 
       <div className={cn("px-2 transition-opacity", { "opacity-100": !loading, "opacity-0": loading })}>
