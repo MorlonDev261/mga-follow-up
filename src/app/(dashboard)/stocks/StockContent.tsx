@@ -74,7 +74,7 @@ export default function PendingContent({ stocks }: { stocks: Stock[] }) {
   }, []);
 
   const data = React.useMemo(
-    () => (stockParam ? rawData.filter((item) => item.dateStock === stockParam) : rawData),
+    () => (stockParam ? rawData.filter((item) => moment(item.dateStock).format("DD-MM-YYYY") === stockParam) : rawData),
     [rawData, stockParam]
   );
 
@@ -120,7 +120,7 @@ export default function PendingContent({ stocks }: { stocks: Stock[] }) {
               Copy ID
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={() => router.push(`?stock=${encodeURIComponent(product.productId)}`)}
+              onClick={() => router.push(`?stock=${encodeURIComponent(product.dateStock)}`)}
             >
               Show from same product
             </DropdownMenuItem>
