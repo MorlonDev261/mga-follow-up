@@ -10,7 +10,6 @@ type StockProps = {
   name: string;
   inStock?: number;
   sales?: number;
-  value?: number;
   color?: string;
 };
 
@@ -45,7 +44,6 @@ const Stock = ({ caisses }: { caisses: StockProps[] }) => {
             )}
 
             <span className="text-xs">{stock.name}</span>
-            {stock.value !== undefined && <b className="text-xs">{stock.value.toLocaleString()}</b>}
             {stock.inStock !== undefined && <b className="text-xs">{stock.inStock.toLocaleString()}</b>}
             {stock.sales !== undefined && <b className="text-xs">{stock.sales.toLocaleString()}</b>}
           </Link>
