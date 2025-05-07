@@ -92,8 +92,8 @@ export default function PendingContent({ stocks }: { stocks: Stock[] }) {
     [rawData, caisseParam]
   );
 
-  // Calcul du total des paiements en attente
-  const totalPending = React.useMemo(() => data.reduce((acc, item) => acc + item.amount, 0), [data]);
+  // Calcul du total des paiements en attente (id -> amount)
+  const totalPending = React.useMemo(() => data.reduce((acc, item) => acc + item.id, 0), [data]);
 
   // Définition du sous-titre en fonction du filtre
   const subtitle = caisseParam
