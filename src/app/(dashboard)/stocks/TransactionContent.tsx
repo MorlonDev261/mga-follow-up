@@ -136,7 +136,7 @@ export default function PendingContent({ stocks }: { stocks: Stock[] }) {
                 </DropdownMenuItem>
               ) : (
                 <>
-                  <DropdownMenuItem onClick={() => navigator.clipboard.writeText(product.id)}>
+                  <DropdownMenuItem onClick={() => navigator.clipboard.writeText(product.id.toString())}>
                     Copy payment ID
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
