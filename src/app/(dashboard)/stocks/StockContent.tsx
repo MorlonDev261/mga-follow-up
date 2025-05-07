@@ -30,7 +30,7 @@ type Product = {
   productId: string;
   productName: string;
   date: Date;
-  dateStock: Date;
+  dateStock: string;
   comment: string;
 };
 
@@ -75,11 +75,7 @@ export default function PendingContent({ stocks }: { stocks: Stock[] }) {
   const data = React.useMemo(
     () =>
       stockParam
-        ? rawData.filter(
-         (item) =>
-            item.dateStock instanceof Date &&
-            item.dateStock.toISOString().slice(0, 10) === stockParam
-         )
+        ? rawData.filter((item) => item.dateStock === stockParam)
         : rawData,
     [rawData, stockParam]
   );
@@ -130,7 +126,7 @@ export default function PendingContent({ stocks }: { stocks: Stock[] }) {
               Copy ID
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={() => router.push(`?stock=${product.dateStock}`)}
+              onClick={() => router.push(`?stock=${encodeURIComponent(product.dateStock)}`)}
             >
               Show from same product
             </DropdownMenuItem>
