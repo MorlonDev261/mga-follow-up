@@ -87,7 +87,7 @@ export default function PendingContent({ stocks }: { stocks: Stock[] }) {
   {
     accessorKey: "date",
     header: "DATE",
-    cell: ({ row }) => <div>{moment(row.getValue("date")).format("DD/MM/YYYY")}</div>,
+    cell: ({ row }) => <div>{row.getValue("date")}</div>,
   },
   {
     accessorKey: "productName",
@@ -96,7 +96,7 @@ export default function PendingContent({ stocks }: { stocks: Stock[] }) {
   {
     accessorKey: "dateStock",
     header: "DATE STOCK",
-    cell: ({ row }) => <div>{moment(row.getValue("dateStock")).format("DD-MM-YYYY")}</div>,
+    cell: ({ row }) => <div>{row.getValue("dateStock")}</div>,
   },
   {
     accessorKey: "id",
@@ -123,7 +123,7 @@ export default function PendingContent({ stocks }: { stocks: Stock[] }) {
               Copy ID
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={() => router.push(`?stock=${encodeURIComponent(moment(product.dateStock).format("DD-MM-YYYY"))}`)}
+              onClick={() => router.push(`?stock=${encodeURIComponent(product.dateStock)}`)}
             >
               Show from same product
             </DropdownMenuItem>
