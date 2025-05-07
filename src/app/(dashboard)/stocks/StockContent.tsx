@@ -39,7 +39,6 @@ type Stock = {
   name: string;
   inStock?: number;
   sales?: number;
-  value?: number;
   color?: string;
 };
 
