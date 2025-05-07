@@ -46,7 +46,7 @@ type Stock = {
 export default function PendingContent({ stocks }: { stocks: Stock[] }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const caisseParam = searchParams.get("caisse");
+  const stockParam = searchParams.get("stock");
 
   const [rawData, setRawData] = React.useState<Product[]>([]);
   const [loading, setLoading] = React.useState(true);
@@ -74,21 +74,21 @@ export default function PendingContent({ stocks }: { stocks: Stock[] }) {
   }, []);
 
   const data = React.useMemo(
-    () => (caisseParam ? rawData.filter((item) => item.productId === caisseParam) : rawData),
-    [rawData, caisseParam]
+    () => (stockParam ? rawData.filter((item) => item.dateStock === stockParam) : rawData),
+    [rawData, stockParam]
   );
 
   const totalPending = React.useMemo(() => data.length, [data]); // Change if amount is available
 
-  const subtitle = caisseParam
-    ? `Pending payments from ${getCaisseName(caisseParam)}.`
+  const subtitle = stockParam
+    ? `Pending payments from ${getCaisseName(stockParam)}.`
     : `All pending payments are displayed.`;
 
   const Columns: ColumnDef<Product>[] = [
   {
     accessorKey: "date",
     header: "Date",
-    cell: ({ row }) => <div>{moment(row.getValue("date")).format("DD-MM-YYYY")}</div>,
+    cell: ({ row }) => <div>{moment(row.getValue("date")).format("DD/MM/YYYY")}</div>,
   },
   {
     accessorKey: "productName",
@@ -97,7 +97,7 @@ export default function PendingContent({ stocks }: { stocks: Stock[] }) {
   {
     accessorKey: "dateStock",
     header: "Date Stock",
-    cell: ({ row }) => <div>{moment(row.getValue("dateStock")).format("DD/MM/YYYY")}</div>,
+    cell: ({ row }) => <div>{moment(row.getValue("dateStock")).format("DD-MM-YYYY")}</div>,
   },
   {
     id: "actions",
@@ -120,7 +120,7 @@ export default function PendingContent({ stocks }: { stocks: Stock[] }) {
               Copy ID
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={() => router.push(`?caisse=${encodeURIComponent(product.productId)}`)}
+              onClick={() => router.push(`?stock=${encodeURIComponent(product.productId)}`)}
             >
               Show from same product
             </DropdownMenuItem>
@@ -133,8 +133,8 @@ export default function PendingContent({ stocks }: { stocks: Stock[] }) {
   return (
     <>
       <NextSeo
-        title={`Pending Payments - ${caisseParam ? getCaisseName(caisseParam) : "All Caisse"}`}
-        description={`View all pending payments${caisseParam ? ` from ${getCaisseName(caisseParam)}` : ""}.`}
+        title={`Pending Payments - ${stockParam ? getCaisseName(stockParam) : "All Caisse"}`}
+        description={`View all pending payments${caisseParam ? ` from ${getCaisseName(stockParam)}` : ""}.`}
       />
 
       <div className={cn("px-2 transition-opacity", { "opacity-100": !loading, "opacity-0": loading })}>
