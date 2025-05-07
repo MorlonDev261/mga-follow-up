@@ -1,7 +1,7 @@
 // src/app/api/stock/[companyId]/route.ts
 import { NextResponse } from 'next/server'
 import db from '@/lib/db'
-import { getProductsByCompany } from '@/actions'
+import { getProductsListByCompany } from '@/actions'
 
 export async function GET(
   request: Request,
@@ -17,7 +17,7 @@ export async function GET(
       )
     }
 
-    const products = await getProductsByCompany(companyId);
+    const products = await getProductsListByCompany(companyId);
 
     return NextResponse.json(products)
 
