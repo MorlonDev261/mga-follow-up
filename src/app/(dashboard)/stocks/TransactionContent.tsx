@@ -101,6 +101,7 @@ export default function PendingContent({ stocks }: { stocks: Stock[] }) {
   },
   {
     id: "actions",
+    header: "Actions",
     enableHiding: false,
     cell: ({ row }: { row: Row<Product> }) => {
       const product = row.original;
