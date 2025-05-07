@@ -84,59 +84,52 @@ export default function PendingContent({ stocks }: { stocks: Stock[] }) {
     ? `Pending payments from ${getCaisseName(caisseParam)}.`
     : `All pending payments are displayed.`;
 
-  const Columns: ColumnDef<Product>[] = [
-    {
-      accessorKey: "date",
-      header: "Date",
-      cell: ({ row }) => <div>{moment(row.getValue("date")).format("DD/MM/YYYY")}</div>,
+  const Columns = [
+  {
+    accessorKey: "date",
+    header: "Date",
+    cell: ({ row }) => <div>{moment(row.getValue("date")).format("DD/MM/YYYY")}</div>,
+  },
+  {
+    accessorKey: "productName",
+    header: "Designation",
+  },
+  {
+    accessorKey: "dateStock",
+    header: "Date Stock",
+    cell: ({ row }) => <div>{moment(row.getValue("dateStock")).format("DD/MM/YYYY")}</div>,
+  },
+  {
+    id: "actions",
+    enableHiding: false,
+    cell: ({ row }: { row: Row<Product> }) => {
+      const product = row.original;
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem
+              onClick={() => navigator.clipboard.writeText(product.id.toString())}
+            >
+              Copy ID
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => router.push(`?caisse=${encodeURIComponent(product.productId)}`)}
+            >
+              Show from same product
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
     },
-    { accessorKey: "productName", header: "Designation" },
-    {
-      accessorKey: "dateStock",
-      header: "Date Stock",
-      cell: ({ row }) => (
-        <div>{moment(row.getValue("dateStock")).format("DD/MM/YYYY")}</div>
-      ),
-    },
-    {
-      id: "actions",
-      enableHiding: false,
-      cell: ({ row }: { row: Row<Product> }) => {
-        const product = row.original;
-        return (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-8 w-8 p-0">
-                <span className="sr-only">Open menu</span>
-                <MoreHorizontal />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Actions</DropdownMenuLabel>
-              {caisseParam ? (
-                <DropdownMenuItem onClick={() => router.push(`/view/pending/${product.id}`)}>
-                  Show details
-                </DropdownMenuItem>
-              ) : (
-                <>
-                  <DropdownMenuItem onClick={() => navigator.clipboard.writeText(product.id.toString())}>
-                    Copy payment ID
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem>View payment details</DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => router.push(`?caisse=${encodeURIComponent(product.productId)}`)}>
-                    Show payments from this product
-                  </DropdownMenuItem>
-                </>
-              )}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        );
-      },
-    },
-  ];
-
+  },
+] satisfies ColumnDef<Product>[];
   return (
     <>
       <NextSeo
