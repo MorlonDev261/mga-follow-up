@@ -88,7 +88,7 @@ export default function PendingContent({ stocks }: { stocks: Stock[] }) {
 
   // Filtrer les données en fonction de la caisse sélectionnée
   const data = React.useMemo(
-    () => (caisseParam ? rawData.filter((item) => item.caisseId === caisseParam) : rawData),
+    () => (caisseParam ? rawData.filter((item) => item.productId === caisseParam) : rawData),
     [rawData, caisseParam]
   );
 
