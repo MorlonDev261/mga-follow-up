@@ -84,7 +84,7 @@ export default function PendingContent({ stocks }: { stocks: Stock[] }) {
     ? `Pending payments from ${getCaisseName(caisseParam)}.`
     : `All pending payments are displayed.`;
 
-  const Columns = [
+  const Columns: ColumnDef<Product>[] = [
   {
     accessorKey: "date",
     header: "Date",
@@ -129,7 +129,7 @@ export default function PendingContent({ stocks }: { stocks: Stock[] }) {
       );
     },
   },
-] satisfies ColumnDef<Product>[];
+];
   return (
     <>
       <NextSeo
