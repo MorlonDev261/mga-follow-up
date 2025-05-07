@@ -8,7 +8,7 @@ import { MoreHorizontal } from "lucide-react";
 import moment from "moment";
 import { NextSeo } from "next-seo";
 
-import Transactions from "@components/Table/Transactions";
+import ProductList from "@components/Table/Transactions";
 import Counter from "@components/Counter";
 import Caisse from "./Caisse";
 import Balance from "@components/Balance";
@@ -181,7 +181,7 @@ export default function PendingContent({ stocks }: { stocks: Stock[] }) {
        <Caisse caisses={dataCaisse} />
        
         <div className="pt-2">
-          <Transactions Columns={Columns} data={loading ? [] : data} loading={loading} />
+          <ProductList Columns={Columns} data={loading ? [] : data} loading={loading} />
         </div>
       </div>
     </>
