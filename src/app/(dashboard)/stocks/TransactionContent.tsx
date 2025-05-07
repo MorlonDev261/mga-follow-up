@@ -25,12 +25,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 // Types
-type Payment = {
-  id: string;
-  date: string;
-  comments: string;
-  amount: number;
-  caisseId: string;
+type Product = {
+  id: number;
+  productId: string;
+  productName: string;
+  date: Date;
+  dateStock: Date;
+  comment: string;
 };
 
 type Stock = {
@@ -58,7 +59,7 @@ export default function PendingContent({ stocks }: { stocks: Stock[] }) {
   const caisseParam = searchParams.get("caisse");
 
   // État pour stocker les transactions
-  const [rawData, setRawData] = React.useState<Payment[]>([]);
+  const [rawData, setRawData] = React.useState<Product[]>([]);
   const [loading, setLoading] = React.useState(true);
 
   const dataCaisse = stocks;
@@ -73,7 +74,7 @@ export default function PendingContent({ stocks }: { stocks: Stock[] }) {
         const response = await fetch("/api/stocks/cmacjsr390004ld0406t3vxpq");
         if (!response.ok) throw new Error("Failed to fetch data");
 
-        const result: Payment[] = await response.json();
+        const result: Product[] = await response.json();
         setRawData(result);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -100,37 +101,25 @@ export default function PendingContent({ stocks }: { stocks: Stock[] }) {
     : `All pending payments are displayed.`;
 
   // Définition des colonnes du tableau
-  const Columns: ColumnDef<Payment>[] = [
+  const Columns: ColumnDef<Product>[] = [
     {
       accessorKey: "date",
       header: "Date",
       cell: ({ row }) => <div>{moment(row.getValue("date")).format("DD/MM/YYYY")}</div>,
     },
-    { accessorKey: "comments", header: "Comments" },
+    { accessorKey: "ProductName", header: "Designation" },
     {
-      accessorKey: "amount",
-      header: "Amount",
-      cell: ({ row }: { row: Row<Payment> }) => {
-        const amount = row.getValue("amount") as number;
-        return (
-          <div className={cn("text-center", { "text-green-500": amount > 0, "text-red-500": amount <= 0 })}>
-            {amount}
-          </div>
-        );
-      }
-    },
-    {
-      accessorKey: "caisseId",
-      header: "Caisse",
-      cell: ({ row }: { row: Row<Payment> }) => (
-        <div className="text-center">{getCaisseName(row.getValue("caisseId"))}</div>
+      accessorKey: "StockDate",
+      header: "Date Stock",
+      cell: ({ row }: { row: Row<Product> }) => (
+        <div className="text-center">{getCaisseName(row.getValue("StockDate"))}</div>
       ),
     },
     {
       id: "actions",
       enableHiding: false,
-      cell: ({ row }: { row: Row<Payment> }) => {
-        const payment = row.original;
+      cell: ({ row }: { row: Row<Product> }) => {
+        const product = row.original;
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -142,19 +131,19 @@ export default function PendingContent({ stocks }: { stocks: Stock[] }) {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               {caisseParam ? (
-                <DropdownMenuItem onClick={() => router.push(`/view/pending/${payment.id}`)}>
+                <DropdownMenuItem onClick={() => router.push(`/view/pending/${product.id}`)}>
                   Show details
                 </DropdownMenuItem>
               ) : (
                 <>
-                  <DropdownMenuItem onClick={() => navigator.clipboard.writeText(payment.id)}>
+                  <DropdownMenuItem onClick={() => navigator.clipboard.writeText(product.id)}>
                     Copy payment ID
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem>View payment details</DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => router.push(`?caisse=${encodeURIComponent(payment.caisseId)}`)}>
-                    Show payments from this caisse
+                  <DropdownMenuItem onClick={() => router.push(`?caisse=${encodeURIComponent(product.productId)}`)}>
+                    Show payments from this product
                   </DropdownMenuItem>
                 </>
               )}
