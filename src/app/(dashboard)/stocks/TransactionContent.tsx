@@ -88,7 +88,7 @@ export default function PendingContent({ stocks }: { stocks: Stock[] }) {
   {
     accessorKey: "date",
     header: "Date",
-    cell: ({ row }) => <div>{moment(row.getValue("date")).format("DD/MM/YYYY")}</div>,
+    cell: ({ row }) => <div>{moment(row.getValue("date")).format("DD-MM-YYYY")}</div>,
   },
   {
     accessorKey: "productName",
@@ -101,11 +101,9 @@ export default function PendingContent({ stocks }: { stocks: Stock[] }) {
   },
   {
     id: "actions",
-    header: "Actions",
-    accessorFn: (row) => row.id,
     enableHiding: false,
     cell: ({ row }: { row: Row<Product> }) => {
-      const product = row.original;
+        const product = row.original;
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
