@@ -269,8 +269,8 @@ export async function getProductsByCompany(companyId: string, date?: string) {
         id: entry.identifier,
         productId: product.id,
         productName: product.name,
-        date: entry.arrival,
-        dateStock: entry.stockDate,
+        date: moment(entry.date).format("DD/MM/YYYY"),
+        dateStock: moment(entry.stockDate).format("DD-MM-YYYY"),
         comment: entry.comment,
       }))
     )
