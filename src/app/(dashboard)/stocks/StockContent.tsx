@@ -73,7 +73,7 @@ export default function PendingContent({ stocks }: { stocks: Stock[] }) {
   }, []);
 
   const data = React.useMemo(
-    () => (stockParam ? rawData.filter((item) => moment(item.dateStock).format("DD-MM-YYYY") === stockParam) : rawData),
+    () => (stockParam ? rawData.filter((item) => item.dateStock === stockParam) : rawData),
     [rawData, stockParam]
   );
 
