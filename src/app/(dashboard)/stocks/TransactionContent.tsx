@@ -43,31 +43,18 @@ type Stock = {
   color?: string;
 };
 
-// Liste des caisses (stocké en local ou récupéré depuis une API)
-/**const dataCaisse = [
-  { id: "uzRt253", name: "Caisse 1", value: 457900, color: "from-blue-500 to-blue-700 text-white" },
-  { id: "7264Yehf", name: "Caisse 2", value: 457900, color: "from-orange-500 to-orange-700 text-white" },
-  { id: "jdjbe59Jz", name: "Caisse 3", value: 457900, color: "from-yellow-400 to-yellow-600 text-white" },
-  { id: "7uet357eH", name: "Caisse 4", value: 4476900, color: "bg-gray-200 dark:bg-gray-800 text-gray-600 dark:text-gray-300" },
-  { id: "zyegq753JsG", name: "Caisse 5", value: 4837900, color: "bg-gray-200 dark:bg-gray-800 text-gray-600 dark:text-gray-300" },
-  { id: "djhe5292H", name: "Caisse 6", value: 364900, color: "bg-gray-200 dark:bg-gray-800 text-gray-600 dark:text-gray-300" },
-];**/
-
 export default function PendingContent({ stocks }: { stocks: Stock[] }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const caisseParam = searchParams.get("caisse");
 
-  // État pour stocker les transactions
   const [rawData, setRawData] = React.useState<Product[]>([]);
   const [loading, setLoading] = React.useState(true);
-
   const dataCaisse = stocks;
-  // Fonction pour obtenir le nom de la caisse
-  const getCaisseName = (caisseId: string) => dataCaisse.find((caisse) => caisse.id === caisseId)?.name || "Unknown";
 
-  
-  // Fetch des données au montage
+  const getCaisseName = (caisseId: string) =>
+    dataCaisse.find((caisse) => caisse.id === caisseId)?.name || "Unknown";
+
   React.useEffect(() => {
     const fetchData = async () => {
       try {
@@ -86,33 +73,29 @@ export default function PendingContent({ stocks }: { stocks: Stock[] }) {
     fetchData();
   }, []);
 
-  // Filtrer les données en fonction de la caisse sélectionnée
   const data = React.useMemo(
     () => (caisseParam ? rawData.filter((item) => item.productId === caisseParam) : rawData),
     [rawData, caisseParam]
   );
 
-  // Calcul du total des paiements en attente (id -> amount)
-  const totalPending = React.useMemo(() => data.reduce((acc, item) => acc + item.id, 0), [data]);
+  const totalPending = React.useMemo(() => data.length, [data]); // Change if amount is available
 
-  // Définition du sous-titre en fonction du filtre
   const subtitle = caisseParam
     ? `Pending payments from ${getCaisseName(caisseParam)}.`
     : `All pending payments are displayed.`;
 
-  // Définition des colonnes du tableau
   const Columns: ColumnDef<Product>[] = [
     {
       accessorKey: "date",
       header: "Date",
       cell: ({ row }) => <div>{moment(row.getValue("date")).format("DD/MM/YYYY")}</div>,
     },
-    { accessorKey: "ProductName", header: "Designation" },
+    { accessorKey: "productName", header: "Designation" },
     {
-      accessorKey: "StockDate",
+      accessorKey: "dateStock",
       header: "Date Stock",
-      cell: ({ row }: { row: Row<Product> }) => (
-        <div className="text-center">{getCaisseName(row.getValue("StockDate"))}</div>
+      cell: ({ row }) => (
+        <div>{moment(row.getValue("dateStock")).format("DD/MM/YYYY")}</div>
       ),
     },
     {
@@ -164,22 +147,27 @@ export default function PendingContent({ stocks }: { stocks: Stock[] }) {
       <div className={cn("px-2 transition-opacity", { "opacity-100": !loading, "opacity-0": loading })}>
         <Balance
           title={<><SwapWallet /> Transactions</>}
-          balance={loading ? "Loading..." : data.length > 0 ? <><Counter end={totalPending} duration={0.8} /> Ar.</> : "No pending payment added."}
+          balance={
+            loading
+              ? "Loading..."
+              : data.length > 0
+              ? <><Counter end={totalPending} duration={0.8} /> en attente</>
+              : "No pending payment added."
+          }
           balanceColor="text-green-500 hover:text-green-600"
           subtitle={subtitle}
           subtitleSize="text-sm"
         >
           {!loading && data.length > 0 && (
-             <button className="relative flex bg-red-500 items-center text-white rounded overflow-hidden">
-               <span className="bg-red-500 p-1 clip-debit">Débit</span>
-               <span className="bg-green-500 p-1 pl-2 clip-credit">Crédit</span>
-             </button>
-
+            <button className="relative flex bg-red-500 items-center text-white rounded overflow-hidden">
+              <span className="bg-red-500 p-1 clip-debit">Débit</span>
+              <span className="bg-green-500 p-1 pl-2 clip-credit">Crédit</span>
+            </button>
           )}
         </Balance>
 
-       <Caisse caisses={dataCaisse} />
-       
+        <Caisse caisses={dataCaisse} />
+
         <div className="pt-2">
           <ProductTable Columns={Columns} data={loading ? [] : data} loading={loading} />
         </div>
