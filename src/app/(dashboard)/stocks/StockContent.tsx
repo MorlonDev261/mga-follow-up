@@ -129,7 +129,7 @@ export default function PendingContent({ stocks }: { stocks: Stock[] }) {
               Copy ID
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={() => router.push(`?stock=${encodeURIComponent(formatDate(new Date(product.dateStock))}`)}
+              onClick={() => router.push(`?stock=${encodeURIComponent(formatDate(new Date(product.dateStock)))}`)}
             >
               Show from same product
             </DropdownMenuItem>
