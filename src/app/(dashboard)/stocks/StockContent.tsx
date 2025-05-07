@@ -72,8 +72,14 @@ export default function PendingContent({ stocks }: { stocks: Stock[] }) {
     fetchData();
   }, []);
 
+  const formatDate = (date: Date) =>
+  new Intl.DateTimeFormat("fr-FR").format(date).replace(/\//g, "-");
+
   const data = React.useMemo(
-    () => (stockParam ? rawData.filter((item) => item.dateStock === stockParam) : rawData),
+    () =>
+      stockParam
+        ? rawData.filter((item) => formatDate(new Date(item.dateStock)) === stockParam)
+        : rawData,
     [rawData, stockParam]
   );
 
@@ -123,7 +129,7 @@ export default function PendingContent({ stocks }: { stocks: Stock[] }) {
               Copy ID
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={() => router.push(`?stock=${encodeURIComponent(moment(product.dateStock).format("DD-MM-YYYY"))}`)}
+              onClick={() => router.push(`?stock=${encodeURIComponent(formatDate(new Date(product.dateStock))}`)}
             >
               Show from same product
             </DropdownMenuItem>
