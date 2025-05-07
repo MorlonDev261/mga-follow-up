@@ -37,7 +37,7 @@ type Product = {
   productId: string;
   productName: string;
   date: Date;
-  dateStock: Date;
+  dateStock: string;
   comment: string;
 };
 
