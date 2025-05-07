@@ -231,45 +231,10 @@ export async function createProduct(data: { name: string; companyId: string }) {
   }
 }
 
-export async function getProductsByCompany(
-  companyId: string,
-  date?: string // format 'YYYY-MM-DD'
-) {
-  if (!companyId) {
-    throw new Error("L'identifiant de l'entreprise est requis.");
-  }
-
-  try {
-    const where: Prisma.ProductWhereInput = {
-      companyId,
-    };
-
-    if (date) {
-      const start = new Date(date);
-      const end = new Date(date);
-      end.setHours(23, 59, 59, 999); // fin de la journée
-
-      where.createdAt = {
-        gte: start,
-        lte: end,
-      };
-    }
-
-    const products = await db.product.findMany({
-      where,
-      include: {
-        entries: true
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
-
-    return products;
-  } catch (error) {
-    console.error("Erreur lors de la récupération des produits:", error);
-    throw new Error("Erreur serveur lors de la récupération des produits.");
-  }
+export async function getProductsByCompany(companyId: string) {
+  return db.product.findMany({
+    where: { companyId },
+  })
 }
 
 export async function getProductsListByCompany(companyId: string, date?: string) {
