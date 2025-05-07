@@ -32,10 +32,10 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
     qty: 0,
     identifiers: [],
   });
-  
-  const [loading, setLoading] = useState(false);
 
-  // Fonction pour gérer la modification de la quantité
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
   const handleQtyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const qty = Number(e.target.value);
     setForm(prev => ({
@@ -45,7 +45,6 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
     }));
   };
 
-  // Gestion de la modification des dates
   const handleDateChange = (key: 'arrival' | 'stockDate', date: Date | undefined) => {
     if (!date) return;
     setForm(prev => ({
@@ -54,26 +53,26 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
     }));
   };
 
-  // Modification des identifiants
   const handleIdentifierChange = (index: number, field: 'identifier' | 'comment', value: string) => {
     setForm(prev => {
       const updated = [...prev.identifiers];
-      updated[index] = { ...updated[index], [field]: field === 'identifier' ? Number(value) : value };
+      updated[index] = {
+        ...updated[index],
+        [field]: field === 'identifier' ? Number(value) : value,
+      };
       return { ...prev, identifiers: updated };
     });
   };
 
-  // Ajout d’un identifiant
   const addIdentifier = () => {
     if (form.identifiers.length < form.qty) {
       setForm(prev => ({
         ...prev,
-        identifiers: [...prev.identifiers, { identifier: 0, comment: '' }],
+        identifiers: [...prev.identifiers, { identifier: NaN, comment: '' }],
       }));
     }
   };
 
-  // Suppression d’un identifiant
   const removeIdentifier = (index: number) => {
     setForm(prev => {
       const updated = [...prev.identifiers];
@@ -82,11 +81,29 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
     });
   };
 
-  // Soumission du formulaire
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
+
+    // Vérifications supplémentaires
+    if (form.qty === 0) {
+      setError('Veuillez spécifier une quantité supérieure à 0.');
+      return;
+    }
+
     if (form.identifiers.length !== form.qty) {
-      alert(`Le nombre d'identifiants (${form.identifiers.length}) doit être égal à la quantité (${form.qty}).`);
+      setError(`Le nombre d'identifiants (${form.identifiers.length}) doit être égal à la quantité (${form.qty}).`);
+      return;
+    }
+
+    if (form.identifiers.some((i) => !i.identifier || isNaN(i.identifier))) {
+      setError("Tous les identifiants doivent être remplis (aucun ne doit être vide ou égal à 0).");
+      return;
+    }
+
+    const identifiersSet = new Set(form.identifiers.map(i => i.identifier));
+    if (identifiersSet.size !== form.identifiers.length) {
+      setError("Tous les identifiants doivent être uniques.");
       return;
     }
 
@@ -98,12 +115,17 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
         body: JSON.stringify(form),
       });
 
-      if (!response.ok) throw new Error('Échec de l’enregistrement');
+      if (!response.ok) {
+        const data = await response.json();
+        setError(data?.message || "Une erreur s'est produite lors de l’enregistrement.");
+        return;
+      }
+
       alert('Produit enregistré avec succès !');
       setOpen();
     } catch (error) {
       console.error(error);
-      alert('Une erreur est survenue lors de l’enregistrement.');
+      setError("Une erreur réseau est survenue.");
     } finally {
       setLoading(false);
     }
@@ -111,6 +133,12 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="grid gap-4 py-2">
+      {error && (
+        <div className="text-sm text-red-600 bg-red-100 px-3 py-2 rounded-md">
+          {error}
+        </div>
+      )}
+
       <div className="grid grid-cols-2 gap-2 md:gap-4">
         {['arrival', 'stockDate'].map((key) => (
           <div key={key}>
@@ -144,15 +172,13 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
       <div className="grid grid-cols-3 md:grid-cols-4 gap-4 items-end">
         <div className="col-span-2 md:col-span-3">
           <label className="block mb-1 text-sm font-medium">Nom du produit</label>
-          
           <Combobox
             companyId="cmacjsr390004ld0406t3vxpq"
             form={form}
             setForm={setForm}
-            showSearch={true}  // Affiche la barre de recherche
-            closeOnSelect={false}  // Laisse le sélecteur ouvert après la sélection
+            showSearch={true}
+            closeOnSelect={false}
           />
-          
         </div>
         <div>
           <label className="block mb-1 text-sm font-medium">Quantité</label>
@@ -176,14 +202,15 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
             variant="outline"
             onClick={() => {
               if (form.qty === 0) {
-                alert("Veuillez d'abord entrer une quantité.");
+                setError("Veuillez d'abord entrer une quantité.");
                 return;
               }
               if (form.identifiers.length >= form.qty) {
-                alert(`Vous avez déjà ajouté ${form.qty} identifiant(s).`);
+                setError(`Vous avez déjà ajouté ${form.qty} identifiant(s).`);
                 return;
               }
-              addIdentifier(); 
+              setError(null);
+              addIdentifier();
             }}
           >
             <PlusIcon className="w-4 h-4 mr-1" /> Ajouter
@@ -195,7 +222,7 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
             <Input
               type="number"
               placeholder="Identifiant"
-              value={item.identifier}
+              value={isNaN(item.identifier) ? '' : item.identifier}
               onChange={(e) => handleIdentifierChange(index, 'identifier', e.target.value)}
               required
               className="col-span-2"
