@@ -291,7 +291,7 @@ export async function getProductsListByCompany(companyId: string, date?: string)
 // === STOCK ENTRIES ===
 
 export async function listStocksByCompany(companyId: string) {
-  if (!companyId.trim()) {
+  if (typeof companyId !== 'string' || !companyId.trim()) {
     throw new Error("L'identifiant de l'entreprise est requis.")
   }
 
@@ -311,11 +311,14 @@ export async function listStocksByCompany(companyId: string) {
       },
     })
 
-    return summary.map(item => ({
-      id: moment(item.stockDate).format('DD-MM-YYYY'),
-      name: moment(item.stockDate).format('DD-MM-YYYY'),
-      value: item._count.id,
-    }))
+    return summary.map(item => {
+      const formattedDate = moment(item.stockDate).format('DD-MM-YYYY')
+      return {
+        id: formattedDate,
+        name: `Stock du ${formattedDate}`,
+        value: item._count.id,
+      }
+    })
   } catch (error) {
     console.error("Erreur lors du résumé des stocks par entreprise:", error)
     throw new Error("Erreur serveur lors du résumé des stocks.")
