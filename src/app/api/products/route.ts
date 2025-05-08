@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import db from '@/lib/db';
 import { auth } from '@/lib/auth';
 import { z } from 'zod';
+import { Prisma } from '@prisma/client'; // <- Import du type d'erreur Prisma
 
 // Schéma de validation
 const productSchema = z
@@ -58,7 +59,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Dates invalides' }, { status: 400 });
   }
 
-  // Vérification des identifiants existants en base
+  // Vérification des identifiants déjà présents
   const identifiers = payload.identifiers.map((i) => i.identifier);
   const existing = await db.stockEntry.findMany({
     where: { identifier: { in: identifiers } },
@@ -98,7 +99,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(created, { status: 201 });
   } catch (error) {
     console.error('[Product API] Erreur base de données:', error);
-    if (error.code === 'P2002') {
+    if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
       return NextResponse.json(
         { error: 'Conflit : un identifiant est déjà utilisé' },
         { status: 400 }
