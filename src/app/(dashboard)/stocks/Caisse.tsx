@@ -1,9 +1,8 @@
 "use client";
 
-import Link from "next/link";
+import { useSearchParams, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { useSearchParams } from "next/navigation"; // Pour accéder aux paramètres de l'URL
-import { FaRegCheckCircle } from "react-icons/fa"; // Importez l'icône de vérification de Font Awesome
+import { FaRegCheckCircle } from "react-icons/fa";
 
 type StockProps = {
   id: string;
@@ -14,18 +13,35 @@ type StockProps = {
 };
 
 const Stock = ({ caisses }: { caisses: StockProps[] }) => {
-  const searchParams = useSearchParams(); // Récupérer les paramètres de l'URL
-  const activeStock = searchParams.get("stock"); // Récupérer la valeur du paramètre "caisse"
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const activeStock = searchParams.get("stock");
+
+  const handleClick = (id: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (id === activeStock) {
+      // Supprimer le paramètre s’il est déjà actif
+      params.delete("stock");
+    } else {
+      params.set("stock", id);
+    }
+
+    router.replace(`?${params.toString()}`, { scroll: false });
+  };
 
   return (
-    <nav aria-label="Shortcuts Navigation" className="grid grid-cols-3 md:grid-cols-7 sm:grid-cols-5 gap-3 p-2 w-full">
+    <nav
+      aria-label="Shortcuts Navigation"
+      className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-7 gap-3 p-2 w-full"
+    >
       {caisses.map((stock) => {
-        const isActive = stock.id === activeStock; // Vérifier si la caisse est active
+        const isActive = stock.id === activeStock;
 
         return (
-          <Link
+          <button
             key={stock.id}
-            href={`?stock=${stock.id}`}
+            onClick={() => handleClick(stock.id)}
             title={stock.name}
             aria-label={stock.name}
             className={cn(
@@ -33,20 +49,23 @@ const Stock = ({ caisses }: { caisses: StockProps[] }) => {
               "transition-all duration-300 transform hover:scale-105",
               "hover:bg-gray-100 dark:hover:bg-gray-700",
               "bg-gradient-to-r",
-              stock.color || "bg-gray-200 dark:bg-gray-800 text-gray-600 dark:text-gray-300" // Valeur par défaut
+              stock.color || "bg-gray-200 dark:bg-gray-800 text-gray-600 dark:text-gray-300",
+              isActive && "ring-2 ring-green-500"
             )}
           >
-            {/* Icône de vérification si la caisse est active */}
             {isActive && (
               <div className="absolute bg-background p-1 rounded-full top-1 right-1 text-green-500">
                 <FaRegCheckCircle />
               </div>
             )}
-
             <span className="text-xs">{stock.name}</span>
-            {stock.inStock !== undefined && <b className="text-xs">{stock.inStock.toLocaleString()}</b>}
-            {stock.sales !== undefined && <b className="text-xs">{stock.sales.toLocaleString()}</b>}
-          </Link>
+            {stock.inStock !== undefined && (
+              <b className="text-xs">{stock.inStock.toLocaleString()}</b>
+            )}
+            {stock.sales !== undefined && (
+              <b className="text-xs">{stock.sales.toLocaleString()}</b>
+            )}
+          </button>
         );
       })}
     </nav>
