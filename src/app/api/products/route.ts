@@ -3,7 +3,7 @@ import db from '@/lib/db';
 import { auth } from '@/lib/auth';
 import { z } from 'zod';
 
-// Schéma de validation avec identifiants uniques
+// Schéma de validation
 const productSchema = z
   .object({
     arrival: z.number(),
@@ -58,6 +58,23 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Dates invalides' }, { status: 400 });
   }
 
+  // Vérification des identifiants existants en base
+  const identifiers = payload.identifiers.map((i) => i.identifier);
+  const existing = await db.stockEntry.findMany({
+    where: { identifier: { in: identifiers } },
+    select: { identifier: true },
+  });
+
+  if (existing.length > 0) {
+    return NextResponse.json(
+      {
+        error: 'Certains identifiants existent déjà en base',
+        existing: existing.map((e) => e.identifier),
+      },
+      { status: 400 }
+    );
+  }
+
   try {
     const created = await db.$transaction(async (tx) => {
       const results = [];
@@ -81,6 +98,13 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(created, { status: 201 });
   } catch (error) {
     console.error('[Product API] Erreur base de données:', error);
+    if (error.code === 'P2002') {
+      return NextResponse.json(
+        { error: 'Conflit : un identifiant est déjà utilisé' },
+        { status: 400 }
+      );
+    }
+
     return NextResponse.json({ error: 'Erreur serveur' }, { status: 500 });
   }
 }
