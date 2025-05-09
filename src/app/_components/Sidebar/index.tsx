@@ -22,6 +22,7 @@ interface SidebarProps {
 export default function Sidebar({ open, setOpen }: SidebarProps) {
   const { data: session } = useSession(); // Récupération de la session
   const router = useRouter(); // Initialisation du router
+  const [selectedCompany, setSelectedCompany] = useState("Français");
   const [selectedLanguage, setSelectedLanguage] = useState("Français");
   const [selectedCurrency, setSelectedCurrency] = useState("$");
   const [exchangeRate, setExchangeRate] = useState("");
@@ -36,6 +37,21 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
             <ProfileAvatar />
 
             <Separator className="my-4" />
+
+            {/* Company */}
+              <div>
+                <Label>Swich company</Label>
+                <Select value={selectedCompany} onValueChange={setSelectedCompany}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Sélectionner une entreprise" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Malagasy">Aztek DWC</SelectItem>
+                    <SelectItem value="Français">ShopCell</SelectItem>
+                    <SelectItem value="Anglais">High Tech</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
 
             {/* Paramètres */}
             <div className="space-y-4">
