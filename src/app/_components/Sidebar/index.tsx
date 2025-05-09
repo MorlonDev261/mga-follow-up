@@ -20,7 +20,12 @@ type SidebarProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-type Company {
+type Logo = {
+  url: string;
+  public_id: string;
+};
+
+type Company = {
   id: string;
   name: string;
   createdAt: Date; 
@@ -30,8 +35,8 @@ type Company {
   owner: string; 
   contact: string; 
   address: string; 
-  logo: JsonValue; 
-}
+  logo: Logo; 
+};
 
 export default function Sidebar({ open, setOpen }: SidebarProps) {
   const { data: session } = useSession();
