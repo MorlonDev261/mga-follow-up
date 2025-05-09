@@ -185,8 +185,6 @@ model StockInfo {
   id          DateTime   @id
   name        String?
   color       String?
-
-  stockEntry  StockEntry @relation(fields: [id], references: [stockDate])
 }
 
 model Caisse {
