@@ -4,7 +4,7 @@ import React, { useState, useEffect, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useSession } from "next-auth/react";
-import { createCompany, updateCompany } from "@/actions";
+import { createCompany, createCompanyUser, updateCompany } from "@/actions";
 import LogoUploader from "@components/Uploader";
 import { cn } from "@/lib/utils";
 
@@ -54,14 +54,13 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
     }));
   }, [logo]);
 
-  const handleChange = <
-    K extends keyof Company
-  >(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setCompany((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setCompany({
+      ...company,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -75,12 +74,12 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
         const newCompany = await createCompany(dataToSubmit);
 
         // Associer automatiquement l'utilisateur à l'entreprise créée
-        /**await createCompanyUser({
+        await createCompanyUser({
           companyId: newCompany.id,
           userId: session?.user?.id!,
           role: "OWNER",
-        });**/
-    
+        });
+        
         router.push(`/companies/${newCompany.id}`);
       } else if (mode === "edit") {
         if (!initialData?.id) throw new Error("L'identifiant de l'entreprise est manquant");
@@ -157,60 +156,104 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
           
           {/* Form fields (right side) */}
           <div className="w-2/3">
-            {["name", "contact", "address"].map((field) => (
-              <div className="mb-4" key={field}>
-                <label htmlFor={field} className="block text-sm font-medium text-gray-500 mb-1">
-                  {field === "name" ? "Nom de l&apos;entreprise" : field === "contact" ? "Contact Joignable" : "Adresse de l’entreprise"}
-                </label>
-                <input
-                  type="text"
-                  id={field}
-                  name={field as keyof Company}
-                  value={company[field as keyof Company] ?? ""}
-                  onChange={handleChange}
-                  required
-                  className="w-full p-2 bg-transparent border-0 border-b border-gray-300 focus:border-green-500 hover:border-green-400 focus:outline-none focus:ring-0 transition-colors"
-                  placeholder={`Entrez ${field === "name" ? "le nom de l'entreprise" : field === "contact" ? "le contact" : "l'adresse de l'entreprise"}`}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {["nif", "stat"].map((field) => (
-            <div key={field}>
-              <label htmlFor={field} className="block text-sm font-medium text-gray-500 mb-1">
-                {field === "nif" ? "NIF" : "STAT"}
+            <div className="mb-4">
+              <label htmlFor="name" className="block text-sm font-medium text-gray-500 mb-1">
+                Nom de l&apos;entreprise
               </label>
               <input
                 type="text"
-                id={field}
-                name={field as keyof Company}
-                value={company[field as keyof Company] ?? ""}
+                id="name"
+                name="name"
+                value={company.name}
                 onChange={handleChange}
-                className="w-full px-4 py-2 bg-background border border-foreground rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
-                placeholder={field === "nif" ? "Numéro d'identification fiscale" : "Numéro statistique"}
+                required
+                className="w-full p-2 bg-transparent border-0 border-b border-gray-300 focus:border-green-500 hover:border-green-400 focus:outline-none focus:ring-0 transition-colors"
+                placeholder="Entrez le nom de l'entreprise"
               />
             </div>
-          ))}
+
+            <div className="mb-4">
+              <label htmlFor="contact" className="block text-sm font-medium text-gray-500 mb-1">
+                Contact Joignable
+              </label>
+              <input
+                type="text"
+                id="contact"
+                name="contact"
+                value={company.contact}
+                onChange={handleChange}
+                required
+                className="w-full p-2 bg-transparent border-0 border-b border-gray-300 focus:border-green-500 hover:border-green-400 focus:outline-none focus:ring-0 transition-colors"
+                placeholder="Entrez le contact de l'entreprise"
+              />
+            </div>
+
+            <div className="mb-4">
+              <label htmlFor="address" className="block text-sm font-medium text-gray-500 mb-1">
+                Adresse de l’entreprise
+              </label>
+              <input
+                type="text"
+                id="address"
+                name="address"
+                value={company.address}
+                onChange={handleChange}
+                required
+                className="w-full p-2 bg-transparent border-0 border-b border-gray-300 focus:border-green-500 hover:border-green-400 focus:outline-none focus:ring-0 transition-colors"
+                placeholder="Entrez l’adresse de l'entreprise"
+              />
+            </div>
+          </div>
         </div>
             
-        <div className="mt-4">
-          <label htmlFor="desc" className="block text-sm font-medium text-gray-500 mb-1">
-            Description
-          </label>
-          <textarea
-            id="desc"
-            name="desc"
-            value={company.desc}
-            onChange={handleChange}
-            required
-            rows={4}
-            className="w-full px-4 py-2 bg-background border border-foreground rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors resize-none"
-            placeholder="Décrivez l'entreprise en quelques mots..."
-          />
-        </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="nif" className="block text-sm font-medium text-gray-500 mb-1">
+                  NIF
+                </label>
+                <input
+                  type="text"
+                  id="nif"
+                  name="nif"
+                  value={company.nif}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 bg-background border border-foreground rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
+                  placeholder="Numéro d'identification fiscale"
+                />
+              </div>
+              
+              <div>
+                <label htmlFor="stat" className="block text-sm font-medium text-gray-500 mb-1">
+                  STAT
+                </label>
+                <input
+                  type="text"
+                  id="stat"
+                  name="stat"
+                  value={company.stat}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 bg-background border border-foreground rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
+                  placeholder="Numéro statistique"
+                />
+              </div>
+            </div>
+            
+            <div className="mt-4">
+              <label htmlFor="desc" className="block text-sm font-medium text-gray-500 mb-1">
+                Description
+              </label>
+              <textarea
+                id="desc"
+                name="desc"
+                value={company.desc}
+                onChange={handleChange}
+                required
+                rows={4}
+                className="w-full px-4 py-2 bg-background border border-foreground rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors resize-none"
+                placeholder="Décrivez l'entreprise en quelques mots..."
+              />
+            </div>
+          
         
         <div className="pt-4 border-t border-gray-200 mt-6">
           <div className="flex justify-end">
