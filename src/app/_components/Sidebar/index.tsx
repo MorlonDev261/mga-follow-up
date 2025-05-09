@@ -18,7 +18,7 @@ import { getCompaniesByUser } from "@/actions";
 type SidebarProps {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
+};
 
 type Logo = {
   url: string;
