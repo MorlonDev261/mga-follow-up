@@ -1,13 +1,11 @@
 import NextAuth, { type NextAuthConfig } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import GoogleProvider from 'next-auth/providers/google'
-import { PrismaAdapter } from '@auth/prisma-adapter'
 import bcrypt from 'bcryptjs'
 import db from '@/lib/db'
 import moment from 'moment'
 
 export const authOptions: NextAuthConfig = {
-  adapter: PrismaAdapter(db),
   providers: [
     CredentialsProvider({
       name: 'Credentials',
@@ -58,7 +56,7 @@ export const authOptions: NextAuthConfig = {
   callbacks: {
     async signIn({ user, account }) {
       if (account?.provider !== 'credentials') {
-        let existingUser = await db.user.findUnique({
+        const existingUser = await db.user.findUnique({
           where: { email: user.email as string },
         })
 
@@ -67,21 +65,13 @@ export const authOptions: NextAuthConfig = {
             data: {
               email: user.email as string,
               name: user.name,
-              image: user.image,
+              image: user.image
             },
           })
-
-          // Re-fetch to get the auto-generated id
-          existingUser = await db.user.findUnique({
-            where: { email: user.email as string },
-          })
         }
-
-        // Replace `user.id` with actual DB id
-        user.id = existingUser?.id ?? ""
       }
       return true
-    }, 
+    },
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id ?? ""
