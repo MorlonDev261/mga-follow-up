@@ -59,7 +59,7 @@ export async function deleteUser(id: string) {
 
 // --- COMPANIES ---
 
-export async function getCompaniesByUser(userId: string): Promise<(Company & { userRole: Role })[]> {
+export async function getCompaniesByUser(userId: string) {
   const companyUsers = await db.companyUser.findMany({
     where: { userId },
     include: {
