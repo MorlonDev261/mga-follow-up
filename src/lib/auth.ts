@@ -2,10 +2,11 @@ import NextAuth, { type NextAuthConfig } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import GoogleProvider from 'next-auth/providers/google'
 import bcrypt from 'bcryptjs'
+import { PrismaAdapter } from '@auth/prisma-adapter'
 import db from '@/lib/db'
-import moment from 'moment'
 
 export const authOptions: NextAuthConfig = {
+  adapter: PrismaAdapter(db),
   providers: [
     CredentialsProvider({
       name: 'Credentials',
@@ -35,11 +36,7 @@ export const authOptions: NextAuthConfig = {
           throw new Error('Invalid email or password.')
         }
 
-        return {
-          id: user.id,
-          email: user.email,
-          name: user.name,
-        }
+        return user
       },
     }),
     GoogleProvider({
@@ -48,51 +45,27 @@ export const authOptions: NextAuthConfig = {
     }),
   ],
   session: {
-    strategy: 'jwt',
+    strategy: 'database',
   },
   pages: {
     signIn: '/login',
   },
   callbacks: {
-    async signIn({ user, account }) {
-      if (account?.provider !== 'credentials') {
-        const existingUser = await db.user.findUnique({
-          where: { email: user.email as string },
-        })
-
-        if (!existingUser) {
-          await db.user.create({
-            data: {
-              email: user.email as string,
-              name: user.name,
-              image: user.image
-            },
-          })
-        }
-      }
-      return true
-    },
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id ?? ""
+        token.id = user.id
         token.email = user.email ?? ""
         token.name = user.name ?? ""
-        token.coverPicture = user.coverPicture ?? ""
         token.image = user.image ?? ""
-        token.emailVerified = user.emailVerified ?? null
-        token.createdAt = user.createdAt ?? ""
       }
       return token
     },
     async session({ session, token }) {
       if (token) {
         session.user.id = token.id
-        session.user.email = token.email ?? ""
-        session.user.name = token.name ?? ""
-        session.user.coverPicture = token.coverPicture ?? ""
-        session.user.image = token.image ?? ""
-        session.user.emailVerified = token.emailVerified ?? null
-        session.user.createdAt = token.createdAt ?? ""
+        session.user.email = token.email
+        session.user.name = token.name
+        session.user.image = token.image
       }
       return session
     },
