@@ -14,16 +14,11 @@ import Download from "@components/Download";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { getCompaniesByUser } from "@/actions";
-import { Role } from "@prisma/client";
+import { Role, Prisma } from "@prisma/client";
 
 interface SidebarProps {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-type Logo = {
-  url: string;
-  public_id: string;
 }
 
 type Company = {
@@ -36,7 +31,7 @@ type Company = {
   owner: string; 
   contact: string; 
   address: string; 
-  logo: Logo;
+  logo: Prisma.JsonValue | null;
   userRole: string;
 }
 
