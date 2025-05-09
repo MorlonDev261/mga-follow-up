@@ -59,13 +59,18 @@ export async function deleteUser(id: string) {
 
 // --- COMPANIES ---
 
-export async function getCompaniesByUser(userId: string) {
-  return db.companyUser.findMany({
+export async function getCompaniesByUser(userId: string): Promise<(Company & { userRole: Role })[]> {
+  const companyUsers = await db.companyUser.findMany({
     where: { userId },
     include: {
       company: true,
     },
-  })
+  });
+
+  return companyUsers.map((item) => ({
+    ...item.company,
+    userRole: item.role,
+  }));
 }
 
 export async function getCompaniesByUserAndRole(userId: string, role: Role) {
