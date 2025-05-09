@@ -14,6 +14,7 @@ import Download from "@components/Download";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { getCompaniesByUser } from "@/actions";
+import { Role } from "@prisma/client";
 
 interface SidebarProps {
   open: boolean;
@@ -39,11 +40,13 @@ type Company = {
   userRole: string;
 }
 
+type CompanyWithRole = Company & { userRole: Role };
+
 export default function Sidebar({ open, setOpen }: SidebarProps) {
   const { data: session } = useSession();
   const router = useRouter();
 
-  const [companies, setCompanies] = useState<Company[]>([]);
+  const [companies, setCompanies] = useState<CompanyWithRole[]>([]);
   const [selectedCompany, setSelectedCompany] = useState("");
   const [selectedLanguage, setSelectedLanguage] = useState("Français");
   const [selectedCurrency, setSelectedCurrency] = useState("$");
