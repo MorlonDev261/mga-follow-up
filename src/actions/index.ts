@@ -1,8 +1,7 @@
 "use server"
 
 import db from "@/lib/db"
-import { Prisma } from "@prisma/client"
-import { Role } from "@prisma/client"
+import { Role, Prisma } from "@prisma/client"
 import moment from "moment"
 
 import {
