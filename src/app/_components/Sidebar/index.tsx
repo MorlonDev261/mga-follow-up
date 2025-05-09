@@ -15,15 +15,15 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { getCompaniesByUser } from "@/actions";
 
-type SidebarProps {
+interface SidebarProps {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-};
+}
 
 type Logo = {
   url: string;
   public_id: string;
-};
+}
 
 type Company = {
   id: string;
@@ -36,7 +36,7 @@ type Company = {
   contact: string; 
   address: string; 
   logo: Logo; 
-};
+}
 
 export default function Sidebar({ open, setOpen }: SidebarProps) {
   const { data: session } = useSession();
