@@ -75,11 +75,11 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
         const newCompany = await createCompany(dataToSubmit);
 
         // Associer automatiquement l'utilisateur à l'entreprise créée
-        await createCompanyUser({
+        /**await createCompanyUser({
           companyId: newCompany.id,
           userId: session?.user?.id!,
           role: "OWNER",
-        });
+        });**/
     
         router.push(`/companies/${newCompany.id}`);
       } else if (mode === "edit") {
