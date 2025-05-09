@@ -86,7 +86,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
     setError(null);
     try {
       if (mode === "create") {
-        alert(data);
+        alert(JSON.stringify({ data }))
         const newCompany = await createCompany(data);
 
         if (!session?.user?.id) {
