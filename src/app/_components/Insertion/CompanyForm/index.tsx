@@ -86,17 +86,22 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
     setError(null);
     try {
       if (mode === "create") {
+        alert(data);
         const newCompany = await createCompany(data);
 
         if (!session?.user?.id) {
           throw new Error("L'utilisateur n'est pas authentifié.");
         }
 
+        alert(`Company ID: ${newCompany.id}, User ID: ${session.user.id}`);
+        
         await createCompanyUser({
           companyId: newCompany.id,
           userId: session.user.id,
           role: "OWNER",
         });
+
+        
 
         router.push(`/companies/${newCompany.id}`);
       } else if (mode === "edit") {
