@@ -15,16 +15,29 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { getCompaniesByUser } from "@/actions";
 
-interface SidebarProps {
+type SidebarProps {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+type Company {
+  id: string;
+  name: string;
+  createdAt: Date; 
+  desc: string; 
+  nif: string | null; 
+  stat: string | null; 
+  owner: string; 
+  contact: string; 
+  address: string; 
+  logo: JsonValue; 
 }
 
 export default function Sidebar({ open, setOpen }: SidebarProps) {
   const { data: session } = useSession();
   const router = useRouter();
 
-  const [companies, setCompanies] = useState<{ id: string; name: string }[]>([]);
+  const [companies, setCompanies] = useState<Company[]>([]);
   const [selectedCompany, setSelectedCompany] = useState("");
   const [selectedLanguage, setSelectedLanguage] = useState("Français");
   const [selectedCurrency, setSelectedCurrency] = useState("$");
