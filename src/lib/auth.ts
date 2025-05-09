@@ -50,7 +50,7 @@ export const authOptions: NextAuthConfig = {
     }),
   ],
   session: {
-    strategy: 'database',
+    strategy: 'jwt',
   },
   pages: {
     signIn: '/login',
