@@ -1,8 +1,8 @@
 "use client";
 
 import Image from 'next/image';
-import Humour from "@components/Company/humour";
-import Company from "@components/Company/list";
+import Humour from "./Company/humour";
+import Company from "./Company/list";
 import { useRouter } from 'next/navigation';
 
 const HomePage = () => {
