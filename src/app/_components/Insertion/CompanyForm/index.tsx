@@ -7,7 +7,7 @@ import { useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createCompany, createCompanyUser, updateCompany } from "@/actions";
+import { createCompany, updateCompany } from "@/actions";
 import LogoUploader from "@components/Uploader";
 import { cn } from "@/lib/utils";
 
@@ -92,11 +92,11 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ mode, initialData }) => {
           throw new Error("L'utilisateur n'est pas authentifié.");
         }
 
-        await createCompanyUser({
+        /**await createCompanyUser({
           companyId: newCompany.id,
           userId: session.user.id,
           role: "OWNER",
-        });
+        });**/
 
         router.push(`/companies/${newCompany.id}`);
       } else if (mode === "edit") {
