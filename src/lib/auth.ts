@@ -56,7 +56,7 @@ export const authOptions: NextAuthConfig = {
   callbacks: {
     async signIn({ user, account }) {
       if (account?.provider !== 'credentials') {
-        const existingUser = await db.user.findUnique({
+        let existingUser = await db.user.findUnique({
           where: { email: user.email as string },
         })
 
@@ -65,10 +65,18 @@ export const authOptions: NextAuthConfig = {
             data: {
               email: user.email as string,
               name: user.name,
-              image: user.image
+              image: user.image,
             },
           })
+
+          // Re-fetch to get the auto-generated id
+          existingUser = await db.user.findUnique({
+            where: { email: user.email as string },
+          })
         }
+
+        // Replace `user.id` with actual DB id
+        user.id = existingUser?.id ?? ""
       }
       return true
     },
