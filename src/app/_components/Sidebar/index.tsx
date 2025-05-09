@@ -35,7 +35,8 @@ type Company = {
   owner: string; 
   contact: string; 
   address: string; 
-  logo: Logo; 
+  logo: Logo;
+  userRole: string;
 }
 
 export default function Sidebar({ open, setOpen }: SidebarProps) {
