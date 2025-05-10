@@ -29,7 +29,10 @@ export default function Header({ children }: HeaderProps) {
   useEffect(() => {
     const fetchCompanyInfo = async () => {
       if (session?.selectedCompany) {
-        const { name } = await getCompanyById(session.selectedCompany);
+        const company = await getCompanyById(session.selectedCompany);
+        if (company) {
+          const name = company.name;
+        }
       }
     };
   
