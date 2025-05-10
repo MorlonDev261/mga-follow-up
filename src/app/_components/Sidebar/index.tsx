@@ -61,14 +61,18 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
   }, [session]);
 
   useEffect(() => {
-    if (selectedCompany) {
-      await fetch("/api/auth/session", {
-        method: "PATCH",
-        body: JSON.stringify({ selectedCompany: companyId }),
-      })
+    async function updateSession() {
+      if (selectedCompany) {
+        await fetch("/api/auth/session", {
+          method: "PATCH",
+          body: JSON.stringify({ selectedCompany }),
+        });
+      }
     }
-  }, [selectedCompany]);
 
+    updateSession();
+  }, [selectedCompany]);
+  
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetContent className="w-80 flex overflow-x-auto flex-col justify-between">
