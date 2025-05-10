@@ -24,16 +24,16 @@ interface SidebarProps {
 type Company = {
   id: string;
   name: string;
-  createdAt: Date; 
-  desc: string; 
-  nif: string | null; 
-  stat: string | null; 
-  owner: string; 
-  contact: string; 
-  address: string; 
+  createdAt: Date;
+  desc: string;
+  nif: string | null;
+  stat: string | null;
+  owner: string;
+  contact: string;
+  address: string;
   logo: Prisma.JsonValue | null;
   userRole: string;
-}
+};
 
 type CompanyWithRole = Company & { userRole: Role };
 
@@ -42,7 +42,7 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
   const router = useRouter();
 
   const [companies, setCompanies] = useState<CompanyWithRole[]>([]);
-  const [selectedCompany, setSelectedCompany] = useState<string | null | undefined>(undefined);
+  const [selectedCompany, setSelectedCompany] = useState<string | undefined>(undefined);
   const [selectedLanguage, setSelectedLanguage] = useState("Français");
   const [selectedCurrency, setSelectedCurrency] = useState("$");
   const [exchangeRate, setExchangeRate] = useState("");
@@ -53,13 +53,16 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
       if (session?.user?.id) {
         const res = await getCompaniesByUser(session.user.id);
         setCompanies(res);
-        if (res.length > 0) setSelectedCompany(res[0].id); // sélection par défaut
+
+        if (!session.selectedCompany && res.length > 0) {
+          setSelectedCompany(res[0].id);
+        } else if (session.selectedCompany) {
+          setSelectedCompany(session.selectedCompany);
+        }
       }
     }
 
     fetchCompanies();
-    
-    setSelectedCompany(session?.selectedCompany);
   }, [session]);
 
   useEffect(() => {
@@ -67,10 +70,10 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
       update({ selectedCompany });
     }
   }, [selectedCompany, session, update]);
-  
+
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetContent className="w-80 flex overflow-x-auto flex-col justify-between">
+      <SheetContent className="w-80 flex overflow-x-auto flex-col justify-between h-full">
         {session?.user ? (
           <div>
             <ProfileAvatar />
@@ -167,7 +170,7 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
         )}
 
         {session?.user && (
-          <Button variant="destructive" className="mt-6 w-full" onClick={() => signOut()}>
+          <Button variant="destructive" className="w-full" onClick={() => signOut()}>
             Déconnexion
           </Button>
         )}
