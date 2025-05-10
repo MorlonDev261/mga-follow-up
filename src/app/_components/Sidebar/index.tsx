@@ -58,6 +58,8 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
     }
 
     fetchCompanies();
+    
+    setSelectedCompany(session?.selectedCompany);
   }, [session]);
 
   useEffect(() => {
