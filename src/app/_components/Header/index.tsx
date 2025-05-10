@@ -31,7 +31,7 @@ export default function Header({ children }: HeaderProps) {
       if (session?.selectedCompany) {
         const company = await getCompanyById(session.selectedCompany);
         if (company) {
-          const name = company.name;
+          const companyName = company.name;
         }
       }
     };
@@ -66,7 +66,11 @@ export default function Header({ children }: HeaderProps) {
                 className="h-auto"
               />
             </Link>
-            <span className="font-bold italic text-sm text-gray-700 dark:text-gray-200">{name}</span>
+            {companyName && (
+              <span className="font-bold italic text-sm text-gray-700 dark:text-gray-200">
+                {companyName}
+              </span>
+            )}
           </div>
         </div>
 
