@@ -91,7 +91,7 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
 
             {/* Entreprises */}
             <div className="space-y-4">
-              <Label>Changer d'entreprise</Label>
+              <Label>Changer d&apos;entreprise</Label>
               {companies.length > 0 ? (
                 <Select value={selectedCompany ?? ""} onValueChange={setSelectedCompany}>
                   <SelectTrigger>
