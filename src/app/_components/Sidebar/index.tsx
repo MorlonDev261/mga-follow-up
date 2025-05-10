@@ -62,7 +62,10 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
 
   useEffect(() => {
     if (selectedCompany) {
-      document.cookie = `selectedCompany=${selectedCompany}; path=/`;
+      await fetch("/api/auth/session", {
+        method: "PATCH",
+        body: JSON.stringify({ selectedCompany: companyId }),
+      })
     }
   }, [selectedCompany]);
 
