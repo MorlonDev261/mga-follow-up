@@ -80,7 +80,7 @@ export const authOptions: NextAuthConfig = {
       }
       return true
     },
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
       if (user) {
         token.id = user.id ?? ""
         token.email = user.email ?? ""
@@ -89,7 +89,13 @@ export const authOptions: NextAuthConfig = {
         token.image = user.image ?? ""
         token.emailVerified = user.emailVerified ?? null
         token.createdAt = user.createdAt ?? ""
+        token.selectedCompany = null
       }
+
+      if (trigger === "update" && session.selectedCompany) {
+        token.selectedCompany = session.selectedCompany;
+      }
+      
       return token
     },
     async session({ session, token }) {
@@ -101,6 +107,7 @@ export const authOptions: NextAuthConfig = {
         session.user.image = token.image ?? ""
         session.user.emailVerified = token.emailVerified ?? null
         session.user.createdAt = token.createdAt ?? ""
+        session.selectedCompany = token.selectedCompany
       }
       return session
     },
