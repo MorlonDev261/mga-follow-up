@@ -3,7 +3,7 @@ import 'next-auth/jwt'
 
 declare module 'next-auth' {
   interface Session {
-    selectedCompany?: string
+    selectedCompany: string | null
     user: {
       id: string
       email: string
@@ -35,6 +35,6 @@ declare module 'next-auth/jwt' {
     coverPicture?: string
     emailVerified?: Date | null
     createdAt?: string
-    selectedCompany?: string | null
+    selectedCompany: string | null
   }
 }
