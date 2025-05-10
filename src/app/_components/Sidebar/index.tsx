@@ -42,44 +42,39 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
   const router = useRouter();
 
   const [companies, setCompanies] = useState<CompanyWithRole[]>([]);
-  const [selectedCompany, setSelectedCompany] = useState<string | null>(null);
+  const [selectedCompany, setSelectedCompany] = useState<string | undefined>();
   const [selectedLanguage, setSelectedLanguage] = useState("Français");
   const [selectedCurrency, setSelectedCurrency] = useState("$");
   const [exchangeRate, setExchangeRate] = useState("");
   const [rounding, setRounding] = useState(false);
 
-  // Récupère depuis localStorage au premier render
-  useEffect(() => {
-    const saved = localStorage.getItem("selectedCompany");
-    if (saved) {
-      setSelectedCompany(saved);
-    }
-  }, []);
-
-  // Fetch les companies et initialise la sélection si besoin
   useEffect(() => {
     async function fetchCompanies() {
       if (session?.user?.id) {
         const res = await getCompaniesByUser(session.user.id);
         setCompanies(res);
-
-        // Si rien n'est sélectionné, prendre la première par défaut
-        if (!selectedCompany && res.length > 0) {
-          setSelectedCompany(res[0].id);
-        }
       }
     }
-
     fetchCompanies();
   }, [session?.user?.id]);
 
-  // Sauvegarde dans localStorage + propager à la session (optionnel)
+  // Set default company from session or localStorage
+  useEffect(() => {
+    if (session?.selectedCompany) {
+      setSelectedCompany(session.selectedCompany as string);
+    } else {
+      const local = localStorage.getItem("selectedCompany");
+      if (local) setSelectedCompany(local);
+    }
+  }, [session?.selectedCompany]);
+
+  // Update session and localStorage when selectedCompany changes
   useEffect(() => {
     if (selectedCompany) {
+      update({ selectedCompany });
       localStorage.setItem("selectedCompany", selectedCompany);
-      update({ selectedCompany }); // si tu veux utiliser ça dans NextAuth côté serveur plus tard
     }
-  }, [selectedCompany]);
+  }, [selectedCompany, update]);
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -91,7 +86,7 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
 
             {/* Entreprises */}
             <div className="space-y-4">
-              <Label>Changer d&apos;entreprise</Label>
+              <Label>Switch company</Label>
               {companies.length > 0 ? (
                 <Select value={selectedCompany ?? ""} onValueChange={setSelectedCompany}>
                   <SelectTrigger>
