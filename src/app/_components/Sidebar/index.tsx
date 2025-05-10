@@ -8,10 +8,20 @@ import ProfileAvatar from "@components/ProfileAvatar";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import Download from "@components/Download";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { getCompaniesByUser } from "@/actions";
 import { Role, Prisma } from "@prisma/client";
@@ -24,21 +34,21 @@ interface SidebarProps {
 type Company = {
   id: string;
   name: string;
-  createdAt: Date; 
-  desc: string; 
-  nif: string | null; 
-  stat: string | null; 
-  owner: string; 
-  contact: string; 
-  address: string; 
+  createdAt: Date;
+  desc: string;
+  nif: string | null;
+  stat: string | null;
+  owner: string;
+  contact: string;
+  address: string;
   logo: Prisma.JsonValue | null;
   userRole: string;
-}
+};
 
 type CompanyWithRole = Company & { userRole: Role };
 
 export default function Sidebar({ open, setOpen }: SidebarProps) {
-  const { data: session } = useSession();
+  const { data: session, update } = useSession();
   const router = useRouter();
 
   const [companies, setCompanies] = useState<CompanyWithRole[]>([]);
@@ -53,26 +63,18 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
       if (session?.user?.id) {
         const res = await getCompaniesByUser(session.user.id);
         setCompanies(res);
-        if (res.length > 0) setSelectedCompany(res[0].id); // sélection par défaut
+        if (res.length > 0) setSelectedCompany(res[0].id);
       }
     }
-
     fetchCompanies();
   }, [session]);
 
   useEffect(() => {
-    async function updateSession() {
-      if (selectedCompany) {
-        await fetch("/api/auth/session", {
-          method: "PATCH",
-          body: JSON.stringify({ selectedCompany }),
-        });
-      }
+    if (selectedCompany && session?.user) {
+      update({ selectedCompany });
     }
+  }, [selectedCompany, session, update]);
 
-    updateSession();
-  }, [selectedCompany]);
-  
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetContent className="w-80 flex overflow-x-auto flex-col justify-between">
@@ -83,9 +85,12 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
 
             {/* Entreprises */}
             <div className="space-y-4">
-              <Label>Switch company</Label>
+              <Label>Entreprise</Label>
               {companies.length > 0 ? (
-                <Select value={selectedCompany} onValueChange={setSelectedCompany}>
+                <Select
+                  value={selectedCompany}
+                  onValueChange={setSelectedCompany}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Sélectionner une entreprise" />
                   </SelectTrigger>
@@ -105,10 +110,13 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
             </div>
 
             {/* Paramètres */}
-            <div className="space-y-4 mt-4">
+            <div className="space-y-4 mt-6">
               <div>
                 <Label>Langue</Label>
-                <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
+                <Select
+                  value={selectedLanguage}
+                  onValueChange={setSelectedLanguage}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Sélectionner" />
                   </SelectTrigger>
@@ -122,7 +130,10 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
 
               <div>
                 <Label>Concurrence</Label>
-                <Select value={selectedCurrency} onValueChange={setSelectedCurrency}>
+                <Select
+                  value={selectedCurrency}
+                  onValueChange={setSelectedCurrency}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Sélectionner" />
                   </SelectTrigger>
@@ -156,7 +167,11 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
 
               <div className="flex items-center justify-between">
                 <Label>Arrondissement de valeur</Label>
-                <Switch checked={rounding} onCheckedChange={setRounding} />
+                <Switch
+                  checked={rounding}
+                  onCheckedChange={setRounding}
+                  aria-label="Activer l'arrondissement"
+                />
               </div>
 
               <Download />
@@ -164,15 +179,24 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center h-full">
-            <p className="text-center text-gray-500 mb-4">Vous n&apos;êtes pas connecté</p>
-            <Button className="bg-blue-500 text-white hover:bg-blue-600" onClick={() => router.push("/sign-in")}>
+            <p className="text-center text-gray-500 mb-4">
+              Vous n&apos;êtes pas connecté
+            </p>
+            <Button
+              className="bg-blue-500 text-white hover:bg-blue-600"
+              onClick={() => router.push("/sign-in")}
+            >
               Se connecter
             </Button>
           </div>
         )}
 
         {session?.user && (
-          <Button variant="destructive" className="mt-6 w-full" onClick={() => signOut()}>
+          <Button
+            variant="destructive"
+            className="mt-6 w-full"
+            onClick={() => signOut()}
+          >
             Déconnexion
           </Button>
         )}
