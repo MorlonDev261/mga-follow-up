@@ -60,6 +60,12 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
     fetchCompanies();
   }, [session]);
 
+  useEffect(() => {
+    if (selectedCompany) {
+      document.cookie = `selectedCompany=${selectedCompany}; path=/`;
+    }
+  }, [selectedCompany]);
+
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetContent className="w-80 flex overflow-x-auto flex-col justify-between">
