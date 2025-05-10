@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, ReactNode,  Suspense } from "react";
+import { useState, useEffect, ReactNode, Suspense } from "react";
 import { useSession } from "next-auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Theme from "@components/Theme";
@@ -20,10 +20,11 @@ type HeaderProps = {
 
 export default function Header({ children }: HeaderProps) {
   const [open, setOpen] = useState(false);
+  const [companyName, setCompanyName] = useState<string | null>(null); // Ajouté pour stocker le nom de l'entreprise
   const pathname = usePathname();
   const router = useRouter();
   const { push } = router;
-  
+
   const { data: session } = useSession();
 
   useEffect(() => {
@@ -31,11 +32,11 @@ export default function Header({ children }: HeaderProps) {
       if (session?.selectedCompany) {
         const company = await getCompanyById(session.selectedCompany);
         if (company) {
-          const companyName = company.name;
+          setCompanyName(company.name); // Mise à jour de l'état
         }
       }
     };
-  
+
     fetchCompanyInfo();
   }, [session?.selectedCompany]);
 
@@ -79,7 +80,7 @@ export default function Header({ children }: HeaderProps) {
           <button
             className={cn(
               "w-1/2 rounded p-1 transition",
-              !pathname.startsWith("/rows") 
+              !pathname.startsWith("/rows")
                 ? "bg-white dark:bg-white/40 pointer-events-none"
                 : "hover:bg-white/60 dark:hover:bg-white/20"
             )}
@@ -104,7 +105,7 @@ export default function Header({ children }: HeaderProps) {
         {session?.user ? (
           <div className="flex items-center gap-4">
             {/* Messages */}
-            <Link 
+            <Link
               href="/messages"
               className="text-gray-800 dark:text-white hover:text-gray-600 dark:hover:text-gray-300"
             >
@@ -130,17 +131,17 @@ export default function Header({ children }: HeaderProps) {
             <div className="flex items-center gap-2 cursor-pointer" onClick={() => setOpen(!open)}>
               <Suspense>
                 <Avatar className="h-7 w-7 border border-gray-300 dark:border-white">
-                {session.user.image ? (
-                  <AvatarImage src={session.user.image} />
-                ) : (
-                  <AvatarFallback>
-                    {session.user.name?.[0]?.toUpperCase() || 'MGA'}
-                  </AvatarFallback>
-                )}
-              </Avatar>
-              <span className="hidden md:block text-gray-800 dark:text-white">
-                Hi, {session.user.name?.split(' ')[0] || 'User'}
-              </span>
+                  {session.user.image ? (
+                    <AvatarImage src={session.user.image} />
+                  ) : (
+                    <AvatarFallback>
+                      {session.user.name?.[0]?.toUpperCase() || 'MGA'}
+                    </AvatarFallback>
+                  )}
+                </Avatar>
+                <span className="hidden md:block text-gray-800 dark:text-white">
+                  Hi, {session.user.name?.split(' ')[0] || 'User'}
+                </span>
               </Suspense>
             </div>
           </div>
