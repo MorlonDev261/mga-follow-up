@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, ReactNode,  Suspense } from "react";
+import { useState, useEffect, ReactNode,  Suspense } from "react";
 import { useSession } from "next-auth/react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Theme from "@components/Theme";
@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import { FaRegEnvelope } from "react-icons/fa6";
 import { IoNotifications, IoNotificationsOutline } from "react-icons/io5";
+import { getCompanyById } from "@/actions";
 
 type HeaderProps = {
   children?: ReactNode;
@@ -24,6 +25,16 @@ export default function Header({ children }: HeaderProps) {
   const { push } = router;
   
   const { data: session } = useSession();
+
+  useEffect(() => {
+    const fetchCompanyInfo = async () => {
+      if (session?.selectedCompany) {
+        const { name } = await getCompanyById(session.selectedCompany);
+      }
+    };
+  
+    fetchCompanyInfo();
+  }, [session?.selectedCompany]);
 
   return (
     <header className="sticky top-0 z-50 w-full bg-white dark:bg-[#111] p-2 transition-colors border-b border-gray-300 dark:border-none">
@@ -41,16 +52,19 @@ export default function Header({ children }: HeaderProps) {
           )}
 
           {/* Logo */}
-          <Link href="/" className="flex items-center mb-3">
-            <Image
-              src="/main-logo.png"
-              width={150}
-              height={30}
-              alt="logo"
-              priority
-              className="h-auto"
-            />
-          </Link>
+          <div className="flex flex-col gap-1">
+            <Link href="/" className="flex items-center mb-3">
+              <Image
+                src="/main-logo.png"
+                width={150}
+                height={30}
+                alt="logo"
+                priority
+                className="h-auto"
+              />
+            </Link>
+            <span className="font-bold italic text-sm text-gray-700 dark:text-gray-200">{name}</span>
+          </div>
         </div>
 
         {/* View Toggle */}
