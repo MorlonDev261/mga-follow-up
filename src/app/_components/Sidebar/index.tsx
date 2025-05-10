@@ -42,38 +42,48 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
   const router = useRouter();
 
   const [companies, setCompanies] = useState<CompanyWithRole[]>([]);
-  const [selectedCompany, setSelectedCompany] = useState<string | undefined>(undefined);
+  const [selectedCompany, setSelectedCompany] = useState<string | null>(null);
   const [selectedLanguage, setSelectedLanguage] = useState("Français");
   const [selectedCurrency, setSelectedCurrency] = useState("$");
   const [exchangeRate, setExchangeRate] = useState("");
   const [rounding, setRounding] = useState(false);
 
+  // Récupère depuis localStorage au premier render
+  useEffect(() => {
+    const saved = localStorage.getItem("selectedCompany");
+    if (saved) {
+      setSelectedCompany(saved);
+    }
+  }, []);
+
+  // Fetch les companies et initialise la sélection si besoin
   useEffect(() => {
     async function fetchCompanies() {
       if (session?.user?.id) {
         const res = await getCompaniesByUser(session.user.id);
         setCompanies(res);
 
-        if (!session.selectedCompany && res.length > 0) {
+        // Si rien n'est sélectionné, prendre la première par défaut
+        if (!selectedCompany && res.length > 0) {
           setSelectedCompany(res[0].id);
-        } else if (session.selectedCompany) {
-          setSelectedCompany(session.selectedCompany);
         }
       }
     }
 
     fetchCompanies();
-  }, [session]);
+  }, [session?.user?.id]);
 
+  // Sauvegarde dans localStorage + propager à la session (optionnel)
   useEffect(() => {
-    if (selectedCompany && session?.user) {
-      update({ selectedCompany });
+    if (selectedCompany) {
+      localStorage.setItem("selectedCompany", selectedCompany);
+      update({ selectedCompany }); // si tu veux utiliser ça dans NextAuth côté serveur plus tard
     }
-  }, [selectedCompany, session, update]);
+  }, [selectedCompany]);
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetContent className="w-80 flex overflow-x-auto flex-col justify-between h-full">
+      <SheetContent className="w-80 flex overflow-x-auto flex-col justify-between">
         {session?.user ? (
           <div>
             <ProfileAvatar />
@@ -81,9 +91,9 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
 
             {/* Entreprises */}
             <div className="space-y-4">
-              <Label>Switch company</Label>
+              <Label>Changer d'entreprise</Label>
               {companies.length > 0 ? (
-                <Select value={selectedCompany} onValueChange={setSelectedCompany}>
+                <Select value={selectedCompany ?? ""} onValueChange={setSelectedCompany}>
                   <SelectTrigger>
                     <SelectValue placeholder="Sélectionner une entreprise" />
                   </SelectTrigger>
@@ -170,7 +180,7 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
         )}
 
         {session?.user && (
-          <Button variant="destructive" className="w-full" onClick={() => signOut()}>
+          <Button variant="destructive" className="mt-6 w-full" onClick={() => signOut()}>
             Déconnexion
           </Button>
         )}
