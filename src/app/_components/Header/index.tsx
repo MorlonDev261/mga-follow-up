@@ -57,7 +57,7 @@ export default function Header({ children }: HeaderProps) {
 
           {/* Logo */}
           <div className="flex flex-col">
-            <Link href="/" className="flex items-center mb-3">
+            <Link href="/" className="flex items-center">
               <Image
                 src="/main-logo.png"
                 width={150}
