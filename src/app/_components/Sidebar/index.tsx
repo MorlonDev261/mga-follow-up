@@ -38,7 +38,7 @@ type Company = {
 type CompanyWithRole = Company & { userRole: Role };
 
 export default function Sidebar({ open, setOpen }: SidebarProps) {
-  const { data: session } = useSession();
+  const { data: session, update } = useSession();
   const router = useRouter();
 
   const [companies, setCompanies] = useState<CompanyWithRole[]>([]);
@@ -61,17 +61,10 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
   }, [session]);
 
   useEffect(() => {
-    async function updateSession() {
-      if (selectedCompany) {
-        await fetch("/api/auth/session", {
-          method: "PATCH",
-          body: JSON.stringify({ selectedCompany }),
-        });
-      }
+    if (selectedCompany && session?.user) {
+      update({ selectedCompany });
     }
-
-    updateSession();
-  }, [selectedCompany]);
+  }, [selectedCompany, session, update]);
   
   return (
     <Sheet open={open} onOpenChange={setOpen}>
