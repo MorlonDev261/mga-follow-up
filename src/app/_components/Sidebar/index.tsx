@@ -42,7 +42,7 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
   const router = useRouter();
 
   const [companies, setCompanies] = useState<CompanyWithRole[]>([]);
-  const [selectedCompany, setSelectedCompany] = useState<string | null>(null);
+  const [selectedCompany, setSelectedCompany] = useState<string | null | undefined>("");
   const [selectedLanguage, setSelectedLanguage] = useState("Français");
   const [selectedCurrency, setSelectedCurrency] = useState("$");
   const [exchangeRate, setExchangeRate] = useState("");
