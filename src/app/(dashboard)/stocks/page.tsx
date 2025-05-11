@@ -11,5 +11,5 @@ export default async function Page() {
 
   const stocks = await listStocksByCompany(session.selectedCompany);
 
-  return <StockContent stocks={stocks} />;
+  return <StockContent stocks={stocks} companyId={session.selectedCompany} />;
 }
