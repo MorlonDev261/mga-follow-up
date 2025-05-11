@@ -68,7 +68,7 @@ export default function Header({ children }: HeaderProps) {
               />
             </Link>
             {companyName && (
-              <span className="font-bold italic text-[2px] text-gray-700 dark:text-gray-200">
+              <span className="font-bold italic text-[6px] text-gray-700 dark:text-gray-200">
                 {companyName}
               </span>
             )}
