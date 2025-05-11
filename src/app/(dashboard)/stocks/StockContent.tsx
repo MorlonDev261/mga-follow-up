@@ -10,7 +10,7 @@ import { NextSeo } from "next-seo";
 
 import ProductTable from "@components/Table/Stock";
 import Counter from "@components/Counter";
-import Caisse from "./Caisse";
+import StocksList from "./stocksList";
 import Balance from "@components/Balance";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -167,7 +167,7 @@ export default function PendingContent({ stocks, companyId }: { stocks: Stock[],
           )}
         </Balance>
 
-        <Caisse caisses={dataCaisse} />
+        <StocksList caisses={dataCaisse} />
 
         <div className="pt-2">
           <ProductTable Columns={Columns} data={loading ? [] : data} loading={loading} />
