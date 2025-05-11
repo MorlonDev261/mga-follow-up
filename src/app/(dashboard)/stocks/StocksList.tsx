@@ -12,7 +12,7 @@ type StockProps = {
   color?: string;
 };
 
-const Stock = ({ caisses }: { caisses: StockProps[] }) => {
+const Stock = ({ stocks }: { stocks: StockProps[] }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const activeStock = searchParams.get("stock");
@@ -35,7 +35,7 @@ const Stock = ({ caisses }: { caisses: StockProps[] }) => {
       aria-label="Shortcuts Navigation"
       className="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-7 gap-3 p-2 w-full"
     >
-      {caisses.map((stock) => {
+      {stocks.map((stock) => {
         const isActive = stock.id === activeStock;
 
         return (
@@ -50,11 +50,11 @@ const Stock = ({ caisses }: { caisses: StockProps[] }) => {
               "hover:bg-gray-100 dark:hover:bg-gray-700",
               "bg-gradient-to-r",
               stock.color || "bg-gray-200 dark:bg-gray-800 text-gray-600 dark:text-gray-300",
-              isActive && "ring-2 ring-green-500"
+              isActive && "ring-2 ring-blue-500"
             )}
           >
             {isActive && (
-              <div className="absolute bg-background p-1 rounded-full top-1 right-1 text-green-500">
+              <div className="absolute bg-background p-1 rounded-full top-1 right-1 text-blue-500">
                 <FaRegCheckCircle />
               </div>
             )}
