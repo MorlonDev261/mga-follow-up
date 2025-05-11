@@ -61,7 +61,7 @@ export default function PendingContent({ stocks, companyId }: { stocks: Stock[],
 
     const fetchData = async () => {
       try {
-        const response = await fetch(`/api/stocks/${companyId}`);
+        const response = await fetch(`/api/products/${companyId}`);
         if (!response.ok) throw new Error("Failed to fetch data");
 
         const result: Product[] = await response.json();
