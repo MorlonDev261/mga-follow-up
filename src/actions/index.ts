@@ -14,11 +14,7 @@ import {
   conversationSchema, ConversationInput
 } from "./schema"
 
-type Role {
-  OWNER
-  SUB_OWNER
-  MEMBER
-}
+type Role = "OWNER" | "SUB_OWNER" | "MEMBER"
 
 // --- USERS ---
 
