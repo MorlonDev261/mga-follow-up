@@ -1,19 +1,14 @@
 "use client";
 
 import * as React from "react";
-import { useState, useEffect, useMemo } from "react";
+import useSWR from "swr";
+import moment from "moment";
+import { useMemo, useState } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import { BsShopWindow } from "react-icons/bs";
 import { MoreHorizontal } from "lucide-react";
-import { useSearchParams, useRouter } from "next/navigation";
-import moment from "moment";
 import { NextSeo } from "next-seo";
 
-import DialogPopup from "@components/DialogPopup";
-import ProductForm from "@components/Insertion/ProductForm";
-import ProductTable from "@components/Table/Stock";
-import Counter from "@components/Counter";
-import StockList from "./StockList";
-import Balance from "@components/Balance";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ColumnDef, Row } from "@tanstack/react-table";
@@ -24,6 +19,13 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+
+import DialogPopup from "@components/DialogPopup";
+import ProductForm from "@components/Insertion/ProductForm";
+import ProductTable from "@components/Table/Stock";
+import Counter from "@components/Counter";
+import StockList from "./StockList";
+import Balance from "@components/Balance";
 
 // Types
 type Product = {
@@ -43,48 +45,28 @@ type Stock = {
   color?: string;
 };
 
-export default function PendingContent({ stocks, companyId }: { stocks: Stock[], companyId: string }) {
+export default function PendingContent({ stocks, companyId }: { stocks: Stock[]; companyId: string }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const stockParam = searchParams.get("stock");
 
-  const [rawData, setRawData] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-  const dataStock = stocks;
+  const fetcher = (url: string) => fetch(url).then(res => res.json());
+
+  const { data: rawData = [], isLoading, mutate } = useSWR<Product[]>(
+    companyId ? `/api/products/${companyId}` : null,
+    fetcher
+  );
+
   const [open, setOpen] = useState(false);
 
   const getStockName = (stockId: string) =>
-    dataStock.find((stock) => stock.id === stockId)?.name || "Unknown";
-  
-  useEffect(() => {
-    if (!companyId) return;
+    stocks.find((stock) => stock.id === stockId)?.name || "Unknown";
 
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`/api/products/${companyId}`);
-        if (!response.ok) throw new Error("Failed to fetch data");
+  const filteredData = useMemo(() => {
+    return stockParam ? rawData.filter(item => item.dateStock === stockParam) : rawData;
+  }, [rawData, stockParam]);
 
-        const result: Product[] = await response.json();
-        setRawData(result);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [companyId]);
-  
-  const data = useMemo(
-    () =>
-      stockParam
-        ? rawData.filter((item) => item.dateStock === stockParam)
-        : rawData,
-    [rawData, stockParam]
-  );
-
-  const totalStock = useMemo(() => data.length, [data]);
+  const totalStock = filteredData.length;
 
   const subtitle = stockParam
     ? `Stock from ${getStockName(stockParam)}.`
@@ -94,7 +76,9 @@ export default function PendingContent({ stocks, companyId }: { stocks: Stock[],
     {
       accessorKey: "date",
       header: "DATE",
-      cell: ({ row }) => <div>{moment(row.getValue("date")).format("YYYY-MM-DD")}</div>,
+      cell: ({ row }) => (
+        <div>{moment(row.getValue("date")).format("YYYY-MM-DD")}</div>
+      ),
     },
     {
       accessorKey: "productName",
@@ -103,7 +87,9 @@ export default function PendingContent({ stocks, companyId }: { stocks: Stock[],
     {
       accessorKey: "dateStock",
       header: "DATE STOCK",
-      cell: ({ row }) => <div>{moment(row.getValue("dateStock")).format("YYYY-MM-DD")}</div>,
+      cell: ({ row }) => (
+        <div>{moment(row.getValue("dateStock")).format("YYYY-MM-DD")}</div>
+      ),
     },
     {
       accessorKey: "id",
@@ -130,7 +116,9 @@ export default function PendingContent({ stocks, companyId }: { stocks: Stock[],
                 Copy ID
               </DropdownMenuItem>
               <DropdownMenuItem
-                onClick={() => router.push(`?stock=${encodeURIComponent(product.dateStock)}`)}
+                onClick={() =>
+                  router.push(`?stock=${encodeURIComponent(product.dateStock)}`)
+                }
               >
                 Show from same product
               </DropdownMenuItem>
@@ -148,45 +136,54 @@ export default function PendingContent({ stocks, companyId }: { stocks: Stock[],
         description={`View all Stocks${stockParam ? ` from ${getStockName(stockParam)}` : ""}.`}
       />
 
-      <div className={cn("px-2 transition-opacity", { "opacity-100": !loading, "opacity-0": loading })}>
+      <div className={cn("px-2 transition-opacity", { "opacity-100": !isLoading, "opacity-0": isLoading })}>
         <Balance
-          title={<><BsShopWindow /> Stocks</>}
-          balance={
-            loading
-              ? "Loading..."
-              : data.length > 0
-              ? <><Counter end={totalStock} duration={0.8} /> pcs dans {stockParam ? "le stock" : "tous les stocks"}</>
-              : "No product added in stock."
+          title={
+            <>
+              <BsShopWindow /> Stocks
+            </>
           }
-          balanceColor="text-green-500 hover:text-green-600"
+          balance={
+            isLoading ? (
+              "Loading..."
+            ) : totalStock > 0 ? (
+              <>
+                <Counter end={totalStock} duration={0.8} /> pcs dans{" "}
+                {stockParam ? "le stock" : "tous les stocks"}
+              </>
+            ) : (
+              "No product added in stock."
+            )
+          }
+          balanceColor="text-blue-500 hover:text-blue-600"
           subtitle={subtitle}
           subtitleSize="text-sm"
         >
-          {!loading && (
+          {!isLoading && (
             <>
-              <button 
-                className="relative flex bg-blue-500 items-center text-white rounded overflow-hidden" 
-                onClick={() => setOpen(prev => !prev)}
+              <Button
+                className="bg-blue-500 text-white hover:bg-blue-600 p-1"
+                onClick={() => setOpen(true)}
               >
                 Add new Stock
-              </button>
-              {/* Modale Produit */}
+              </Button>
+
               <DialogPopup
                 isOpen={open}
                 onClose={() => setOpen(false)}
                 title="Ajouter un nouveau produit"
                 description="Veuillez remplir les détails du produit à enregistrer."
               >
-                <ProductForm setOpen={() => setOpen(prev => !prev)} />
+                <ProductForm setOpen={() => setOpen(false)} mutate={mutate} />
               </DialogPopup>
             </>
           )}
         </Balance>
 
-        <StockList stocks={dataStock} />
+        <StockList stocks={stocks} />
 
         <div className="pt-2">
-          <ProductTable Columns={Columns} data={loading ? [] : data} loading={loading} />
+          <ProductTable Columns={Columns} data={isLoading ? [] : filteredData} loading={isLoading} />
         </div>
       </div>
     </>
