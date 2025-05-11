@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useSession } from "next-auth/react";
 import { format } from 'date-fns';
 import Combobox from "@components/ui/select";
 import { CalendarIcon, PlusIcon, Trash2 } from 'lucide-react';
@@ -24,6 +25,7 @@ export interface ProductFormData {
 }
 
 export default function ProductForm({ setOpen }: ProductFormProps) {
+  const { data: session } = useSession();
   const [companyId, setCompanyId] = useState<string | null>(null);
   const [form, setForm] = useState<ProductFormData>({
     arrival: Date.now(),
@@ -163,7 +165,7 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
                   {form[key as 'arrival' | 'stockDate']
-                    ? format(form[key as 'arrival' | 'stockDate'], 'PPP')
+                    ? format(new Date(form[key as 'arrival' | 'stockDate']), 'PPP')
                     : 'Choisir une date'}
                 </Button>
               </PopoverTrigger>
