@@ -41,7 +41,7 @@ export default function Header({ children }: HeaderProps) {
   }, [session?.selectedCompany]);
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white dark:bg-[#111] p-2 transition-colors border-b border-gray-300 dark:border-none">
+    <header className="sticky top-0 z-50 w-full bg-white dark:bg-[#111] transition-colors border-b border-gray-300 dark:border-none">
       {/* Top section */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
