@@ -11,7 +11,7 @@ import { NextSeo } from "next-seo";
 import DialogPopup from "@components/DialogPopup";
 import ProductTable from "@components/Table/Stock";
 import Counter from "@components/Counter";
-import StocksList from "./stocksList";
+import StockList from "./StockList";
 import Balance from "@components/Balance";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -182,7 +182,7 @@ export default function PendingContent({ stocks, companyId }: { stocks: Stock[],
           )}
         </Balance>
 
-        <StocksList stocks={dataStock} />
+        <StockList stocks={dataStock} />
 
         <div className="pt-2">
           <ProductTable Columns={Columns} data={loading ? [] : data} loading={loading} />
