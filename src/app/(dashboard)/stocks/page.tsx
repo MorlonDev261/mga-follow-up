@@ -1,11 +1,15 @@
 import { listStocksByCompany } from "@/actions";
 import StockContent from "./StockContent";
+import { auth } from "@/lib/auth";
 
 export default async function Page() {
-  const companyId = "cmacjsr390004ld0406t3vxpq";
-  const stocks = await listStocksByCompany(companyId);
-  
-  return (
-    <StockContent stocks={stocks} />
-  );
+  const session = await auth();
+
+  if (!session?.selectedCompany) {
+    return <div>Aucune entreprise sélectionnée</div>;
+  }
+
+  const stocks = await listStocksByCompany(session.selectedCompany);
+
+  return <StockContent stocks={stocks} />;
 }
