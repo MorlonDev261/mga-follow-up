@@ -42,7 +42,7 @@ type Stock = {
   color?: string;
 };
 
-export default function PendingContent({ stocks }: { stocks: Stock[] }) {
+export default function PendingContent({ stocks, companyId }: { stocks: Stock[], companyId: string }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const stockParam = searchParams.get("stock");
@@ -53,11 +53,13 @@ export default function PendingContent({ stocks }: { stocks: Stock[] }) {
 
   const getCaisseName = (caisseId: string) =>
     dataCaisse.find((caisse) => caisse.id === caisseId)?.name || "Unknown";
-
+  
   React.useEffect(() => {
+    if (!companyId) return;
+
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/stocks/cmacjsr390004ld0406t3vxpq");
+        const response = await fetch(`/api/stocks/${companyId}`);
         if (!response.ok) throw new Error("Failed to fetch data");
 
         const result: Product[] = await response.json();
@@ -70,8 +72,8 @@ export default function PendingContent({ stocks }: { stocks: Stock[] }) {
     };
 
     fetchData();
-  }, []);
-
+  }, [companyId]);
+  
   const data = React.useMemo(
     () =>
       stockParam
