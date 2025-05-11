@@ -25,6 +25,7 @@ export interface ProductFormData {
 }
 
 export default function ProductForm({ setOpen }: ProductFormProps) {
+  const [companyId, setCompanyId] = useState<string | null>(null);
   const [form, setForm] = useState<ProductFormData>({
     arrival: Date.now(),
     stockDate: Date.now(),
@@ -35,6 +36,16 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchCompanyInfo = async () => {
+      if (session?.selectedCompany) {
+       setCompanyId(session.selectedCompany);
+      }
+    };
+
+    fetchCompanyInfo();
+  }, [session?.selectedCompany]);
 
   const handleQtyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const qty = Number(e.target.value);
@@ -173,7 +184,7 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
         <div className="col-span-2 md:col-span-3">
           <label className="block mb-1 text-sm font-medium">Nom du produit</label>
           <Combobox
-            companyId="cmacjsr390004ld0406t3vxpq"
+            companyId={companyId}
             form={form}
             setForm={setForm}
             showSearch={true}
