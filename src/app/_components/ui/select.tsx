@@ -23,7 +23,7 @@ import {
 interface ProductFormData {
   arrival: number;
   stockDate: number;
-  productId: string;
+  productId: string | null;
   qty: number;
   identifiers: { identifier: number; comment: string }[];
 }
@@ -31,7 +31,7 @@ interface ProductFormData {
 interface ComboboxProps {
   form: ProductFormData;
   setForm: React.Dispatch<React.SetStateAction<ProductFormData>>;
-  companyId: string;
+  companyId: string | null;
   showSearch?: boolean;
   closeOnSelect?: boolean;
 }
@@ -51,6 +51,8 @@ export default function Combobox({
   const [showAddProduct, setShowAddProduct] = React.useState(false);
 
   React.useEffect(() => {
+    if (!companyId) return;
+
     const fetchProducts = async () => {
       try {
         const data = await getProductsByCompany(companyId);
@@ -91,7 +93,7 @@ export default function Combobox({
 
   const saveNewProduct = async (index: number) => {
     const name = newProducts[index];
-    if (!name) return;
+    if (!name || !companyId) return;
 
     try {
       const data = await createProduct({ name: name.trim(), companyId });
@@ -100,6 +102,7 @@ export default function Combobox({
       setProducts((prev) => [...prev, { id: data.id, name: data.name }]);
       setNewProducts((prev) => prev.filter((_, i) => i !== index));
       setShowAddProduct(false);
+      setOpen(false);
     } catch (err) {
       alert("Erreur lors de l'ajout du produit.");
     }
@@ -123,7 +126,7 @@ export default function Combobox({
         </Button>
       </PopoverTrigger>
 
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent className="w-[250px] p-0">
         <Command>
           <div className="flex items-center justify-between px-2 pt-2 pb-1">
             <span className="text-sm font-medium">Produits</span>
@@ -136,6 +139,7 @@ export default function Combobox({
                 e.stopPropagation();
                 addNewProductField();
               }}
+              aria-label="Ajouter un produit"
             >
               <PlusIcon className="w-4 h-4" />
             </Button>
@@ -164,17 +168,23 @@ export default function Combobox({
 
               {showAddProduct &&
                 newProducts.map((name, index) => (
-                  <div key={index} className="flex gap-1 items-center px-2 py-1">
+                  <div
+                    key={index}
+                    className="flex gap-1 items-center px-2 py-1"
+                  >
                     <Input
                       placeholder="Nouveau produit"
                       value={name}
-                      onChange={(e) => updateNewProductName(index, e.target.value)}
+                      onChange={(e) =>
+                        updateNewProductName(index, e.target.value)
+                      }
                       className="flex-1"
                     />
                     <Button
                       type="button"
                       size="sm"
                       onClick={() => saveNewProduct(index)}
+                      disabled={!name.trim()}
                     >
                       Ajouter
                     </Button>
