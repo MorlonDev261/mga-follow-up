@@ -1,4 +1,3 @@
-// src/app/api/stock/[companyId]/route.ts
 import { NextResponse } from 'next/server'
 import db from '@/lib/db'
 import { getProductsListByCompany } from '@/actions'
