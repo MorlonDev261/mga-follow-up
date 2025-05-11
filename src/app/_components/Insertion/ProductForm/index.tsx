@@ -165,7 +165,7 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
                   {form[key as 'arrival' | 'stockDate']
-                    ? format(new Date(form[key as 'arrival' | 'stockDate']), 'PPP')
+                    ? format(form[key as 'arrival' | 'stockDate'], 'PPP')
                     : 'Choisir une date'}
                 </Button>
               </PopoverTrigger>
