@@ -1,13 +1,14 @@
 "use client";
 
 import * as React from "react";
-import { Suspense } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
-import { SwapWallet } from "@icons";
+import { useState, useEffect, useMemo } from "react";
+import { BsShopWindow } from "react-icons/bs";
 import { MoreHorizontal } from "lucide-react";
+import { useSearchParams, useRouter } from "next/navigation";
 import moment from "moment";
 import { NextSeo } from "next-seo";
 
+import DialogPopup from "@components/DialogPopup";
 import ProductTable from "@components/Table/Stock";
 import Counter from "@components/Counter";
 import StocksList from "./stocksList";
@@ -20,7 +21,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
@@ -47,14 +47,15 @@ export default function PendingContent({ stocks, companyId }: { stocks: Stock[],
   const searchParams = useSearchParams();
   const stockParam = searchParams.get("stock");
 
-  const [rawData, setRawData] = React.useState<Product[]>([]);
-  const [loading, setLoading] = React.useState(true);
-  const dataCaisse = stocks;
+  const [rawData, setRawData] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const dataStock = stocks;
+  const [open, setOpen] = useState(false);
 
-  const getCaisseName = (caisseId: string) =>
-    dataCaisse.find((caisse) => caisse.id === caisseId)?.name || "Unknown";
+  const getStockName = (stockId: string) =>
+    dataStock.find((stock) => stock.id === stockId)?.name || "Unknown";
   
-  React.useEffect(() => {
+  useEffect(() => {
     if (!companyId) return;
 
     const fetchData = async () => {
@@ -74,7 +75,7 @@ export default function PendingContent({ stocks, companyId }: { stocks: Stock[],
     fetchData();
   }, [companyId]);
   
-  const data = React.useMemo(
+  const data = useMemo(
     () =>
       stockParam
         ? rawData.filter((item) => item.dateStock === stockParam)
@@ -82,92 +83,104 @@ export default function PendingContent({ stocks, companyId }: { stocks: Stock[],
     [rawData, stockParam]
   );
 
-  const totalPending = React.useMemo(() => data.length, [data]); // Change if amount is available
+  const totalStock = useMemo(() => data.length, [data]);
 
   const subtitle = stockParam
-    ? `Pending payments from ${getCaisseName(stockParam)}.`
-    : `All pending payments are displayed.`;
+    ? `Stock from ${getStockName(stockParam)}.`
+    : `All Stocks are displayed.`;
 
   const Columns: ColumnDef<Product>[] = [
-  {
-    accessorKey: "date",
-    header: "DATE",
-    cell: ({ row }) => <div>{row.getValue("date")}</div>,
-  },
-  {
-    accessorKey: "productName",
-    header: "DESIGNATION",
-  },
-  {
-    accessorKey: "dateStock",
-    header: "DATE STOCK",
-    cell: ({ row }) => <div>{row.getValue("dateStock")}</div>,
-  },
-  {
-    accessorKey: "id",
-    header: "IDENTIFIANT",
-  },
-  {
-    id: "actions",
-    enableHiding: false,
-    cell: ({ row }: { row: Row<Product> }) => {
-        const product = row.original;
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(product.id.toString())}
-            >
-              Copy ID
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => router.push(`?stock=${encodeURIComponent(product.dateStock)}`)}
-            >
-              Show from same product
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
+    {
+      accessorKey: "date",
+      header: "DATE",
+      cell: ({ row }) => <div>{moment(row.getValue("date")).format("YYYY-MM-DD")}</div>,
     },
-  },
-];
+    {
+      accessorKey: "productName",
+      header: "DESIGNATION",
+    },
+    {
+      accessorKey: "dateStock",
+      header: "DATE STOCK",
+      cell: ({ row }) => <div>{moment(row.getValue("dateStock")).format("YYYY-MM-DD")}</div>,
+    },
+    {
+      accessorKey: "id",
+      header: "IDENTIFIANT",
+    },
+    {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }: { row: Row<Product> }) => {
+        const product = row.original;
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              <DropdownMenuItem
+                onClick={() => navigator.clipboard.writeText(product.id.toString())}
+              >
+                Copy ID
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => router.push(`?stock=${encodeURIComponent(product.dateStock)}`)}
+              >
+                Show from same product
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
+  ];
+
   return (
     <>
       <NextSeo
-        title={`Pending Payments - ${stockParam ? getCaisseName(stockParam) : "All Caisse"}`}
-        description={`View all pending payments${stockParam ? ` from ${getCaisseName(stockParam)}` : ""}.`}
+        title={`Stocks - ${stockParam ? getStockName(stockParam) : "All Stocks"}`}
+        description={`View all Stocks${stockParam ? ` from ${getStockName(stockParam)}` : ""}.`}
       />
 
       <div className={cn("px-2 transition-opacity", { "opacity-100": !loading, "opacity-0": loading })}>
         <Balance
-          title={<><SwapWallet /> Transactions</>}
+          title={<><BsShopWindow /> Stocks</>}
           balance={
             loading
               ? "Loading..."
               : data.length > 0
-              ? <><Counter end={totalPending} duration={0.8} /> en attente</>
-              : "No pending payment added."
+              ? <><Counter end={totalStock} duration={0.8} /> pcs dans {stockParam ? "le stock" : "tous les stocks"}</>
+              : "No product added in stock."
           }
           balanceColor="text-green-500 hover:text-green-600"
           subtitle={subtitle}
           subtitleSize="text-sm"
         >
-          {!loading && data.length > 0 && (
-            <button className="relative flex bg-red-500 items-center text-white rounded overflow-hidden">
-              <span className="bg-red-500 p-1 clip-debit">Débit</span>
-              <span className="bg-green-500 p-1 pl-2 clip-credit">Crédit</span>
+          {!loading && (
+            <button 
+              className="relative flex bg-blue-500 items-center text-white rounded overflow-hidden" 
+              onClick={() => setOpen(prev => !prev)}
+            >
+              Add new Stock
             </button>
+            {/* Modale Produit */}
+            <DialogPopup
+              isOpen={open}
+              onClose={() => setOpen(false)}
+              title="Ajouter un nouveau produit"
+              description="Veuillez remplir les détails du produit à enregistrer."
+            >
+              <ProductForm setOpen={() => setOpen(prev => !prev)} />
+            </DialogPopup>
           )}
         </Balance>
 
-        <StocksList caisses={dataCaisse} />
+        <StocksList stocks={dataStock} />
 
         <div className="pt-2">
           <ProductTable Columns={Columns} data={loading ? [] : data} loading={loading} />
