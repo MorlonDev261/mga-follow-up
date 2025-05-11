@@ -23,7 +23,7 @@ import {
 interface ProductFormData {
   arrival: number;
   stockDate: number;
-  productId: string | null;
+  productId: string;
   qty: number;
   identifiers: { identifier: number; comment: string }[];
 }
@@ -68,7 +68,7 @@ export default function Combobox({
   }, [companyId]);
 
   React.useEffect(() => {
-    setValue(form.productId || "");
+    setValue(form.productId);
   }, [form.productId]);
 
   const handleSelect = (id: string) => {
