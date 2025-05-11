@@ -9,6 +9,7 @@ import moment from "moment";
 import { NextSeo } from "next-seo";
 
 import DialogPopup from "@components/DialogPopup";
+import ProductForm from "@components/Insertion/ProductForm";
 import ProductTable from "@components/Table/Stock";
 import Counter from "@components/Counter";
 import StockList from "./StockList";
