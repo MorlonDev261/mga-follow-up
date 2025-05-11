@@ -1,7 +1,6 @@
 'use client';
 
-import { useState } from 'react';
-import * as React from 'react';
+import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 import Combobox from "@components/ui/select";
 import { CalendarIcon, PlusIcon, Trash2 } from 'lucide-react';
