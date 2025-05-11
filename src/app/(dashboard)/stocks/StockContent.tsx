@@ -162,21 +162,23 @@ export default function PendingContent({ stocks, companyId }: { stocks: Stock[],
           subtitleSize="text-sm"
         >
           {!loading && (
-            <button 
-              className="relative flex bg-blue-500 items-center text-white rounded overflow-hidden" 
-              onClick={() => setOpen(prev => !prev)}
-            >
-              Add new Stock
-            </button>
-            {/* Modale Produit */}
-            <DialogPopup
-              isOpen={open}
-              onClose={() => setOpen(false)}
-              title="Ajouter un nouveau produit"
-              description="Veuillez remplir les détails du produit à enregistrer."
-            >
-              <ProductForm setOpen={() => setOpen(prev => !prev)} />
-            </DialogPopup>
+            <>
+              <button 
+                className="relative flex bg-blue-500 items-center text-white rounded overflow-hidden" 
+                onClick={() => setOpen(prev => !prev)}
+              >
+                Add new Stock
+              </button>
+              {/* Modale Produit */}
+              <DialogPopup
+                isOpen={open}
+                onClose={() => setOpen(false)}
+                title="Ajouter un nouveau produit"
+                description="Veuillez remplir les détails du produit à enregistrer."
+              >
+                <ProductForm setOpen={() => setOpen(prev => !prev)} />
+              </DialogPopup>
+            </>
           )}
         </Balance>
 
