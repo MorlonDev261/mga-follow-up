@@ -41,7 +41,7 @@ export default function Header({ children }: HeaderProps) {
   }, [session?.selectedCompany]);
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-white dark:bg-[#111] transition-colors border-b border-gray-300 dark:border-none">
+    <header className="sticky top-0 z-50 p-1 w-full bg-white dark:bg-[#111] transition-colors border-b border-gray-300 dark:border-none">
       {/* Top section */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
@@ -68,7 +68,7 @@ export default function Header({ children }: HeaderProps) {
               />
             </Link>
             {companyName && (
-              <span className="font-bold italic text-sm text-gray-700 dark:text-gray-200">
+              <span className="font-bold italic text-[2px] text-gray-700 dark:text-gray-200">
                 {companyName}
               </span>
             )}
