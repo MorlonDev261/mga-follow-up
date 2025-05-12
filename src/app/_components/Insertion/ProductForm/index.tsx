@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import type { KeyedMutator } from 'swr';
+import { useSession } from "next-auth/react";
 import { format } from 'date-fns';
 import Combobox from "@components/ui/select";
 import { CalendarIcon, PlusIcon, Trash2 } from 'lucide-react';
@@ -35,6 +36,7 @@ export interface ProductFormData {
 }
 
 export default function ProductForm({ setOpen, mutate }: ProductFormProps) {
+  const { data: session } = useSession();
   const [companyId, setCompanyId] = useState<string | null>(null);
   const [form, setForm] = useState<ProductFormData>({
     arrival: Date.now(),
