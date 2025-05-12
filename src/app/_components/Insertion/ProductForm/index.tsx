@@ -35,7 +35,7 @@ interface ProductFormProps {
   mutate?: KeyedMutator<Product[]>;
 }
 
-export default function ProductForm({ setOpen }: ProductFormProps) {
+export default function ProductForm({ setOpen, mutate }: ProductFormProps) {
   const { data: session } = useSession();
   const [companyId, setCompanyId] = useState<string | null>(null);
   const [form, setForm] = useState<ProductFormData>({
