@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useSession } from "next-auth/react";
+import type { KeyedMutator } from 'swr';
 import { format } from 'date-fns';
 import Combobox from "@components/ui/select";
 import { CalendarIcon, PlusIcon, Trash2 } from 'lucide-react';
@@ -12,16 +13,17 @@ import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Input } from '@/components/ui/input';
 
-interface ProductFormProps {
-  setOpen: () => void;
-}
-
-export interface ProductFormData {
+interface ProductFormData {
   arrival: number;
   stockDate: number;
   productId: string;
   qty: number;
   identifiers: { identifier: number; comment: string }[];
+}
+
+interface ProductFormProps {
+  setOpen: () => void;
+  mutate?: KeyedMutator<ProductFormData[]>;
 }
 
 export default function ProductForm({ setOpen }: ProductFormProps) {
@@ -93,7 +95,7 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
     });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
 
@@ -132,6 +134,7 @@ export default function ProductForm({ setOpen }: ProductFormProps) {
         setError(data?.message || "Une erreur s'est produite lors de l’enregistrement.");
         return;
       }
+      mutate?.();
 
       alert('Produit enregistré avec succès !');
       setOpen();
