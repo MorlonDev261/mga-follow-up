@@ -195,7 +195,7 @@ export default function ProductForm({ setOpen, mutate }: ProductFormProps) {
         <div className="col-span-2 md:col-span-3">
           <label className="block mb-1 text-sm font-medium">Nom du produit</label>
           <Combobox
-            companyId="cmacjsr390004ld0406t3vxpq"
+            companyId={companyId}
             form={form}
             setForm={setForm}
             showSearch={true}
