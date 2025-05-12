@@ -1,7 +1,6 @@
 'use client';
 
-import { useState } from 'react';
-import * as React from 'react';
+import { useState, useEffect } from 'react';
 import type { KeyedMutator } from 'swr';
 import { format } from 'date-fns';
 import Combobox from "@components/ui/select";
@@ -36,6 +35,7 @@ export interface ProductFormData {
 }
 
 export default function ProductForm({ setOpen, mutate }: ProductFormProps) {
+  const [companyId, setCompanyId] = useState<string | null>(null);
   const [form, setForm] = useState<ProductFormData>({
     arrival: Date.now(),
     stockDate: Date.now(),
@@ -46,6 +46,16 @@ export default function ProductForm({ setOpen, mutate }: ProductFormProps) {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchCompanyInfo = async () => {
+      if (session?.selectedCompany) {
+       setCompanyId(session.selectedCompany);
+      }
+    };
+
+    fetchCompanyInfo();
+  }, [session?.selectedCompany]);
 
   const handleQtyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const qty = Number(e.target.value);
