@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useSession } from "next-auth/react";
+import { useState } from 'react';
+import * as React from 'react';
 import type { KeyedMutator } from 'swr';
 import { format } from 'date-fns';
 import Combobox from "@components/ui/select";
@@ -13,16 +13,12 @@ import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Input } from '@/components/ui/input';
 
-type Product = {
-  id: number;
-  productId: string;
-  productName: string;
-  date: Date;
-  dateStock: string;
-  comment: string;
-};
+interface ProductFormProps {
+  setOpen: () => void;
+  mutate?: KeyedMutator<Product[]>;
+}
 
-interface ProductFormData {
+export interface ProductFormData {
   arrival: number;
   stockDate: number;
   productId: string;
@@ -30,14 +26,7 @@ interface ProductFormData {
   identifiers: { identifier: number; comment: string }[];
 }
 
-interface ProductFormProps {
-  setOpen: () => void;
-  mutate?: KeyedMutator<Product[]>;
-}
-
 export default function ProductForm({ setOpen, mutate }: ProductFormProps) {
-  const { data: session } = useSession();
-  const [companyId, setCompanyId] = useState<string | null>(null);
   const [form, setForm] = useState<ProductFormData>({
     arrival: Date.now(),
     stockDate: Date.now(),
@@ -48,16 +37,6 @@ export default function ProductForm({ setOpen, mutate }: ProductFormProps) {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchCompanyInfo = async () => {
-      if (session?.selectedCompany) {
-       setCompanyId(session.selectedCompany);
-      }
-    };
-
-    fetchCompanyInfo();
-  }, [session?.selectedCompany]);
 
   const handleQtyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const qty = Number(e.target.value);
@@ -104,7 +83,7 @@ export default function ProductForm({ setOpen, mutate }: ProductFormProps) {
     });
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
@@ -143,10 +122,10 @@ export default function ProductForm({ setOpen, mutate }: ProductFormProps) {
         setError(data?.message || "Une erreur s'est produite lors de l’enregistrement.");
         return;
       }
-      mutate?.();
 
       alert('Produit enregistré avec succès !');
       setOpen();
+      mutate?.();
     } catch (error) {
       console.error(error);
       setError("Une erreur réseau est survenue.");
@@ -197,7 +176,7 @@ export default function ProductForm({ setOpen, mutate }: ProductFormProps) {
         <div className="col-span-2 md:col-span-3">
           <label className="block mb-1 text-sm font-medium">Nom du produit</label>
           <Combobox
-            companyId={companyId}
+            companyId="cmacjsr390004ld0406t3vxpq"
             form={form}
             setForm={setForm}
             showSearch={true}
