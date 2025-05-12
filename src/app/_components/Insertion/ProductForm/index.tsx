@@ -13,6 +13,15 @@ import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Input } from '@/components/ui/input';
 
+type Product = {
+  id: number;
+  productId: string;
+  productName: string;
+  date: Date;
+  dateStock: string;
+  comment: string;
+};
+
 interface ProductFormData {
   arrival: number;
   stockDate: number;
@@ -23,7 +32,7 @@ interface ProductFormData {
 
 interface ProductFormProps {
   setOpen: () => void;
-  mutate?: KeyedMutator<ProductFormData[]>;
+  mutate?: KeyedMutator<Product[]>;
 }
 
 export default function ProductForm({ setOpen }: ProductFormProps) {
