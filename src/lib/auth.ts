@@ -107,7 +107,7 @@ export const authOptions: NextAuthConfig = {
         session.user.image = token.image ?? ""
         session.user.emailVerified = token.emailVerified ?? null
         session.user.createdAt = token.createdAt ?? ""
-        session.selectedCompany = token.selectedCompany
+        session.selectedCompany = token.selectedCompany ?? undefined
       }
       return session
     },
