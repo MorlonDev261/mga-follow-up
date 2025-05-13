@@ -61,7 +61,7 @@ export async function deleteUser(id: string) {
 // --- COMPANIES ---
 
 export async function getCompaniesByUser(userId: string) {
-  const companyUsers: CompanyUserInput[] = await db.companyUser.findMany({
+  const companyUsers = await db.companyUser.findMany({
     where: { userId },
     include: {
       company: true,
@@ -249,9 +249,10 @@ export async function getProductsListByCompany(companyId: string, date?: string)
   }
 
   try {
-    const where: Prisma.Product = {
+    const where: Prisma.ProductWhereInput = {
       companyId,
     }
+
     if (date) {
       const start = moment(date, 'YYYY-MM-DD').startOf('day').toDate()
       const end = moment(date, 'YYYY-MM-DD').endOf('day').toDate()
