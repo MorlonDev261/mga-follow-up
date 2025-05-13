@@ -249,10 +249,9 @@ export async function getProductsListByCompany(companyId: string, date?: string)
   }
 
   try {
-    const where = {
+    const where: Prisma.ProductWhereInput = {
       companyId,
     }
-
     if (date) {
       const start = moment(date, 'YYYY-MM-DD').startOf('day').toDate()
       const end = moment(date, 'YYYY-MM-DD').endOf('day').toDate()
