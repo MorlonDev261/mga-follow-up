@@ -60,7 +60,7 @@ export async function deleteUser(id: string) {
 // === COMPANIES ===
 
 export async function getCompaniesByUser(userId: string) {
-  const companyUsers = await db.companyUser.findMany({
+  const companyUsers: CompanyUserInput[] = await db.companyUser.findMany({
     where: { userId },
     include: { company: true },
   })
