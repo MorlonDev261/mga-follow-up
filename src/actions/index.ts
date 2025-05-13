@@ -61,14 +61,14 @@ export async function deleteUser(id: string) {
 // --- COMPANIES ---
 
 export async function getCompaniesByUser(userId: string) {
-  const companyUsers = await db.companyUser.findMany({
+  const companyUsers: CompanyUserInput[] = await db.companyUser.findMany({
     where: { userId },
     include: {
       company: true,
     },
   });
 
-  return companyUsers.map((item: { company: any; role: Role }) => ({
+  return companyUsers.map((item) => ({
     ...item.company,
     userRole: item.role,
   }));
