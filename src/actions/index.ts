@@ -68,7 +68,7 @@ export async function getCompaniesByUser(userId: string) {
     },
   });
 
-  return companyUsers.map((item: CompanyUserInput) => ({
+  return companyUsers.map((item) => ({
     ...item.company,
     userRole: item.role,
   }));
