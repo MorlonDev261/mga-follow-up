@@ -249,7 +249,7 @@ export async function getProductsListByCompany(companyId: string, date?: string)
   }
 
   try {
-    const where: Prisma.ProductWhereInput = {
+    const where: Prisma.Product = {
       companyId,
     }
     if (date) {
