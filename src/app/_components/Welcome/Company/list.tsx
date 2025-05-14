@@ -14,7 +14,7 @@ const companies = [
     logo: "/aztek.jpg"
   },
   {
-    name: "AgroMada SARL",
+    name: "ShopCell ARKADIA",
     nif: "321654987",
     stat: "456789123",
     status: "verified",
