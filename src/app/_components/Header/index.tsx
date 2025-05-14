@@ -106,7 +106,7 @@ export default function Header({ children }: HeaderProps) {
           <div className="flex items-center gap-4">
             {/* Messages */}
             <Link
-              href="/messages"
+              href="#"
               className="text-gray-800 dark:text-white hover:text-gray-600 dark:hover:text-gray-300"
             >
               <FaRegEnvelope className="text-xl" />
