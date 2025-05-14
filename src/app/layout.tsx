@@ -40,7 +40,6 @@ export const metadata: Metadata = {
     shortcut: "/logo/icon-192x192.png",
     apple: "/logo/icon-180x180.png",
   },
-  themeColor: "#000000",
   openGraph: {
     title: "MGA Follow UP",
     description: "Manage your finances easily with MGA Follow UP.",
@@ -65,7 +64,9 @@ export const metadata: Metadata = {
   },
   robots: "index, follow",
 };
-
+export const viewport = {
+  themeColor: '#000000',
+},
 export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
