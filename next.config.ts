@@ -11,7 +11,7 @@ const withPWA = require('next-pwa')({
 const nextConfig = {
   reactStrictMode: true,
   trustedHosts: [
-    'mga-follow-up.vercel.app',
+    'mga-follow-up.com',
     'localhost:3000',
   ],
   images: {
