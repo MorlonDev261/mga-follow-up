@@ -29,7 +29,7 @@ const HomePage = () => {
       <section className="flex justify-center gap-8 mb-16">
         <div className="w-1/2">
           <Image
-            src="/logo/screenshot-1.png" // Remplacer par ton image
+            src="/logo/screenshot-1.png"
             alt="Gestion des stocks"
             width={600}
             height={350}
