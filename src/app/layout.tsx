@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   title: "MGA Follow UP | Simplify Your Finances",
   description: "Manage your moulaa easily 😎. Track your payments, customers, and more.",
   keywords: ["finance", "tracking", "payments", "MGA Follow UP"],
-  authors: [{ name: "AZTEK DWC LLC", url: "https://yourwebsite.com" }],
+  authors: [{ name: "AZTEK DWC LLC", url: "https://mga-follow-up.com" }],
   creator: "AZTEK DWC LLC",
   manifest: "/manifest.json",
   icons: {
@@ -43,12 +43,12 @@ export const metadata: Metadata = {
   openGraph: {
     title: "MGA Follow UP",
     description: "Manage your finances easily with MGA Follow UP.",
-    url: "https://yourwebsite.com",
+    url: "https://mga-follow-up.com",
     siteName: "MGA Follow UP",
     type: "website",
     images: [
       {
-        url: "https://yourwebsite.com/og-image.jpg",
+        url: "https://mga-follow-up.com/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "MGA Follow UP Dashboard",
@@ -60,7 +60,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     site: "@your_twitter_handle",
     creator: "@your_twitter_handle",
-    images: ["https://yourwebsite.com/twitter-image.jpg"],
+    images: ["https://mga-follow-up.com/twitter-image.jpg"],
   },
   robots: "index, follow",
 };
