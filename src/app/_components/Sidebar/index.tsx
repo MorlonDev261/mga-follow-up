@@ -101,7 +101,7 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
                   </SelectContent>
                 </Select>
               ) : (
-                <Button onClick={() => router.push("/create-company")}>
+                <Button onClick={() => router.push("/new-company")}>
                   Créer une entreprise
                 </Button>
               )}
