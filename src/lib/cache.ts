@@ -6,7 +6,7 @@ const runtimeCaching = [
       cacheName: 'external-images',
       expiration: {
         maxEntries: 100,
-        maxAgeSeconds: 30 * 24 * 60 * 60,
+        maxAgeSeconds: 30 * 24 * 60 * 60, // 30 jours
       },
     },
   },
@@ -17,7 +17,7 @@ const runtimeCaching = [
       cacheName: 'pages-cache',
       expiration: {
         maxEntries: 200,
-        maxAgeSeconds: 7 * 24 * 60 * 60,
+        maxAgeSeconds: 7 * 24 * 60 * 60, // 7 jours
       },
     },
   },
@@ -32,34 +32,6 @@ const runtimeCaching = [
       expiration: {
         maxEntries: 200,
         maxAgeSeconds: 30 * 24 * 60 * 60,
-      },
-    },
-  },
-  {
-    urlPattern: /\/api\/.*$/,
-    handler: 'NetworkFirst',
-    method: 'GET',
-    options: {
-      cacheName: 'api-cache',
-      networkTimeoutSeconds: 10,
-      expiration: {
-        maxEntries: 100,
-        maxAgeSeconds: 24 * 60 * 60,
-      },
-      cacheableResponse: {
-        statuses: [0, 200],
-      },
-    },
-  },
-  {
-    urlPattern: /\/api\/sync.*$/,
-    handler: 'NetworkFirst',
-    method: 'POST',
-    options: {
-      cacheName: 'sync-cache',
-      networkTimeoutSeconds: 10,
-      cacheableResponse: {
-        statuses: [200],
       },
     },
   },
