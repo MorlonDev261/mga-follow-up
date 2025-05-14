@@ -1,4 +1,4 @@
-const runtimeCaching = require('src/lib/cache'); // ou './lib/cache' si tu l’as mis ailleurs
+const runtimeCaching = require('./src/lib/cache'); // ou './lib/cache' si tu l’as mis ailleurs
 const withPWA = require('next-pwa')({
   dest: 'public',
   register: true,
