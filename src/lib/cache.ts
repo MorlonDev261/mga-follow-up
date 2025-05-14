@@ -11,7 +11,7 @@ const runtimeCaching = [
     },
   },
   {
-    urlPattern: ({ request }) => request.destination === 'document',
+    urlPattern: ({ request }: { request: Request }) => request.destination === 'document',
     handler: 'NetworkFirst',
     options: {
       cacheName: 'pages-cache',
@@ -22,10 +22,8 @@ const runtimeCaching = [
     },
   },
   {
-    urlPattern: ({ request }) =>
-      request.destination === 'script' ||
-      request.destination === 'style' ||
-      request.destination === 'font',
+    urlPattern: ({ request }: { request: Request }) =>
+      ['script', 'style', 'font'].includes(request.destination),
     handler: 'StaleWhileRevalidate',
     options: {
       cacheName: 'static-resources',
@@ -37,4 +35,4 @@ const runtimeCaching = [
   },
 ];
 
-module.exports = runtimeCaching;
+export default runtimeCaching;
