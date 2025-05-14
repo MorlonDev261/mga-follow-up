@@ -6,6 +6,7 @@ import db from '@/lib/db'
 import moment from 'moment'
 
 export const authOptions: NextAuthConfig = {
+  trustHost: true,
   providers: [
     CredentialsProvider({
       name: 'Credentials',
