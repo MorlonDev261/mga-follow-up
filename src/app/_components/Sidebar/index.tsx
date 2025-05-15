@@ -8,7 +8,7 @@ import ProfileAvatar from "@components/ProfileAvatar";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import DialogPopup from "@components/DialogPopup";
-import { PageSwitcherDemo } from "@components/SwitchCompany";
+import PageSwitcherDemo from "@components/SwitchCompany";
 import { Separator } from "@/components/ui/separator";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
