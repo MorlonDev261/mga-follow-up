@@ -144,9 +144,8 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
               title="Changer d’entreprise"
             >
               <PageSwitcherDemo
-                pages={companySelected}
-                initialPageIndex={0}
-                onPageChange={(company: Page) => setSelectedCompany(company.id)}
+                userName={companySelected.name}
+                profilePicture={companySelected.imageUrl}
               />
             </DialogPopup>
 
