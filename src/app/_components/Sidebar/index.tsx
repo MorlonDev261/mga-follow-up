@@ -33,6 +33,12 @@ interface SidebarProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+type Page = {
+  id: string;
+  name: string;
+  imageUrl: string;
+};
+
 type Company = {
   id: string;
   name: string;
@@ -144,7 +150,7 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
               <PageSwitcherDemo
                 pages={companySelected}
                 initialPageIndex={0}
-                onPageChange={(companyId) => setSelectedCompany(companyId)}
+                onPageChange={(company: Page) => setSelectedCompany(company.id)}
               />
             </DialogPopup>
 
