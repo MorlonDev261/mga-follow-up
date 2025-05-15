@@ -90,7 +90,7 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
       };
       applyCompanySelection();
     }
-  }, [selectedCompany, update, router]);
+  }, [selectedCompany]);
 
   const companySelected: Page[] = companies
     .filter((company) => company.id === selectedCompany)
