@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input";
 import ProfileAvatar from "@components/ProfileAvatar";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import DialogPopup from "@components/DialogPopup";
+import { PageSwitcherDemo } from "@components/SwitchCompany";
 import { Separator } from "@/components/ui/separator";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
@@ -14,7 +16,7 @@ import Download from "@components/Download";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { getCompaniesByUser } from "@/actions";
-import { Role, Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
 interface SidebarProps {
   open: boolean;
@@ -35,19 +37,19 @@ type Company = {
   userRole: string;
 };
 
-type CompanyWithRole = Company & { userRole: Role };
-
 export default function Sidebar({ open, setOpen }: SidebarProps) {
   const { data: session, update } = useSession();
   const router = useRouter();
 
-  const [companies, setCompanies] = useState<CompanyWithRole[]>([]);
+  const [companies, setCompanies] = useState<Company[]>([]);
   const [selectedCompany, setSelectedCompany] = useState<string | undefined>();
+  const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState("Français");
   const [selectedCurrency, setSelectedCurrency] = useState("$");
   const [exchangeRate, setExchangeRate] = useState("");
   const [rounding, setRounding] = useState(false);
 
+  // Récupère les entreprises de l'utilisateur
   useEffect(() => {
     async function fetchCompanies() {
       if (session?.user?.id) {
@@ -58,7 +60,7 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
     fetchCompanies();
   }, [session?.user?.id]);
 
-  // Set default company from session or localStorage
+  // Initialise l'entreprise sélectionnée
   useEffect(() => {
     if (session?.selectedCompany) {
       setSelectedCompany(session.selectedCompany as string);
@@ -68,13 +70,16 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
     }
   }, [session?.selectedCompany]);
 
-  // Update session and localStorage when selectedCompany changes
+  // Met à jour session + localStorage et empêche retour en arrière
   useEffect(() => {
     if (selectedCompany) {
+      setDialogOpen(true);
       update({ selectedCompany });
       localStorage.setItem("selectedCompany", selectedCompany);
+      router.replace("/"); // remplacement sans possibilité de "back"
+      setDialogOpen(false);
     }
-  }, [selectedCompany, update]);
+  }, [selectedCompany, update, router]);
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -106,6 +111,14 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
                 </Button>
               )}
             </div>
+
+            <DialogPopup
+              isOpen={dialogOpen}
+              onClose={() => setDialogOpen(false)}
+              title="Switch Company"
+            >
+              <PageSwitcherDemo />
+            </DialogPopup>
 
             {/* Paramètres */}
             <div className="space-y-4 mt-4">
