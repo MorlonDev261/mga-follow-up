@@ -4,27 +4,19 @@ import { useEffect, useState } from "react";
 import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
-import ProfileAvatar from "@components/ProfileAvatar";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
+
+import ProfileAvatar from "@components/ProfileAvatar";
 import DialogPopup from "@components/DialogPopup";
 import PageSwitcherDemo from "@components/SwitchCompany";
-import { Separator } from "@/components/ui/separator";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
 import Download from "@components/Download";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Sheet, SheetContent } from "@/components/ui/sheet";
+
 import { getCompaniesByUser } from "@/actions";
 import { Prisma } from "@prisma/client";
 
@@ -86,18 +78,21 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
     }
   }, [session?.selectedCompany]);
 
-  // Met à jour session + localStorage et empêche retour en arrière
+  // Mise à jour de la session et navigation
   useEffect(() => {
     if (selectedCompany) {
-      setDialogOpen(true);
-      update({ selectedCompany });
-      localStorage.setItem("selectedCompany", selectedCompany);
-      router.replace("/");
-      setDialogOpen(false);
+      const applyCompanySelection = async () => {
+        setDialogOpen(true);
+        await update({ selectedCompany });
+        localStorage.setItem("selectedCompany", selectedCompany);
+        router.replace("/");
+        setDialogOpen(false);
+      };
+      applyCompanySelection();
     }
   }, [selectedCompany, update, router]);
 
-  const companySelected = companies
+  const companySelected: Page[] = companies
     .filter((company) => company.id === selectedCompany)
     .map((company) => ({
       id: company.id,
@@ -110,13 +105,13 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetContent className="w-80 flex overflow-x-auto flex-col justify-between">
+      <SheetContent className="w-80 flex flex-col justify-between overflow-x-auto">
         {session?.user ? (
           <div>
             <ProfileAvatar />
             <Separator className="my-4" />
 
-            {/* Entreprises */}
+            {/* Switch entreprise */}
             <div className="space-y-4">
               <Label>Switch company</Label>
               {companies.length > 0 ? (
@@ -142,10 +137,11 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
               )}
             </div>
 
+            {/* Modal de changement d’entreprise */}
             <DialogPopup
               isOpen={dialogOpen}
               onClose={() => setDialogOpen(false)}
-              title="Switch Company"
+              title="Changer d’entreprise"
             >
               <PageSwitcherDemo
                 pages={companySelected}
@@ -155,13 +151,10 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
             </DialogPopup>
 
             {/* Paramètres */}
-            <div className="space-y-4 mt-4">
+            <div className="space-y-4 mt-6">
               <div>
                 <Label>Langue</Label>
-                <Select
-                  value={selectedLanguage}
-                  onValueChange={setSelectedLanguage}
-                >
+                <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
                   <SelectTrigger>
                     <SelectValue placeholder="Sélectionner" />
                   </SelectTrigger>
@@ -175,10 +168,7 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
 
               <div>
                 <Label>Concurrence</Label>
-                <Select
-                  value={selectedCurrency}
-                  onValueChange={setSelectedCurrency}
-                >
+                <Select value={selectedCurrency} onValueChange={setSelectedCurrency}>
                   <SelectTrigger>
                     <SelectValue placeholder="Sélectionner" />
                   </SelectTrigger>
@@ -212,10 +202,7 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
 
               <div className="flex items-center justify-between">
                 <Label>Arrondissement de valeur</Label>
-                <Switch
-                  checked={rounding}
-                  onCheckedChange={setRounding}
-                />
+                <Switch checked={rounding} onCheckedChange={setRounding} />
               </div>
 
               <Download />
@@ -223,13 +210,10 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center h-full">
-            <p className="text-center text-gray-500 mb-4">
+            <p className="text-center text-muted-foreground mb-4">
               Vous n&apos;êtes pas connecté
             </p>
-            <Button
-              className="bg-blue-500 text-white hover:bg-blue-600"
-              onClick={() => router.push("/sign-in")}
-            >
+            <Button onClick={() => router.push("/sign-in")}>
               Se connecter
             </Button>
           </div>
