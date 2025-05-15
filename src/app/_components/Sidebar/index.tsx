@@ -139,8 +139,8 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
 
             {/* Modal de changement d’entreprise */}
             <DialogPopup
+              className="rounded-md"
               isOpen={dialogOpen}
-              onClose={() => setDialogOpen(false)}
               title="Changer d’entreprise"
             >
               <PageSwitcherDemo
