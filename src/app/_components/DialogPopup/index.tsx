@@ -21,7 +21,7 @@ interface Props {
   children: ReactNode;
 }
 
-export default function AddProduct({ isOpen, onClose, title, description, children }: Props) {
+export default function AddProduct({ className, isOpen, onClose, title, description, children }: Props) {
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogContent className={cn("w-[90%] max-w-2xl mx-auto", classname)}>
