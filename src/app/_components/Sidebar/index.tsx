@@ -10,10 +10,20 @@ import { Label } from "@/components/ui/label";
 import DialogPopup from "@components/DialogPopup";
 import PageSwitcherDemo from "@components/SwitchCompany";
 import { Separator } from "@/components/ui/separator";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import Download from "@components/Download";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { getCompaniesByUser } from "@/actions";
 import { Prisma } from "@prisma/client";
@@ -76,10 +86,21 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
       setDialogOpen(true);
       update({ selectedCompany });
       localStorage.setItem("selectedCompany", selectedCompany);
-      router.replace("/"); // remplacement sans possibilité de "back"
+      router.replace("/");
       setDialogOpen(false);
     }
   }, [selectedCompany, update, router]);
+
+  const companySelected = companies
+    .filter((company) => company.id === selectedCompany)
+    .map((company) => ({
+      id: company.id,
+      name: company.name,
+      imageUrl:
+        typeof company.logo === "object" && company.logo !== null
+          ? (company.logo as { url?: string })?.url ?? ""
+          : "",
+    }));
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -93,7 +114,10 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
             <div className="space-y-4">
               <Label>Switch company</Label>
               {companies.length > 0 ? (
-                <Select value={selectedCompany ?? ""} onValueChange={setSelectedCompany}>
+                <Select
+                  value={selectedCompany ?? ""}
+                  onValueChange={setSelectedCompany}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Sélectionner une entreprise" />
                   </SelectTrigger>
@@ -117,14 +141,21 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
               onClose={() => setDialogOpen(false)}
               title="Switch Company"
             >
-              <PageSwitcherDemo />
+              <PageSwitcherDemo
+                pages={companySelected}
+                initialPageIndex={0}
+                onPageChange={(companyId) => setSelectedCompany(companyId)}
+              />
             </DialogPopup>
 
             {/* Paramètres */}
             <div className="space-y-4 mt-4">
               <div>
                 <Label>Langue</Label>
-                <Select value={selectedLanguage} onValueChange={setSelectedLanguage}>
+                <Select
+                  value={selectedLanguage}
+                  onValueChange={setSelectedLanguage}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Sélectionner" />
                   </SelectTrigger>
@@ -138,7 +169,10 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
 
               <div>
                 <Label>Concurrence</Label>
-                <Select value={selectedCurrency} onValueChange={setSelectedCurrency}>
+                <Select
+                  value={selectedCurrency}
+                  onValueChange={setSelectedCurrency}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Sélectionner" />
                   </SelectTrigger>
@@ -172,7 +206,10 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
 
               <div className="flex items-center justify-between">
                 <Label>Arrondissement de valeur</Label>
-                <Switch checked={rounding} onCheckedChange={setRounding} />
+                <Switch
+                  checked={rounding}
+                  onCheckedChange={setRounding}
+                />
               </div>
 
               <Download />
@@ -180,15 +217,24 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
           </div>
         ) : (
           <div className="flex flex-col items-center justify-center h-full">
-            <p className="text-center text-gray-500 mb-4">Vous n&apos;êtes pas connecté</p>
-            <Button className="bg-blue-500 text-white hover:bg-blue-600" onClick={() => router.push("/sign-in")}>
+            <p className="text-center text-gray-500 mb-4">
+              Vous n&apos;êtes pas connecté
+            </p>
+            <Button
+              className="bg-blue-500 text-white hover:bg-blue-600"
+              onClick={() => router.push("/sign-in")}
+            >
               Se connecter
             </Button>
           </div>
         )}
 
         {session?.user && (
-          <Button variant="destructive" className="mt-6 w-full" onClick={() => signOut()}>
+          <Button
+            variant="destructive"
+            className="mt-6 w-full"
+            onClick={() => signOut()}
+          >
             Déconnexion
           </Button>
         )}
