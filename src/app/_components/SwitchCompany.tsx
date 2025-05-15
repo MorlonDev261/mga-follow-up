@@ -1,114 +1,111 @@
-import { useState, useEffect } from 'react';
-import { RotateCw } from 'lucide-react';
+'use client';
 
-interface Page {
-  id: string;
-  name: string;
-  imageUrl: string;
+import React from 'react';
+
+interface UserSwitcherProps {
+  userName: string;
+  profilePicture?: string;
+  onSwitch?: () => void;
 }
 
-interface PageSwitcherProps {
-  pages: Page[];
-  initialPageIndex?: number;
-  onPageChange?: (page: Page) => void;
-}
-
-export default function PageSwitcher({ 
-  pages, 
-  initialPageIndex = 0, 
-  onPageChange 
-}: PageSwitcherProps) {
-  const [currentPageIndex, setCurrentPageIndex] = useState(initialPageIndex);
-  const [isAnimating, setIsAnimating] = useState(false);
-
-  const currentPage = pages[currentPageIndex];
-
-  const changePage = (direction: 'next' | 'prev') => {
-    setIsAnimating(true);
-    setTimeout(() => {
-      const newIndex =
-        direction === 'next'
-          ? (currentPageIndex + 1) % pages.length
-          : (currentPageIndex - 1 + pages.length) % pages.length;
-
-      setCurrentPageIndex(newIndex);
-      onPageChange?.(pages[newIndex]);
-      setIsAnimating(false);
-    }, 300);
+const UserSwitcher: React.FC<UserSwitcherProps> = ({
+  userName,
+  profilePicture = '/api/placeholder/200/200',
+  onSwitch
+}) => {
+  const handleSwitchUser = () => {
+    if (onSwitch) {
+      onSwitch();
+    } else {
+      console.log('Switching to user:', userName);
+    }
   };
 
-  useEffect(() => {
-    if (pages.length === 0) {
-      console.warn("No pages provided to PageSwitcher component");
-    }
-  }, [pages]);
-
-  if (pages.length === 0) {
-    return <div className="text-red-500">No pages provided</div>;
-  }
-
   return (
-    <div className="flex flex-col items-center">
-      <div className="relative w-64 h-64 mb-4">
-        <div className="w-full h-full overflow-hidden rounded-lg shadow-lg">
-          <img 
-            src={currentPage.imageUrl || "/api/placeholder/400/320"} 
-            alt={currentPage.name} 
-            className="w-full h-full object-cover"
-          />
-        </div>
-
-        {/* Arrows animation */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className={`absolute top-0 left-0 w-full h-full flex items-center justify-center transition-opacity duration-300 ${isAnimating ? 'opacity-100' : 'opacity-0'}`}>
-            {['left', 'right', 'top', 'bottom'].map((position) => (
-              <div
-                key={position}
-                className={`absolute ${
-                  position === 'left' ? 'left-0 top-1/2 -translate-y-1/2 -translate-x-4' :
-                  position === 'right' ? 'right-0 top-1/2 -translate-y-1/2 translate-x-4' :
-                  position === 'top' ? 'top-0 left-1/2 -translate-x-1/2 -translate-y-4' :
-                  'bottom-0 left-1/2 -translate-x-1/2 translate-y-4'
-                } transform`}
-              >
-                <div className={`rounded-full bg-gray-800 bg-opacity-70 p-2 ${isAnimating ? 'animate-spin' : ''}`}>
-                  <RotateCw size={24} className="text-white" />
-                </div>
-              </div>
-            ))}
+    <div className="flex flex-col items-center justify-between min-h-screen bg-black text-black">
+      {/* Status bar */}
+      <div className="w-full px-4 py-2 flex justify-between items-center bg-white">
+        <div className="text-lg font-medium">23:50</div>
+        <div className="flex items-center space-x-2">
+          <span className="text-xs">4g+</span>
+          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+            <rect x="3" y="10" width="3" height="10" />
+            <rect x="8" y="7" width="3" height="13" />
+            <rect x="13" y="4" width="3" height="16" />
+            <rect x="18" y="2" width="3" height="18" />
+          </svg>
+          <div className="relative">
+            <div className="w-10 h-5 bg-green-500 rounded-full flex items-center px-1">
+              <div className="text-xs font-bold text-white">82</div>
+            </div>
+            <svg className="w-4 h-4 absolute right-0 top-0 text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M13 2L13 10 21 10" transform="rotate(45 13 10)" />
+            </svg>
           </div>
         </div>
-
-        {/* Prev / Next buttons */}
-        <button 
-          onClick={() => changePage('prev')}
-          disabled={isAnimating}
-          className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-4 bg-white rounded-full p-2 shadow-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-          aria-disabled={isAnimating}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
-
-        <button 
-          onClick={() => changePage('next')}
-          disabled={isAnimating}
-          className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-4 bg-white rounded-full p-2 shadow-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
-          aria-disabled={isAnimating}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
       </div>
 
-      <div className="text-center">
-        <h3 className="text-xl font-semibold text-gray-800">{currentPage.name}</h3>
-        <p className="text-sm text-gray-500">
-          {currentPageIndex + 1} / {pages.length}
-        </p>
+      {/* Main content */}
+      <div className="w-full flex-1 flex flex-col">
+        <div className="w-full h-full bg-white rounded-lg flex flex-col items-center justify-center p-8">
+          {/* Profile picture with sync arrows */}
+          <div className="relative mb-6">
+            <div className="w-20 h-20 rounded-full bg-blue-600 flex items-center justify-center overflow-hidden border-2 border-gray-300">
+              <img
+                src={profilePicture}
+                alt={`${userName}'s profile`}
+                className="w-full h-full object-cover"
+              />
+            </div>
+
+            <div
+              className="absolute inset-0 w-full h-full rounded-full border-2 border-gray-300 border-dashed animate-spin"
+              style={{ animationDuration: '8s' }}
+            ></div>
+
+            <svg className="absolute -top-1 left-1/2 transform -translate-x-1/2 w-4 h-4 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M7 10l5-5 5 5" />
+            </svg>
+            <svg className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-4 h-4 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M7 14l5 5 5-5" />
+            </svg>
+          </div>
+
+          {/* Text */}
+          <div className="text-center">
+            <p className="text-xl">Changement vers</p>
+            <p className="text-xl font-bold truncate max-w-xs">{userName}</p>
+          </div>
+
+          {/* Optional: Add a button to trigger onSwitch */}
+          <button
+            onClick={handleSwitchUser}
+            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-full"
+          >
+            Utiliser ce compte
+          </button>
+        </div>
+      </div>
+
+      {/* Facebook logo */}
+      <div className="w-full bg-white py-8 flex justify-center">
+        <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center">
+          <span className="text-white text-2xl font-bold">f</span>
+        </div>
+      </div>
+
+      {/* Navigation bar */}
+      <div className="w-full bg-black h-16 flex justify-around items-center">
+        <div className="w-8 h-8 bg-gray-400 rounded"></div>
+        <div className="w-8 h-8 bg-white rounded-full border-2 border-gray-300"></div>
+        <div className="w-8 h-8">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+            <path d="M20 12l-8 8-8-8" />
+          </svg>
+        </div>
       </div>
     </div>
   );
-}
+};
+
+export default UserSwitcher;
