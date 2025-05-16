@@ -5,7 +5,6 @@ import React, { useEffect } from 'react';
 interface UserSwitcherProps {
   userName: string;
   profilePicture?: string;
-  onSwitch?: boolean;
 }
 
 const UserSwitcher: React.FC<UserSwitcherProps> = ({
@@ -13,10 +12,6 @@ const UserSwitcher: React.FC<UserSwitcherProps> = ({
   profilePicture = '/api/placeholder/200/200',
   onSwitch
 }) => {
-  useEffect(() => {
-    onSwitch();
-  }, [onSwitch]);
-
   return (
     <div className="flex flex-col items-center justify-between max-h-[50vh] bg-black text-black">
       {/* Main content */}
