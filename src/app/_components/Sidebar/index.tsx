@@ -163,7 +163,6 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
             >
               {companySelected && (
                 <PageSwitcherDemo
-                  onSwitch
                   userName={companySelected.name}
                   profilePicture={
                     typeof companySelected.logo === "object" && companySelected.logo !== null
