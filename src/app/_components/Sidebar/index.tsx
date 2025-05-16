@@ -25,12 +25,6 @@ interface SidebarProps {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-type Page = {
-  id: string;
-  name: string;
-  imageUrl: string;
-};
-
 type Company = {
   id: string;
   name: string;
@@ -41,7 +35,7 @@ type Company = {
   owner: string;
   contact: string;
   address: string;
-  logo: Prisma.JsonValue | null;
+  logo?: Prisma.JsonValue | null;
   userRole: string;
 };
 
@@ -56,6 +50,8 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
   const [selectedCurrency, setSelectedCurrency] = useState("$");
   const [exchangeRate, setExchangeRate] = useState("");
   const [rounding, setRounding] = useState(false);
+
+  const companySelected = companies.find(c => c.id === selectedCompany);
 
   // Récupère les entreprises de l'utilisateur
   useEffect(() => {
@@ -80,7 +76,10 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
 
   // Mise à jour de la session et navigation
   useEffect(() => {
-    if (selectedCompany) {
+    if (
+      selectedCompany &&
+      selectedCompany !== session?.selectedCompany
+    ) {
       const applyCompanySelection = async () => {
         setDialogOpen(true);
         await update({ selectedCompany });
@@ -90,18 +89,36 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
       };
       applyCompanySelection();
     }
-  }, [selectedCompany]);
+  }, [selectedCompany, session?.selectedCompany]);
 
-  const companySelected: Page[] = companies
-    .filter((company) => company.id === selectedCompany)
-    .map((company) => ({
-      id: company.id,
-      name: company.name,
-      imageUrl:
-        typeof company.logo === "object" && company.logo !== null
-          ? (company.logo as { url?: string })?.url ?? ""
-          : "",
-    }));
+  // Langue, monnaie, cours, arrondi
+  useEffect(() => {
+    const savedLang = localStorage.getItem("lang");
+    const savedCurrency = localStorage.getItem("currency");
+    const savedRate = localStorage.getItem("rate");
+    const savedRounding = localStorage.getItem("rounding");
+
+    if (savedLang) setSelectedLanguage(savedLang);
+    if (savedCurrency) setSelectedCurrency(savedCurrency);
+    if (savedRate) setExchangeRate(savedRate);
+    if (savedRounding) setRounding(savedRounding === "true");
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("lang", selectedLanguage);
+  }, [selectedLanguage]);
+
+  useEffect(() => {
+    localStorage.setItem("currency", selectedCurrency);
+  }, [selectedCurrency]);
+
+  useEffect(() => {
+    localStorage.setItem("rate", exchangeRate);
+  }, [exchangeRate]);
+
+  useEffect(() => {
+    localStorage.setItem("rounding", rounding.toString());
+  }, [rounding]);
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -143,10 +160,16 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
               isOpen={dialogOpen}
               title="Changer d’entreprise"
             >
-              <PageSwitcherDemo
-                userName={companySelected.name}
-                profilePicture={companySelected.imageUrl}
-              />
+              {companySelected && (
+                <PageSwitcherDemo
+                  userName={companySelected.name}
+                  profilePicture={
+                    typeof companySelected.logo === "object" && companySelected.logo !== null
+                      ? (companySelected.logo as { url?: string })?.url ?? ""
+                      : ""
+                  }
+                />
+              )}
             </DialogPopup>
 
             {/* Paramètres */}
