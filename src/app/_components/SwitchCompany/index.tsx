@@ -62,13 +62,14 @@ const UserSwitcher: React.FC<UserSwitcherProps> = ({
             <p className="text-xl">Changement vers</p>
             <p className="text-xl font-bold truncate max-w-xs">{userName}</p>
           </div>
-        </div>
-      </div>
 
-      {/* logo */}
-      <div className="w-full bg-white py-8 flex justify-center">
-        <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center">
-          <span className="text-white text-2xl font-bold">f</span>
+          {/* logo */}
+          <div className="w-full bg-white py-8 flex justify-center">
+            <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center">
+              <span className="text-white text-2xl font-bold">f</span>
+            </div>
+          </div>
+          
         </div>
       </div>
     </div>
