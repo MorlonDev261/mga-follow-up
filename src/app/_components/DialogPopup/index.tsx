@@ -24,7 +24,7 @@ interface Props {
 export default function AddProduct({ className, isOpen, onClose, title, description, children }: Props) {
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className={cn("w-[90%] max-w-2xl mx-auto", classname)}>
+      <DialogContent className={cn("w-[90%] max-w-2xl mx-auto", className)}>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{description}</DialogDescription>
