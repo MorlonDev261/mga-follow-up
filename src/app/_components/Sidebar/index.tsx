@@ -156,12 +156,14 @@ export default function Sidebar({ open, setOpen }: SidebarProps) {
 
             {/* Modal de changement d’entreprise */}
             <DialogPopup
+              noStyled
               className="rounded-md"
               isOpen={dialogOpen}
               title="Changer d’entreprise"
             >
               {companySelected && (
                 <PageSwitcherDemo
+                  onSwich
                   userName={companySelected.name}
                   profilePicture={
                     typeof companySelected.logo === "object" && companySelected.logo !== null
