@@ -9,8 +9,7 @@ interface UserSwitcherProps {
 
 const UserSwitcher: React.FC<UserSwitcherProps> = ({
   userName,
-  profilePicture = '/api/placeholder/200/200',
-  onSwitch
+  profilePicture = '/api/placeholder/200/200'
 }) => {
   return (
     <div className="flex flex-col items-center justify-between max-h-[50vh] bg-black text-black">
