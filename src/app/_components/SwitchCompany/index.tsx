@@ -5,13 +5,13 @@ import React, { useEffect } from 'react';
 interface UserSwitcherProps {
   userName: string;
   profilePicture?: string;
-  onSwitch?: () => void;
+  onSwitch?: boolean;
 }
 
 const UserSwitcher: React.FC<UserSwitcherProps> = ({
   userName,
   profilePicture = '/api/placeholder/200/200',
-  onSwitch = () => {},
+  onSwitch
 }) => {
   useEffect(() => {
     onSwitch();
