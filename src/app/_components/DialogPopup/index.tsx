@@ -24,6 +24,7 @@ interface Props {
 
 export default function AppDialog({
   className,
+  noStyled,
   isOpen,
   onClose,
   title,
