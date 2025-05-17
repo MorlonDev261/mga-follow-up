@@ -68,7 +68,7 @@ export default function PendingContent({ companyId }: { companyId: string }) {
   const [open, setOpen] = useState(false);
 
   const {
-    data: stocks = initialStocks,
+    data: stocks = [],
     isLoading: isStockLoading,
     mutate: mutateStock,
   } = useStockSummary();
