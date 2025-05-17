@@ -45,19 +45,39 @@ type Stock = {
   color?: string;
 };
 
-export default function PendingContent({ stocks, companyId }: { stocks: Stock[]; companyId: string }) {
+// SWR fetcher
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
+// Custom hooks
+function useStockSummary() {
+  return useSWR<Stock[]>("/api/stocks/summary", fetcher);
+}
+
+function useProducts(companyId: string | null) {
+  return useSWR<Product[]>(
+    companyId ? `/api/products/${companyId}` : null,
+    fetcher
+  );
+}
+
+export default function PendingContent({ stocks: initialStocks, companyId }: { stocks: Stock[]; companyId: string }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const stockParam = searchParams.get("stock");
 
-  const fetcher = (url: string) => fetch(url).then(res => res.json());
-
-  const { data: rawData = [], isLoading, mutate } = useSWR<Product[]>(
-    companyId ? `/api/products/${companyId}` : null,
-    fetcher
-  );
-
   const [open, setOpen] = useState(false);
+
+  const {
+    data: stocks = initialStocks,
+    isLoading: isStockLoading,
+    mutate: mutateStock,
+  } = useStockSummary();
+
+  const {
+    data: rawData = [],
+    isLoading: isProductLoading,
+    mutate: mutateProduct,
+  } = useProducts(companyId);
 
   const getStockName = (stockId: string) =>
     stocks.find((stock) => stock.id === stockId)?.name || "Unknown";
@@ -136,7 +156,7 @@ export default function PendingContent({ stocks, companyId }: { stocks: Stock[];
         description={`View all Stocks${stockParam ? ` from ${getStockName(stockParam)}` : ""}.`}
       />
 
-      <div className={cn("px-2 transition-opacity", { "opacity-100": !isLoading, "opacity-0": isLoading })}>
+      <div className={cn("px-2 transition-opacity", { "opacity-100": !isProductLoading, "opacity-0": isProductLoading })}>
         <Balance
           title={
             <>
@@ -144,7 +164,7 @@ export default function PendingContent({ stocks, companyId }: { stocks: Stock[];
             </>
           }
           balance={
-            isLoading ? (
+            isProductLoading ? (
               "Loading..."
             ) : totalStock > 0 ? (
               <>
@@ -159,7 +179,7 @@ export default function PendingContent({ stocks, companyId }: { stocks: Stock[];
           subtitle={subtitle}
           subtitleSize="text-sm"
         >
-          {!isLoading && (
+          {!isProductLoading && (
             <>
               <Button
                 className="bg-blue-500 text-white hover:bg-blue-600 p-1"
@@ -174,7 +194,7 @@ export default function PendingContent({ stocks, companyId }: { stocks: Stock[];
                 title="Ajouter un nouveau produit"
                 description="Veuillez remplir les détails du produit à enregistrer."
               >
-                <ProductForm setOpen={() => setOpen(false)} mutate={mutate} />
+                <ProductForm setOpen={() => setOpen(false)} mutate={mutateProduct} />
               </DialogPopup>
             </>
           )}
@@ -183,7 +203,7 @@ export default function PendingContent({ stocks, companyId }: { stocks: Stock[];
         <StockList stocks={stocks} />
 
         <div className="pt-2">
-          <ProductTable Columns={Columns} data={isLoading ? [] : filteredData} loading={isLoading} />
+          <ProductTable Columns={Columns} data={isProductLoading ? [] : filteredData} loading={isProductLoading} />
         </div>
       </div>
     </>
