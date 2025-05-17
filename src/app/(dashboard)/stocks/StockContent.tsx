@@ -79,9 +79,9 @@ export default function PendingContent({ companyId }: { companyId: string }) {
     mutate: mutateProduct,
   } = useProducts(companyId);
 
-  const mutation = () => {
-    mutateStock(undefined, { revalidate: true });
-    mutateProduct(undefined, { revalidate: true });
+  const mutation = async () => {
+    await mutateStock(undefined, { revalidate: true });
+    return mutateProduct(undefined, { revalidate: true });
   }
 
   const getStockName = (stockId: string) =>
