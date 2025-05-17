@@ -60,7 +60,7 @@ function useProducts(companyId: string | null) {
   );
 }
 
-export default function PendingContent({ stocks: initialStocks, companyId }: { stocks: Stock[]; companyId: string }) {
+export default function PendingContent({ companyId }: { companyId: string }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const stockParam = searchParams.get("stock");
