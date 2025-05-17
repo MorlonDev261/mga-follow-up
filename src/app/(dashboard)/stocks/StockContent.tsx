@@ -79,6 +79,11 @@ export default function PendingContent({ companyId }: { companyId: string }) {
     mutate: mutateProduct,
   } = useProducts(companyId);
 
+  const mutation = () => {
+    mutateStock(undefined, { revalidate: true });
+    mutateProduct(undefined, { revalidate: true });
+  }
+
   const getStockName = (stockId: string) =>
     stocks.find((stock) => stock.id === stockId)?.name || "Unknown";
 
@@ -194,7 +199,7 @@ export default function PendingContent({ companyId }: { companyId: string }) {
                 title="Ajouter un nouveau produit"
                 description="Veuillez remplir les détails du produit à enregistrer."
               >
-                <ProductForm setOpen={() => setOpen(false)} mutate={mutateProduct} />
+                <ProductForm setOpen={() => setOpen(false)} mutate={mutation} />
               </DialogPopup>
             </>
           )}
