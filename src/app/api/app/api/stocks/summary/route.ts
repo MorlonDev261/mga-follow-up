@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { db } from "@/lib/db";
+import db from "@/lib/db";
 import moment from "moment";
 
 export async function GET(req: NextRequest) {
