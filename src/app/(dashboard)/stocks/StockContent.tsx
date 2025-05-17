@@ -8,7 +8,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { BsShopWindow } from "react-icons/bs";
 import { MoreHorizontal } from "lucide-react";
 import { NextSeo } from "next-seo";
-
+import Statistique from "@components/Statistique";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ColumnDef, Row } from "@tanstack/react-table";
@@ -204,6 +204,8 @@ export default function PendingContent({ companyId }: { companyId: string }) {
             </>
           )}
         </Balance>
+
+        <Statistique type="bar" legende={false} />
 
         <StockList stocks={stocks} />
 
